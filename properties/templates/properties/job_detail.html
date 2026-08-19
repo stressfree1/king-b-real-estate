@@ -1,0 +1,176 @@
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+{% block content %}
+
+<main>
+
+    <section class="job-detail-page">
+
+        <div class="job-detail-container">
+
+            <div class="job-detail-header">
+
+                <span class="job-detail-label">
+                    CAREER OPPORTUNITY
+                </span>
+
+                <h1>
+                    {{ job.title }}
+                </h1>
+
+                <div class="job-detail-meta">
+
+                    {% if job.category %}
+                        <div>
+                            <span>Category</span>
+                            <strong>{{ job.category }}</strong>
+                        </div>
+                    {% endif %}
+
+                    {% if job.location %}
+                        <div>
+                            <span>Location</span>
+                            <strong>{{ job.location }}</strong>
+                        </div>
+                    {% endif %}
+
+                    {% if job.get_employment_type_display %}
+                        <div>
+                            <span>Employment Type</span>
+                            <strong>
+                                {{ job.get_employment_type_display }}
+                            </strong>
+                        </div>
+                    {% endif %}
+
+                    {% if job.experience_required %}
+                        <div>
+                            <span>Experience</span>
+                            <strong>
+                                {{ job.experience_required }}
+                            </strong>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="job-detail-body">
+
+                <div class="job-detail-main">
+
+                    <div class="job-detail-section">
+
+                        <h2>
+                            Job Description
+                        </h2>
+
+                        <div class="job-detail-text">
+                            {{ job.description|linebreaks }}
+                        </div>
+
+                    </div>
+
+
+                    {% if job.responsibilities %}
+
+                    <div class="job-detail-section">
+
+                        <h2>
+                            Responsibilities
+                        </h2>
+
+                        <div class="job-detail-text">
+                            {{ job.responsibilities|linebreaks }}
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="job-detail-section">
+
+                        <h2>
+                            Requirements
+                        </h2>
+
+                        <div class="job-detail-text">
+                            {{ job.requirements|linebreaks }}
+                        </div>
+
+                    </div>
+
+
+                    {% if job.benefits %}
+
+                    <div class="job-detail-section">
+
+                        <h2>
+                            Benefits
+                        </h2>
+
+                        <div class="job-detail-text">
+                            {{ job.benefits|linebreaks }}
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <aside class="job-apply-box">
+
+                    <div>
+
+                        <span>
+                            INTERESTED IN THIS ROLE?
+                        </span>
+
+                        <h2>
+                            Apply Now
+                        </h2>
+
+                        <p>
+                            Submit your application and
+                            our team will review your
+                            information.
+                        </p>
+
+                    </div>
+
+                    <a href="{% url 'job_apply' job.id %}"
+                       class="job-apply-button">
+
+                        Apply Now
+
+                    </a>
+
+                    <a href="{% url 'jobs' %}"
+                       class="job-back-button">
+
+                        ← Back to Jobs
+
+                    </a>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+{% endblock %}

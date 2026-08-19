@@ -1,0 +1,115 @@
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+{% block content %}
+<main>
+
+
+<section class="contact-page">
+
+    <div class="contact-heading">
+
+        <p>GET IN TOUCH</p>
+
+        <h1>
+            Contact King B Real Estate
+        </h1>
+
+        <p>
+            Have a question about a property, investment opportunity,
+            or our services? Send us a message and our team will get back to you.
+        </p>
+
+    </div>
+
+
+    <div class="contact-layout">
+
+
+        <div class="contact-information">
+
+            <span>CONTACT US</span>
+
+            <h2>
+                Let's Talk About Your Next Move
+            </h2>
+
+            <p>
+                Whether you are looking to buy property, invest in real estate,
+                or simply need more information, our team is ready to assist you.
+            </p>
+
+
+            <div class="contact-item">
+
+                <strong>Location</strong>
+
+                <p>
+                    Port Harcourt, Rivers State
+                </p>
+
+            </div>
+
+
+            <div class="contact-item">
+
+                <strong>Email</strong>
+
+                <p>
+                    info@kingbrealestate.com
+                </p>
+
+            </div>
+
+
+            <div class="contact-item">
+
+                <strong>Phone</strong>
+
+                <p>
+                    +234 XXX XXX XXXX
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="contact-form-container">
+
+            <div class="contact-form-header">
+
+                <span>SEND A MESSAGE</span>
+
+                <h2>
+                    How Can We Help?
+                </h2>
+
+            </div>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit">
+                    Send Message
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
+

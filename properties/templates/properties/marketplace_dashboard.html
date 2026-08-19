@@ -1,0 +1,644 @@
+{% extends 'properties/base.html' %}
+{% load static %}
+
+{% block title %}
+    My Dashboard | King B Real Estate
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .dashboard-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 50px 20px 80px;
+    }
+
+    .dashboard-header {
+        background: #123c2f;
+        color: white;
+        border-radius: 18px;
+        padding: 40px;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-header h1 {
+        margin: 0 0 10px;
+        font-size: 34px;
+    }
+
+    .dashboard-header p {
+        margin: 0;
+        color: #e8e8e8;
+        font-size: 16px;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    .dashboard-card h2 {
+        margin-top: 0;
+        color: #123c2f;
+        font-size: 23px;
+    }
+
+    .dashboard-card p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .dashboard-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 14px;
+        background: #f5ead3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+        margin-bottom: 18px;
+    }
+
+    .dashboard-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 13px 22px;
+        background: #123c2f;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+    .dashboard-btn:hover {
+        background: #b58b3b;
+        color: white;
+    }
+
+    .dashboard-btn.secondary {
+        background: #b58b3b;
+    }
+
+    .dashboard-btn.secondary:hover {
+        background: #123c2f;
+    }
+
+    .status-box {
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: #f7f7f7;
+        margin-top: 15px;
+        color: #555;
+    }
+
+    .status-approved {
+        color: #176b45;
+        font-weight: 700;
+    }
+
+    .status-pending {
+        color: #b06a00;
+        font-weight: 700;
+    }
+
+    .stats-section {
+        margin-top: 30px;
+    }
+
+    .stats-section h2 {
+        color: #123c2f;
+        margin-bottom: 20px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+
+    .stat-card {
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 14px;
+        padding: 22px;
+        text-align: center;
+    }
+
+    .stat-number {
+        display: block;
+        font-size: 30px;
+        font-weight: 700;
+        color: #123c2f;
+        margin-bottom: 7px;
+    }
+
+    .stat-label {
+        color: #777;
+        font-size: 14px;
+    }
+
+    .account-section {
+        margin-top: 30px;
+        background: #f8f8f8;
+        border-radius: 18px;
+        padding: 30px;
+    }
+
+    .account-section h2 {
+        color: #123c2f;
+        margin-top: 0;
+    }
+
+    .account-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .account-row:last-child {
+        border-bottom: none;
+    }
+
+    .account-label {
+        color: #777;
+    }
+
+    .account-value {
+        font-weight: 600;
+        color: #123c2f;
+    }
+
+    .empty-message {
+        text-align: center;
+        color: #777;
+        padding: 15px 0;
+    }
+
+    @media (max-width: 800px) {
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dashboard-header {
+            padding: 30px 25px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 28px;
+        }
+    }
+
+    @media (max-width: 500px) {
+
+        .dashboard-wrapper {
+            padding: 30px 15px 60px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-card {
+            padding: 24px;
+        }
+
+        .account-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+    }
+
+</style>
+
+
+<div class="dashboard-wrapper">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="dashboard-header">
+
+        <h1>
+            Welcome,
+            {% if user.first_name %}
+                {{ user.first_name }}
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+        </h1>
+
+        <p>
+            Welcome to your King B Real Estate account.
+            From here you can manage your marketplace activities
+            in one place.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN ACTIONS
+    ====================================================== -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- =================================================
+             HIRE SKILLED WORKER
+        ================================================== -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                🔧
+            </div>
+
+            <h2>
+                Hire a Skilled Worker
+            </h2>
+
+            <p>
+                Find trusted skilled professionals and hire
+                the right person for your project.
+            </p>
+
+            <a
+                href="{% url 'skilled_workers' %}"
+                class="dashboard-btn"
+            >
+                Find Skilled Workers
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             BECOME SKILLED WORKER
+        ================================================== -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                👷
+            </div>
+
+            <h2>
+                Become a Skilled Worker
+            </h2>
+
+            {% if worker_exists %}
+
+                {% if worker_approved %}
+
+                    <p>
+                        You are already an approved skilled
+                        worker on the King B marketplace.
+                    </p>
+
+                    <div class="status-box">
+                        Status:
+                        <span class="status-approved">
+                            Approved
+                        </span>
+                    </div>
+
+                    <a
+                        href="{% url 'worker_dashboard' %}"
+                        class="dashboard-btn secondary"
+                    >
+                        Worker Dashboard
+                    </a>
+
+                {% else %}
+
+                    <p>
+                        Your skilled worker application has
+                        already been submitted and is waiting
+                        for King B approval.
+                    </p>
+
+                    <div class="status-box">
+                        Status:
+                        <span class="status-pending">
+                            Waiting for Approval
+                        </span>
+                    </div>
+
+                {% endif %}
+
+            {% else %}
+
+                <p>
+                    Do you have a skill or professional service?
+                    Join the King B marketplace and make your
+                    services available to customers.
+                </p>
+
+                <a
+                    href="{% url 'become_skilled_worker' %}"
+                    class="dashboard-btn secondary"
+                >
+                    Become a Skilled Worker
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CUSTOMER ACTIVITY
+    ====================================================== -->
+
+    {% if customer_exists %}
+
+    <div class="stats-section">
+
+        <h2>
+            My Hiring Activity
+        </h2>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    {{ total_hires }}
+                </span>
+
+                <span class="stat-label">
+                    Total Hires
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    {{ active_hires }}
+                </span>
+
+                <span class="stat-label">
+                    Active Jobs
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    {{ pending_hires }}
+                </span>
+
+                <span class="stat-label">
+                    Pending Requests
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    {{ completed_hires }}
+                </span>
+
+                <span class="stat-label">
+                    Completed Jobs
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div style="margin-top: 20px;">
+
+            <a
+                href="{% url 'customer_dashboard' %}"
+                class="dashboard-btn"
+            >
+                View My Hiring Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         WORKER ACTIVITY
+    ====================================================== -->
+
+    {% if worker_approved %}
+
+    <div class="stats-section">
+
+        <h2>
+            My Worker Activity
+        </h2>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    {{ worker_pending_requests }}
+                </span>
+
+                <span class="stat-label">
+                    Pending Requests
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    {{ worker_active_jobs }}
+                </span>
+
+                <span class="stat-label">
+                    Active Jobs
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    {{ worker_completed_jobs }}
+                </span>
+
+                <span class="stat-label">
+                    Completed Jobs
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    {% if worker %}
+                        Approved
+                    {% else %}
+                        -
+                    {% endif %}
+                </span>
+
+                <span class="stat-label">
+                    Worker Status
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div style="margin-top: 20px;">
+
+            <a
+                href="{% url 'worker_dashboard' %}"
+                class="dashboard-btn"
+            >
+                Open Worker Dashboard
+            </a>
+
+            
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         ACCOUNT INFORMATION
+    ====================================================== -->
+
+    <div class="account-section">
+
+        <h2>
+            My Account
+        </h2>
+
+
+        <div class="account-row">
+
+            <span class="account-label">
+                Email
+            </span>
+
+            <span class="account-value">
+                {{ user.email }}
+            </span>
+
+        </div>
+
+
+        <div class="account-row">
+
+            <span class="account-label">
+                Customer Account
+            </span>
+
+            <span class="account-value">
+
+                {% if customer_exists %}
+
+                    {% if customer_verified %}
+                        Verified
+                    {% else %}
+                        Waiting for Verification
+                    {% endif %}
+
+                {% else %}
+
+                    Not Registered
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+        <div class="account-row">
+
+            <span class="account-label">
+                Skilled Worker Account
+            </span>
+
+            <span class="account-value">
+
+                {% if worker_exists %}
+
+                    {% if worker_approved %}
+                        Approved
+                    {% else %}
+                        Waiting for Approval
+                    {% endif %}
+
+                {% else %}
+
+                    Not Registered
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LOGOUT
+    ====================================================== -->
+
+    <div style="text-align: center; margin-top: 35px;">
+
+        <a
+            href="{% url 'site_logout' %}"
+            class="dashboard-btn"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

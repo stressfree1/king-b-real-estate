@@ -1,0 +1,386 @@
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+    KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+{% block content %}
+
+<main>
+
+    <section class="properties-page">
+
+        <!-- =====================================================
+             PAGE HEADER
+        ====================================================== -->
+
+        <div class="properties-heading">
+
+            {% if estate %}
+
+                <p>
+                    EXPLORE
+                </p>
+
+                <h1>
+                    {{ estate.name }}
+                </h1>
+
+                <p>
+                    Explore the available properties
+                    currently listed in this estate.
+                </p>
+
+            {% else %}
+
+                <p>
+                    EXPLORE OUR PROPERTIES
+                </p>
+
+                <h1>
+                    Available Properties
+                </h1>
+
+                <p>
+                    Find the perfect land or property
+                    for your next investment.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =====================================================
+             BACK TO ALL PROPERTIES
+        ====================================================== -->
+
+        {% if estate %}
+
+            <div class="estate-back-button">
+
+                <a href="{% url 'property_list' %}">
+                    ← Back to Properties
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =====================================================
+             PROPERTY SEARCH
+        ====================================================== -->
+
+        <form
+            method="GET"
+            class="property-search"
+        >
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search by property or location..."
+                value="{{ search }}"
+            >
+
+
+            <!-- PROPERTY TYPE -->
+
+            <select name="property_type">
+
+                <option value="">
+                    All Property Types
+                </option>
+
+                <option
+                    value="land"
+                    {% if property_type == 'land' %}
+                        selected
+                    {% endif %}
+                >
+                    Land
+                </option>
+
+                <option
+                    value="house"
+                    {% if property_type == 'house' %}
+                        selected
+                    {% endif %}
+                >
+                    House
+                </option>
+
+                <option
+                    value="apartment"
+                    {% if property_type == 'apartment' %}
+                        selected
+                    {% endif %}
+                >
+                    Apartment
+                </option>
+
+                <option
+                    value="commercial"
+                    {% if property_type == 'commercial' %}
+                        selected
+                    {% endif %}
+                >
+                    Commercial Property
+                </option>
+
+            </select>
+
+
+            <!-- STATUS -->
+
+            <select name="status">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option
+                    value="available"
+                    {% if status == 'available' %}
+                        selected
+                    {% endif %}
+                >
+                    Available
+                </option>
+
+                <option
+                    value="reserved"
+                    {% if status == 'reserved' %}
+                        selected
+                    {% endif %}
+                >
+                    Reserved
+                </option>
+
+                <option
+                    value="sold"
+                    {% if status == 'sold' %}
+                        selected
+                    {% endif %}
+                >
+                    Sold
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+
+        <!-- =====================================================
+             ESTATE INFORMATION
+             
+             ONLY AVAILABLE PROPERTY COUNT
+        ====================================================== -->
+
+        {% if estate %}
+
+            <div class="estate-properties-intro">
+
+                <div class="estate-property-count">
+
+                    <strong>
+                        {{ properties|length }}
+                    </strong>
+
+                    <span>
+                        Available Properties
+                    </span>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =====================================================
+             PROPERTY GRID
+        ====================================================== -->
+
+        <div class="properties-grid">
+
+            {% for property in properties %}
+
+                <article class="property-card">
+
+
+                    <!-- =================================================
+                         PROPERTY IMAGE
+                    ================================================== -->
+
+                    <div class="property-card-image">
+
+                        {% if property.image %}
+
+                            <img
+                                src="{{ property.image.url }}"
+                                alt="{{ property.title }}"
+                            >
+
+                        {% else %}
+
+                            <div class="no-property-image">
+
+                                <span>
+                                    No Image Available
+                                </span>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- STATUS BADGE -->
+
+                        <div class="property-status-badge">
+
+                            {{ property.get_status_display }}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PROPERTY INFORMATION
+                    ================================================== -->
+
+                    <div class="property-card-info">
+
+
+                        <!-- PROPERTY TYPE -->
+
+                        <p class="property-type">
+
+                            {{ property.get_property_type_display|upper }}
+
+                        </p>
+
+
+                        <!-- PROPERTY TITLE -->
+
+                        <h2>
+
+                            {{ property.title }}
+
+                        </h2>
+
+
+                        <!-- LOCATION -->
+
+                        <p class="property-location">
+
+                            📍 {{ property.location }}
+
+                        </p>
+
+
+                        <!-- ESTATE -->
+
+                        {% if property.estate %}
+
+                            <p class="property-estate">
+
+                                Estate:
+
+                                <strong>
+                                    {{ property.estate.name }}
+                                </strong>
+
+                            </p>
+
+                        {% endif %}
+
+
+                        <!-- =================================================
+                             INDIVIDUAL PROPERTY PRICE
+                             =================================================
+
+                             Every property has its own price.
+                        -->
+
+                        <p class="property-price">
+
+                            ₦{{ property.price|floatformat:0 }}
+
+                        </p>
+
+
+                        <!-- VIEW PROPERTY -->
+
+                        <a
+                            href="{% url 'property_detail' property.id %}"
+                            class="property-view-button"
+                        >
+                            View Property
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+            {% empty %}
+
+
+                <!-- =================================================
+                     NO PROPERTIES
+                ================================================== -->
+
+                <div class="no-properties">
+
+                    {% if estate %}
+
+                        <h2>
+                            No Properties Available
+                        </h2>
+
+                        <p>
+                            There are currently no available
+                            properties in {{ estate.name }}.
+                        </p>
+
+                    {% else %}
+
+                        <h2>
+                            No Properties Available
+                        </h2>
+
+                        <p>
+                            There are currently no properties
+                            matching your search.
+                        </p>
+
+                    {% endif %}
+
+
+                    <a
+                        href="{% url 'property_list' %}"
+                        class="property-view-button"
+                    >
+                        ← Browse Properties
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock %}

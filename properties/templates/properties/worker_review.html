@@ -1,0 +1,293 @@
+{% extends 'properties/base.html' %}
+{% load static %}
+
+{% block title %}
+    Review {{ worker.full_name }} | King B Real Estate
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.review-page {
+    min-height: 100vh;
+    padding: 60px 20px;
+    background: #f5f6f4;
+}
+
+.review-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.review-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+.review-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.review-header h1 {
+    color: #123c2f;
+    margin-bottom: 10px;
+    font-size: 30px;
+}
+
+.review-header p {
+    color: #666;
+    margin: 0;
+}
+
+.worker-name {
+    color: #b58b3b;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    color: #123c2f;
+    margin-bottom: 10px;
+}
+
+.rating-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.rating-options input {
+    display: none;
+}
+
+.rating-options label {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #f1f1f1;
+    border: 2px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    color: #555;
+    transition: 0.2s;
+}
+
+.rating-options input:checked + label {
+    background: #b58b3b;
+    border-color: #b58b3b;
+    color: #ffffff;
+}
+
+.rating-options label:hover {
+    border-color: #b58b3b;
+}
+
+textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #b58b3b;
+}
+
+.review-submit {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #123c2f;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.review-submit:hover {
+    background: #0d2f25;
+}
+
+.cancel-button {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    text-decoration: none;
+}
+
+.cancel-button:hover {
+    color: #123c2f;
+}
+
+.error-message {
+    background: #ffe8e8;
+    color: #a00000;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="review-page">
+
+    <div class="review-container">
+
+        <div class="review-card">
+
+            <div class="review-header">
+
+                <h1>Review Worker</h1>
+
+                <p>
+                    How was your experience with
+                    <span class="worker-name">
+                        {{ worker.full_name }}
+                    </span>?
+                </p>
+
+            </div>
+
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="error-message">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <div class="form-group">
+
+                    <label>
+                        Your Rating
+                    </label>
+
+                    <div class="rating-options">
+
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="1"
+                            id="rating1"
+                        >
+                        <label for="rating1">1</label>
+
+
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="2"
+                            id="rating2"
+                        >
+                        <label for="rating2">2</label>
+
+
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="3"
+                            id="rating3"
+                        >
+                        <label for="rating3">3</label>
+
+
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="4"
+                            id="rating4"
+                        >
+                        <label for="rating4">4</label>
+
+
+                        <input
+                            type="radio"
+                            name="rating"
+                            value="5"
+                            id="rating5"
+                        >
+                        <label for="rating5">5</label>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="comment">
+                        Your Review
+                    </label>
+
+                    <textarea
+                        name="comment"
+                        id="comment"
+                        placeholder="Tell us about your experience with this worker..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="review-submit"
+                >
+                    Submit Review
+                </button>
+
+            </form>
+
+
+            <a
+                href="{% url 'customer_dashboard' %}"
+                class="cancel-button"
+            >
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

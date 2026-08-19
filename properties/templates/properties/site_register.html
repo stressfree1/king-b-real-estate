@@ -1,0 +1,1933 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}
+    Create Your King B Account | King B Real Estate
+{% endblock %}
+
+{% block content %}
+
+<section class="account-page">
+
+    <div class="account-shell">
+
+        <!-- =====================================================
+             HERO
+        ====================================================== -->
+
+        <div class="account-hero">
+
+            <div class="hero-copy">
+
+                <div class="eyebrow">
+                    KING B ACCOUNT
+                </div>
+
+                <h1>
+                    One Account.
+                    <span>Everything in One Place.</span>
+                </h1>
+
+                <p>
+                    Create your King B account once and access the
+                    services you need from one central dashboard.
+                    Hire skilled professionals, manage your account,
+                    and apply to become a skilled worker whenever
+                    you are ready.
+                </p>
+
+                <div class="hero-points">
+
+                    <div>
+                        <span class="point-icon">✓</span>
+                        <span>One login across King B</span>
+                    </div>
+
+                    <div>
+                        <span class="point-icon">✓</span>
+                        <span>Hire skilled professionals</span>
+                    </div>
+
+                    <div>
+                        <span class="point-icon">✓</span>
+                        <span>Apply to become a skilled worker</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HERO CARD -->
+
+            <div class="hero-card">
+
+                <div class="hero-card-top">
+
+                    <div class="profile-symbol">
+                        KB
+                    </div>
+
+                    <div>
+
+                        <span class="small-label">
+                            KING B ACCOUNT
+                        </span>
+
+                        <h3>
+                            Personal Account
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-divider"></div>
+
+
+                <div class="hero-status">
+
+                    <span class="status-dot"></span>
+
+                    <div>
+
+                        <strong>
+                            Your account starts here
+                        </strong>
+
+                        <p>
+                            Create one account and use your
+                            dashboard to access King B services.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             ACCOUNT BANNER
+        ====================================================== -->
+
+        <div class="account-banner">
+
+            <div class="banner-icon">
+                ✓
+            </div>
+
+            <div class="banner-content">
+
+                <strong>
+                    One registration. Multiple possibilities.
+                </strong>
+
+                <p>
+                    You do not need to choose between being a
+                    customer and a skilled worker when creating
+                    your account.
+                </p>
+
+            </div>
+
+            <div class="banner-tag">
+                ONE ACCOUNT
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+
+        <div class="account-layout">
+
+
+            <!-- =================================================
+                 FORM
+            ================================================== -->
+
+            <div class="application-card">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-number">
+                            01
+                        </span>
+
+                        <div>
+
+                            <span class="section-label">
+                                ACCOUNT REGISTRATION
+                            </span>
+
+                            <h2>
+                                Create your King B account
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="form-alert">
+
+                        <div class="alert-icon">
+                            !
+                        </div>
+
+                        <div>
+
+                            {% for error in form.non_field_errors %}
+
+                                <p>
+                                    {{ error }}
+                                </p>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <form
+                    method="POST"
+                >
+
+                    {% csrf_token %}
+
+
+                    <!-- =========================================
+                         PERSONAL INFORMATION
+                    ========================================== -->
+
+                    <div class="form-block">
+
+                        <div class="block-header">
+
+                            <span>
+                                Personal Information
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            {% for field in form %}
+
+
+                                {% if field.name == 'full_name' %}
+
+                                    <div class="field field-full">
+
+                                        <label for="{{ field.id_for_label }}">
+                                            Full Name
+                                        </label>
+
+                                        {{ field }}
+
+                                        {% for error in field.errors %}
+
+                                            <div class="field-error">
+                                                {{ error }}
+                                            </div>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if field.name == 'email' %}
+
+                                    <div class="field">
+
+                                        <label for="{{ field.id_for_label }}">
+                                            Email Address
+                                        </label>
+
+                                        {{ field }}
+
+                                        {% for error in field.errors %}
+
+                                            <div class="field-error">
+                                                {{ error }}
+                                            </div>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if field.name == 'phone' %}
+
+                                    <div class="field">
+
+                                        <label for="{{ field.id_for_label }}">
+                                            Phone Number
+                                        </label>
+
+                                        {{ field }}
+
+                                        {% for error in field.errors %}
+
+                                            <div class="field-error">
+                                                {{ error }}
+                                            </div>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                            {% endfor %}
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         SECURITY
+                    ========================================== -->
+
+                    <div class="form-block">
+
+                        <div class="block-header">
+
+                            <span>
+                                Account Security
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            {% for field in form %}
+
+
+                                {% if field.name == 'password' %}
+
+                                    <div class="field">
+
+                                        <label for="{{ field.id_for_label }}">
+                                            Create Password
+                                        </label>
+
+                                        {{ field }}
+
+                                        <small>
+                                            Use at least 8 characters.
+                                        </small>
+
+                                        {% for error in field.errors %}
+
+                                            <div class="field-error">
+                                                {{ error }}
+                                            </div>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if field.name == 'confirm_password' %}
+
+                                    <div class="field">
+
+                                        <label for="{{ field.id_for_label }}">
+                                            Confirm Password
+                                        </label>
+
+                                        {{ field }}
+
+                                        {% for error in field.errors %}
+
+                                            <div class="field-error">
+                                                {{ error }}
+                                            </div>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                            {% endfor %}
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ACCOUNT INFORMATION
+                    ========================================== -->
+
+                    <div class="form-block">
+
+
+                        <div class="block-header">
+
+                            <span>
+                                Your King B Account
+                            </span>
+
+                        </div>
+
+
+                        <div class="account-information">
+
+                            <div class="information-icon">
+                                KB
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    One account gives you flexibility
+                                </strong>
+
+                                <p>
+                                    After registration, you will enter
+                                    your general King B dashboard.
+                                    From there you can hire skilled
+                                    workers or apply to become a
+                                    skilled worker without creating
+                                    another account.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =========================================
+                         SUBMISSION
+                    ========================================== -->
+
+                    <div class="submit-area">
+
+                        <div class="submission-note">
+
+                            <span>
+                                ✓
+                            </span>
+
+                            <p>
+                                Please make sure your information is
+                                accurate before creating your account.
+                            </p>
+
+                        </div>
+
+
+                        <div class="submit-actions">
+
+                            <a
+                                href="{% url 'site_login' %}"
+                                class="back-button"
+                            >
+                                Already have an account?
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="submit-button"
+                            >
+
+                                <span>
+                                    Create Account
+                                </span>
+
+                                <strong>
+                                    →
+                                </strong>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- =================================================
+                 SIDEBAR
+            ================================================== -->
+
+            <aside class="account-sidebar">
+
+
+                <!-- HOW IT WORKS -->
+
+                <div class="sidebar-card">
+
+                    <div class="sidebar-label">
+                        HOW IT WORKS
+                    </div>
+
+                    <h3>
+                        Your King B account
+                    </h3>
+
+
+                    <div class="steps">
+
+                        <div class="step">
+
+                            <div class="step-number">
+                                01
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Create your account
+                                </strong>
+
+                                <p>
+                                    Enter your basic information
+                                    and create your password.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="step">
+
+                            <div class="step-number">
+                                02
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Access your dashboard
+                                </strong>
+
+                                <p>
+                                    Manage your King B activities
+                                    from one central location.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="step">
+
+                            <div class="step-number">
+                                03
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Hire skilled professionals
+                                </strong>
+
+                                <p>
+                                    Discover skilled workers and
+                                    request their services.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="step">
+
+                            <div class="step-number">
+                                04
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Become a skilled worker
+                                </strong>
+
+                                <p>
+                                    Apply through your dashboard
+                                    when you are ready.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRUST CARD -->
+
+                <div class="sidebar-card trust-card">
+
+                    <div class="trust-symbol">
+                        ✓
+                    </div>
+
+                    <h3>
+                        One secure account
+                    </h3>
+
+                    <p>
+                        Your King B account is designed to give you
+                        access to multiple services without having
+                        to maintain separate accounts.
+                    </p>
+
+                </div>
+
+
+                <!-- ACCOUNT CARD -->
+
+                <div class="sidebar-card account-card">
+
+                    <span class="sidebar-label">
+                        YOUR ACCOUNT
+                    </span>
+
+                    <h3>
+                        One login.
+                        More possibilities.
+                    </h3>
+
+                    <p>
+                        Use one account to manage your King B
+                        experience and access the services that
+                        are relevant to you.
+                    </p>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<style>
+
+/* =========================================================
+   BASE
+========================================================= */
+
+.account-page {
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(181,139,59,.08),
+            transparent 32%
+        ),
+        #f5f7f5;
+
+    min-height: 100vh;
+
+    padding: 70px 20px 90px;
+
+    color: #17211d;
+}
+
+.account-shell {
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.account-hero {
+
+    display: grid;
+
+    grid-template-columns:
+        1.35fr
+        .65fr;
+
+    gap: 55px;
+
+    align-items: center;
+
+    margin-bottom: 42px;
+}
+
+.eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    color: #b58b3b;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.5px;
+}
+
+.eyebrow::before {
+
+    content: "";
+
+    width: 32px;
+
+    height: 1px;
+
+    background: #b58b3b;
+}
+
+.hero-copy h1 {
+
+    max-width: 760px;
+
+    margin: 0;
+
+    color: #123c2f;
+
+    font-size: clamp(42px,5vw,70px);
+
+    font-weight: 800;
+
+    line-height: 1.03;
+
+    letter-spacing: -2.5px;
+}
+
+.hero-copy h1 span {
+
+    color: #b58b3b;
+}
+
+.hero-copy > p {
+
+    max-width: 700px;
+
+    margin: 24px 0 28px;
+
+    color: #66716c;
+
+    font-size: 18px;
+
+    line-height: 1.75;
+}
+
+.hero-points {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 13px;
+}
+
+.hero-points > div {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px 13px;
+
+    background: rgba(255,255,255,.86);
+
+    border: 1px solid #e2e7e3;
+
+    border-radius: 999px;
+
+    color: #44514b;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.point-icon {
+
+    width: 20px;
+
+    height: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #123c2f;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   HERO CARD
+========================================================= */
+
+.hero-card {
+
+    padding: 28px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #123c2f,
+            #0d2f26
+        );
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 60px rgba(18,60,47,.18);
+
+    color: white;
+}
+
+.hero-card-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+}
+
+.profile-symbol {
+
+    width: 62px;
+
+    height: 62px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,.1);
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    color: #d4af63;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.small-label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #d4af63;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.hero-card h3 {
+
+    margin: 0;
+
+    font-size: 24px;
+}
+
+.hero-divider {
+
+    height: 1px;
+
+    margin: 25px 0;
+
+    background: rgba(255,255,255,.11);
+}
+
+.hero-status {
+
+    display: flex;
+
+    gap: 14px;
+}
+
+.status-dot {
+
+    width: 10px;
+
+    height: 10px;
+
+    margin-top: 7px;
+
+    border-radius: 50%;
+
+    background: #4ed58a;
+
+    box-shadow:
+        0 0 0 6px rgba(78,213,138,.12);
+}
+
+.hero-status strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 14px;
+}
+
+.hero-status p {
+
+    margin: 0;
+
+    color: rgba(255,255,255,.68);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ACCOUNT BANNER
+========================================================= */
+
+.account-banner {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    margin-bottom: 34px;
+
+    padding: 18px 20px;
+
+    background: white;
+
+    border: 1px solid #e0e6e1;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 30px rgba(24,41,33,.04);
+}
+
+.banner-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: #eaf5ee;
+
+    color: #167343;
+
+    font-weight: 800;
+}
+
+.banner-content {
+
+    flex: 1;
+}
+
+.banner-content strong {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #123c2f;
+
+    font-size: 14px;
+}
+
+.banner-content p {
+
+    margin: 0;
+
+    color: #718078;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+.banner-tag {
+
+    padding: 7px 11px;
+
+    background: #f5f0e5;
+
+    border-radius: 999px;
+
+    color: #94722f;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.account-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0,1fr)
+        350px;
+
+    gap: 28px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.application-card {
+
+    overflow: hidden;
+
+    background: white;
+
+    border: 1px solid #e0e6e1;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 18px 50px rgba(24,41,33,.06);
+}
+
+.section-heading {
+
+    padding: 30px 34px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #fafcfb
+        );
+
+    border-bottom: 1px solid #edf0ed;
+}
+
+.section-heading > div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+.section-number {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #123c2f;
+
+    color: #d4af63;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+.section-label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #b58b3b;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.8px;
+}
+
+.section-heading h2 {
+
+    margin: 0;
+
+    color: #173e31;
+
+    font-size: 22px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.application-card form {
+
+    padding: 34px;
+}
+
+.form-block {
+
+    padding-bottom: 34px;
+
+    margin-bottom: 34px;
+
+    border-bottom: 1px solid #edf0ed;
+}
+
+.form-block:last-of-type {
+
+    border-bottom: none;
+}
+
+.block-header {
+
+    margin-bottom: 22px;
+}
+
+.block-header span {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #123c2f;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.block-header span::before {
+
+    content: "";
+
+    width: 6px;
+
+    height: 20px;
+
+    border-radius: 10px;
+
+    background: #b58b3b;
+}
+
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap: 20px;
+}
+
+.field {
+
+    min-width: 0;
+}
+
+.field-full {
+
+    grid-column: 1 / -1;
+}
+
+.field label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #34423b;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.field input {
+
+    width: 100%;
+
+    height: 54px;
+
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    border: 1px solid #dfe5e1;
+
+    border-radius: 10px;
+
+    background: #fbfcfb;
+
+    color: #27352f;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.field input:hover {
+
+    background: white;
+}
+
+.field input:focus {
+
+    background: white;
+
+    border-color: #123c2f;
+
+    box-shadow:
+        0 0 0 4px rgba(18,60,47,.08);
+}
+
+.field small {
+
+    display: block;
+
+    margin-top: 7px;
+
+    color: #7c8982;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+}
+
+.field-error {
+
+    margin-top: 7px;
+
+    color: #c0392b;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   ACCOUNT INFORMATION
+========================================================= */
+
+.account-information {
+
+    display: flex;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    background: #fbfcfb;
+
+    border: 1px solid #e4e9e5;
+
+    border-radius: 14px;
+}
+
+.information-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #123c2f;
+
+    color: #d4af63;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+.account-information strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #173e31;
+
+    font-size: 13px;
+}
+
+.account-information p {
+
+    margin: 0;
+
+    color: #738078;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ALERT
+========================================================= */
+
+.form-alert {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin: 28px 34px 0;
+
+    padding: 14px 16px;
+
+    background: #fff2f1;
+
+    border: 1px solid #f0d3d0;
+
+    border-radius: 12px;
+
+    color: #a63830;
+}
+
+.alert-icon {
+
+    width: 28px;
+
+    height: 28px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #f8dcd9;
+
+    font-weight: 800;
+}
+
+.form-alert p {
+
+    margin: 3px 0;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+.submit-area {
+
+    padding-top: 8px;
+}
+
+.submission-note {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+}
+
+.submission-note > span {
+
+    width: 24px;
+
+    height: 24px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #eaf5ee;
+
+    color: #177244;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+.submission-note p {
+
+    margin: 2px 0 0;
+
+    color: #68756e;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+.submit-actions {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+.back-button,
+.submit-button {
+
+    min-height: 48px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    padding: 0 20px;
+
+    border-radius: 11px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.back-button {
+
+    background: #f1f3f1;
+
+    color: #4d5a54;
+
+    border: 1px solid #dfe5e1;
+}
+
+.submit-button {
+
+    min-width: 205px;
+
+    border: 1px solid #123c2f;
+
+    background: #123c2f;
+
+    color: white;
+
+    box-shadow:
+        0 12px 24px rgba(18,60,47,.16);
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.submit-button strong {
+
+    font-size: 18px;
+
+    font-weight: 400;
+}
+
+.submit-button:hover {
+
+    transform: translateY(-2px);
+
+    background: #b58b3b;
+
+    border-color: #b58b3b;
+
+    box-shadow:
+        0 14px 28px rgba(181,139,59,.22);
+}
+
+.back-button:hover {
+
+    background: #e7ebe8;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.account-sidebar {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.sidebar-card {
+
+    padding: 26px;
+
+    background: white;
+
+    border: 1px solid #e0e6e1;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 14px 35px rgba(24,41,33,.05);
+}
+
+.sidebar-label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #b58b3b;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.8px;
+}
+
+.sidebar-card h3 {
+
+    margin: 0 0 10px;
+
+    color: #123c2f;
+
+    font-size: 22px;
+
+    line-height: 1.2;
+}
+
+.sidebar-card > p {
+
+    margin: 0;
+
+    color: #718078;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.steps {
+
+    margin-top: 24px;
+}
+
+.step {
+
+    display: grid;
+
+    grid-template-columns: 38px 1fr;
+
+    gap: 12px;
+
+    padding-bottom: 21px;
+
+    margin-bottom: 21px;
+
+    border-bottom: 1px solid #edf0ed;
+}
+
+.step:last-child {
+
+    border-bottom: none;
+
+    margin-bottom: 0;
+
+    padding-bottom: 0;
+}
+
+.step-number {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #f5f0e5;
+
+    color: #9a7835;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+.step strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #34423b;
+
+    font-size: 13px;
+}
+
+.step p {
+
+    margin: 0;
+
+    color: #7b8781;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   TRUST
+========================================================= */
+
+.trust-card {
+
+    background:
+        linear-gradient(
+            145deg,
+            #123c2f,
+            #0e3027
+        );
+
+    border-color: transparent;
+
+    color: white;
+}
+
+.trust-card h3 {
+
+    color: white;
+}
+
+.trust-card > p {
+
+    color: rgba(255,255,255,.68);
+}
+
+.trust-symbol {
+
+    width: 44px;
+
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 17px;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.1);
+
+    color: #d4af63;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   ACCOUNT CARD
+========================================================= */
+
+.account-card {
+
+    background: #f6f1e6;
+
+    border-color: #e8ddc4;
+}
+
+.account-card .sidebar-label {
+
+    color: #98752f;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .account-hero {
+
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+    }
+
+    .hero-card {
+
+        max-width: 500px;
+    }
+
+    .account-layout {
+
+        grid-template-columns: 1fr;
+    }
+
+    .account-sidebar {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .account-sidebar .sidebar-card:first-child {
+
+        grid-column: 1 / -1;
+    }
+
+}
+
+@media (max-width: 720px) {
+
+    .account-page {
+
+        padding: 40px 14px 60px;
+    }
+
+    .account-hero {
+
+        margin-bottom: 28px;
+    }
+
+    .hero-copy h1 {
+
+        font-size: 41px;
+
+        letter-spacing: -1.5px;
+    }
+
+    .hero-copy > p {
+
+        font-size: 15px;
+    }
+
+    .hero-points {
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .hero-points > div {
+
+        width: fit-content;
+
+        max-width: 100%;
+    }
+
+    .account-banner {
+
+        align-items: flex-start;
+    }
+
+    .banner-tag {
+
+        display: none;
+    }
+
+    .application-card form {
+
+        padding: 22px;
+    }
+
+    .section-heading {
+
+        padding: 24px 22px;
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .field-full {
+
+        grid-column: auto;
+    }
+
+    .account-sidebar {
+
+        grid-template-columns: 1fr;
+    }
+
+    .account-sidebar .sidebar-card:first-child {
+
+        grid-column: auto;
+    }
+
+    .submit-actions {
+
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+    }
+
+    .back-button,
+    .submit-button {
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,298 @@
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+{% block content %}
+<main>
+
+
+<section class="application-page">
+
+    <div class="application-container">
+
+
+        <div class="application-heading">
+
+            <p>CAREERS AT KING B REAL ESTATE</p>
+
+            <h1>
+                Apply for {{ job.title }}
+            </h1>
+
+            <span>
+                Complete the application below and submit your details.
+            </span>
+
+        </div>
+
+
+        <form method="POST"
+              enctype="multipart/form-data"
+              class="application-form">
+
+            {% csrf_token %}
+
+
+            <div class="application-section">
+
+                <div class="application-section-title">
+
+                    <span>01</span>
+
+                    <div>
+                        <h2>Personal Information</h2>
+                        <p>Tell us how we can contact you.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="application-fields">
+
+                    <div class="application-field">
+
+                        <label for="{{ form.full_name.id_for_label }}">
+                            Full Name
+                        </label>
+
+                        {{ form.full_name }}
+
+                        {% if form.full_name.errors %}
+                            <div class="application-error">
+                                {{ form.full_name.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="application-field">
+
+                        <label for="{{ form.email.id_for_label }}">
+                            Email Address
+                        </label>
+
+                        {{ form.email }}
+
+                        {% if form.email.errors %}
+                            <div class="application-error">
+                                {{ form.email.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="application-field">
+
+                        <label for="{{ form.phone.id_for_label }}">
+                            Phone Number
+                        </label>
+
+                        {{ form.phone }}
+
+                        {% if form.phone.errors %}
+                            <div class="application-error">
+                                {{ form.phone.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="application-section">
+
+                <div class="application-section-title">
+
+                    <span>02</span>
+
+                    <div>
+                        <h2>Professional Information</h2>
+                        <p>Tell us about your experience and skills.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="application-fields">
+
+                    <div class="application-field">
+
+                        <label for="{{ form.skill.id_for_label }}">
+                            Skill / Profession
+                        </label>
+
+                        {{ form.skill }}
+
+                        {% if form.skill.errors %}
+                            <div class="application-error">
+                                {{ form.skill.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="application-field">
+
+                        <label for="{{ form.years_of_experience.id_for_label }}">
+                            Years of Experience
+                        </label>
+
+                        {{ form.years_of_experience }}
+
+                        {% if form.years_of_experience.errors %}
+                            <div class="application-error">
+                                {{ form.years_of_experience.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="application-section">
+
+                <div class="application-section-title">
+
+                    <span>03</span>
+
+                    <div>
+                        <h2>Identification</h2>
+                        <p>Provide a valid means of identification.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="application-fields">
+
+                    <div class="application-field">
+
+                        <label for="{{ form.id_type.id_for_label }}">
+                            Identification Type
+                        </label>
+
+                        {{ form.id_type }}
+
+                        {% if form.id_type.errors %}
+                            <div class="application-error">
+                                {{ form.id_type.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="application-field">
+
+                        <label for="{{ form.id_number.id_for_label }}">
+                            Identification Number
+                        </label>
+
+                        {{ form.id_number }}
+
+                        {% if form.id_number.errors %}
+                            <div class="application-error">
+                                {{ form.id_number.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="application-field application-full">
+
+                        <label for="{{ form.id_document.id_for_label }}">
+                            Upload Identification Document
+                        </label>
+
+                        {{ form.id_document }}
+
+                        {% if form.id_document.errors %}
+                            <div class="application-error">
+                                {{ form.id_document.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="application-section">
+
+                <div class="application-section-title">
+
+                    <span>04</span>
+
+                    <div>
+                        <h2>Curriculum Vitae</h2>
+                        <p>Upload your most recent CV.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="application-field application-full">
+
+                    <label for="{{ form.cv.id_for_label }}">
+                        Upload CV
+                    </label>
+
+                    {{ form.cv }}
+
+                    {% if form.cv.errors %}
+                        <div class="application-error">
+                            {{ form.cv.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="application-submit-area">
+
+                <p>
+                    By submitting this application, you confirm that
+                    the information provided is accurate.
+                </p>
+
+                <button type="submit"
+                        class="application-submit">
+                    Submit Application
+                </button>
+
+                <a href="{% url 'job_detail' job.id %}"
+                   class="application-back">
+                    ← Back to Job
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+{% endblock %}

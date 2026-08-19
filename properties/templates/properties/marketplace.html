@@ -1,0 +1,857 @@
+{% extends 'properties/base.html' %}
+{% load static %}
+
+{% block title %}
+    Marketplace | King B Real Estate
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   KING B MARKETPLACE — PREMIUM DESIGN
+   ========================================================= */
+
+.marketplace-page {
+    min-height: 100vh;
+    background: #f5f7f6;
+    color: #17231f;
+    padding-bottom: 80px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.marketplace-hero {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(
+            135deg,
+            #092d23 0%,
+            #123c2f 55%,
+            #185443 100%
+        );
+    padding: 75px 6% 105px;
+    color: white;
+}
+
+.marketplace-hero::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+    right: -160px;
+    top: -200px;
+}
+
+.marketplace-hero::after {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,175,99,0.15);
+    left: -180px;
+    bottom: -250px;
+}
+
+.marketplace-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1250px;
+    margin: auto;
+}
+
+.marketplace-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #d4af63;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+
+.marketplace-eyebrow::before {
+    content: "";
+    width: 30px;
+    height: 2px;
+    background: #d4af63;
+}
+
+.marketplace-hero h1 {
+    margin: 0;
+    max-width: 800px;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.marketplace-hero h1 span {
+    color: #d4af63;
+}
+
+.marketplace-hero-text {
+    max-width: 680px;
+    margin-top: 22px;
+    color: rgba(255,255,255,0.75);
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   SEARCH PANEL
+   ========================================================= */
+
+.marketplace-search-wrapper {
+    position: relative;
+    z-index: 10;
+    max-width: 1180px;
+    margin: -55px auto 0;
+    padding: 0 25px;
+}
+
+.marketplace-search {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    border: 1px solid rgba(18,60,47,0.08);
+}
+
+.marketplace-search-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #68736f;
+    margin: 0 0 10px 5px;
+}
+
+.search-row {
+    display: grid;
+    grid-template-columns: 2fr 1.1fr 1fr auto;
+    gap: 10px;
+}
+
+.search-field {
+    position: relative;
+}
+
+.search-field input,
+.search-field select {
+    width: 100%;
+    height: 56px;
+    box-sizing: border-box;
+    border: 1px solid #e1e6e3;
+    border-radius: 11px;
+    background: #f8faf9;
+    padding: 0 16px;
+    font-size: 15px;
+    color: #17231f;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.search-field input:focus,
+.search-field select:focus {
+    border-color: #123c2f;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(18,60,47,0.08);
+}
+
+.marketplace-search-button {
+    height: 56px;
+    border: none;
+    border-radius: 11px;
+    padding: 0 27px;
+    background: #123c2f;
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s ease;
+    white-space: nowrap;
+}
+
+.marketplace-search-button:hover {
+    background: #0b2d23;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.marketplace-content {
+    max-width: 1250px;
+    margin: 55px auto 0;
+    padding: 0 25px;
+}
+
+.marketplace-results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 25px;
+}
+
+.results-heading small {
+    display: block;
+    color: #8a9490;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.results-heading h2 {
+    margin: 0;
+    color: #123c2f;
+    font-size: 27px;
+    letter-spacing: -0.5px;
+}
+
+.results-count {
+    background: #e9efec;
+    color: #123c2f;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MARKETPLACE GRID
+   ========================================================= */
+
+.marketplace-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+
+/* =========================================================
+   LISTING CARD
+   ========================================================= */
+
+.marketplace-card {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: white;
+    border: 1px solid #e9edeb;
+    border-radius: 15px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.045);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.marketplace-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(181,139,59,0.35);
+    box-shadow: 0 20px 45px rgba(18,60,47,0.12);
+}
+
+
+/* =========================================================
+   CARD IMAGE
+   ========================================================= */
+
+.marketplace-image {
+    position: relative;
+    height: 230px;
+    overflow: hidden;
+    background: #edf1ef;
+}
+
+.marketplace-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.marketplace-card:hover .marketplace-image img {
+    transform: scale(1.06);
+}
+
+.marketplace-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.05),
+        transparent 45%,
+        rgba(0,0,0,0.35)
+    );
+    pointer-events: none;
+}
+
+.marketplace-status {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(255,255,255,0.95);
+    color: #123c2f;
+    padding: 7px 11px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.marketplace-save {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    font-size: 18px;
+    color: #123c2f;
+}
+
+
+/* =========================================================
+   NO IMAGE
+   ========================================================= */
+
+.no-marketplace-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        linear-gradient(
+            135deg,
+            #e7ece9,
+            #f4f6f5
+        );
+    color: #8b9691;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   CARD BODY
+   ========================================================= */
+
+.marketplace-card-content {
+    padding: 18px;
+}
+
+.marketplace-category {
+    display: inline-block;
+    color: #a2762f;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 7px;
+}
+
+.marketplace-card h3 {
+    margin: 0;
+    color: #1b2924;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.marketplace-price {
+    margin-top: 14px;
+    color: #123c2f;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.marketplace-location {
+    margin: 12px 0 0;
+    color: #707b76;
+    font-size: 13px;
+}
+
+.marketplace-date {
+    margin: 6px 0 0;
+    color: #a0a8a4;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.marketplace-empty {
+    background: white;
+    border: 1px solid #e5eae7;
+    border-radius: 18px;
+    padding: 80px 25px;
+    text-align: center;
+}
+
+.empty-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #edf3ef;
+    border-radius: 50%;
+    font-size: 28px;
+}
+
+.marketplace-empty h2 {
+    margin: 0 0 8px;
+    color: #123c2f;
+}
+
+.marketplace-empty p {
+    color: #7d8883;
+    margin: 0;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .marketplace-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .search-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .marketplace-search-button {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 760px) {
+
+    .marketplace-hero {
+        padding: 55px 5% 85px;
+    }
+
+    .marketplace-hero h1 {
+        letter-spacing: -1px;
+    }
+
+    .marketplace-hero-text {
+        font-size: 16px;
+    }
+
+    .marketplace-search-wrapper {
+        padding: 0 15px;
+    }
+
+    .marketplace-search {
+        padding: 15px;
+    }
+
+    .search-row {
+        grid-template-columns: 1fr;
+    }
+
+    .marketplace-content {
+        padding: 0 15px;
+        margin-top: 40px;
+    }
+
+    .marketplace-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .marketplace-image {
+        height: 190px;
+    }
+
+    .marketplace-card-content {
+        padding: 14px;
+    }
+
+    .marketplace-price {
+        font-size: 19px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .marketplace-hero {
+        padding: 45px 5% 75px;
+    }
+
+    .marketplace-hero h1 {
+        font-size: 38px;
+    }
+
+    .marketplace-results-header {
+        align-items: center;
+    }
+
+    .results-heading h2 {
+        font-size: 22px;
+    }
+
+    .marketplace-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .marketplace-image {
+        height: 230px;
+    }
+
+    .marketplace-card h3 {
+        font-size: 18px;
+    }
+
+}
+
+</style>
+
+
+<section class="marketplace-page">
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="marketplace-hero">
+
+        <div class="marketplace-hero-inner">
+
+            <div class="marketplace-eyebrow">
+                King B Marketplace
+            </div>
+
+            <h1>
+                Discover what you need.
+                <span>Buy with confidence.</span>
+            </h1>
+
+            <p class="marketplace-hero-text">
+                Explore properties, vehicles, electronics, furniture,
+                building materials, services and more from sellers
+                across your area.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH
+         ===================================================== -->
+
+    <div class="marketplace-search-wrapper">
+
+        <div class="marketplace-search">
+
+            <span class="marketplace-search-label">
+                Search marketplace
+            </span>
+
+            <form method="GET">
+
+                <div class="search-row">
+
+                    <div class="search-field">
+
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="What are you looking for?"
+                            value="{{ search }}"
+                        >
+
+                    </div>
+
+
+                    <div class="search-field">
+
+                        <select name="category">
+
+                            <option value="">
+                                All Categories
+                            </option>
+
+                            <option
+                                value="electronics"
+                                {% if category == 'electronics' %}selected{% endif %}
+                            >
+                                Electronics
+                            </option>
+
+                            <option
+                                value="vehicles"
+                                {% if category == 'vehicles' %}selected{% endif %}
+                            >
+                                Vehicles
+                            </option>
+
+                            <option
+                                value="furniture"
+                                {% if category == 'furniture' %}selected{% endif %}
+                            >
+                                Furniture
+                            </option>
+
+                            <option
+                                value="building_materials"
+                                {% if category == 'building_materials' %}selected{% endif %}
+                            >
+                                Building Materials
+                            </option>
+
+                            <option
+                                value="home_appliances"
+                                {% if category == 'home_appliances' %}selected{% endif %}
+                            >
+                                Home Appliances
+                            </option>
+
+                            <option
+                                value="fashion"
+                                {% if category == 'fashion' %}selected{% endif %}
+                            >
+                                Fashion
+                            </option>
+
+                            <option
+                                value="services"
+                                {% if category == 'services' %}selected{% endif %}
+                            >
+                                Services
+                            </option>
+
+                            <option
+                                value="land"
+                                {% if category == 'land' %}selected{% endif %}
+                            >
+                                Land
+                            </option>
+
+                            <option
+                                value="property"
+                                {% if category == 'property' %}selected{% endif %}
+                            >
+                                Property
+                            </option>
+
+                            <option
+                                value="tools"
+                                {% if category == 'tools' %}selected{% endif %}
+                            >
+                                Tools
+                            </option>
+
+                            <option
+                                value="other"
+                                {% if category == 'other' %}selected{% endif %}
+                            >
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="search-field">
+
+                        <input
+                            type="text"
+                            name="location"
+                            placeholder="Location"
+                            value="{{ location }}"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="marketplace-search-button"
+                    >
+                        Search
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LISTINGS
+         ===================================================== -->
+
+    <div class="marketplace-content">
+
+        <div class="marketplace-results-header">
+
+            <div class="results-heading">
+
+                <small>
+                    Marketplace
+                </small>
+
+                <h2>
+                    Latest Listings
+                </h2>
+
+            </div>
+
+            <div class="results-count">
+
+                {{ listings|length }} listings
+
+            </div>
+
+        </div>
+
+
+        {% if listings %}
+
+            <div class="marketplace-grid">
+
+                {% for listing in listings %}
+
+                    <a
+                        href="{% url 'marketplace_detail' listing.id %}"
+                        class="marketplace-card"
+                    >
+
+                        <!-- IMAGE -->
+
+                        <div class="marketplace-image">
+
+                            {% if listing.image %}
+
+                                <img
+                                    src="{{ listing.image.url }}"
+                                    alt="{{ listing.title }}"
+                                    loading="lazy"
+                                >
+
+                                <div class="marketplace-image-overlay"></div>
+
+                            {% else %}
+
+                                <div class="no-marketplace-image">
+                                    No Image Available
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="marketplace-status">
+                                Available
+                            </div>
+
+
+                            <div class="marketplace-save">
+                                ♡
+                            </div>
+
+                        </div>
+
+
+                        <!-- BODY -->
+
+                        <div class="marketplace-card-content">
+
+                            <span class="marketplace-category">
+                                {{ listing.get_category_display }}
+                            </span>
+
+                            <h3>
+                                {{ listing.title }}
+                            </h3>
+
+                            <div class="marketplace-price">
+                                ₦{{ listing.price|floatformat:0 }}
+                            </div>
+
+                            <p class="marketplace-location">
+                                📍 {{ listing.location }}
+                            </p>
+
+                            <p class="marketplace-date">
+                                Posted
+                                {{ listing.created_at|date:"M d, Y" }}
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="marketplace-empty">
+
+                <div class="empty-icon">
+                    🔍
+                </div>
+
+                <h2>
+                    No listings found
+                </h2>
+
+                <p>
+                    Try another search, category or location.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

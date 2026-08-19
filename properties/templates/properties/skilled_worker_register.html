@@ -1,0 +1,856 @@
+{% extends 'properties/base.html' %}
+{% load static %}
+
+
+{% block title %}
+Register as a Skilled Worker | King B Real Estate
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =====================================================
+       SUCCESS / ERROR POPUP
+    ===================================================== */
+
+    .message-overlay {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+
+        background: rgba(0, 0, 0, 0.72);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 20px;
+
+        z-index: 99999;
+
+        backdrop-filter: blur(5px);
+    }
+
+
+    .message-popup {
+        position: relative;
+
+        width: 100%;
+        max-width: 480px;
+
+        background: #ffffff;
+
+        padding: 50px 40px;
+
+        border-radius: 16px;
+
+        text-align: center;
+
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+
+        animation: popupAppear 0.35s ease;
+    }
+
+
+    @keyframes popupAppear {
+
+        from {
+            opacity: 0;
+            transform: translateY(-25px) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+    }
+
+
+    .message-close {
+
+        position: absolute;
+
+        top: 15px;
+        right: 18px;
+
+        width: 36px;
+        height: 36px;
+
+        border: none;
+
+        background: transparent;
+
+        color: #777;
+
+        font-size: 30px;
+
+        line-height: 1;
+
+        cursor: pointer;
+
+    }
+
+
+    .message-close:hover {
+        color: #123c2f;
+    }
+
+
+    .message-icon {
+
+        width: 78px;
+        height: 78px;
+
+        margin: 0 auto 22px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background: #123c2f;
+
+        color: #d4af63;
+
+        font-size: 40px;
+
+        font-weight: bold;
+
+        box-shadow: 0 10px 30px rgba(18, 60, 47, 0.25);
+
+    }
+
+
+    .error-icon {
+
+        background: #a83c3c;
+
+        color: #ffffff;
+
+    }
+
+
+    .message-popup h2 {
+
+        margin: 0 0 14px;
+
+        color: #123c2f;
+
+        font-size: 28px;
+
+    }
+
+
+    .message-popup p {
+
+        margin: 0 0 30px;
+
+        color: #666;
+
+        font-size: 15px;
+
+        line-height: 1.7;
+
+    }
+
+
+    .message-button {
+
+        display: inline-block;
+
+        width: 100%;
+
+        padding: 15px 25px;
+
+        border: none;
+
+        border-radius: 7px;
+
+        background: #b58b3b;
+
+        color: #ffffff;
+
+        font-size: 15px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: 0.3s ease;
+
+        text-decoration: none;
+
+        box-sizing: border-box;
+
+    }
+
+
+    .message-button:hover {
+
+        background: #96732f;
+
+        transform: translateY(-2px);
+
+    }
+
+
+    .error-button {
+
+        background: #a83c3c;
+
+    }
+
+
+    .error-button:hover {
+
+        background: #8c3030;
+
+    }
+
+
+    /* =====================================================
+       FORM ERROR
+    ===================================================== */
+
+    .form-errors {
+
+        background: #f8dddd;
+
+        color: #9b2525;
+
+        border-left: 4px solid #a83c3c;
+
+        padding: 15px 18px;
+
+        border-radius: 8px;
+
+        margin-bottom: 25px;
+
+    }
+
+
+    .form-errors p {
+
+        margin: 0 0 8px;
+
+        font-weight: 700;
+
+    }
+
+
+    .form-errors ul {
+
+        margin: 8px 0 0;
+
+        padding-left: 20px;
+
+    }
+
+
+    /* =====================================================
+       PASSWORD FIELD
+    ===================================================== */
+
+    .password-help {
+
+        margin-top: 7px;
+
+        color: #777;
+
+        font-size: 13px;
+
+        line-height: 1.5;
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .message-popup {
+
+            padding: 42px 25px;
+
+            border-radius: 12px;
+
+        }
+
+        .message-popup h2 {
+
+            font-size: 23px;
+
+        }
+
+        .message-popup p {
+
+            font-size: 14px;
+
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =====================================================
+     SUCCESS POPUP
+===================================================== -->
+
+{% if registration_success %}
+
+<div class="message-overlay" id="successOverlay">
+
+    <div class="message-popup message-success">
+
+        <button
+            type="button"
+            class="message-close"
+            onclick="closeSuccessPopup()"
+            aria-label="Close"
+        >
+            &times;
+        </button>
+
+
+        <div class="message-icon">
+            ✓
+        </div>
+
+
+        <h2>
+            Registration Successful
+        </h2>
+
+
+        <p>
+            Your information has been successfully submitted
+            to King B Real Estate.
+            Your skilled worker application is now waiting
+            for approval.
+        </p>
+
+
+        {% if worker %}
+
+            <a
+                href="{% url 'skilled_worker_profile' worker_id=worker.id %}"
+                class="message-button"
+            >
+                View My Profile
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+
+<!-- =====================================================
+     ERROR POPUP
+===================================================== -->
+
+{% if messages %}
+
+    {% for message in messages %}
+
+        {% if message.tags == "error" %}
+
+            <div class="message-overlay" id="errorOverlay">
+
+                <div class="message-popup message-error">
+
+
+                    <button
+                        type="button"
+                        class="message-close"
+                        onclick="closeErrorPopup()"
+                        aria-label="Close"
+                    >
+                        &times;
+                    </button>
+
+
+                    <div class="message-icon error-icon">
+                        !
+                    </div>
+
+
+                    <h2>
+                        Registration Failed
+                    </h2>
+
+
+                    <p>
+                        {{ message }}
+                    </p>
+
+
+                    <button
+                        type="button"
+                        class="message-button error-button"
+                        onclick="closeErrorPopup()"
+                    >
+                        Try Again
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+
+
+<!-- =====================================================
+     PAGE HEADER
+===================================================== -->
+
+<section class="page-header">
+
+    <div class="container">
+
+        <h1>
+            Register as a Skilled Worker
+        </h1>
+
+        <p>
+            Join King B Real Estate's network of trusted
+            skilled professionals.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     REGISTRATION SECTION
+===================================================== -->
+
+<section class="registration-section">
+
+    <div class="container">
+
+
+        <div class="registration-intro">
+
+            <h2>
+                Become a Skilled Worker Partner
+            </h2>
+
+            <p>
+                Are you an experienced professional looking for
+                opportunities to work with King B Real Estate?
+                Register your details below and our team will
+                review your application.
+            </p>
+
+        </div>
+
+
+        <div class="skilled-worker-actions">
+
+            <a
+                href="{% url 'skilled_workers' %}"
+                class="worker-view-button"
+            >
+                View Skilled Workers
+            </a>
+
+        </div>
+
+
+
+        <div class="registration-form">
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                {% csrf_token %}
+
+
+                {% if form.errors %}
+
+                    <div class="form-errors">
+
+                        <p>
+                            Please correct the errors below.
+                        </p>
+
+                        {{ form.non_field_errors }}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================================
+                     PERSONAL INFORMATION
+                ================================================== -->
+
+                <h3>
+                    Personal Information
+                </h3>
+
+
+                <!-- FULL NAME -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.full_name.id_for_label }}">
+                        Full Name
+                    </label>
+
+                    {{ form.full_name }}
+
+                    {{ form.full_name.errors }}
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.phone.id_for_label }}">
+                        Phone Number
+                    </label>
+
+                    {{ form.phone }}
+
+                    {{ form.phone.errors }}
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.email.id_for_label }}">
+                        Email Address
+                    </label>
+
+                    {{ form.email }}
+
+                    {{ form.email.errors }}
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.password.id_for_label }}">
+                        Password
+                    </label>
+
+                    {{ form.password }}
+
+                    {{ form.password.errors }}
+
+                    
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label for="{{ form.confirm_password.id_for_label }}">
+                            Confirm Password
+                        </label>
+
+                        {{ form.confirm_password }}
+
+                        {{ form.confirm_password.errors }}
+
+                        <div class="password-help">
+                            Re-enter your password to confirm it.
+                        </div>
+
+                      
+                    </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.location.id_for_label }}">
+                        Location
+                    </label>
+
+                    {{ form.location }}
+
+                    {{ form.location.errors }}
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PROFESSIONAL INFORMATION
+                ================================================== -->
+
+                <h3>
+                    Professional Information
+                </h3>
+
+
+                <!-- SKILL -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.skill.id_for_label }}">
+                        Skill / Profession
+                    </label>
+
+                    {{ form.skill }}
+
+                    {{ form.skill.errors }}
+
+                </div>
+
+
+                <!-- EXPERIENCE -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.years_of_experience.id_for_label }}">
+                        Years of Experience
+                    </label>
+
+                    {{ form.years_of_experience }}
+
+                    {{ form.years_of_experience.errors }}
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.description.id_for_label }}">
+                        About Your Experience
+                    </label>
+
+                    {{ form.description }}
+
+                    {{ form.description.errors }}
+
+                </div>
+
+
+                <!-- SERVICES -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.services.id_for_label }}">
+                        Services You Provide
+                    </label>
+
+                    {{ form.services }}
+
+                    {{ form.services.errors }}
+
+                </div>
+
+
+
+                <!-- =================================================
+                     AVAILABILITY
+                ================================================== -->
+
+                <h3>
+                    Availability
+                </h3>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.availability.id_for_label }}">
+                        Availability
+                    </label>
+
+                    {{ form.availability }}
+
+                    {{ form.availability.errors }}
+
+                </div>
+
+
+
+                <!-- =================================================
+                     IDENTIFICATION
+                ================================================== -->
+
+                <h3>
+                    Identification
+                </h3>
+
+
+                <!-- ID TYPE -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.id_type.id_for_label }}">
+                        ID Type
+                    </label>
+
+                    {{ form.id_type }}
+
+                    {{ form.id_type.errors }}
+
+                </div>
+
+
+                <!-- ID NUMBER -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.id_number.id_for_label }}">
+                        ID Number
+                    </label>
+
+                    {{ form.id_number }}
+
+                    {{ form.id_number.errors }}
+
+                </div>
+
+
+                <!-- ID DOCUMENT -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.id_document.id_for_label }}">
+                        ID Document
+                    </label>
+
+                    {{ form.id_document }}
+
+                    {{ form.id_document.errors }}
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DOCUMENTS
+                ================================================== -->
+
+                <h3>
+                    Documents & Profile
+                </h3>
+
+
+                <!-- PROFILE PHOTO -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.profile_image.id_for_label }}">
+                        Profile Photo
+                    </label>
+
+                    {{ form.profile_image }}
+
+                    {{ form.profile_image.errors }}
+
+                </div>
+
+
+                <!-- CV -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.cv.id_for_label }}">
+                        CV / Resume
+                    </label>
+
+                    {{ form.cv }}
+
+                    {{ form.cv.errors }}
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SUBMIT
+                ================================================== -->
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    Submit Registration
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     POPUP JAVASCRIPT
+===================================================== -->
+
+<script>
+
+function closeSuccessPopup() {
+
+    const overlay = document.getElementById("successOverlay");
+
+    if (overlay) {
+        overlay.remove();
+    }
+
+}
+
+
+function closeErrorPopup() {
+
+    const overlay = document.getElementById("errorOverlay");
+
+    if (overlay) {
+        overlay.remove();
+    }
+
+}
+
+</script>
+
+
+{% endblock %}

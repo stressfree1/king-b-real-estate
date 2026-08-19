@@ -1,0 +1,1968 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}
+    Sell on King B Marketplace
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   KING B MARKETPLACE — SELLER PAGE
+   ========================================================= */
+
+.marketplace-sell-page {
+    min-height: 100vh;
+    background: #f6f8f7;
+    padding: 50px 20px 100px;
+    color: #17231f;
+}
+
+.marketplace-sell-container {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.sell-header {
+    margin-bottom: 35px;
+}
+
+.sell-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.sell-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sell-brand-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #123c2f;
+    color: #d4af63;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 18px;
+}
+
+.sell-brand-text strong {
+    display: block;
+    color: #123c2f;
+    font-size: 15px;
+}
+
+.sell-brand-text span {
+    display: block;
+    margin-top: 2px;
+    color: #8a9690;
+    font-size: 12px;
+}
+
+.sell-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #123c2f;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 14px;
+    border: 1px solid #dfe7e3;
+    background: white;
+    border-radius: 9px;
+    transition: .2s ease;
+}
+
+.sell-back:hover {
+    border-color: #123c2f;
+    background: #f8faf9;
+}
+
+.sell-header h1 {
+    margin: 30px 0 8px;
+    color: #123c2f;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    font-weight: 850;
+}
+
+.sell-header h1 span {
+    color: #b58b3b;
+}
+
+.sell-header p {
+    max-width: 680px;
+    margin: 0;
+    color: #748079;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.sell-header-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-top: 25px;
+}
+
+.sell-feature {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.sell-feature-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #eaf2ee;
+    color: #123c2f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+}
+
+.sell-feature strong {
+    display: block;
+    color: #293a34;
+    font-size: 12px;
+}
+
+.sell-feature span {
+    display: block;
+    color: #8b9691;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.sell-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 350px;
+    gap: 25px;
+    align-items: start;
+}
+
+
+/* =========================================================
+   MAIN CARD
+   ========================================================= */
+
+.sell-main-card {
+    background: white;
+    border: 1px solid #e2e9e5;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(18,60,47,.06);
+}
+
+.sell-section {
+    padding: 30px;
+    border-bottom: 1px solid #edf1ef;
+}
+
+.sell-section:last-child {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.sell-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 25px;
+}
+
+.sell-section-number {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #edf4f0;
+    color: #123c2f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.sell-section-title h2 {
+    margin: 0;
+    color: #17352b;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.sell-section-title p {
+    margin: 5px 0 0;
+    color: #89948f;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
+
+.sell-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.sell-field-full {
+    grid-column: 1 / -1;
+}
+
+.sell-field {
+    min-width: 0;
+}
+
+.sell-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #293a34;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.sell-field label span {
+    color: #a2762f;
+}
+
+.sell-field input,
+.sell-field select,
+.sell-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #dce5e0;
+    border-radius: 11px;
+    background: #fafcfb;
+    color: #18251f;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: .2s ease;
+}
+
+.sell-field input,
+.sell-field select {
+    height: 52px;
+    padding: 0 15px;
+}
+
+.sell-field textarea {
+    min-height: 145px;
+    padding: 14px 15px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.sell-field input:focus,
+.sell-field select:focus,
+.sell-field textarea:focus {
+    background: white;
+    border-color: #123c2f;
+    box-shadow: 0 0 0 3px rgba(18,60,47,.07);
+}
+
+.sell-field-help {
+    display: block;
+    margin-top: 7px;
+    color: #929d98;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   PRICE
+   ========================================================= */
+
+.price-wrapper {
+    position: relative;
+}
+
+.price-symbol {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #123c2f;
+    font-size: 15px;
+    font-weight: 800;
+    pointer-events: none;
+}
+
+.price-wrapper input {
+    padding-left: 36px !important;
+}
+
+
+/* =========================================================
+   IMAGE UPLOAD AREA
+   ========================================================= */
+
+.image-upload-box {
+    position: relative;
+    width: 100%;
+    min-height: 230px;
+    border: 1.5px dashed #cbd8d1;
+    border-radius: 15px;
+    background: #f9fbfa;
+    overflow: hidden;
+    transition: .2s ease;
+    box-sizing: border-box;
+}
+
+.image-upload-box:hover {
+    border-color: #123c2f;
+    background: #f5f9f7;
+}
+
+
+/* =========================================================
+   ADD IMAGE AREA
+   IMPORTANT:
+   BUTTON ALWAYS STAYS VISIBLE
+   ========================================================= */
+
+.image-add-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    text-align: center;
+    min-height: 190px;
+    box-sizing: border-box;
+}
+
+.image-upload-content {
+    width: 100%;
+}
+
+.image-upload-icon {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 15px;
+    border-radius: 14px;
+    background: #eaf2ee;
+    color: #123c2f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+}
+
+.image-upload-content strong {
+    display: block;
+    color: #25372f;
+    font-size: 14px;
+}
+
+.image-upload-content p {
+    margin: 6px 0 15px;
+    color: #929d98;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   ADD IMAGE BUTTON
+   ========================================================= */
+
+.image-upload-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 20px;
+    border-radius: 9px;
+    background: #123c2f;
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .2s ease;
+    border: none;
+}
+
+.image-upload-button:hover {
+    background: #1b5543;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   REAL FILE INPUT
+   ========================================================= */
+
+.image-upload-box input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   IMAGE PREVIEW AREA
+   ========================================================= */
+
+.multi-image-preview-container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   INDIVIDUAL IMAGE
+   ========================================================= */
+
+.image-preview-item {
+    position: relative;
+    height: 150px;
+    border-radius: 11px;
+    overflow: hidden;
+    background: #eef3f0;
+    border: 1px solid #dce5e0;
+}
+
+.image-preview-item img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   REMOVE IMAGE BUTTON
+   ========================================================= */
+
+.remove-image-button {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(180,35,24,.92);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 900;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 3px 10px rgba(0,0,0,.2);
+}
+
+.remove-image-button:hover {
+    background: #b42318;
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   IMAGE COUNT
+   ========================================================= */
+
+.image-count {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 0 15px 15px;
+    font-size: 11px;
+    color: #7c8983;
+}
+
+.image-count strong {
+    color: #123c2f;
+}
+
+.image-count.warning {
+    color: #b42318;
+}
+
+.image-count.good {
+    color: #28734d;
+}
+
+
+/* =========================================================
+   ERRORS
+   ========================================================= */
+
+.field-errors {
+    margin-top: 7px;
+    color: #b42318;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.form-errors {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: #fff1f0;
+    border: 1px solid #f1c8c4;
+    color: #a4231b;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sell-sidebar {
+    position: sticky;
+    top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.sell-submit-card {
+    background: #123c2f;
+    border-radius: 20px;
+    padding: 25px;
+    color: white;
+    box-shadow: 0 18px 45px rgba(18,60,47,.18);
+}
+
+.sell-submit-card h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+
+.sell-submit-card > p {
+    margin: 0 0 22px;
+    color: rgba(255,255,255,.68);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.submit-button {
+    width: 100%;
+    height: 54px;
+    border: none;
+    border-radius: 11px;
+    background: #d4af63;
+    color: #123c2f;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: .25s ease;
+}
+
+.submit-button:hover {
+    background: #e0bd73;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   APPROVAL
+   ========================================================= */
+
+.approval-card {
+    background: white;
+    border: 1px solid #e2e9e5;
+    border-radius: 18px;
+    padding: 23px;
+}
+
+.approval-card h3 {
+    margin: 0 0 20px;
+    color: #123c2f;
+    font-size: 15px;
+}
+
+.approval-step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.approval-step:last-child {
+    margin-bottom: 0;
+}
+
+.approval-icon {
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #edf4f0;
+    color: #123c2f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.approval-step strong {
+    display: block;
+    color: #293a34;
+    font-size: 12px;
+}
+
+.approval-step span {
+    display: block;
+    margin-top: 3px;
+    color: #8c9892;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SAFETY
+   ========================================================= */
+
+.sell-safety {
+    background: #fffaf0;
+    border: 1px solid #f0dfb8;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.sell-safety-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #795b21;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.sell-safety p {
+    margin: 0;
+    color: #8b7750;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+    .sell-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sell-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sell-submit-card,
+    .sell-safety {
+        grid-column: 1 / -1;
+    }
+
+    .multi-image-preview-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .marketplace-sell-page {
+        padding: 30px 14px 70px;
+    }
+
+    .sell-header {
+        margin-bottom: 25px;
+    }
+
+    .sell-header-top {
+        align-items: flex-start;
+    }
+
+    .sell-back {
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+
+    .sell-brand-mark {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+
+    .sell-brand-text strong {
+        font-size: 13px;
+    }
+
+    .sell-header h1 {
+        margin-top: 24px;
+        font-size: 34px;
+        letter-spacing: -1px;
+    }
+
+    .sell-header p {
+        font-size: 13px;
+    }
+
+    .sell-header-features {
+        gap: 14px;
+        flex-direction: column;
+    }
+
+    .sell-main-card {
+        border-radius: 16px;
+    }
+
+    .sell-section {
+        padding: 22px 18px;
+    }
+
+    .sell-form-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .sell-field-full {
+        grid-column: auto;
+    }
+
+    .sell-sidebar {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sell-submit-card {
+        border-radius: 16px;
+    }
+
+    .approval-card {
+        border-radius: 16px;
+    }
+
+    .multi-image-preview-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .image-preview-item {
+        height: 135px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONE
+   ========================================================= */
+
+@media (max-width: 430px) {
+
+    .sell-header-top {
+        display: block;
+    }
+
+    .sell-back {
+        margin-top: 15px;
+    }
+
+    .sell-header h1 {
+        font-size: 30px;
+    }
+
+    .sell-section {
+        padding: 20px 15px;
+    }
+
+    .sell-section-header {
+        gap: 10px;
+    }
+
+    .sell-section-number {
+        flex-basis: 30px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .sell-section-title h2 {
+        font-size: 16px;
+    }
+
+    .image-upload-box {
+        min-height: 180px;
+    }
+
+    .image-preview-item {
+        height: 115px;
+    }
+
+    .remove-image-button {
+        width: 25px;
+        height: 25px;
+        font-size: 13px;
+    }
+}
+
+</style>
+
+
+<section class="marketplace-sell-page">
+
+<div class="marketplace-sell-container">
+
+
+<!-- =========================================================
+     PREMIUM KING B MARKETPLACE SELLER HEADER
+     ========================================================= -->
+
+<header class="sell-header-premium">
+
+    <!-- Decorative background -->
+    <div class="sell-header-glow sell-header-glow-one"></div>
+    <div class="sell-header-glow sell-header-glow-two"></div>
+
+    <div class="sell-header-inner">
+
+        <!-- =================================================
+             TOP NAV
+             ================================================= -->
+
+        <div class="sell-topbar">
+
+            <a href="{% url 'marketplace' %}" class="sell-brand-premium">
+
+                <div class="sell-brand-logo">
+                    KB
+                </div>
+
+                <div class="sell-brand-info">
+                    <strong>King B</strong>
+                    <span>Marketplace</span>
+                </div>
+
+            </a>
+
+
+            <a
+                href="{% url 'marketplace' %}"
+                class="sell-marketplace-link"
+            >
+                <span class="sell-back-arrow">←</span>
+                Marketplace
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <div class="sell-hero">
+
+            <div class="sell-hero-copy">
+
+                <!-- Small label -->
+
+                <div class="sell-eyebrow">
+
+                    <span class="sell-eyebrow-line"></span>
+
+                    SELLER CENTRE
+
+                </div>
+
+
+                <!-- Main heading -->
+
+                <h1>
+                    Sell with
+                    <span>confidence.</span>
+                </h1>
+
+
+                <!-- Description -->
+
+                <p class="sell-hero-description">
+
+                    List your products on King B Marketplace
+                    and connect with buyers looking for
+                    quality products.
+
+                </p>
+
+
+                <!-- Trust points -->
+
+                <div class="sell-trust-row">
+
+                    <div class="sell-trust-item">
+
+                        <div class="sell-trust-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>
+                                Easy to list
+                            </strong>
+
+                            <span>
+                                Simple process
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="sell-trust-divider"></div>
+
+
+                    <div class="sell-trust-item">
+
+                        <div class="sell-trust-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>
+                                Verified listings
+                            </strong>
+
+                            <span>
+                                Reviewed by King B
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="sell-trust-divider"></div>
+
+
+                    <div class="sell-trust-item">
+
+                        <div class="sell-trust-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>
+                                More visibility
+                            </strong>
+
+                            <span>
+                                Reach more buyers
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT VISUAL CARD
+                 ================================================= -->
+
+            <div class="sell-hero-card">
+
+                <div class="sell-hero-card-top">
+
+                    <span>
+                        KING B MARKETPLACE
+                    </span>
+
+                    <div class="sell-status">
+                        <span></span>
+                        LIVE
+                    </div>
+
+                </div>
+
+
+                <div class="sell-hero-card-content">
+
+                    <div class="sell-product-symbol">
+                        KB
+                    </div>
+
+                    <div>
+
+                        <small>
+                            YOUR NEXT CUSTOMER
+                        </small>
+
+                        <strong>
+                            Could be looking
+                            for your product.
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sell-hero-card-bottom">
+
+                    <span>
+                        Create your listing
+                    </span>
+
+                    <span class="sell-card-arrow">
+                        →
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     FORM
+     ========================================================= -->
+
+<form
+    method="POST"
+    enctype="multipart/form-data"
+    class="sell-layout"
+>
+
+{% csrf_token %}
+
+
+<!-- =========================================================
+     MAIN FORM CARD
+     ========================================================= -->
+
+<div class="sell-main-card">
+
+
+{% if form.non_field_errors %}
+
+<div style="padding:25px 30px 0;">
+
+    <div class="form-errors">
+        {{ form.non_field_errors }}
+    </div>
+
+</div>
+
+{% endif %}
+
+
+
+<!-- =========================================================
+     SECTION 01
+     ========================================================= -->
+
+<section class="sell-section">
+
+<div class="sell-section-header">
+
+    <div class="sell-section-number">
+        01
+    </div>
+
+    <div class="sell-section-title">
+
+        <h2>
+            Basic information
+        </h2>
+
+        <p>
+            Tell buyers what you are selling.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="sell-form-grid">
+
+
+<div class="sell-field sell-field-full">
+
+<label for="{{ form.title.id_for_label }}">
+    Item title <span>*</span>
+</label>
+
+{{ form.title }}
+
+{% if form.title.errors %}
+
+<div class="field-errors">
+    {{ form.title.errors }}
+</div>
+
+{% endif %}
+
+<span class="sell-field-help">
+    Use a clear title such as "Samsung 55-inch Smart TV".
+</span>
+
+</div>
+
+
+
+<div class="sell-field">
+
+<label for="{{ form.category.id_for_label }}">
+    Category <span>*</span>
+</label>
+
+{{ form.category }}
+
+{% if form.category.errors %}
+
+<div class="field-errors">
+    {{ form.category.errors }}
+</div>
+
+{% endif %}
+
+</div>
+
+
+
+<div class="sell-field">
+
+<label for="{{ form.location.id_for_label }}">
+    Location <span>*</span>
+</label>
+
+{{ form.location }}
+
+{% if form.location.errors %}
+
+<div class="field-errors">
+    {{ form.location.errors }}
+</div>
+
+{% endif %}
+
+<span class="sell-field-help">
+    Enter the city or area where the item is located.
+</span>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SECTION 02 — PRICE
+     ========================================================= -->
+
+<section class="sell-section">
+
+<div class="sell-section-header">
+
+    <div class="sell-section-number">
+        02
+    </div>
+
+    <div class="sell-section-title">
+
+        <h2>
+            Pricing
+        </h2>
+
+        <p>
+            Set the amount you want buyers to see.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="sell-form-grid">
+
+<div class="sell-field sell-field-full">
+
+<label for="{{ form.price.id_for_label }}">
+    Asking price <span>*</span>
+</label>
+
+<div class="price-wrapper">
+
+<span class="price-symbol">
+    ₦
+</span>
+
+{{ form.price }}
+
+</div>
+
+{% if form.price.errors %}
+
+<div class="field-errors">
+    {{ form.price.errors }}
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SECTION 03 — DESCRIPTION
+     ========================================================= -->
+
+<section class="sell-section">
+
+<div class="sell-section-header">
+
+    <div class="sell-section-number">
+        03
+    </div>
+
+    <div class="sell-section-title">
+
+        <h2>
+            Description
+        </h2>
+
+        <p>
+            Give buyers enough information to understand the item.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="sell-field">
+
+<label for="{{ form.description.id_for_label }}">
+    Item description <span>*</span>
+</label>
+
+{{ form.description }}
+
+{% if form.description.errors %}
+
+<div class="field-errors">
+    {{ form.description.errors }}
+</div>
+
+{% endif %}
+
+<span class="sell-field-help">
+    Include condition, age, specifications, features
+    and anything important buyers should know.
+</span>
+
+</div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SECTION 04 — PHOTOS
+     ========================================================= -->
+
+<section class="sell-section">
+
+<div class="sell-section-header">
+
+    <div class="sell-section-number">
+        04
+    </div>
+
+    <div class="sell-section-title">
+
+        <h2>
+            Product photos
+        </h2>
+
+        <p>
+            Add 4–10 clear photos of your item.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     IMAGE UPLOAD BOX
+     ========================================================= -->
+
+<div class="image-upload-box">
+
+
+    <!-- ADD IMAGE BUTTON AREA -->
+
+    <div class="image-add-area">
+
+        <div class="image-upload-content">
+
+            <div class="image-upload-icon">
+                📷
+            </div>
+
+            <strong>
+                Add product photos
+            </strong>
+
+            <p>
+                JPG, PNG or WEBP · Max 5MB each
+            </p>
+
+
+            <label
+                for="{{ form.images.id_for_label }}"
+                class="image-upload-button"
+            >
+                + Add Images
+            </label>
+
+        </div>
+
+    </div>
+
+
+    <!-- REAL DJANGO INPUT -->
+
+    {{ form.images }}
+
+
+    <!-- PREVIEWS WILL APPEAR HERE -->
+
+    <div
+        id="imagePreviewContainer"
+        class="multi-image-preview-container"
+    ></div>
+
+
+    <!-- IMAGE COUNT -->
+
+    <div
+        id="imageCount"
+        class="image-count"
+    >
+
+        <span>
+            Select at least <strong>4 photos</strong>
+        </span>
+
+        <span>
+            <strong id="selectedImageCount">0</strong>/10
+        </span>
+
+    </div>
+
+</div>
+
+
+{% if form.images.errors %}
+
+<div class="field-errors">
+    {{ form.images.errors }}
+</div>
+
+{% endif %}
+
+
+<span class="sell-field-help">
+
+    You can click <strong>+ Add Images</strong> multiple times.
+    New photos will be added without removing the previous ones.
+
+</span>
+
+</section>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SIDEBAR
+     ========================================================= -->
+
+<aside class="sell-sidebar">
+
+
+<div class="sell-submit-card">
+
+<h3>
+    Ready to publish?
+</h3>
+
+<p>
+    Submit your listing to King B for review.
+    It will become visible after approval.
+</p>
+
+<button
+    type="submit"
+    class="submit-button"
+>
+    Submit Listing →
+</button>
+
+</div>
+
+
+
+<div class="approval-card">
+
+<h3>
+    How it works
+</h3>
+
+
+<div class="approval-step">
+
+<div class="approval-icon">
+    1
+</div>
+
+<div>
+
+<strong>
+    Create your listing
+</strong>
+
+<span>
+    Add your item information, price and photos.
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="approval-step">
+
+<div class="approval-icon">
+    2
+</div>
+
+<div>
+
+<strong>
+    King B reviews it
+</strong>
+
+<span>
+    Our team checks the listing before publication.
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="approval-step">
+
+<div class="approval-icon">
+    3
+</div>
+
+<div>
+
+<strong>
+    Listing goes live
+</strong>
+
+<span>
+    Approved items appear on the marketplace.
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="sell-safety">
+
+<div class="sell-safety-title">
+    🛡️
+    Seller safety
+</div>
+
+<p>
+    Do not include passwords, banking information
+    or other sensitive personal information in your
+    listing description.
+</p>
+
+</div>
+
+
+</aside>
+
+
+</form>
+
+</div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MULTIPLE IMAGE JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const imageInput = document.getElementById(
+        "{{ form.images.id_for_label }}"
+    );
+
+    const previewContainer = document.getElementById(
+        "imagePreviewContainer"
+    );
+
+    const selectedImageCount = document.getElementById(
+        "selectedImageCount"
+    );
+
+    const imageCount = document.getElementById(
+        "imageCount"
+    );
+
+    if (!imageInput) {
+        console.error("Marketplace image input was not found.");
+        return;
+    }
+
+
+    /*
+     * =====================================================
+     * THIS IS THE IMPORTANT PART
+     *
+     * DataTransfer stores all selected files.
+     * When the user clicks + Add Images again,
+     * the new files are added to the existing files.
+     * =====================================================
+     */
+
+    let selectedFiles = new DataTransfer();
+
+
+    /*
+     * =====================================================
+     * IMAGE INPUT CHANGE
+     * =====================================================
+     */
+
+    imageInput.addEventListener("change", function () {
+
+        const newFiles = Array.from(this.files);
+
+
+        newFiles.forEach(function (file) {
+
+            /*
+             * Only accept images
+             */
+
+            if (!file.type.startsWith("image/")) {
+                return;
+            }
+
+
+            /*
+             * Maximum 10 images
+             */
+
+            if (selectedFiles.files.length >= 10) {
+                return;
+            }
+
+
+            /*
+             * Prevent duplicate files
+             */
+
+            const alreadyExists = Array.from(
+                selectedFiles.files
+            ).some(function (existingFile) {
+
+                return (
+                    existingFile.name === file.name &&
+                    existingFile.size === file.size &&
+                    existingFile.lastModified === file.lastModified
+                );
+
+            });
+
+
+            if (!alreadyExists) {
+
+                selectedFiles.items.add(file);
+
+            }
+
+        });
+
+
+        /*
+         * Put the combined files back into
+         * the actual Django file input.
+         */
+
+        imageInput.files = selectedFiles.files;
+
+
+        /*
+         * Display all images
+         */
+
+        renderPreviews();
+
+
+        /*
+         * Clear the input value so that selecting
+         * the same image again can trigger change.
+         */
+
+        imageInput.value = "";
+
+        /*
+         * Restore the combined FileList after clearing.
+         */
+
+        imageInput.files = selectedFiles.files;
+
+    });
+
+
+
+    /*
+     * =====================================================
+     * DISPLAY ALL SELECTED IMAGES
+     * =====================================================
+     */
+
+    function renderPreviews() {
+
+        previewContainer.innerHTML = "";
+
+
+        const files = Array.from(
+            selectedFiles.files
+        );
+
+
+        files.forEach(function (file, index) {
+
+            const reader = new FileReader();
+
+
+            reader.onload = function (event) {
+
+
+                const item = document.createElement("div");
+
+                item.className = "image-preview-item";
+
+
+                const image = document.createElement("img");
+
+                image.src = event.target.result;
+
+                image.alt = "Product image " + (index + 1);
+
+
+                /*
+                 * REMOVE BUTTON
+                 */
+
+                const removeButton =
+                    document.createElement("button");
+
+                removeButton.type = "button";
+
+                removeButton.className =
+                    "remove-image-button";
+
+                removeButton.innerHTML = "×";
+
+                removeButton.title =
+                    "Remove this image";
+
+
+                removeButton.addEventListener(
+                    "click",
+                    function () {
+
+                        removeImage(index);
+
+                    }
+                );
+
+
+                item.appendChild(image);
+
+                item.appendChild(removeButton);
+
+                previewContainer.appendChild(item);
+
+            };
+
+
+            reader.readAsDataURL(file);
+
+        });
+
+
+        /*
+         * Update counter
+         */
+
+        updateCounter();
+
+    }
+
+
+
+    /*
+     * =====================================================
+     * REMOVE ONE IMAGE
+     * =====================================================
+     */
+
+    function removeImage(index) {
+
+        const newFiles = new DataTransfer();
+
+
+        Array.from(
+            selectedFiles.files
+        ).forEach(function (file, fileIndex) {
+
+            if (fileIndex !== index) {
+
+                newFiles.items.add(file);
+
+            }
+
+        });
+
+
+        selectedFiles = newFiles;
+
+
+        /*
+         * Update Django input
+         */
+
+        imageInput.files = selectedFiles.files;
+
+
+        /*
+         * Render again
+         */
+
+        renderPreviews();
+
+    }
+
+
+
+    /*
+     * =====================================================
+     * IMAGE COUNTER
+     * =====================================================
+     */
+
+    function updateCounter() {
+
+        const count = selectedFiles.files.length;
+
+        selectedImageCount.textContent = count;
+
+
+        imageCount.classList.remove(
+            "warning",
+            "good"
+        );
+
+
+        if (count === 0) {
+
+            imageCount.classList.add(
+                "warning"
+            );
+
+        }
+        else if (count < 4) {
+
+            imageCount.classList.add(
+                "warning"
+            );
+
+        }
+        else {
+
+            imageCount.classList.add(
+                "good"
+            );
+
+        }
+
+    }
+
+
+    /*
+     * =====================================================
+     * FORM SUBMISSION CHECK
+     * =====================================================
+     */
+
+    const form = imageInput.closest("form");
+
+
+    if (form) {
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+
+                /*
+                 * Make absolutely sure Django receives
+                 * the complete FileList.
+                 */
+
+                imageInput.files =
+                    selectedFiles.files;
+
+
+                const count =
+                    selectedFiles.files.length;
+
+
+                /*
+                 * Minimum 4 photos
+                 */
+
+                if (count < 4) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Please add at least 4 photos before submitting your listing."
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                 * Maximum 10 photos
+                 */
+
+                if (count > 10) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "You can upload a maximum of 10 photos."
+                    );
+
+                    return;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Initial state
+     */
+
+    updateCounter();
+
+});
+
+</script>
+
+{% endblock %}

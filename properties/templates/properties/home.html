@@ -1,0 +1,379 @@
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <main>
+
+        <section class="home-hero">
+
+            <div>
+                <p>WELCOME TO KING B REAL ESTATE & CONSTRUCTION</p>
+
+                <h1>
+                    Find a Place
+                    <br>
+                    You'll Be Proud to Call Home.
+                </h1>
+
+                <p>
+                    Discover quality land and properties
+                    in carefully selected locations.
+                    We're here to help you make the right
+                    property investment.
+                </p>
+
+                <div>
+                    <a href="/properties/">View Properties</a>
+
+                    <a href="/contact/">Contact Us</a>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Property Search -->
+        <section>
+
+            <h2>Find Your Property</h2>
+
+            <form>
+
+                <input
+                    type="text"
+                    placeholder="Search property..."
+                >
+
+                <select>
+                    <option value="">Property Type</option>
+                    <option value="land">Land</option>
+                    <option value="house">House</option>
+                    <option value="apartment">Apartment</option>
+                    <option value="commercial">Commercial</option>
+                </select>
+
+                <input
+                    type="text"
+                    placeholder="Location"
+                >
+
+                <button type="submit">
+                    Search
+                </button>
+
+            </form>
+
+        </section>
+
+<!-- Featured Properties -->
+<section>
+
+    <div>
+        <p>EXPLORE OUR PROPERTIES</p>
+
+        <h2>Featured Properties</h2>
+
+        <p>
+            Explore some of our available properties
+            and find the right opportunity for you.
+        </p>
+    </div>
+
+
+    <div>
+
+        {% for property in properties %}
+
+        <article>
+
+            <div class="property-image">
+
+    {% if property.image %}
+        <img src="{{ property.image.url }}" alt="{{ property.title }}">
+    {% else %}
+        <div>
+            PROPERTY IMAGE
+        </div>
+    {% endif %}
+
+</div>
+
+            <div>
+
+                <p>{{ property.get_property_type_display|upper }}</p>
+
+                <h3>
+                    {{ property.title }}
+                </h3>
+
+                <p>
+                    {{ property.location }}
+                </p>
+
+                <strong>
+                    ₦{{ property.price|floatformat:0 }}
+                </strong>
+
+                <br><br>
+
+                <a href="{% url 'property_detail' property.id %}">
+                 View Property
+                </a>
+            </div>
+
+        </article>
+
+        {% empty %}
+
+        <p>
+            No properties are currently available.
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     ABOUT KING B REAL ESTATE & CONSTRUCTION
+     ========================================================= -->
+
+<section class="pro-about">
+
+
+<div class="container">
+
+    <div class="pro-about-grid">
+
+        <div class="pro-about-image">
+
+            <div class="pro-about-image-frame">
+
+                <img
+                    src="{% static 'properties/images/about-home.jpg' %}"
+                    alt="KING B REAL ESTATE & CONSTRUCTION"
+                >
+
+            </div>
+
+            <div class="pro-about-stat">
+
+                <strong>01</strong>
+
+                <span>
+                    Professional<br>
+                    Real Estate
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="pro-about-content">
+
+            <span class="pro-label">
+                WHO WE ARE
+            </span>
+
+            <h2>
+                Building trust through
+                <em>real estate.</em>
+            </h2>
+
+            <div class="pro-divider"></div>
+
+            <p class="pro-lead">
+                KING B REAL ESTATE & CONSTRUCTION is committed to providing
+                quality properties and professional real estate
+                services to individuals, families and investors.
+            </p>
+
+            <p>
+                We believe that finding the right property is
+                more than a transaction. It is about creating
+                opportunities, protecting investments and
+                building lasting relationships with our clients.
+            </p>
+
+            <a href="/about/" class="pro-text-link">
+                <span>Discover KING B REAL ESTATE & CONSTRUCTION</span>
+                <strong>→</strong>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =========================================================
+     WHY CHOOSE KING B
+     ========================================================= -->
+
+<section class="pro-why">
+
+
+<div class="container">
+
+    <div class="pro-why-header">
+
+        <div>
+
+            <span class="pro-label">
+                WHY KING B REAL ESTATE & CONSTRUCTION
+            </span>
+
+            <h2>
+                A better standard<br>
+                of <em>real estate.</em>
+            </h2>
+
+        </div>
+
+        <p>
+            We combine property expertise, professional
+            service and a commitment to our clients to
+            create a better real estate experience.
+        </p>
+
+    </div>
+
+
+    <div class="pro-values">
+
+        <div class="pro-value">
+
+            <span class="pro-value-number">
+                01
+            </span>
+
+            <div>
+
+                <h3>
+                    Quality Properties
+                </h3>
+
+                <p>
+                    Carefully selected properties and
+                    land opportunities that offer genuine
+                    value to our clients.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="pro-value">
+
+            <span class="pro-value-number">
+                02
+            </span>
+
+            <div>
+
+                <h3>
+                    Trusted Service
+                </h3>
+
+                <p>
+                    Transparency, integrity and
+                    professionalism guide every
+                    client relationship.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="pro-value">
+
+            <span class="pro-value-number">
+                03
+            </span>
+
+            <div>
+
+                <h3>
+                    Expert Guidance
+                </h3>
+
+                <p>
+                    Helping individuals, families and
+                    investors make confident property
+                    decisions.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =========================================================
+     PROPERTY CTA
+     ========================================================= -->
+
+<section class="pro-cta">
+
+
+<div class="pro-cta-line"></div>
+
+<div class="container">
+
+    <div class="pro-cta-inner">
+
+        <div>
+
+            <span class="pro-label">
+                YOUR NEXT OPPORTUNITY
+            </span>
+
+            <h2>
+                Find a property<br>
+                worth <em>investing in.</em>
+            </h2>
+
+        </div>
+
+
+        <div class="pro-cta-action">
+
+            <p>
+                Explore our available properties and
+                discover your next opportunity with
+                KING B REAL ESTATE & CONSTRUCTION.
+            </p>
+
+            <a href="/properties/" class="pro-gold-button">
+                Explore Properties
+                <span>→</span>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+{% endblock %}
+

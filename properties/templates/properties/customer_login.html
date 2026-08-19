@@ -1,0 +1,292 @@
+{% extends 'properties/base.html' %}
+{% load static %}
+
+{% block title %}
+Customer Login | King B Real Estate & Construction Ltd
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.customer-login-page {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 20px;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(201, 162, 39, 0.08),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #f7f8f6,
+            #eef2ef
+        );
+}
+
+.customer-login-box {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 22px;
+
+    box-shadow:
+        0 25px 70px rgba(11, 46, 34, 0.12);
+
+    border: 1px solid rgba(11, 46, 34, 0.08);
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.login-logo img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    margin: 0 0 10px;
+    color: #0b2e22;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.login-header p {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.login-field label {
+    color: #24352e;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.login-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 15px;
+    border: 1px solid #dfe4e1;
+    border-radius: 10px;
+    background: #fafcfb;
+    font-size: 15px;
+    outline: none;
+}
+
+.login-field input:focus {
+    border-color: #b99727;
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 4px rgba(201,162,39,0.10);
+}
+
+.login-button {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b2e22,
+            #164d38
+        );
+
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #123f2e,
+            #1a5941
+        );
+}
+
+.login-error {
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #b42318;
+    font-size: 13px;
+    text-align: center;
+}
+
+.login-register {
+    margin-top: 25px;
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+}
+
+.login-register a {
+    color: #0b2e22;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login-register a:hover {
+    color: #b99727;
+}
+
+@media (max-width: 500px) {
+
+    .customer-login-page {
+        padding: 40px 15px;
+    }
+
+    .customer-login-box {
+        padding: 35px 25px;
+    }
+
+    .login-header h1 {
+        font-size: 26px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="customer-login-page">
+
+    <div class="customer-login-box">
+
+        <div class="login-logo">
+
+            <img
+                src="{% static 'properties/Image/kingb-logo.png' %}"
+                alt="King B Logo"
+            >
+
+        </div>
+
+
+        <div class="login-header">
+
+            <h1>
+                Customer Login
+            </h1>
+
+            <p>
+                Login to your King B account to find and hire
+                skilled workers.
+            </p>
+
+        </div>
+
+
+        {% if error %}
+
+            <div class="login-error">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        <form method="POST"
+              class="login-form">
+
+            {% csrf_token %}
+
+
+            <div class="login-field">
+
+                <label for="id_username">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    name="username"
+                    id="id_username"
+                    placeholder="Enter your email address"
+                    required
+                >
+
+            </div>
+
+
+            <div class="login-field">
+
+                <label for="id_password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    id="id_password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-button">
+
+                Login
+
+            </button>
+
+        </form>
+
+
+        <div class="login-register">
+
+            Don't have an account?
+
+            <a href="{% url 'customer_register' %}">
+                Create an account
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

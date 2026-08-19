@@ -1,0 +1,1315 @@
+{% extends 'properties/base.html' %}
+{% load static %}
+
+{% block title %}
+Skilled Professionals | King B Real Estate
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   KING B — SKILLED PROFESSIONALS
+   COMPLETE OVERRIDE
+========================================================= */
+
+.kb-workers-page,
+.kb-workers-page * {
+    box-sizing: border-box;
+}
+
+.kb-workers-page {
+    --kb-green: #0b2e22;
+    --kb-green-2: #123f2e;
+    --kb-green-3: #164d38;
+    --kb-gold: #c9a227;
+    --kb-gold-light: #dfc04c;
+    --kb-bg: #f6f7f5;
+    --kb-border: #e5e9e6;
+    --kb-text: #18231e;
+    --kb-muted: #6d7772;
+
+    background: var(--kb-bg);
+    color: var(--kb-text);
+    min-height: 100vh;
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.kb-workers-hero {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(201,162,39,.18),
+            transparent 28%
+        ),
+        linear-gradient(
+            135deg,
+            #071f17 0%,
+            #0b2e22 55%,
+            #123f2e 100%
+        );
+
+    color: #fff;
+    padding: 95px 24px 105px;
+}
+
+.kb-workers-hero::before {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 50%;
+    right: -150px;
+    top: -170px;
+}
+
+.kb-workers-hero::after {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border: 1px solid rgba(201,162,39,.15);
+    border-radius: 50%;
+    right: 50px;
+    bottom: -180px;
+}
+
+.kb-workers-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.kb-workers-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #e0c24d;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+
+.kb-workers-eyebrow::before {
+    content: "";
+    width: 28px;
+    height: 2px;
+    background: var(--kb-gold);
+}
+
+.kb-workers-hero h1 {
+    margin: 0;
+    max-width: 760px;
+    font-size: clamp(38px, 5vw, 62px);
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    font-weight: 850;
+}
+
+.kb-workers-hero-description {
+    max-width: 680px;
+    margin: 22px 0 0;
+    color: rgba(255,255,255,.76);
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   SEARCH AREA
+========================================================= */
+
+.kb-workers-search {
+    position: relative;
+    z-index: 5;
+    max-width: 1120px;
+    margin: -45px auto 0;
+    padding: 0 20px;
+}
+
+.kb-workers-search-card {
+    background: #fff;
+    border: 1px solid var(--kb-border);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow:
+        0 20px 60px rgba(9,35,25,.10);
+}
+
+.kb-search-heading {
+    margin-bottom: 24px;
+}
+
+.kb-search-label {
+    display: block;
+    color: var(--kb-gold);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.kb-search-heading h2 {
+    margin: 0 0 7px;
+    color: var(--kb-green);
+    font-size: 26px;
+    line-height: 1.2;
+}
+
+.kb-search-heading p {
+    margin: 0;
+    color: var(--kb-muted);
+    font-size: 14px;
+}
+
+.kb-worker-filters {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: 15px;
+}
+
+.kb-filter {
+    min-width: 0;
+}
+
+.kb-filter label {
+    display: block;
+    margin-bottom: 8px;
+    color: #27342e;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.kb-input-wrap {
+    position: relative;
+}
+
+.kb-input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #87918c;
+    font-size: 17px;
+    pointer-events: none;
+}
+
+.kb-worker-filters input,
+.kb-worker-filters select {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #dfe5e1;
+    border-radius: 11px;
+    background: #fafcfb;
+    color: #1f2924;
+    padding: 0 14px;
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: .2s ease;
+}
+
+.kb-input-wrap input {
+    padding-left: 43px;
+}
+
+.kb-worker-filters input:focus,
+.kb-worker-filters select:focus {
+    border-color: var(--kb-gold);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(201,162,39,.10);
+}
+
+
+/* =========================================================
+   PROFESSIONALS SECTION
+========================================================= */
+
+.kb-workers-list {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 75px 20px 95px;
+}
+
+.kb-workers-list-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.kb-section-label {
+    color: var(--kb-gold);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.kb-workers-list-heading h2 {
+    margin: 7px 0 0;
+    color: var(--kb-green);
+    font-size: 34px;
+    line-height: 1.15;
+    letter-spacing: -.5px;
+}
+
+.kb-worker-counter {
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.kb-worker-counter strong {
+    display: block;
+    color: var(--kb-green);
+    font-size: 30px;
+    line-height: 1;
+}
+
+.kb-worker-counter span {
+    display: block;
+    margin-top: 5px;
+    color: var(--kb-muted);
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.kb-workers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+
+/* =========================================================
+   PROFESSIONAL CARD
+========================================================= */
+
+.kb-worker-card {
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    background: #fff;
+    border: 1px solid var(--kb-border);
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 30px rgba(12,35,25,.055);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+.kb-worker-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(201,162,39,.35);
+    box-shadow:
+        0 20px 45px rgba(12,35,25,.12);
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.kb-worker-card-image {
+    position: relative;
+    height: 275px;
+    overflow: hidden;
+    background:
+        linear-gradient(
+            145deg,
+            #0b2e22,
+            #164d38
+        );
+}
+
+.kb-worker-card-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform .5s ease;
+}
+
+.kb-worker-card:hover .kb-worker-card-image img {
+    transform: scale(1.045);
+}
+
+.kb-worker-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #e0c24d;
+    font-size: 58px;
+    font-weight: 850;
+}
+
+.kb-worker-status {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 12px;
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.95);
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.kb-worker-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.kb-worker-status.available {
+    color: #176a3b;
+}
+
+.kb-worker-status.available .kb-worker-status-dot {
+    background: #25a45a;
+}
+
+.kb-worker-status.unavailable {
+    color: #9b2929;
+}
+
+.kb-worker-status.unavailable .kb-worker-status-dot {
+    background: #c84444;
+}
+
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.kb-worker-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 23px;
+}
+
+.kb-worker-name {
+    margin: 0;
+    color: var(--kb-green);
+    font-size: 21px;
+    line-height: 1.25;
+    font-weight: 800;
+}
+
+.kb-worker-profession {
+    margin: 6px 0 0;
+    color: #b08c1e;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.kb-worker-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 21px 0 23px;
+    padding-top: 18px;
+    border-top: 1px solid #edf0ee;
+}
+
+.kb-worker-info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #65706a;
+    font-size: 13px;
+}
+
+.kb-worker-info-icon {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+    background: #f3f6f3;
+
+    color: var(--kb-gold);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   PROFILE BUTTON
+========================================================= */
+
+.kb-worker-profile-btn {
+    width: 100%;
+    margin-top: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 13px 15px;
+
+    border-radius: 10px;
+
+    background: var(--kb-green);
+    color: #fff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    transition: .2s ease;
+}
+
+.kb-worker-profile-btn:hover {
+    background: var(--kb-green-3);
+    color: #fff;
+}
+
+.kb-worker-profile-arrow {
+    font-size: 18px;
+    transition: transform .2s ease;
+}
+
+.kb-worker-profile-btn:hover .kb-worker-profile-arrow {
+    transform: translateX(4px);
+}
+
+
+/* =========================================================
+   NO RESULTS
+========================================================= */
+
+.kb-no-results,
+.kb-empty-workers {
+    padding: 70px 25px;
+    text-align: center;
+
+    background: #fff;
+    border: 1px solid var(--kb-border);
+    border-radius: 18px;
+}
+
+.kb-empty-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #f1f5f2;
+
+    font-size: 27px;
+}
+
+.kb-no-results h3,
+.kb-empty-workers h3 {
+    margin: 0 0 8px;
+    color: var(--kb-green);
+    font-size: 23px;
+}
+
+.kb-no-results p,
+.kb-empty-workers p {
+    max-width: 500px;
+    margin: auto;
+    color: var(--kb-muted);
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.kb-workers-cta {
+    position: relative;
+    overflow: hidden;
+
+    padding: 85px 20px;
+
+    background:
+        radial-gradient(
+            circle at 15% 30%,
+            rgba(201,162,39,.14),
+            transparent 25%
+        ),
+        linear-gradient(
+            135deg,
+            #071f17,
+            #123f2e
+        );
+
+    color: #fff;
+}
+
+.kb-workers-cta-inner {
+    position: relative;
+    z-index: 2;
+
+    max-width: 760px;
+    margin: auto;
+    text-align: center;
+}
+
+.kb-workers-cta .kb-section-label {
+    color: #e0c24d;
+}
+
+.kb-workers-cta h2 {
+    margin: 12px 0 14px;
+    font-size: clamp(30px, 4vw, 43px);
+    line-height: 1.15;
+}
+
+.kb-workers-cta p {
+    max-width: 650px;
+    margin: 0 auto 28px;
+    color: rgba(255,255,255,.72);
+    line-height: 1.8;
+}
+
+.kb-workers-cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 14px 22px;
+
+    border-radius: 10px;
+
+    background: var(--kb-gold);
+    color: #111;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 850;
+
+    transition: .2s ease;
+}
+
+.kb-workers-cta-button:hover {
+    background: var(--kb-gold-light);
+    color: #111;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .kb-workers-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .kb-worker-filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .kb-filter:first-child {
+        grid-column: 1 / -1;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .kb-workers-hero {
+        padding: 70px 20px 85px;
+    }
+
+    .kb-workers-search {
+        margin-top: -35px;
+    }
+
+    .kb-workers-search-card {
+        padding: 23px;
+    }
+
+    .kb-worker-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .kb-filter:first-child {
+        grid-column: auto;
+    }
+
+    .kb-workers-list {
+        padding-top: 55px;
+    }
+
+    .kb-workers-list-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .kb-worker-counter {
+        text-align: left;
+    }
+
+    .kb-workers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .kb-workers-hero h1 {
+        font-size: 38px;
+    }
+
+    .kb-workers-hero-description {
+        font-size: 15px;
+    }
+
+    .kb-worker-card-image {
+        height: 250px;
+    }
+
+    .kb-workers-list-heading h2 {
+        font-size: 28px;
+    }
+
+    .kb-workers-cta {
+        padding: 65px 20px;
+    }
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="kb-workers-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="kb-workers-hero">
+
+        <div class="kb-workers-hero-inner">
+
+            <span class="kb-workers-eyebrow">
+                King B Professional Network
+            </span>
+
+            <h1>
+                Find the right professional for your project.
+            </h1>
+
+            <p class="kb-workers-hero-description">
+                Connect with trusted and experienced skilled
+                professionals for construction, maintenance,
+                renovation and property projects.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <section class="kb-workers-search">
+
+        <div class="kb-workers-search-card">
+
+            <div class="kb-search-heading">
+
+                <span class="kb-search-label">
+                    Professional Directory
+                </span>
+
+                <h2>
+                    Search our professional network
+                </h2>
+
+                <p>
+                    Find professionals by name, skill,
+                    location or availability.
+                </p>
+
+            </div>
+
+
+            <div class="kb-worker-filters">
+
+
+                <!-- SEARCH -->
+
+                <div class="kb-filter">
+
+                    <label for="workerSearch">
+                        Search professional
+                    </label>
+
+                    <div class="kb-input-wrap">
+
+                        <span class="kb-input-icon">
+                            ⌕
+                        </span>
+
+                        <input
+                            type="text"
+                            id="workerSearch"
+                            placeholder="Name or skill..."
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="kb-filter">
+
+                    <label for="locationFilter">
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="locationFilter"
+                        placeholder="e.g. Port Harcourt"
+                    >
+
+                </div>
+
+
+                <!-- AVAILABILITY -->
+
+                <div class="kb-filter">
+
+                    <label for="availabilityFilter">
+                        Availability
+                    </label>
+
+                    <select id="availabilityFilter">
+
+                        <option value="all">
+                            All Professionals
+                        </option>
+
+                        <option value="available">
+                            Available
+                        </option>
+
+                        <option value="unavailable">
+                            Not Available
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROFESSIONALS
+    ====================================================== -->
+
+    <section class="kb-workers-list">
+
+        <div class="kb-workers-list-heading">
+
+            <div>
+
+                <span class="kb-section-label">
+                    Our Network
+                </span>
+
+                <h2>
+                    Skilled Professionals
+                </h2>
+
+            </div>
+
+
+            <div class="kb-worker-counter">
+
+                <strong id="workerCount">
+                    {{ workers|length }}
+                </strong>
+
+                <span>
+                    Professionals Found
+                </span>
+
+            </div>
+
+        </div>
+
+
+        {% if workers %}
+
+
+            <div
+                class="kb-workers-grid"
+                id="workersGrid"
+            >
+
+
+                {% for worker in workers %}
+
+                    <article
+                        class="kb-worker-card"
+
+                        data-name="{{ worker.full_name|lower }}"
+
+                        data-skill="{{ worker.skill|lower }}"
+
+                        data-location="{{ worker.location|lower }}"
+
+                        data-availability="{% if worker.availability == 'available' %}available{% else %}unavailable{% endif %}"
+                    >
+
+
+                        <!-- IMAGE -->
+
+                        <div class="kb-worker-card-image">
+
+                            {% if worker.profile_image %}
+
+                                <img
+                                    src="{{ worker.profile_image.url }}"
+                                    alt="{{ worker.full_name }}"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="kb-worker-placeholder">
+
+                                    {{ worker.full_name|first|upper }}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- STATUS -->
+
+                            {% if worker.availability == "available" %}
+
+                                <div class="kb-worker-status available">
+
+                                    <span class="kb-worker-status-dot"></span>
+
+                                    Available
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="kb-worker-status unavailable">
+
+                                    <span class="kb-worker-status-dot"></span>
+
+                                    Not Available
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- CARD BODY -->
+
+                        <div class="kb-worker-card-body">
+
+
+                            <h3 class="kb-worker-name">
+                                {{ worker.full_name }}
+                            </h3>
+
+
+                            <p class="kb-worker-profession">
+                                {{ worker.skill }}
+                            </p>
+
+
+                            <div class="kb-worker-info">
+
+
+                                <!-- EXPERIENCE -->
+
+                                <div class="kb-worker-info-row">
+
+                                    <span class="kb-worker-info-icon">
+                                        ★
+                                    </span>
+
+                                    <span>
+
+                                        {{ worker.years_of_experience }}
+
+                                        {% if worker.years_of_experience == 1 %}
+                                            year
+                                        {% else %}
+                                            years
+                                        {% endif %}
+
+                                        experience
+
+                                    </span>
+
+                                </div>
+
+
+                                <!-- LOCATION -->
+
+                                <div class="kb-worker-info-row">
+
+                                    <span class="kb-worker-info-icon">
+                                        📍
+                                    </span>
+
+                                    <span>
+                                        {{ worker.location }}
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- PROFILE -->
+
+                            <a
+                                href="{% url 'skilled_worker_profile' worker_id=worker.id %}"
+                                class="kb-worker-profile-btn"
+                            >
+
+                                <span>
+                                    View Professional Profile
+                                </span>
+
+                                <span class="kb-worker-profile-arrow">
+                                    →
+                                </span>
+
+                            </a>
+
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- NO SEARCH RESULTS -->
+
+            <div
+                class="kb-no-results"
+                id="noWorkerResults"
+                style="display:none;"
+            >
+
+                <div class="kb-empty-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    No professionals found
+                </h3>
+
+                <p>
+                    We couldn't find a professional matching
+                    your search. Try changing your search or
+                    availability filter.
+                </p>
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- EMPTY DIRECTORY -->
+
+            <div class="kb-empty-workers">
+
+                <div class="kb-empty-icon">
+                    👷
+                </div>
+
+                <h3>
+                    No professionals available
+                </h3>
+
+                <p>
+                    There are currently no skilled professionals
+                    listed in our network. Please check back soon.
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+    <section class="kb-workers-cta">
+
+        <div class="kb-workers-cta-inner">
+
+            <span class="kb-section-label">
+                Join King B Professional Network
+            </span>
+
+            <h2>
+                Are you a skilled professional?
+            </h2>
+
+            <p>
+                Register your skills with King B Real Estate
+                and get discovered by clients looking for
+                reliable and experienced professionals.
+            </p>
+
+            <a
+                href="{% url 'skilled_worker_register' %}"
+                class="kb-workers-cta-button"
+            >
+
+                <span>
+                    Register Your Skills
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     FILTER SCRIPT
+========================================================= -->
+
+<script>
+
+(function () {
+
+    const searchInput =
+        document.getElementById("workerSearch");
+
+    const locationInput =
+        document.getElementById("locationFilter");
+
+    const availabilityFilter =
+        document.getElementById("availabilityFilter");
+
+    const workerCards =
+        document.querySelectorAll(".kb-worker-card");
+
+    const workerCount =
+        document.getElementById("workerCount");
+
+    const noResults =
+        document.getElementById("noWorkerResults");
+
+
+    function filterWorkers() {
+
+        if (!searchInput || !locationInput || !availabilityFilter) {
+            return;
+        }
+
+
+        const searchValue =
+            searchInput.value.toLowerCase().trim();
+
+        const locationValue =
+            locationInput.value.toLowerCase().trim();
+
+        const availabilityValue =
+            availabilityFilter.value;
+
+
+        let visibleWorkers = 0;
+
+
+        workerCards.forEach(function (card) {
+
+            const name =
+                card.dataset.name || "";
+
+            const skill =
+                card.dataset.skill || "";
+
+            const location =
+                card.dataset.location || "";
+
+            const availability =
+                card.dataset.availability || "";
+
+
+            const matchesSearch =
+                name.includes(searchValue) ||
+                skill.includes(searchValue);
+
+
+            const matchesLocation =
+                location.includes(locationValue);
+
+
+            const matchesAvailability =
+                availabilityValue === "all" ||
+                availability === availabilityValue;
+
+
+            const shouldShow =
+                matchesSearch &&
+                matchesLocation &&
+                matchesAvailability;
+
+
+            if (shouldShow) {
+
+                card.style.display = "flex";
+
+                visibleWorkers++;
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+        if (workerCount) {
+
+            workerCount.textContent =
+                visibleWorkers;
+
+        }
+
+
+        if (noResults) {
+
+            noResults.style.display =
+                visibleWorkers === 0
+                    ? "block"
+                    : "none";
+
+        }
+
+    }
+
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            filterWorkers
+        );
+
+    }
+
+
+    if (locationInput) {
+
+        locationInput.addEventListener(
+            "input",
+            filterWorkers
+        );
+
+    }
+
+
+    if (availabilityFilter) {
+
+        availabilityFilter.addEventListener(
+            "change",
+            filterWorkers
+        );
+
+    }
+
+})();
+
+</script>
+
+{% endblock %}

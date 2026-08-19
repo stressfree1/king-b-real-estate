@@ -1,0 +1,461 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            KING B REAL ESTATE & CONSTRUCTION LTD
+        {% endblock %}
+    </title>
+
+    <link rel="icon"
+          type="image/png"
+          href="{% static 'properties/Image/kingb-logo.png' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'properties/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<header>
+
+    <nav>
+
+
+        <!-- =================================================
+             LOGO / BRAND
+        ================================================== -->
+
+        <div class="nav-brand">
+
+            <a href="{% url 'home' %}">
+
+                <img
+                    src="{% static 'properties/Image/kingb-logo.png' %}"
+                    alt="King B Logo"
+                >
+
+                <span>
+                    KING B REAL ESTATE & CONSTRUCTION LTD
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             MOBILE MENU BUTTON
+        ================================================== -->
+
+        <button
+            class="menu-toggle"
+            type="button"
+            onclick="toggleMenu()"
+            aria-label="Open navigation menu">
+
+            ☰
+
+        </button>
+
+
+        <!-- =================================================
+             NAVIGATION LINKS
+        ================================================== -->
+
+        <div
+            class="nav-links"
+            id="navLinks">
+
+
+            <!-- =================================================
+                 PUBLIC WEBSITE
+            ================================================== -->
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+
+            <a href="{% url 'property_list' %}">
+                Properties
+            </a>
+
+
+            <a href="{% url 'jobs' %}">
+                Jobs
+            </a>
+
+
+            <!-- =================================================
+                 SKILLED WORKERS
+                 
+                 PUBLIC:
+                 Anyone can view skilled workers without logging in.
+            ================================================== -->
+
+            <a href="{% url 'skilled_workers' %}">
+                Skilled Workers
+            </a>
+
+
+            <!-- =================================================
+                 MARKETPLACE
+                 
+                 PUBLIC:
+                 Marketplace can be accessed without login.
+            ================================================== -->
+
+            <a href="{% url 'marketplace' %}">
+                Marketplace
+            </a>
+
+
+            <!-- =================================================
+                 CONTACT
+            ================================================== -->
+
+            <a href="{% url 'contact' %}">
+                Contact
+            </a>
+
+
+            <!-- =================================================
+                 ACCOUNT SECTION
+            ================================================== -->
+
+            {% if request.user.is_authenticated %}
+
+
+                <!-- =============================================
+                     CUSTOMER ACCOUNT
+                ============================================== -->
+
+                {% if request.user.customer_profile %}
+
+                    <a href="{% url 'marketplace_dashboard' %}"
+                       class="nav-account">
+
+                        My Account
+
+                    </a>
+
+
+                    <a href="{% url 'customer_logout' %}"
+                       class="nav-logout">
+
+                        Logout
+
+                    </a>
+
+
+                <!-- =============================================
+                     SKILLED WORKER ACCOUNT
+                ============================================== -->
+
+                {% elif request.user.skilled_worker_profile %}
+
+                    <a href="{% url 'worker_dashboard' %}"
+                       class="nav-account">
+
+                        My Account
+
+                    </a>
+
+
+                    <a href="{% url 'skilled_worker_logout' %}"
+                       class="nav-logout">
+
+                        Logout
+
+                    </a>
+
+
+                <!-- =============================================
+                     OTHER DJANGO USER
+                ============================================== -->
+
+                {% else %}
+
+                    <a href="{% url 'site_logout' %}"
+                       class="nav-logout">
+
+                        Logout
+
+                    </a>
+
+                {% endif %}
+
+
+            {% else %}
+
+
+                <!-- =============================================
+                     CREATE ACCOUNT
+                     
+                     ONE CENTRAL REGISTRATION PAGE
+                ============================================== -->
+
+                
+
+
+                <!-- =============================================
+                     LOGIN
+                     
+                     ONE CENTRAL LOGIN PAGE
+                ============================================== -->
+
+                <a href="{% url 'site_login' %}"
+                   class="nav-login">
+
+                    Login
+
+                </a>
+
+
+            {% endif %}
+
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN PAGE CONTENT
+===================================================== -->
+
+<main>
+
+    {% if messages %}
+
+        <div class="site-messages">
+
+            {% for message in messages %}
+
+                <div class="site-message site-message-{{ message.tags }}">
+
+                    <span class="message-icon">
+
+                        {% if message.tags == "success" %}
+
+                            ✓
+
+                        {% elif message.tags == "error" %}
+
+                            !
+
+                        {% elif message.tags == "warning" %}
+
+                            ⚠
+
+                        {% else %}
+
+                            ℹ
+
+                        {% endif %}
+
+                    </span>
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    {% block content %}
+
+    {% endblock %}
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+
+    <!-- =================================================
+         COMPANY
+    ================================================== -->
+
+    <div>
+
+        <h3>
+            KING B REAL ESTATE & CONSTRUCTION
+        </h3>
+
+        <p>
+            Your trusted real estate partner.
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================================
+         QUICK LINKS
+    ================================================== -->
+
+    <div>
+
+        <h4>
+            Quick Links
+        </h4>
+
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+
+        <a href="{% url 'property_list' %}">
+            Properties
+        </a>
+
+
+        <a href="{% url 'about' %}">
+            About Us
+        </a>
+
+
+        <a href="{% url 'jobs' %}">
+            Jobs
+        </a>
+
+
+        <a href="{% url 'skilled_workers' %}">
+            Skilled Workers
+        </a>
+
+
+        <a href="{% url 'marketplace' %}">
+            Marketplace
+        </a>
+
+
+        <a href="{% url 'contact' %}">
+            Contact
+        </a>
+
+
+        {% if request.user.is_authenticated %}
+
+            {% if request.user.customer_profile %}
+
+                <a href="{% url 'customer_dashboard' %}">
+                    My Account
+                </a>
+
+            {% elif request.user.skilled_worker_profile %}
+
+                <a href="{% url 'worker_dashboard' %}">
+                    My Account
+                </a>
+
+            {% endif %}
+
+        {% else %}
+
+            <a href="{% url 'site_register' %}">
+                Create Account
+            </a>
+
+
+            <a href="{% url 'site_login' %}">
+                Login
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =================================================
+         CONTACT
+    ================================================== -->
+
+    <div>
+
+        <h4>
+            Contact
+        </h4>
+
+
+        <p>
+            Phone: +234 XXX XXX XXXX
+        </p>
+
+
+        <p>
+            Email: info@kingbrealestate.com
+        </p>
+
+
+        <p>
+            Port Harcourt, Rivers State
+        </p>
+
+    </div>
+
+
+</footer>
+
+
+
+<!-- =====================================================
+     MOBILE MENU SCRIPT
+===================================================== -->
+
+<script>
+
+function toggleMenu() {
+
+    const menu = document.getElementById("navLinks");
+
+    if (menu) {
+
+        menu.classList.toggle("active");
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+{% block content %}
+<main>
+
+    <section class="application-success-page">
+
+        <div class="success-card">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <p class="success-label">
+                Application Received
+            </p>
+
+            <h1>
+                Thank You for Applying
+            </h1>
+
+            <p class="success-message">
+                Your application has been successfully submitted
+                to King B Real Estate. Our recruitment team will
+                review your application and contact you if you
+                are shortlisted for the next stage.
+            </p>
+
+            <div class="success-divider"></div>
+
+            <div class="success-reference">
+
+                <span>
+                    Position Applied For
+                </span>
+
+                <strong>
+                    {{ job.title }}
+                </strong>
+
+            </div>
+
+            <div class="success-actions">
+
+                <a href="/" class="success-home-button">
+                    Back to Homepage
+                </a>
+
+                <a href="{% url 'jobs' %}"
+                   class="success-jobs-button">
+                    View Other Jobs
+                </a>
+
+            </div>
+
+            <p class="success-note">
+                Please keep your contact details available in case
+                our recruitment team needs to reach you.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+{% endblock %}

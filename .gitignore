@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+.venv/
+venv/
+env/
+staticfiles/
+*.log
+Media/job_applications/
+Media/skilled_workers/id_documents/
+Media/skilled_workers/cv/
