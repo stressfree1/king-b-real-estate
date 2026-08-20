@@ -7,8 +7,10 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         {% block title %}
@@ -16,12 +18,19 @@
         {% endblock %}
     </title>
 
-    <link rel="icon"
-          type="image/png"
-          href="{% static 'properties/Image/kingb-logo.png' %}">
 
-    <link rel="stylesheet"
-          href="{% static 'properties/style.css' %}">
+    <link
+        rel="icon"
+        type="image/png"
+        href="{% static 'properties/Image/kingb-logo.png' %}"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="{% static 'properties/style.css' %}"
+    >
+
 
     {% block extra_css %}{% endblock %}
 
@@ -35,9 +44,9 @@
      NAVIGATION
 ===================================================== -->
 
-<header>
+<header class="site-header">
 
-    <nav>
+    <nav class="main-navbar">
 
 
         <!-- =================================================
@@ -70,165 +79,310 @@
             class="menu-toggle"
             type="button"
             onclick="toggleMenu()"
-            aria-label="Open navigation menu">
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+        >
 
-            ☰
+            <span></span>
+            <span></span>
+            <span></span>
 
         </button>
 
 
         <!-- =================================================
-             NAVIGATION LINKS
+             NAVIGATION
         ================================================== -->
 
         <div
             class="nav-links"
-            id="navLinks">
+            id="navLinks"
+        >
 
 
             <!-- =================================================
                  PUBLIC WEBSITE
             ================================================== -->
 
-            <a href="{% url 'home' %}">
+            <a
+                href="{% url 'home' %}"
+                class="nav-link"
+            >
                 Home
             </a>
 
 
-            <a href="{% url 'property_list' %}">
+            <a
+                href="{% url 'property_list' %}"
+                class="nav-link"
+            >
                 Properties
             </a>
 
 
-            <a href="{% url 'jobs' %}">
+            <a
+                href="{% url 'jobs' %}"
+                class="nav-link"
+            >
                 Jobs
             </a>
 
 
-            <!-- =================================================
-                 SKILLED WORKERS
-                 
-                 PUBLIC:
-                 Anyone can view skilled workers without logging in.
-            ================================================== -->
-
-            <a href="{% url 'skilled_workers' %}">
+            <a
+                href="{% url 'skilled_workers' %}"
+                class="nav-link"
+            >
                 Skilled Workers
             </a>
 
 
-            <!-- =================================================
-                 MARKETPLACE
-                 
-                 PUBLIC:
-                 Marketplace can be accessed without login.
-            ================================================== -->
-
-            <a href="{% url 'marketplace' %}">
+            <a
+                href="{% url 'marketplace' %}"
+                class="nav-link"
+            >
                 Marketplace
             </a>
 
 
-            <!-- =================================================
-                 CONTACT
-            ================================================== -->
-
-            <a href="{% url 'contact' %}">
+            <a
+                href="{% url 'contact' %}"
+                class="nav-link"
+            >
                 Contact
             </a>
 
 
             <!-- =================================================
-                 ACCOUNT SECTION
+                 AUTHENTICATED USER
             ================================================== -->
 
             {% if request.user.is_authenticated %}
 
-
-                <!-- =============================================
-                     CUSTOMER ACCOUNT
-                ============================================== -->
-
-                {% if request.user.customer_profile %}
-
-                    <a href="{% url 'marketplace_dashboard' %}"
-                       class="nav-account">
-
-                        My Account
-
-                    </a>
+                <div
+                    class="profile-menu"
+                    id="profileMenu"
+                >
 
 
-                    <a href="{% url 'customer_logout' %}"
-                       class="nav-logout">
+                    <!-- =========================================
+                         PROFILE BUTTON
+                    ========================================== -->
 
-                        Logout
-
-                    </a>
-
-
-                <!-- =============================================
-                     SKILLED WORKER ACCOUNT
-                ============================================== -->
-
-                {% elif request.user.skilled_worker_profile %}
-
-                    <a href="{% url 'worker_dashboard' %}"
-                       class="nav-account">
-
-                        My Account
-
-                    </a>
+                    <button
+                        type="button"
+                        class="profile-button"
+                        id="profileButton"
+                        onclick="toggleProfileMenu(event)"
+                        aria-label="Open account menu"
+                        aria-expanded="false"
+                    >
 
 
-                    <a href="{% url 'skilled_worker_logout' %}"
-                       class="nav-logout">
+                        <!-- PROFILE IMAGE -->
 
-                        Logout
+                        <span class="profile-avatar">
 
-                    </a>
+                            {% if request.user.account_settings.profile_image %}
+
+                                <img
+                                    src="{{ request.user.account_settings.profile_image.url }}"
+                                    alt="Profile"
+                                >
+
+                            {% else %}
+
+                                <span class="profile-avatar-letter">
+
+                                    {{ request.user.first_name|default:request.user.username|first|upper }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </span>
 
 
-                <!-- =============================================
-                     OTHER DJANGO USER
-                ============================================== -->
+                        <!-- USER NAME -->
 
-                {% else %}
+                        <span class="profile-user-name">
 
-                    <a href="{% url 'site_logout' %}"
-                       class="nav-logout">
+                            {{ request.user.first_name|default:request.user.username }}
 
-                        Logout
+                        </span>
 
-                    </a>
 
-                {% endif %}
+                        <!-- DROPDOWN ARROW -->
+
+                        <span
+                            class="profile-arrow"
+                            aria-hidden="true"
+                        >
+                            ▾
+                        </span>
+
+                    </button>
+
+
+                    <!-- =========================================
+                         PROFILE DROPDOWN
+                    ========================================== -->
+
+                    <div
+                        class="profile-dropdown"
+                        id="profileDropdown"
+                    >
+
+
+                        <!-- PROFILE HEADER -->
+
+                        <div class="profile-dropdown-header">
+
+
+                            <div class="profile-dropdown-avatar">
+
+                                {% if request.user.account_settings.profile_image %}
+
+                                    <img
+                                        src="{{ request.user.account_settings.profile_image.url }}"
+                                        alt="Profile"
+                                    >
+
+                                {% else %}
+
+                                    <span>
+
+                                        {{ request.user.first_name|default:request.user.username|first|upper }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="profile-dropdown-user">
+
+                                <strong>
+
+                                    {{ request.user.get_full_name|default:request.user.username }}
+
+                                </strong>
+
+                                <span>
+
+                                    {{ request.user.email }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             ACCOUNT LINKS
+                        ====================================== -->
+
+                        <div class="profile-dropdown-links">
+
+
+                            <a
+                                href="{% url 'marketplace_dashboard' %}"
+                                class="profile-dropdown-link"
+                            >
+
+                                <span class="dropdown-icon">
+                                    ◉
+                                </span>
+
+                                <span>
+                                    My Account
+                                </span>
+
+                            </a>
+
+
+                            <a
+                                href="{% url 'account_settings' %}"
+                                class="profile-dropdown-link"
+                            >
+
+                                <span class="dropdown-icon">
+                                    ⚙
+                                </span>
+
+                                <span>
+                                    Account Settings
+                                </span>
+
+                            </a>
+
+
+                            <a
+                                href="{% url 'property_list' %}"
+                                class="profile-dropdown-link"
+                            >
+
+                                <span class="dropdown-icon">
+                                    ◇
+                                </span>
+
+                                <span>
+                                    Browse Properties
+                                </span>
+
+                            </a>
+
+
+                        </div>
+
+
+                        <!-- =====================================
+                             LOGOUT
+                        ====================================== -->
+
+                        <div class="profile-dropdown-footer">
+
+                            <a
+                                href="{% url 'site_logout' %}"
+                                class="profile-dropdown-logout"
+                            >
+
+                                <span class="dropdown-icon">
+                                    ↪
+                                </span>
+
+                                <span>
+                                    Logout
+                                </span>
+
+                            </a>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
 
 
             {% else %}
 
 
-                <!-- =============================================
-                     CREATE ACCOUNT
-                     
-                     ONE CENTRAL REGISTRATION PAGE
-                ============================================== -->
+                <!-- =================================================
+                     LOGGED OUT USER
+                ================================================== -->
 
-                
+                <div class="nav-auth-actions">
 
+                    <a
+                        href="{% url 'site_login' %}"
+                        class="nav-login"
+                    >
+                        Login
+                    </a>
 
-                <!-- =============================================
-                     LOGIN
-                     
-                     ONE CENTRAL LOGIN PAGE
-                ============================================== -->
-
-                <a href="{% url 'site_login' %}"
-                   class="nav-login">
-
-                    Login
-
-                </a>
+                </div>
 
 
             {% endif %}
@@ -241,12 +395,16 @@
 </header>
 
 
-
 <!-- =====================================================
      MAIN PAGE CONTENT
 ===================================================== -->
 
 <main>
+
+
+    <!-- =================================================
+         SITE MESSAGES
+    ================================================== -->
 
     {% if messages %}
 
@@ -278,6 +436,7 @@
 
                     </span>
 
+
                     <span>
                         {{ message }}
                     </span>
@@ -295,8 +454,8 @@
 
     {% endblock %}
 
-</main>
 
+</main>
 
 
 <!-- =====================================================
@@ -321,7 +480,6 @@
         </p>
 
     </div>
-
 
 
     <!-- =================================================
@@ -372,26 +530,17 @@
 
         {% if request.user.is_authenticated %}
 
-            {% if request.user.customer_profile %}
-
-                <a href="{% url 'customer_dashboard' %}">
-                    My Account
-                </a>
-
-            {% elif request.user.skilled_worker_profile %}
-
-                <a href="{% url 'worker_dashboard' %}">
-                    My Account
-                </a>
-
-            {% endif %}
-
-        {% else %}
-
-            <a href="{% url 'site_register' %}">
-                Create Account
+            <a href="{% url 'marketplace_dashboard' %}">
+                My Account
             </a>
 
+
+            <a href="{% url 'account_settings' %}">
+                Account Settings
+            </a>
+
+
+        {% else %}
 
             <a href="{% url 'site_login' %}">
                 Login
@@ -400,7 +549,6 @@
         {% endif %}
 
     </div>
-
 
 
     <!-- =================================================
@@ -434,24 +582,1570 @@
 </footer>
 
 
+<!-- =====================================================
+     PROFILE / NAVIGATION CSS
+===================================================== -->
+
+<style>
+
+.site-header {
+    position: relative;
+    z-index: 1000;
+}
+
+
+.main-navbar {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+
+.nav-links {
+    display: flex;
+
+    align-items: center;
+
+    gap: 24px;
+}
+
+
+.nav-link {
+    position: relative;
+
+    color: inherit;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+
+.nav-link::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom: -7px;
+
+    height: 2px;
+
+    background: #b58b3b;
+
+    transform: scaleX(0);
+
+    transform-origin: center;
+
+    transition:
+        transform .25s ease;
+}
+
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+
+/* =========================================================
+   AUTH ACTIONS
+========================================================= */
+
+.nav-auth-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+
+.nav-login:hover {
+    color: #ffffff;
+
+    background: #123c2f;
+}
+
+
+/* =========================================================
+   PROFILE MENU
+========================================================= */
+
+.profile-menu {
+    position: relative;
+
+    z-index: 1100;
+}
+
+
+.profile-button {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 5px 10px 5px 5px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe5e1;
+
+    border-radius: 999px;
+
+    color: #123c2f;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        box-shadow .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+}
+
+
+.profile-button:hover,
+.profile-button.active {
+    border-color: #cdd8d2;
+
+    background: #f8faf8;
+
+    box-shadow:
+        0 7px 22px
+        rgba(
+            8,
+            39,
+            30,
+            .08
+        );
+}
+
+
+.profile-avatar {
+    width: 34px;
+
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123c2f,
+            #1c5b46
+        );
+
+    color: #ffffff;
+}
+
+
+.profile-avatar img {
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+.profile-avatar-letter {
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.profile-user-name {
+    max-width: 120px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.profile-arrow {
+    font-size: 13px;
+
+    transition:
+        transform .2s ease;
+}
+
+
+.profile-button.active .profile-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   ACCOUNT DROPDOWN
+========================================================= */
+
+.profile-menu {
+    position: relative !important;
+
+    z-index: 99999 !important;
+}
+
+
+.profile-dropdown {
+    position: absolute !important;
+
+    top: calc(100% + 14px) !important;
+
+    right: 0 !important;
+
+    width: 320px !important;
+
+    display: block !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    background: #ffffff !important;
+
+    color: #18231f !important;
+
+    border: 1px solid #d9e1dc !important;
+
+    border-radius: 16px !important;
+
+    overflow: hidden !important;
+
+    box-shadow:
+        0 20px 55px
+        rgba(8, 39, 30, 0.20) !important;
+
+    opacity: 0 !important;
+
+    visibility: hidden !important;
+
+    pointer-events: none !important;
+
+    transform:
+        translateY(-8px) !important;
+
+    transform-origin: top right !important;
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease,
+        transform 0.2s ease !important;
+
+    z-index: 999999 !important;
+}
+
+
+.profile-dropdown.open {
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    pointer-events: auto !important;
+
+    transform:
+        translateY(0) !important;
+}
+
+
+/* =========================================================
+   DROPDOWN HEADER
+========================================================= */
+
+.profile-dropdown-header {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 13px !important;
+
+    width: 100% !important;
+
+    padding: 18px !important;
+
+    box-sizing: border-box !important;
+
+    background: #ffffff !important;
+
+    color: #18231f !important;
+
+    border-bottom: 1px solid #edf0ee !important;
+}
+
+
+.profile-dropdown-avatar {
+    width: 48px !important;
+
+    height: 48px !important;
+
+    min-width: 48px !important;
+
+    flex: 0 0 48px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    overflow: hidden !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 50% !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123c2f,
+            #1d604c
+        ) !important;
+
+    color: #ffffff !important;
+
+    font-size: 16px !important;
+
+    font-weight: 800 !important;
+}
+
+
+.profile-dropdown-avatar img {
+    width: 100% !important;
+
+    height: 100% !important;
+
+    display: block !important;
+
+    object-fit: cover !important;
+}
+
+
+.profile-dropdown-user {
+    min-width: 0 !important;
+
+    flex: 1 !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    gap: 5px !important;
+
+    overflow: hidden !important;
+}
+
+
+.profile-dropdown-user strong {
+    display: block !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    color: #123c2f !important;
+
+    font-size: 14px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1.3 !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+.profile-dropdown-user span {
+    display: block !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    color: #68736e !important;
+
+    font-size: 11px !important;
+
+    font-weight: 500 !important;
+
+    line-height: 1.4 !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   ACCOUNT LINKS
+========================================================= */
+
+.profile-dropdown-links {
+    width: 100% !important;
+
+    padding: 8px !important;
+
+    box-sizing: border-box !important;
+
+    background: #ffffff !important;
+}
+
+
+.profile-dropdown-link {
+    width: 100% !important;
+
+    min-height: 48px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 11px !important;
+
+    box-sizing: border-box !important;
+
+    margin: 0 !important;
+
+    padding: 9px 11px !important;
+
+    background: #ffffff !important;
+
+    color: #263731 !important;
+
+    border-radius: 9px !important;
+
+    text-decoration: none !important;
+
+    font-size: 13px !important;
+
+    font-weight: 650 !important;
+
+    line-height: 1.3 !important;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease !important;
+}
+
+
+.profile-dropdown-link:hover {
+    background: #f2f6f3 !important;
+
+    color: #123c2f !important;
+}
+
+
+.dropdown-icon {
+    width: 30px !important;
+
+    height: 30px !important;
+
+    min-width: 30px !important;
+
+    flex: 0 0 30px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 8px !important;
+
+    background: #edf5f0 !important;
+
+    color: #26734d !important;
+
+    font-size: 13px !important;
+
+    font-weight: 800 !important;
+}
+
+
+.profile-dropdown-link > span:last-child {
+    display: block !important;
+
+    color: inherit !important;
+
+    font-size: 13px !important;
+
+    font-weight: 650 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.profile-dropdown-footer {
+    width: 100% !important;
+
+    padding: 8px !important;
+
+    box-sizing: border-box !important;
+
+    background: #ffffff !important;
+
+    border-top: 1px solid #edf0ee !important;
+}
+
+
+.profile-dropdown-logout {
+    width: 100% !important;
+
+    min-height: 48px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 11px !important;
+
+    box-sizing: border-box !important;
+
+    margin: 0 !important;
+
+    padding: 9px 11px !important;
+
+    background: #ffffff !important;
+
+    color: #a33a3a !important;
+
+    border-radius: 9px !important;
+
+    text-decoration: none !important;
+
+    font-size: 13px !important;
+
+    font-weight: 700 !important;
+}
+
+
+.profile-dropdown-logout:hover {
+    background: #fff3f3 !important;
+
+    color: #a33a3a !important;
+}
+
+
+.profile-dropdown-logout .dropdown-icon {
+    background: #f9eaea !important;
+
+    color: #a33a3a !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    html,
+    body {
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        overflow-x: hidden !important;
+    }
+
+
+    .site-header {
+        width: 100% !important;
+
+        position: relative !important;
+
+        z-index: 9999 !important;
+    }
+
+
+    .main-navbar {
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        height: 68px !important;
+
+        min-height: 68px !important;
+
+        padding: 0 12px !important;
+
+        margin: 0 !important;
+
+        display: flex !important;
+
+        flex-direction: row !important;
+
+        align-items: center !important;
+
+        justify-content: space-between !important;
+
+        gap: 8px !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    .nav-brand {
+        display: block !important;
+
+        flex: 1 1 auto !important;
+
+        min-width: 0 !important;
+
+        max-width: calc(100% - 52px) !important;
+
+        overflow: hidden !important;
+    }
+
+
+    .nav-brand > a {
+        width: 100% !important;
+
+        display: flex !important;
+
+        flex-direction: row !important;
+
+        align-items: center !important;
+
+        gap: 8px !important;
+
+        min-width: 0 !important;
+
+        overflow: hidden !important;
+    }
+
+
+    .nav-brand img {
+        width: 38px !important;
+
+        height: 38px !important;
+
+        min-width: 38px !important;
+
+        flex: 0 0 38px !important;
+
+        display: block !important;
+
+        object-fit: contain !important;
+    }
+
+
+    .nav-brand a > span {
+        display: block !important;
+
+        flex: 1 1 auto !important;
+
+        min-width: 0 !important;
+
+        overflow: hidden !important;
+
+        color: #d4af63 !important;
+
+        font-size: 10px !important;
+
+        font-weight: 800 !important;
+
+        line-height: 1.15 !important;
+
+        white-space: nowrap !important;
+
+        text-overflow: ellipsis !important;
+    }
+
+
+    .menu-toggle {
+        display: flex !important;
+
+        width: 44px !important;
+
+        height: 44px !important;
+
+        min-width: 44px !important;
+
+        min-height: 44px !important;
+
+        flex: 0 0 44px !important;
+
+        margin: 0 !important;
+
+        padding: 0 !important;
+
+        align-items: center !important;
+
+        justify-content: center !important;
+
+        flex-direction: column !important;
+
+        gap: 4px !important;
+
+        background: #f1e7d4 !important;
+
+        border: 1px solid #d6bb88 !important;
+
+        border-radius: 9px !important;
+
+        position: relative !important;
+
+        z-index: 10000 !important;
+    }
+
+
+    .menu-toggle span {
+        display: block !important;
+
+        width: 20px !important;
+
+        height: 2px !important;
+
+        background: #123c2f !important;
+
+        border-radius: 3px !important;
+    }
+
+
+    .nav-links {
+        position: absolute !important;
+
+        top: 68px !important;
+
+        left: 0 !important;
+
+        right: 0 !important;
+
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        display: none !important;
+
+        flex-direction: column !important;
+
+        align-items: stretch !important;
+
+        gap: 0 !important;
+
+        padding: 12px !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+
+        border-top: 1px solid #e5ebe7 !important;
+
+        box-shadow:
+            0 18px 40px
+            rgba(0, 0, 0, 0.12) !important;
+
+        z-index: 9998 !important;
+    }
+
+
+    .nav-links.active {
+        display: flex !important;
+    }
+
+
+    .nav-link {
+        width: 100% !important;
+
+        min-height: 46px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        padding: 0 12px !important;
+
+        box-sizing: border-box !important;
+
+        color: #263731 !important;
+
+        background: #ffffff !important;
+
+        border-radius: 8px !important;
+
+        font-size: 14px !important;
+
+        font-weight: 700 !important;
+
+        white-space: nowrap !important;
+
+        text-decoration: none !important;
+    }
+
+
+    .nav-link:hover {
+        background: #f3f7f4 !important;
+
+        color: #123c2f !important;
+    }
+
+
+    .nav-link::after {
+        display: none !important;
+    }
+
+
+    /* =====================================================
+       MOBILE PROFILE
+    ===================================================== */
+
+    .profile-menu {
+        position: relative !important;
+
+        width: 100% !important;
+
+        margin-top: 8px !important;
+
+        padding-top: 8px !important;
+
+        border-top: 1px solid #e8edeb !important;
+
+        z-index: 10000 !important;
+    }
+
+
+    .profile-button {
+        width: 100% !important;
+
+        min-height: 48px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        gap: 9px !important;
+
+        padding: 6px !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+
+        border: 1px solid #dfe5e1 !important;
+
+        border-radius: 10px !important;
+
+        color: #123c2f !important;
+    }
+
+
+    .profile-avatar {
+        width: 35px !important;
+
+        height: 35px !important;
+
+        min-width: 35px !important;
+
+        flex: 0 0 35px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        justify-content: center !important;
+    }
+
+
+    .profile-user-name {
+        display: block !important;
+
+        flex: 1 !important;
+
+        min-width: 0 !important;
+
+        color: #123c2f !important;
+
+        font-size: 13px !important;
+
+        font-weight: 700 !important;
+
+        text-align: left !important;
+
+        white-space: nowrap !important;
+
+        overflow: hidden !important;
+
+        text-overflow: ellipsis !important;
+    }
+
+
+    .profile-arrow {
+        display: block !important;
+
+        margin-left: auto !important;
+
+        color: #68736e !important;
+    }
+
+
+    .profile-dropdown {
+        position: absolute !important;
+
+        top: calc(100% + 8px) !important;
+
+        left: 0 !important;
+
+        right: 0 !important;
+
+        width: 100% !important;
+
+        display: block !important;
+
+        visibility: hidden !important;
+
+        opacity: 0 !important;
+
+        pointer-events: none !important;
+
+        overflow: hidden !important;
+
+        padding: 0 !important;
+
+        margin: 0 !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+
+        border: 1px solid #d8e1dc !important;
+
+        border-radius: 14px !important;
+
+        box-shadow:
+            0 18px 45px
+            rgba(0, 0, 0, 0.20) !important;
+
+        transform: translateY(-6px) !important;
+
+        z-index: 999999 !important;
+
+        transition:
+            opacity .18s ease,
+            visibility .18s ease,
+            transform .18s ease !important;
+    }
+
+
+    .profile-dropdown.open {
+        visibility: visible !important;
+
+        opacity: 1 !important;
+
+        pointer-events: auto !important;
+
+        transform: translateY(0) !important;
+    }
+
+
+    .profile-dropdown-header {
+        width: 100% !important;
+
+        min-height: 72px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        gap: 12px !important;
+
+        padding: 15px !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+
+        border-bottom: 1px solid #edf0ee !important;
+    }
+
+
+    .profile-dropdown-avatar {
+        width: 44px !important;
+
+        height: 44px !important;
+
+        min-width: 44px !important;
+
+        flex: 0 0 44px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        justify-content: center !important;
+
+        overflow: hidden !important;
+
+        border-radius: 50% !important;
+
+        background:
+            linear-gradient(
+                135deg,
+                #123c2f,
+                #1c5b46
+            ) !important;
+
+        color: #ffffff !important;
+    }
+
+
+    .profile-dropdown-avatar img {
+        width: 100% !important;
+
+        height: 100% !important;
+
+        display: block !important;
+
+        object-fit: cover !important;
+    }
+
+
+    .profile-dropdown-user {
+        min-width: 0 !important;
+
+        flex: 1 !important;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        gap: 4px !important;
+
+        overflow: hidden !important;
+    }
+
+
+    .profile-dropdown-user strong {
+        width: 100% !important;
+
+        display: block !important;
+
+        color: #123c2f !important;
+
+        font-size: 13px !important;
+
+        font-weight: 800 !important;
+
+        white-space: nowrap !important;
+
+        overflow: hidden !important;
+
+        text-overflow: ellipsis !important;
+    }
+
+
+    .profile-dropdown-user span {
+        width: 100% !important;
+
+        display: block !important;
+
+        color: #68736e !important;
+
+        font-size: 10px !important;
+
+        white-space: nowrap !important;
+
+        overflow: hidden !important;
+
+        text-overflow: ellipsis !important;
+    }
+
+
+    .profile-dropdown-links {
+        width: 100% !important;
+
+        padding: 7px !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+    }
+
+
+    .profile-dropdown-link {
+        width: 100% !important;
+
+        min-height: 46px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        gap: 10px !important;
+
+        padding: 8px 10px !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+
+        color: #263731 !important;
+
+        border-radius: 8px !important;
+
+        text-decoration: none !important;
+
+        font-size: 13px !important;
+
+        font-weight: 650 !important;
+    }
+
+
+    .profile-dropdown-link:hover {
+        background: #f2f6f3 !important;
+
+        color: #123c2f !important;
+    }
+
+
+    .dropdown-icon {
+        width: 29px !important;
+
+        height: 29px !important;
+
+        min-width: 29px !important;
+
+        flex: 0 0 29px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        justify-content: center !important;
+
+        background: #edf5f0 !important;
+
+        color: #26734d !important;
+
+        border-radius: 7px !important;
+
+        font-size: 12px !important;
+    }
+
+
+    .profile-dropdown-footer {
+        width: 100% !important;
+
+        padding: 7px !important;
+
+        box-sizing: border-box !important;
+
+        background: #ffffff !important;
+
+        border-top: 1px solid #edf0ee !important;
+    }
+
+
+    .profile-dropdown-logout {
+        width: 100% !important;
+
+        min-height: 46px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        gap: 10px !important;
+
+        padding: 8px 10px !important;
+
+        box-sizing: border-box !important;
+
+        color: #a33a3a !important;
+
+        background: #ffffff !important;
+
+        border-radius: 8px !important;
+
+        text-decoration: none !important;
+
+        font-size: 13px !important;
+
+        font-weight: 700 !important;
+    }
+
+
+    .profile-dropdown-logout:hover {
+        background: #fff3f3 !important;
+    }
+
+
+    /* =====================================================
+       LOGGED OUT
+       LOGIN ONLY
+    ===================================================== */
+
+    .nav-auth-actions {
+        width: 100% !important;
+
+        display: flex !important;
+
+        flex-direction: row !important;
+
+        gap: 8px !important;
+
+        padding-top: 8px !important;
+    }
+
+
+    .nav-login {
+        width: 100% !important;
+
+        flex: 1 1 auto !important;
+
+        min-height: 44px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+
+        justify-content: center !important;
+
+        box-sizing: border-box !important;
+
+        white-space: nowrap !important;
+
+        color: #123c2f !important;
+
+        background: #ffffff !important;
+
+        border: 1px solid #dfe5e1 !important;
+
+        border-radius: 8px !important;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .main-navbar {
+        height: 64px !important;
+
+        min-height: 64px !important;
+
+        padding: 0 10px !important;
+    }
+
+
+    .nav-brand img {
+        width: 35px !important;
+
+        height: 35px !important;
+
+        min-width: 35px !important;
+
+        flex-basis: 35px !important;
+    }
+
+
+    .nav-brand a > span {
+        font-size: 9px !important;
+    }
+
+
+    .menu-toggle {
+        width: 40px !important;
+
+        height: 40px !important;
+
+        min-width: 40px !important;
+
+        flex-basis: 40px !important;
+    }
+
+
+    .nav-links {
+        top: 64px !important;
+    }
+
+
+    .profile-dropdown-header {
+        padding: 13px !important;
+    }
+
+
+    .profile-dropdown-avatar {
+        width: 42px !important;
+
+        height: 42px !important;
+
+        min-width: 42px !important;
+
+        flex-basis: 42px !important;
+    }
+
+
+    .profile-dropdown-link,
+    .profile-dropdown-logout {
+        min-height: 44px !important;
+    }
+
+}
+
+</style>
+
 
 <!-- =====================================================
-     MOBILE MENU SCRIPT
+     NAVIGATION JAVASCRIPT
 ===================================================== -->
 
 <script>
 
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
 function toggleMenu() {
 
-    const menu = document.getElementById("navLinks");
+    const menu =
+        document.getElementById("navLinks");
 
-    if (menu) {
+    const button =
+        document.querySelector(".menu-toggle");
 
+    if (!menu) {
+
+        return;
+
+    }
+
+
+    const isOpen =
         menu.classList.toggle("active");
+
+
+    if (button) {
+
+        button.setAttribute(
+            "aria-expanded",
+            isOpen ? "true" : "false"
+        );
 
     }
 
 }
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+function toggleProfileMenu(event) {
+
+    if (event) {
+
+        event.stopPropagation();
+
+    }
+
+
+    const dropdown =
+        document.getElementById(
+            "profileDropdown"
+        );
+
+
+    const button =
+        document.getElementById(
+            "profileButton"
+        );
+
+
+    if (!dropdown || !button) {
+
+        return;
+
+    }
+
+
+    const isOpen =
+        dropdown.classList.toggle("open");
+
+
+    button.classList.toggle(
+        "active",
+        isOpen
+    );
+
+
+    button.setAttribute(
+        "aria-expanded",
+        isOpen ? "true" : "false"
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE PROFILE DROPDOWN
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const menu =
+            document.getElementById(
+                "profileMenu"
+            );
+
+
+        const dropdown =
+            document.getElementById(
+                "profileDropdown"
+            );
+
+
+        const button =
+            document.getElementById(
+                "profileButton"
+            );
+
+
+        if (
+            !menu ||
+            !dropdown ||
+            !button
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !menu.contains(
+                event.target
+            )
+        ) {
+
+            dropdown.classList.remove(
+                "open"
+            );
+
+
+            button.classList.remove(
+                "active"
+            );
+
+
+            button.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key !== "Escape"
+        ) {
+
+            return;
+
+        }
+
+
+        const dropdown =
+            document.getElementById(
+                "profileDropdown"
+            );
+
+
+        const button =
+            document.getElementById(
+                "profileButton"
+            );
+
+
+        if (!dropdown || !button) {
+
+            return;
+
+        }
+
+
+        dropdown.classList.remove(
+            "open"
+        );
+
+
+        button.classList.remove(
+            "active"
+        );
+
+
+        button.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+);
 
 </script>
 

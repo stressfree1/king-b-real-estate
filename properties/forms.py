@@ -3,6 +3,7 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 
 from .models import (
+    AccountSettings,
     JobApplicant,
     ContactMessage,
     SkilledWorker,
@@ -13,22 +14,6 @@ from .models import (
 
 # =========================================================
 # GENERAL ACCOUNT REGISTRATION
-# =========================================================
-#
-# This is the ONLY form used to create the main King B
-# account.
-#
-# The user creates ONE account with:
-#   - Full name
-#   - Email
-#   - Phone
-#   - Password
-#
-# After registration, the account automatically receives
-# a Customer profile.
-#
-# Later, the same account can apply to become a Skilled
-# Worker without creating another User account.
 # =========================================================
 
 class AccountRegistrationForm(forms.Form):
@@ -328,20 +313,6 @@ class ContactMessageForm(forms.ModelForm):
 # =========================================================
 # SKILLED WORKER PROFILE
 # =========================================================
-#
-# IMPORTANT:
-#
-# This form DOES NOT create a Django User.
-#
-# The user is already logged in and already has a general
-# King B account.
-#
-# The existing User is attached to the SkilledWorker profile
-# in the view using:
-#
-#     worker.user = request.user
-#
-# =========================================================
 
 class SkilledWorkerRegistrationForm(
     forms.ModelForm
@@ -507,14 +478,8 @@ class SkilledWorkerRegistrationForm(
             **kwargs
         )
 
-        # Store the existing logged-in account.
-        #
-        # This is used by clean_email() so the user's own
-        # email is allowed.
         self.current_user = current_user
 
-        # Existing worker profile:
-        # ID document is no longer required.
         if self.instance and self.instance.pk:
 
             self.fields[
@@ -533,12 +498,6 @@ class SkilledWorkerRegistrationForm(
 
         email = email.strip().lower()
 
-        # -------------------------------------------------
-        # EXISTING LOGGED-IN USER
-        # -------------------------------------------------
-        #
-        # The current user's own email is allowed.
-        #
         if (
             self.current_user
             and self.current_user.email
@@ -546,10 +505,6 @@ class SkilledWorkerRegistrationForm(
         ):
 
             return email
-
-        # -------------------------------------------------
-        # OTHER ACCOUNT
-        # -------------------------------------------------
 
         if User.objects.filter(
             username__iexact=email
@@ -595,7 +550,6 @@ class SkilledWorkerRegistrationForm(
             'id_document'
         )
 
-        # New worker application requires ID document.
         if (
             not id_document
             and not self.instance.pk
@@ -611,13 +565,6 @@ class SkilledWorkerRegistrationForm(
 
 # =========================================================
 # CUSTOMER PROFILE
-# =========================================================
-#
-# This form DOES NOT create a User.
-#
-# It creates or updates a Customer profile attached to
-# the existing general King B account.
-#
 # =========================================================
 
 class CustomerForm(forms.ModelForm):
@@ -700,7 +647,6 @@ class CustomerForm(forms.ModelForm):
             **kwargs
         )
 
-        # Existing customer does not need to upload ID again.
         if self.instance and self.instance.pk:
 
             self.fields[
@@ -713,11 +659,10 @@ class CustomerForm(forms.ModelForm):
             'id_type'
         )
 
-        # When editing an existing verified profile,
-        # allow the previous value to remain.
         if not id_type:
 
             if self.instance and self.instance.pk:
+
                 return self.instance.id_type
 
             raise forms.ValidationError(
@@ -732,10 +677,10 @@ class CustomerForm(forms.ModelForm):
             'id_number'
         )
 
-        # When editing an existing profile, preserve it.
         if not id_number:
 
             if self.instance and self.instance.pk:
+
                 return self.instance.id_number
 
             raise forms.ValidationError(
@@ -750,8 +695,6 @@ class CustomerForm(forms.ModelForm):
             'id_document'
         )
 
-        # Existing customer:
-        # keep the old document when no new file is selected.
         if (
             not id_document
             and self.instance
@@ -930,3 +873,442 @@ class MarketplaceListingForm(
                 )
 
         return images
+
+
+# =========================================================
+# UNIFIED ACCOUNT SETTINGS
+# =========================================================
+#
+# One settings form for the shared King B account.
+#
+# Updates:
+#
+# 1. Django User
+#    - Full name
+#    - Email
+#    - Username
+#
+# 2. AccountSettings
+#    - Phone
+#    - Address
+#    - Profile image
+#    - Notification preferences
+#    - Profile visibility
+#
+# 3. Customer profile, when present
+#    - Full name
+#    - Email
+#    - Phone
+#    - Address
+#
+# 4. Skilled Worker profile, when present
+#    - Full name
+#    - Email
+#    - Phone
+#
+# =========================================================
+
+class AccountSettingsForm(forms.ModelForm):
+
+    full_name = forms.CharField(
+        max_length=200,
+        required=True,
+        label='Full Name',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Enter your full name',
+                'autocomplete': 'name',
+                'class': 'account-settings-input',
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        required=True,
+        label='Email Address',
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Enter your email address',
+                'autocomplete': 'email',
+                'class': 'account-settings-input',
+            }
+        )
+    )
+
+    phone = forms.CharField(
+        max_length=50,
+        required=True,
+        label='Phone Number',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Enter your phone number',
+                'autocomplete': 'tel',
+                'class': 'account-settings-input',
+            }
+        )
+    )
+
+    class Meta:
+
+        model = AccountSettings
+
+        fields = (
+            'full_name',
+            'email',
+            'phone',
+            'address',
+            'profile_image',
+            'property_alerts',
+            'plot_availability_alerts',
+            'estate_alerts',
+            'hire_notifications',
+            'security_notifications',
+            'profile_visible',
+        )
+
+        widgets = {
+
+            'phone': forms.TextInput(
+                attrs={
+                    'placeholder': 'Enter your phone number',
+                    'autocomplete': 'tel',
+                    'class': 'account-settings-input',
+                }
+            ),
+
+            'address': forms.TextInput(
+                attrs={
+                    'placeholder': 'Enter your address',
+                    'autocomplete': 'street-address',
+                    'class': 'account-settings-input',
+                }
+            ),
+
+            'profile_image': forms.ClearableFileInput(
+                attrs={
+                    'accept': 'image/*',
+                    'class': 'account-settings-file',
+                }
+            ),
+
+        }
+
+    def __init__(
+        self,
+        *args,
+        user=None,
+        **kwargs
+    ):
+
+        self.user = user
+
+        super().__init__(
+            *args,
+            **kwargs
+        )
+
+        if not self.user:
+
+            raise ValueError(
+                'AccountSettingsForm requires a logged-in user.'
+            )
+
+        # -----------------------------------------------------
+        # LOAD CURRENT USER DATA
+        # -----------------------------------------------------
+
+        self.fields[
+            'full_name'
+        ].initial = (
+            self.user.get_full_name()
+            or self.user.first_name
+            or ''
+        )
+
+        self.fields[
+            'email'
+        ].initial = (
+            self.user.email or ''
+        )
+
+        # -----------------------------------------------------
+        # GET PHONE FROM ACCOUNT SETTINGS FIRST
+        # -----------------------------------------------------
+
+        current_phone = ''
+
+        if self.instance and self.instance.pk:
+
+            current_phone = (
+                self.instance.phone or ''
+            )
+
+        # -----------------------------------------------------
+        # IF EMPTY, CHECK CUSTOMER PROFILE
+        # -----------------------------------------------------
+
+        if not current_phone:
+
+            try:
+
+                current_phone = (
+                    self.user.customer_profile.phone
+                    or ''
+                )
+
+            except Customer.DoesNotExist:
+
+                pass
+
+        # -----------------------------------------------------
+        # IF STILL EMPTY, CHECK WORKER PROFILE
+        # -----------------------------------------------------
+
+        if not current_phone:
+
+            try:
+
+                current_phone = (
+                    self.user.skilled_worker_profile.phone
+                    or ''
+                )
+
+            except SkilledWorker.DoesNotExist:
+
+                pass
+
+        self.fields[
+            'phone'
+        ].initial = current_phone
+
+    # =========================================================
+    # EMAIL VALIDATION
+    # =========================================================
+
+    def clean_email(self):
+
+        email = (
+            self.cleaned_data[
+                'email'
+            ]
+            .strip()
+            .lower()
+        )
+
+        if not email:
+
+            raise forms.ValidationError(
+                'Email address is required.'
+            )
+
+        # -----------------------------------------------------
+        # CHECK USERNAME
+        # -----------------------------------------------------
+
+        username_exists = (
+            User.objects
+            .filter(
+                username__iexact=email
+            )
+            .exclude(
+                pk=self.user.pk
+            )
+            .exists()
+        )
+
+        if username_exists:
+
+            raise forms.ValidationError(
+                'This email address is already '
+                'being used by another account.'
+            )
+
+        # -----------------------------------------------------
+        # CHECK EMAIL
+        # -----------------------------------------------------
+
+        email_exists = (
+            User.objects
+            .filter(
+                email__iexact=email
+            )
+            .exclude(
+                pk=self.user.pk
+            )
+            .exists()
+        )
+
+        if email_exists:
+
+            raise forms.ValidationError(
+                'This email address is already '
+                'being used by another account.'
+            )
+
+        return email
+
+    # =========================================================
+    # FULL NAME
+    # =========================================================
+
+    def clean_full_name(self):
+
+        full_name = (
+            self.cleaned_data[
+                'full_name'
+            ]
+            .strip()
+        )
+
+        if not full_name:
+
+            raise forms.ValidationError(
+                'Full name is required.'
+            )
+
+        return full_name
+
+    # =========================================================
+    # PHONE
+    # =========================================================
+
+    def clean_phone(self):
+
+        phone = (
+            self.cleaned_data[
+                'phone'
+            ]
+            .strip()
+        )
+
+        if not phone:
+
+            raise forms.ValidationError(
+                'Phone number is required.'
+            )
+
+        return phone
+
+    # =========================================================
+    # SAVE EVERYTHING
+    # =========================================================
+
+    def save(
+        self,
+        commit=True
+    ):
+
+        settings = super().save(
+            commit=False
+        )
+
+        full_name = (
+            self.cleaned_data[
+                'full_name'
+            ]
+            .strip()
+        )
+
+        email = (
+            self.cleaned_data[
+                'email'
+            ]
+            .strip()
+            .lower()
+        )
+
+        phone = (
+            self.cleaned_data[
+                'phone'
+            ]
+            .strip()
+        )
+
+        # -----------------------------------------------------
+        # ACCOUNT SETTINGS
+        # -----------------------------------------------------
+
+        settings.phone = phone
+
+        # -----------------------------------------------------
+        # MAIN DJANGO USER
+        # -----------------------------------------------------
+
+        self.user.first_name = full_name
+
+        self.user.email = email
+
+        # IMPORTANT:
+        # Your unified login authenticates using the email
+        # as the username.
+        self.user.username = email
+
+        # -----------------------------------------------------
+        # CUSTOMER PROFILE
+        # -----------------------------------------------------
+
+        try:
+
+            customer = (
+                self.user.customer_profile
+            )
+
+            customer.full_name = full_name
+
+            customer.email = email
+
+            customer.phone = phone
+
+            if settings.address:
+
+                customer.address = settings.address
+
+            if commit:
+
+                customer.save()
+
+        except Customer.DoesNotExist:
+
+            pass
+
+        # -----------------------------------------------------
+        # SKILLED WORKER PROFILE
+        # -----------------------------------------------------
+
+        try:
+
+            worker = (
+                self.user.skilled_worker_profile
+            )
+
+            worker.full_name = full_name
+
+            worker.email = email
+
+            worker.phone = phone
+
+            if commit:
+
+                worker.save()
+
+        except SkilledWorker.DoesNotExist:
+
+            pass
+
+        # -----------------------------------------------------
+        # SAVE MAIN USER
+        # -----------------------------------------------------
+
+        if commit:
+
+            self.user.save(
+                update_fields=[
+                    'first_name',
+                    'email',
+                    'username',
+                ]
+            )
+
+            settings.save()
+
+        return settings

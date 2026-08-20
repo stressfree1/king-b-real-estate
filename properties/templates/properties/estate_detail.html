@@ -1,0 +1,1750 @@
+{% extends 'properties/base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ estate.name }} | King B Real Estate
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   ESTATE DETAIL PAGE — KING B PREMIUM PROPERTY SYSTEM
+   ========================================================= */
+
+.estate-detail-page {
+    --kb-green: #123c2f;
+    --kb-dark-green: #09291f;
+    --kb-gold: #b58b3b;
+    --kb-light-gold: #d4af63;
+    --kb-cream: #f7f7f4;
+    --kb-white: #ffffff;
+    --kb-text: #18231f;
+    --kb-muted: #66716c;
+    --kb-border: #e7ebe8;
+
+    background: var(--kb-cream);
+    min-height: 100vh;
+    padding-bottom: 110px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.estate-detail-hero {
+    position: relative;
+
+    min-height: min(720px, 82vh);
+
+    display: flex;
+    align-items: flex-end;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--kb-dark-green),
+            var(--kb-green)
+        );
+}
+
+
+.estate-detail-hero-image {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    transform: scale(1.01);
+}
+
+
+.estate-detail-hero-placeholder {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--kb-dark-green),
+            var(--kb-green)
+        );
+
+    color: var(--kb-light-gold);
+
+    font-size: 90px;
+}
+
+
+/* ---------------------------------------------------------
+   HERO OVERLAYS
+   --------------------------------------------------------- */
+
+.estate-detail-hero::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(5, 19, 14, 0.08) 0%,
+            rgba(5, 19, 14, 0.16) 30%,
+            rgba(5, 19, 14, 0.68) 72%,
+            rgba(5, 19, 14, 0.94) 100%
+        );
+}
+
+
+/* =========================================================
+   HERO CONTENT
+   ========================================================= */
+
+.estate-detail-hero-content {
+    position: relative;
+
+    z-index: 3;
+
+    width: min(1260px, 88%);
+
+    margin: 0 auto;
+
+    padding: 0 0 74px;
+}
+
+
+.estate-detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 34px;
+
+    padding: 9px 14px;
+
+    background: rgba(255, 255, 255, 0.10);
+
+    border: 1px solid rgba(255, 255, 255, 0.20);
+
+    border-radius: 999px;
+
+    backdrop-filter: blur(8px);
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.estate-detail-back:hover {
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.16);
+
+    border-color: rgba(255, 255, 255, 0.32);
+}
+
+
+.estate-detail-eyebrow {
+    margin: 0 0 14px;
+
+    color: var(--kb-light-gold);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+.estate-detail-hero h1 {
+    max-width: 1050px;
+
+    margin: 0 0 18px;
+
+    color: #ffffff;
+
+    font-size: clamp(46px, 7vw, 82px);
+
+    font-weight: 700;
+
+    line-height: 0.98;
+
+    letter-spacing: -2px;
+}
+
+
+.estate-detail-location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.90);
+
+    font-size: 17px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   ESTATE QUICK BAR
+   ========================================================= */
+
+.estate-quick-bar-wrap {
+    position: relative;
+
+    z-index: 5;
+
+    width: min(1260px, 88%);
+
+    margin: -42px auto 0;
+}
+
+
+.estate-quick-bar {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    background: var(--kb-white);
+
+    border: 1px solid var(--kb-border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 55px rgba(10, 34, 26, 0.12);
+
+    overflow: hidden;
+}
+
+
+.estate-quick-stat {
+    min-height: 115px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 22px 30px;
+
+    border-right: 1px solid var(--kb-border);
+}
+
+
+.estate-quick-stat:last-child {
+    border-right: none;
+}
+
+
+.estate-quick-stat-label {
+    margin-bottom: 7px;
+
+    color: #7a847f;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+.estate-quick-stat-value {
+    color: var(--kb-green);
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+
+.estate-quick-stat-note {
+    margin-top: 3px;
+
+    color: #7a847f;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   ESTATE INTRO
+   ========================================================= */
+
+.estate-intro {
+    width: min(1260px, 88%);
+
+    margin: 0 auto;
+
+    padding-top: 105px;
+}
+
+
+.estate-intro-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.45fr)
+        minmax(320px, 0.75fr);
+
+    gap: 80px;
+
+    align-items: start;
+}
+
+
+/* ---------------------------------------------------------
+   INTRO COPY
+   --------------------------------------------------------- */
+
+.estate-intro-eyebrow {
+    margin: 0 0 12px;
+
+    color: var(--kb-gold);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+.estate-intro-content h2 {
+    max-width: 800px;
+
+    margin: 0 0 22px;
+
+    color: var(--kb-green);
+
+    font-size: clamp(34px, 4.4vw, 48px);
+
+    font-weight: 700;
+
+    line-height: 1.08;
+
+    letter-spacing: -1px;
+}
+
+
+.estate-intro-content p {
+    max-width: 760px;
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 17px;
+
+    line-height: 1.95;
+}
+
+
+/* =========================================================
+   OVERVIEW CARD
+   ========================================================= */
+
+.estate-summary-card {
+    position: sticky;
+
+    top: 25px;
+
+    background: var(--kb-white);
+
+    border: 1px solid var(--kb-border);
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 14px 38px rgba(14, 40, 31, 0.07);
+}
+
+
+.estate-summary-card-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+
+.estate-summary-card h3 {
+    margin: 0;
+
+    color: var(--kb-green);
+
+    font-size: 20px;
+
+    font-weight: 750;
+}
+
+
+.estate-summary-line {
+    width: 40px;
+
+    height: 2px;
+
+    background: var(--kb-gold);
+}
+
+
+.estate-summary-row {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid #eef1ef;
+}
+
+
+.estate-summary-row:last-child {
+    border-bottom: none;
+
+    padding-bottom: 0;
+}
+
+
+.estate-summary-label {
+    color: #7a847f;
+
+    font-size: 13px;
+
+    font-weight: 500;
+}
+
+
+.estate-summary-value {
+    max-width: 190px;
+
+    color: var(--kb-text);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   TYPES SECTION
+   ========================================================= */
+
+.estate-types-section {
+    width: min(1260px, 88%);
+
+    margin: 115px auto 0;
+}
+
+
+.estate-types-header {
+    max-width: 850px;
+
+    margin-bottom: 45px;
+}
+
+
+.estate-types-header .eyebrow {
+    margin: 0 0 11px;
+
+    color: var(--kb-gold);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+.estate-types-header h2 {
+    margin: 0 0 16px;
+
+    color: var(--kb-green);
+
+    font-size: clamp(35px, 4.2vw, 50px);
+
+    font-weight: 700;
+
+    line-height: 1.08;
+
+    letter-spacing: -1px;
+}
+
+
+.estate-types-header p {
+    max-width: 760px;
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 16px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   TYPE GRID
+   ========================================================= */
+
+.estate-types-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(330px, 1fr)
+        );
+
+    gap: 28px;
+}
+
+
+/* =========================================================
+   TYPE CARD
+   ========================================================= */
+
+.estate-type-card {
+    display: flex;
+
+    flex-direction: column;
+
+    background: var(--kb-white);
+
+    border: 1px solid var(--kb-border);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 10px 32px rgba(10, 34, 26, 0.055);
+
+    transition:
+        transform 0.32s ease,
+        box-shadow 0.32s ease;
+}
+
+
+.estate-type-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 24px 55px rgba(10, 34, 26, 0.11);
+}
+
+
+/* =========================================================
+   TYPE IMAGE
+   ========================================================= */
+
+.estate-type-image {
+    position: relative;
+
+    height: 270px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--kb-dark-green),
+            var(--kb-green)
+        );
+}
+
+
+.estate-type-image::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.02),
+            rgba(0, 0, 0, 0.20)
+        );
+}
+
+
+.estate-type-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transition:
+        transform 0.55s ease;
+}
+
+
+.estate-type-card:hover .estate-type-image img {
+    transform: scale(1.045);
+}
+
+
+.estate-type-placeholder {
+    position: absolute;
+    inset: 0;
+
+    z-index: 1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: var(--kb-light-gold);
+
+    font-size: 60px;
+}
+
+
+/* =========================================================
+   TYPE CONTENT
+   ========================================================= */
+
+.estate-type-content {
+    display: flex;
+
+    flex: 1;
+
+    flex-direction: column;
+
+    padding: 30px;
+}
+
+
+.estate-type-label {
+    margin: 0 0 9px;
+
+    color: var(--kb-gold);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+
+.estate-type-content h3 {
+    margin: 0 0 12px;
+
+    color: var(--kb-green);
+
+    font-size: 28px;
+
+    font-weight: 750;
+
+    line-height: 1.15;
+}
+
+
+.estate-type-description {
+    min-height: 70px;
+
+    margin: 0 0 23px;
+
+    color: var(--kb-muted);
+
+    font-size: 14px;
+
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   TYPE STATS
+   ========================================================= */
+
+.estate-type-info {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 24px;
+}
+
+
+.estate-type-info-item {
+    padding: 14px 15px;
+
+    background: #f6f8f6;
+
+    border: 1px solid #edf0ed;
+
+    border-radius: 11px;
+}
+
+
+.estate-type-info-item span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #7b8580;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+}
+
+
+.estate-type-info-item strong {
+    color: var(--kb-green);
+
+    font-size: 15px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   WHAT COMES WITH IT
+   ========================================================= */
+
+.estate-type-includes {
+    margin-bottom: 23px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #edf0ee;
+}
+
+
+.estate-type-includes h4 {
+    margin: 0 0 8px;
+
+    color: var(--kb-green);
+
+    font-size: 13px;
+
+    font-weight: 750;
+}
+
+
+.estate-type-includes p {
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    white-space: pre-line;
+}
+
+
+/* =========================================================
+   DOCUMENTS
+   ========================================================= */
+
+.estate-type-documents {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 22px;
+}
+
+
+.estate-document-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 9px 11px;
+
+    background: #f4f1e9;
+
+    border: 1px solid #ebe5d7;
+
+    border-radius: 8px;
+
+    color: var(--kb-green);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.estate-document-link:hover {
+    color: var(--kb-green);
+
+    background: #ebe5d7;
+
+    border-color: #ded4be;
+}
+
+
+/* =========================================================
+   TYPE CTA
+   ========================================================= */
+
+.estate-type-button {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-top: auto;
+
+    padding: 15px 17px;
+
+    background: var(--kb-green);
+
+    border: 1px solid var(--kb-green);
+
+    border-radius: 10px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.2s ease;
+}
+
+
+.estate-type-button:hover {
+    background: var(--kb-gold);
+
+    border-color: var(--kb-gold);
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+.estate-type-button-arrow {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    border: 1px solid rgba(255,255,255,0.24);
+
+    border-radius: 50%;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   NO TYPES
+   ========================================================= */
+
+.no-estate-types {
+    padding: 70px 30px;
+
+    background: var(--kb-white);
+
+    border: 1px solid var(--kb-border);
+
+    border-radius: 18px;
+
+    text-align: center;
+}
+
+
+.no-estate-types-mark {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background: #f3f0e8;
+
+    color: var(--kb-gold);
+
+    font-size: 22px;
+}
+
+
+.no-estate-types h3 {
+    margin: 0 0 10px;
+
+    color: var(--kb-green);
+
+    font-size: 25px;
+}
+
+
+.no-estate-types p {
+    max-width: 550px;
+
+    margin: 0 auto;
+
+    color: var(--kb-muted);
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    .estate-intro-grid {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+    }
+
+
+    .estate-summary-card {
+        position: static;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .estate-detail-hero {
+        min-height: 610px;
+    }
+
+
+    .estate-detail-hero-content {
+        width: 90%;
+
+        padding-bottom: 65px;
+    }
+
+
+    .estate-detail-hero h1 {
+        font-size: clamp(40px, 10vw, 60px);
+
+        letter-spacing: -1px;
+    }
+
+
+    .estate-quick-bar-wrap {
+        width: 90%;
+    }
+
+
+    .estate-quick-bar {
+        grid-template-columns: 1fr;
+    }
+
+
+    .estate-quick-stat {
+        min-height: auto;
+
+        border-right: none;
+
+        border-bottom: 1px solid var(--kb-border);
+    }
+
+
+    .estate-quick-stat:last-child {
+        border-bottom: none;
+    }
+
+
+    .estate-intro,
+    .estate-types-section {
+        width: 90%;
+    }
+
+
+    .estate-intro {
+        padding-top: 80px;
+    }
+
+
+    .estate-types-section {
+        margin-top: 90px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .estate-detail-hero {
+        min-height: 560px;
+    }
+
+
+    .estate-detail-hero-content {
+        padding-bottom: 55px;
+    }
+
+
+    .estate-detail-eyebrow {
+        letter-spacing: 2px;
+    }
+
+
+    .estate-detail-location {
+        font-size: 15px;
+    }
+
+
+    .estate-quick-bar-wrap {
+        margin-top: -28px;
+    }
+
+
+    .estate-quick-stat {
+        padding: 20px;
+    }
+
+
+    .estate-quick-stat-value {
+        font-size: 24px;
+    }
+
+
+    .estate-intro {
+        padding-top: 65px;
+    }
+
+
+    .estate-intro-content h2 {
+        font-size: 32px;
+
+        letter-spacing: -0.5px;
+    }
+
+
+    .estate-intro-content p {
+        font-size: 15px;
+    }
+
+
+    .estate-summary-card {
+        padding: 23px;
+    }
+
+
+    .estate-types-section {
+        margin-top: 75px;
+    }
+
+
+    .estate-types-header h2 {
+        font-size: 32px;
+
+        letter-spacing: -0.5px;
+    }
+
+
+    .estate-types-header p {
+        font-size: 15px;
+    }
+
+
+    .estate-types-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .estate-type-image {
+        height: 235px;
+    }
+
+
+    .estate-type-content {
+        padding: 23px;
+    }
+
+
+    .estate-type-content h3 {
+        font-size: 25px;
+    }
+
+
+}
+
+
+@media (max-width: 430px) {
+
+    .estate-type-info {
+        grid-template-columns: 1fr;
+    }
+
+
+    .estate-summary-row {
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+
+    .estate-summary-value {
+        max-width: none;
+
+        text-align: left;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="estate-detail-page">
+
+
+    <!-- =====================================================
+         ESTATE HERO
+    ====================================================== -->
+
+    <section class="estate-detail-hero">
+
+        {% if estate.image %}
+
+            <img
+                src="{{ estate.image.url }}"
+                alt="{{ estate.name }}"
+                class="estate-detail-hero-image"
+            >
+
+        {% else %}
+
+            <div class="estate-detail-hero-placeholder">
+                🏡
+            </div>
+
+        {% endif %}
+
+
+        <div class="estate-detail-hero-content">
+
+            <a
+                href="{% url 'property_list' %}"
+                class="estate-detail-back"
+            >
+                ←
+                <span>Back to Estates</span>
+            </a>
+
+
+            <p class="estate-detail-eyebrow">
+                KING B REAL ESTATE
+            </p>
+
+
+            <h1>
+                {{ estate.name }}
+            </h1>
+
+
+            <p class="estate-detail-location">
+                <span>📍</span>
+                <span>{{ estate.location }}</span>
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUICK ESTATE STATISTICS
+    ====================================================== -->
+
+    <div class="estate-quick-bar-wrap">
+
+        <div class="estate-quick-bar">
+
+
+            <div class="estate-quick-stat">
+
+                <span class="estate-quick-stat-label">
+                    Property Types
+                </span>
+
+                <span class="estate-quick-stat-value">
+                    {{ estate_types|length }}
+                </span>
+
+                <span class="estate-quick-stat-note">
+                    Available property options
+                </span>
+
+            </div>
+
+
+            <div class="estate-quick-stat">
+
+                <span class="estate-quick-stat-label">
+                    Total Plots
+                </span>
+
+                <span class="estate-quick-stat-value">
+                    {{ estate.properties.count }}
+                </span>
+
+                <span class="estate-quick-stat-note">
+                    Across this development
+                </span>
+
+            </div>
+
+
+            <div class="estate-quick-stat">
+
+                <span class="estate-quick-stat-label">
+                    Location
+                </span>
+
+                <span class="estate-quick-stat-value"
+                      style="font-size: 21px;">
+                    {{ estate.location }}
+                </span>
+
+                <span class="estate-quick-stat-note">
+                    Development location
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ESTATE INTRO
+    ====================================================== -->
+
+    <section class="estate-intro">
+
+        <div class="estate-intro-grid">
+
+
+            <!-- =================================================
+                 ESTATE DESCRIPTION
+            ================================================== -->
+
+            <div class="estate-intro-content">
+
+                <p class="estate-intro-eyebrow">
+                    ABOUT THE DEVELOPMENT
+                </p>
+
+
+                <h2>
+                    A place designed for
+                    your next move.
+                </h2>
+
+
+                {% if estate.description %}
+
+                    <p>
+                        {{ estate.description|linebreaksbr }}
+                    </p>
+
+                {% else %}
+
+                    <p>
+                        Discover carefully planned property
+                        opportunities at {{ estate.name }}.
+                        Explore the available property types,
+                        review the development information and
+                        find a plot that matches your investment
+                        plans.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =================================================
+                 ESTATE OVERVIEW
+            ================================================== -->
+
+            <aside class="estate-summary-card">
+
+                <div class="estate-summary-card-header">
+
+                    <h3>
+                        Estate Overview
+                    </h3>
+
+                    <span class="estate-summary-line"></span>
+
+                </div>
+
+
+                <div class="estate-summary-row">
+
+                    <span class="estate-summary-label">
+                        Location
+                    </span>
+
+                    <span class="estate-summary-value">
+                        {{ estate.location }}
+                    </span>
+
+                </div>
+
+
+                <div class="estate-summary-row">
+
+                    <span class="estate-summary-label">
+                        Property Types
+                    </span>
+
+                    <span class="estate-summary-value">
+                        {{ estate_types|length }}
+                    </span>
+
+                </div>
+
+
+                <div class="estate-summary-row">
+
+                    <span class="estate-summary-label">
+                        Total Plots
+                    </span>
+
+                    <span class="estate-summary-value">
+                        {{ estate.properties.count }}
+                    </span>
+
+                </div>
+
+
+                {% if estate.digital_layout %}
+
+                    <div class="estate-summary-row">
+
+                        <span class="estate-summary-label">
+                            Development Layout
+                        </span>
+
+                        <span class="estate-summary-value">
+                            Available
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+            </aside>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROPERTY TYPES
+    ====================================================== -->
+
+    <section class="estate-types-section">
+
+        <div class="estate-types-header">
+
+            <p class="eyebrow">
+                EXPLORE THE DEVELOPMENT
+            </p>
+
+
+            <h2>
+                Choose Your Property Type
+            </h2>
+
+
+            <p>
+                Explore the different property options available
+                within {{ estate.name }}. Each category may have
+                its own pricing, plot size, inclusions, layout and
+                available plots.
+            </p>
+
+        </div>
+
+
+        {% if estate_types %}
+
+            <div class="estate-types-grid">
+
+
+                {% for estate_type in estate_types %}
+
+                    <article class="estate-type-card">
+
+
+                        <!-- =========================================
+                             TYPE IMAGE
+                        ========================================== -->
+
+                        <div class="estate-type-image">
+
+                            {% if estate_type.image %}
+
+                                <img
+                                    src="{{ estate_type.image.url }}"
+                                    alt="{{ estate_type.name }} at {{ estate.name }}"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="estate-type-placeholder">
+                                    🏘️
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =========================================
+                             TYPE CONTENT
+                        ========================================== -->
+
+                        <div class="estate-type-content">
+
+
+                            <p class="estate-type-label">
+                                PROPERTY TYPE
+                            </p>
+
+
+                            <h3>
+                                {{ estate_type.name }}
+                            </h3>
+
+
+                            {% if estate_type.description %}
+
+                                <p class="estate-type-description">
+
+                                    {{ estate_type.description|truncatewords:32 }}
+
+                                </p>
+
+                            {% else %}
+
+                                <p class="estate-type-description">
+
+                                    Explore the available {{ estate_type.name }}
+                                    plots and development information.
+
+                                </p>
+
+                            {% endif %}
+
+
+                            <!-- =====================================
+                                 TYPE STATS
+                            ====================================== -->
+
+                            <div class="estate-type-info">
+
+
+                                {% if estate_type.price %}
+
+                                    <div class="estate-type-info-item">
+
+                                        <span>
+                                            Starting Price
+                                        </span>
+
+                                        <strong>
+                                            ₦{{ estate_type.price|floatformat:0 }}
+                                        </strong>
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if estate_type.plot_size %}
+
+                                    <div class="estate-type-info-item">
+
+                                        <span>
+                                            Plot Size
+                                        </span>
+
+                                        <strong>
+                                            {{ estate_type.plot_size }}
+                                        </strong>
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="estate-type-info-item">
+
+                                    <span>
+                                        Total Plots
+                                    </span>
+
+                                    <strong>
+                                        {{ estate_type.total_plot_count }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="estate-type-info-item">
+
+                                    <span>
+                                        Available
+                                    </span>
+
+                                    <strong>
+                                        {{ estate_type.available_plot_count }}
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 WHAT COMES WITH IT
+                            ====================================== -->
+
+                            {% if estate_type.what_comes_with_it %}
+
+                                <div class="estate-type-includes">
+
+                                    <h4>
+                                        What Comes With This Type
+                                    </h4>
+
+                                    <p>
+                                        {{ estate_type.what_comes_with_it }}
+                                    </p>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- =====================================
+                                 DOCUMENTS
+                            ====================================== -->
+
+                            {% if estate_type.proposed_company_plan or estate_type.digital_layout %}
+
+                                <div class="estate-type-documents">
+
+
+                                    {% if estate_type.proposed_company_plan %}
+
+                                        <a
+                                            href="{{ estate_type.proposed_company_plan.url }}"
+                                            target="_blank"
+                                            rel="noopener"
+                                            class="estate-document-link"
+                                        >
+                                            📄
+                                            <span>
+                                                Company Plan
+                                            </span>
+                                        </a>
+
+                                    {% endif %}
+
+
+                                    {% if estate_type.digital_layout %}
+
+                                        <a
+                                            href="{{ estate_type.digital_layout.url }}"
+                                            target="_blank"
+                                            rel="noopener"
+                                            class="estate-document-link"
+                                        >
+                                            🗺️
+                                            <span>
+                                                Digital Layout
+                                            </span>
+                                        </a>
+
+                                    {% endif %}
+
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- =====================================
+                                 CTA
+                            ====================================== -->
+
+                            <a
+                                href="{% url 'estate_type_detail' estate.id estate_type.id %}"
+                                class="estate-type-button"
+                            >
+
+                                <span>
+                                    Explore {{ estate_type.name }}
+                                </span>
+
+                                <span class="estate-type-button-arrow">
+                                    →
+                                </span>
+
+                            </a>
+
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+
+            </div>
+
+        {% else %}
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="no-estate-types">
+
+                <div class="no-estate-types-mark">
+                    +
+                </div>
+
+                <h3>
+                    Property Options Coming Soon
+                </h3>
+
+                <p>
+                    Property types for {{ estate.name }} are
+                    currently being prepared. Please check back
+                    soon for the latest availability.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+    </section>
+
+
+</main>
+
+{% endblock %}

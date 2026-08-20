@@ -1,3 +1,4 @@
+
 {% extends 'properties/base.html' %}
 {% load static %}
 
@@ -579,6 +580,40 @@
 
 
 /* =========================================================
+   VERIFY TO HIRE
+========================================================= */
+
+.worker-button-verify {
+    background: #b58b3b;
+
+    color: #ffffff;
+}
+
+.worker-button-verify:hover {
+    background: #967227;
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   UNAVAILABLE BUTTON
+========================================================= */
+
+.worker-button-disabled {
+    background: #e8ece9;
+
+    color: #7a847f;
+
+    cursor: not-allowed;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
    VERIFICATION
 ========================================================= */
 
@@ -739,8 +774,6 @@
         <div class="worker-hero-container">
 
 
-            <!-- WORKER IMAGE -->
-
             {% if worker.profile_image %}
 
                 <img
@@ -759,8 +792,6 @@
 
             {% endif %}
 
-
-            <!-- WORKER INFORMATION -->
 
             <div>
 
@@ -792,9 +823,7 @@
                 </div>
 
 
-                <!-- =================================================
-                     HERO RATING
-                ================================================== -->
+                <!-- HERO RATING -->
 
                 <div class="hero-rating">
 
@@ -921,9 +950,7 @@
                 {% endif %}
 
 
-                <!-- =================================================
-                     CUSTOMER REVIEWS
-                ================================================== -->
+                <!-- CUSTOMER REVIEWS -->
 
                 <div class="worker-card">
 
@@ -932,10 +959,7 @@
                     </h2>
 
 
-                    <!-- REVIEW SUMMARY -->
-
                     <div class="review-summary">
-
 
                         <div class="review-score">
 
@@ -990,10 +1014,6 @@
                     </div>
 
 
-                    <!-- =================================================
-                         REVIEW LIST
-                    ================================================== -->
-
                     {% if reviews %}
 
                         {% for review in reviews %}
@@ -1003,8 +1023,6 @@
 
                                 <div class="review-header">
 
-
-                                    <!-- CUSTOMER -->
 
                                     <div class="review-customer">
 
@@ -1036,8 +1054,6 @@
                                     </div>
 
 
-                                    <!-- RATING -->
-
                                     <div class="review-rating">
 
                                         {% if review.rating >= 1 %}★{% else %}☆{% endif %}
@@ -1052,8 +1068,6 @@
                                 </div>
 
 
-                                <!-- COMMENT -->
-
                                 <div class="review-comment">
 
                                     {{ review.comment|linebreaksbr }}
@@ -1067,8 +1081,6 @@
 
 
                     {% else %}
-
-                        <!-- NO REVIEWS -->
 
                         <div class="no-reviews">
 
@@ -1272,25 +1284,69 @@
                         {% endif %}
 
 
-                        <!-- HIRE -->
+                        <!-- =================================================
+                             HIRE BUTTON
+                             
+                             NOT LOGGED IN
+                             → LOGIN TO HIRE
+                             
+                             LOGGED IN + NOT VERIFIED
+                             → VERIFY TO HIRE
+                             
+                             LOGGED IN + VERIFIED
+                             → HIRE THIS WORKER
+                        ================================================== -->
 
-                        {% if request.user.is_authenticated %}
+                        {% if worker.availability == "available" %}
 
-                            {% if request.user.customer_profile.is_verified %}
 
-                                <a
-                                    href="{% url 'worker_hire' worker_id=worker.id %}"
-                                    class="worker-button worker-button-primary"
-                                >
+                            {% if request.user.is_authenticated %}
 
-                                    🤝 Hire This Worker
+                                {% if request.user.customer_profile %}
 
-                                </a>
+                                    {% if request.user.customer_profile.is_verified %}
+
+                                        <a
+                                            href="{% url 'worker_hire' worker_id=worker.id %}"
+                                            class="worker-button worker-button-primary"
+                                        >
+
+                                            🤝 Hire This Worker
+
+                                        </a>
+
+                                    {% else %}
+
+                                        <a
+                                            href="{% url 'worker_hire' worker_id=worker.id %}"
+                                            class="worker-button worker-button-verify"
+                                        >
+
+                                            ✓ Verify to Hire
+
+                                        </a>
+
+                                    {% endif %}
+
+
+                                {% else %}
+
+                                    <a
+                                        href="{% url 'worker_hire' worker_id=worker.id %}"
+                                        class="worker-button worker-button-verify"
+                                    >
+
+                                        ✓ Verify to Hire
+
+                                    </a>
+
+                                {% endif %}
+
 
                             {% else %}
 
                                 <a
-                                    href="{% url 'customer_login' %}?next={% url 'worker_hire' worker_id=worker.id %}"
+                                    href="{% url 'worker_hire' worker_id=worker.id %}"
                                     class="worker-button worker-button-primary"
                                 >
 
@@ -1300,18 +1356,19 @@
 
                             {% endif %}
 
+
                         {% else %}
 
-                            <a
-                                href="{% url 'customer_login' %}?next={% url 'worker_hire' worker_id=worker.id %}"
-                                class="worker-button worker-button-primary"
+                            <span
+                                class="worker-button worker-button-disabled"
                             >
 
-                                🔐 Login to Hire
+                                Currently Unavailable
 
-                            </a>
+                            </span>
 
                         {% endif %}
+
 
                     </div>
 
@@ -1391,3 +1448,4 @@
 </div>
 
 {% endblock %}
+

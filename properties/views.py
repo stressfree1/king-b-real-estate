@@ -6,12 +6,16 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.views import (
     PasswordResetView,
     PasswordResetDoneView,
     PasswordResetConfirmView,
     PasswordResetCompleteView,
+    PasswordChangeView,
+    
 )
 
 from .forms import (
@@ -21,10 +25,12 @@ from .forms import (
     SkilledWorkerRegistrationForm,
     CustomerForm,
     SkilledWorkerPasswordResetForm,
+    AccountSettingsForm,
 )
 
 from .models import (
     Estate,
+    EstateType,
     Property,
     Job,
     SkilledWorker,
@@ -32,6 +38,7 @@ from .models import (
     WorkerHire,
     WorkerReview,
     CustomerReview,
+    AccountSettings,
 )
 
 
@@ -45,6 +52,10 @@ def home(request):
         Property.objects
         .filter(
             status='available'
+        )
+        .select_related(
+            'estate',
+            'estate_type'
         )
         .order_by(
             '-created_at'
@@ -69,12 +80,48 @@ def estate_list(request):
     estates = (
         Estate.objects
         .prefetch_related(
+            'estate_types',
             'properties'
         )
         .order_by(
             'name'
         )
     )
+
+    # -----------------------------------------------------
+    # PREPARE ESTATE STATISTICS
+    # -----------------------------------------------------
+
+    for estate in estates:
+
+        estate.total_plots = (
+            estate.properties
+            .count()
+        )
+
+        estate.available_plots = (
+            estate.properties
+            .filter(
+                status='available'
+            )
+            .count()
+        )
+
+        estate.reserved_plots = (
+            estate.properties
+            .filter(
+                status='reserved'
+            )
+            .count()
+        )
+
+        estate.sold_plots = (
+            estate.properties
+            .filter(
+                status='sold'
+            )
+            .count()
+        )
 
     return render(
         request,
@@ -88,6 +135,17 @@ def estate_list(request):
 # =========================================================
 # ESTATE DETAIL
 # =========================================================
+#
+# Shows:
+#
+# Estate
+# ├── Estate Overview
+# ├── Development Plan
+# ├── Development Features
+# ├── Digital Layout
+# └── Estate Types
+#
+# =========================================================
 
 def estate_detail(
     request,
@@ -95,32 +153,253 @@ def estate_detail(
 ):
 
     estate = get_object_or_404(
-        Estate,
+        Estate.objects.prefetch_related(
+            'estate_types',
+            'properties'
+        ),
         id=estate_id,
+    )
+
+    # -----------------------------------------------------
+    # ESTATE TYPES
+    # -----------------------------------------------------
+
+    estate_types = (
+        estate.estate_types
+        .all()
+        .order_by(
+            'name'
+        )
+    )
+
+    # -----------------------------------------------------
+    # ESTATE-LEVEL PLOT COUNTS
+    # -----------------------------------------------------
+
+    total_plots = (
+        estate.properties
+        .count()
+    )
+
+    available_plots = (
+        estate.properties
+        .filter(
+            status='available'
+        )
+        .count()
+    )
+
+    reserved_plots = (
+        estate.properties
+        .filter(
+            status='reserved'
+        )
+        .count()
+    )
+
+    sold_plots = (
+        estate.properties
+        .filter(
+            status='sold'
+        )
+        .count()
+    )
+
+    # -----------------------------------------------------
+    # ESTATE TYPE COUNTS
+    # -----------------------------------------------------
+
+    for estate_type in estate_types:
+
+        estate_type.available_plot_count = (
+            estate_type.properties
+            .filter(
+                status='available'
+            )
+            .count()
+        )
+
+        estate_type.reserved_plot_count = (
+            estate_type.properties
+            .filter(
+                status='reserved'
+            )
+            .count()
+        )
+
+        estate_type.sold_plot_count = (
+            estate_type.properties
+            .filter(
+                status='sold'
+            )
+            .count()
+        )
+
+        estate_type.total_plot_count = (
+            estate_type.properties
+            .count()
+        )
+
+    # -----------------------------------------------------
+    # DEVELOPMENT FEATURES
+    #
+    # Convert the TextField into a clean Python list.
+    #
+    # Admin example:
+    #
+    # Perimeter Fencing
+    # Main Entrance Gate
+    # Internal Road Network
+    # Drainage System
+    # Security Infrastructure
+    #
+    # -----------------------------------------------------
+
+    development_features = [
+        feature.strip()
+        for feature in (
+            estate.development_features or ''
+        ).splitlines()
+        if feature.strip()
+    ]
+
+    # -----------------------------------------------------
+    # CONTEXT
+    # -----------------------------------------------------
+
+    context = {
+
+        'estate': estate,
+
+        'estate_types': estate_types,
+
+        # Estate-level statistics
+        'total_plots': total_plots,
+        'available_plots': available_plots,
+        'reserved_plots': reserved_plots,
+        'sold_plots': sold_plots,
+
+        # Development plan
+        'development_features': development_features,
+
+    }
+
+    return render(
+        request,
+        'properties/estate_detail.html',
+        context
+    )
+
+
+# =========================================================
+# ESTATE TYPE DETAIL
+# =========================================================
+#
+# Shows one specific type inside an estate and only the
+# plots assigned to that type.
+#
+# Example:
+#
+# Kings Park Estate
+#     Classic
+#         Plot 001
+#         Plot 002
+#         Plot 003
+#
+# =========================================================
+
+def estate_type_detail(
+    request,
+    estate_id,
+    estate_type_id
+):
+
+    estate = get_object_or_404(
+        Estate,
+        id=estate_id
+    )
+
+    estate_type = get_object_or_404(
+        EstateType.objects.select_related(
+            'estate'
+        ),
+        id=estate_type_id,
+        estate=estate
     )
 
     properties = (
         Property.objects
         .filter(
             estate=estate,
-            status='available',
+            estate_type=estate_type,
+        )
+        .select_related(
+            'estate',
+            'estate_type',
+            'agent',
+        )
+        .prefetch_related(
+            'gallery_images'
         )
         .order_by(
+            'plot_number',
             '-created_at'
         )
     )
 
+    available_properties = properties.filter(
+        status='available'
+    )
+
+    reserved_properties = properties.filter(
+        status='reserved'
+    )
+
+    sold_properties = properties.filter(
+        status='sold'
+    )
+
+    # -----------------------------------------------------
+    # ESTATE TYPE FEATURES
+    # -----------------------------------------------------
+
+    type_features = [
+        feature.strip()
+        for feature in (
+            estate_type.what_comes_with_it or ''
+        ).splitlines()
+        if feature.strip()
+    ]
+
+    context = {
+
+        'estate': estate,
+
+        'estate_type': estate_type,
+
+        'properties': properties,
+
+        'available_properties': available_properties,
+
+        'reserved_properties': reserved_properties,
+
+        'sold_properties': sold_properties,
+
+        'total_properties': properties.count(),
+
+        'available_count': available_properties.count(),
+
+        'reserved_count': reserved_properties.count(),
+
+        'sold_count': sold_properties.count(),
+
+        'type_features': type_features,
+    }
+
     return render(
         request,
-        'properties/properties.html',
-        {
-            'properties': properties,
-            'estate': estate,
-            'estate_name': estate.name,
-            'search': '',
-            'property_type': '',
-            'status': 'available',
-        }
+        'properties/estate_type_detail.html',
+        context
     )
 
 
@@ -133,6 +412,10 @@ def property_list(request):
     properties = (
         Property.objects
         .all()
+        .select_related(
+            'estate',
+            'estate_type'
+        )
         .order_by(
             '-created_at'
         )
@@ -159,6 +442,12 @@ def property_list(request):
             Q(title__icontains=search)
             |
             Q(location__icontains=search)
+            |
+            Q(plot_number__icontains=search)
+            |
+            Q(estate__name__icontains=search)
+            |
+            Q(estate_type__name__icontains=search)
         )
 
     if property_type:
@@ -195,7 +484,13 @@ def property_detail(
 ):
 
     property_obj = get_object_or_404(
-        Property,
+        Property.objects.select_related(
+            'estate',
+            'estate_type',
+            'agent'
+        ).prefetch_related(
+            'gallery_images'
+        ),
         id=property_id,
     )
 
@@ -493,23 +788,6 @@ def marketplace(request):
 # =========================================================
 # UNIFIED SITE REGISTRATION
 # =========================================================
-#
-# ONE registration for the whole website.
-#
-# New customer:
-#
-#   User
-#      +
-#   Customer profile
-#      +
-#   is_verified = False
-#
-# Customer CAN login.
-#
-# Customer CANNOT hire until an admin verifies
-# the customer account.
-#
-# =========================================================
 
 def site_register(request):
 
@@ -543,28 +821,12 @@ def site_register(request):
                 'password'
             ]
 
-            # -------------------------------------------------
-            # CREATE ONE DJANGO USER
-            # -------------------------------------------------
-
             user = User.objects.create_user(
                 username=email,
                 email=email,
                 password=password,
                 first_name=full_name,
             )
-
-            # -------------------------------------------------
-            # CREATE CUSTOMER PROFILE
-            #
-            # IMPORTANT:
-            #
-            # New customers are NOT verified automatically.
-            #
-            # They can still login and browse the marketplace,
-            # but they cannot hire a skilled worker until an
-            # administrator verifies the account.
-            # -------------------------------------------------
 
             Customer.objects.create(
                 user=user,
@@ -576,12 +838,6 @@ def site_register(request):
                 id_number='',
                 is_verified=False,
             )
-
-            # -------------------------------------------------
-            # AUTOMATIC LOGIN
-            #
-            # Verification does NOT prevent login.
-            # -------------------------------------------------
 
             login(
                 request,
@@ -689,16 +945,6 @@ def site_login(request):
                     ),
                 }
             )
-
-        # -------------------------------------------------
-        # VERIFY THIS IS A KING B ACCOUNT
-        #
-        # Customer verification is intentionally NOT
-        # checked here.
-        #
-        # Customers are allowed to login even when
-        # is_verified=False.
-        # -------------------------------------------------
 
         has_customer = False
         has_worker = False
@@ -1669,14 +1915,6 @@ def customer_profile(
 # =========================================================
 # HIRE SKILLED WORKER
 # =========================================================
-#
-# IMPORTANT:
-#
-# Customer login is NOT blocked by verification.
-#
-# Verification is checked ONLY when attempting to hire.
-#
-# =========================================================
 
 @login_required(login_url='site_login')
 def worker_hire(
@@ -1706,12 +1944,6 @@ def worker_hire(
             'marketplace_dashboard'
         )
 
-    # -----------------------------------------------------
-    # CUSTOMER VERIFICATION CHECK
-    #
-    # This is where the verification matters.
-    # -----------------------------------------------------
-
     if not customer.is_verified:
 
         messages.warning(
@@ -1726,10 +1958,6 @@ def worker_hire(
             'marketplace_dashboard'
         )
 
-    # -----------------------------------------------------
-    # WORKER AVAILABILITY
-    # -----------------------------------------------------
-
     if worker.availability != 'available':
 
         messages.warning(
@@ -1741,10 +1969,6 @@ def worker_hire(
             'skilled_worker_profile',
             worker_id=worker.id
         )
-
-    # -----------------------------------------------------
-    # PREVENT DUPLICATE ACTIVE/PENDING HIRE
-    # -----------------------------------------------------
 
     existing_hire = WorkerHire.objects.filter(
         customer=customer,
@@ -1766,10 +1990,6 @@ def worker_hire(
         return redirect(
             'marketplace_dashboard'
         )
-
-    # -----------------------------------------------------
-    # CREATE HIRE
-    # -----------------------------------------------------
 
     if request.method == 'POST':
 
@@ -2454,6 +2674,23 @@ def customer_review(
 
 
 # =========================================================
+# ACCOUNT PASSWORD CHANGE
+# =========================================================
+
+class AccountPasswordChangeView(
+    PasswordChangeView
+):
+
+    template_name = (
+        'properties/account_password_change.html'
+    )
+
+    success_url = (
+        '/account/settings/'
+    )
+
+
+# =========================================================
 # SKILLED WORKER PASSWORD RESET
 # =========================================================
 
@@ -2520,4 +2757,60 @@ class SkilledWorkerPasswordResetCompleteView(
 
     template_name = (
         'properties/skilled_worker_password_reset_complete.html'
+    )
+# =========================================================
+# ACCOUNT SETTINGS
+# =========================================================
+@login_required(login_url='site_login')
+def account_settings(request):
+
+    try:
+
+        account_settings_obj = (
+            request.user.account_settings
+        )
+
+    except AccountSettings.DoesNotExist:
+
+        account_settings_obj = AccountSettings.objects.create(
+            user=request.user
+        )
+
+    if request.method == 'POST':
+
+        form = AccountSettingsForm(
+            request.POST,
+            request.FILES,
+            instance=account_settings_obj,
+            user=request.user,
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                'Your account settings have been updated successfully.'
+            )
+
+            return redirect(
+                'account_settings'
+            )
+
+    else:
+
+        form = AccountSettingsForm(
+            instance=account_settings_obj,
+            user=request.user,
+        )
+
+    return render(
+        request,
+        'properties/account_settings.html',
+        {
+            'form': form,
+            'account_settings': account_settings_obj,
+            'user': request.user,
+        }
     )

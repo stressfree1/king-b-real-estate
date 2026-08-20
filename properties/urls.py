@@ -47,6 +47,22 @@ urlpatterns = [
     ),
 
     # =========================================================
+    # ACCOUNT SETTINGS
+    # =========================================================
+
+    path(
+        'account/settings/',
+        views.account_settings,
+        name='account_settings'
+    ),
+
+    path(
+        'account/password/change/',
+        views.AccountPasswordChangeView.as_view(),
+        name='password_change'
+    ),
+
+    # =========================================================
     # CUSTOMER PROFILE
     # =========================================================
 
@@ -90,18 +106,32 @@ urlpatterns = [
     # PROPERTIES / ESTATES
     # =========================================================
 
+    # Main estate page
     path(
         'properties/',
         views.estate_list,
         name='property_list'
     ),
 
+    # Single estate
     path(
         'properties/estate/<int:estate_id>/',
         views.estate_detail,
         name='estate_detail'
     ),
 
+    # Single estate type
+    #
+    # Example:
+    # /properties/estate/1/type/2/
+    #
+    path(
+        'properties/estate/<int:estate_id>/type/<int:estate_type_id>/',
+        views.estate_type_detail,
+        name='estate_type_detail'
+    ),
+
+    # Individual plot/property
     path(
         'properties/<int:property_id>/',
         views.property_detail,
@@ -243,10 +273,6 @@ urlpatterns = [
     # =========================================================
     # OLD CUSTOMER ROUTES
     # =========================================================
-    #
-    # Kept so existing templates/links do not break.
-    # They now use the unified account system.
-    # =========================================================
 
     path(
         'customer/register/',
@@ -327,4 +353,5 @@ urlpatterns = [
         views.SkilledWorkerPasswordResetCompleteView.as_view(),
         name='worker_password_reset_complete'
     ),
+
 ]

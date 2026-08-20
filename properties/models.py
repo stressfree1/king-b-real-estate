@@ -20,8 +20,219 @@ class Estate(models.Model):
         blank=True
     )
 
+    # =====================================================
+    # ESTATE MEDIA
+    # =====================================================
+
+    # Main estate image
+    image = models.ImageField(
+        upload_to='estates/',
+        blank=True,
+        null=True
+    )
+
+    # General digital layout for the estate
+    digital_layout = models.FileField(
+        upload_to='estates/layouts/',
+        blank=True,
+        null=True
+    )
+
+    # =====================================================
+    # ESTATE DEVELOPMENT PLAN
+    # =====================================================
+    #
+    # This belongs to the entire estate, not an EstateType.
+    #
+    # Example:
+    #
+    # Kings Park Estate
+    #
+    # Development Plan:
+    #     Kings Park Estate Master Development Plan
+    #
+    # Development Features:
+    #     Perimeter fencing
+    #     Internal roads
+    #     Drainage
+    #     Security
+    #     Street lighting
+    #     Water infrastructure
+    #     Electricity infrastructure
+    #
+    # =====================================================
+
+    development_plan_title = models.CharField(
+        max_length=200,
+        blank=True
+    )
+
+    development_plan = models.FileField(
+        upload_to='estates/development_plans/',
+        blank=True,
+        null=True
+    )
+
+    development_features = models.TextField(
+        blank=True
+    )
+
+    # =====================================================
+    # SYSTEM INFORMATION
+    # =====================================================
+
+    created_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    updated_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
     def __str__(self):
         return self.name
+
+
+# =========================================================
+# ESTATE TYPE
+# =========================================================
+#
+# Example:
+#
+# Kings Park Estate
+#     ├── Classic
+#     ├── Standard
+#     └── Premium
+#
+# Each EstateType belongs to one Estate.
+# Properties/plots can then belong to a specific EstateType.
+# =========================================================
+
+class EstateType(models.Model):
+
+    estate = models.ForeignKey(
+        Estate,
+        on_delete=models.CASCADE,
+        related_name='estate_types'
+    )
+
+    name = models.CharField(
+        max_length=100
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    price = models.DecimalField(
+        max_digits=15,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    plot_size = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    # What comes with this specific estate type
+    what_comes_with_it = models.TextField(
+        blank=True
+    )
+
+    # Proposed company plan for this estate type
+    proposed_company_plan = models.FileField(
+        upload_to='estates/company_plans/',
+        blank=True,
+        null=True
+    )
+
+    # Digital layout specifically for this estate type
+    digital_layout = models.FileField(
+        upload_to='estates/type_layouts/',
+        blank=True,
+        null=True
+    )
+
+    # Main image for this estate type
+    image = models.ImageField(
+        upload_to='estates/types/',
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        ordering = [
+            'estate',
+            'name'
+        ]
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'estate',
+                    'name'
+                ],
+                name='unique_estate_type_name'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.estate.name} - {self.name}"
+
+
+# =========================================================
+# ESTATE TYPE GALLERY
+# =========================================================
+#
+# Allows multiple images/documents for a specific estate type.
+#
+# Example:
+#
+# Kings Park Estate → Classic
+#     ├── Classic front image
+#     ├── Classic layout image
+#     └── Classic facilities image
+#
+# =========================================================
+
+class EstateTypeImage(models.Model):
+
+    estate_type = models.ForeignKey(
+        EstateType,
+        on_delete=models.CASCADE,
+        related_name='gallery_images'
+    )
+
+    image = models.ImageField(
+        upload_to='estates/types/gallery/'
+    )
+
+    caption = models.CharField(
+        max_length=200,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return (
+            f"{self.estate_type} - "
+            f"{self.caption or 'Image'}"
+        )
 
 
 # =========================================================
@@ -51,7 +262,7 @@ class Agent(models.Model):
 
 
 # =========================================================
-# PROPERTY
+# PROPERTY / PLOT
 # =========================================================
 
 class Property(models.Model):
@@ -69,11 +280,36 @@ class Property(models.Model):
         ('sold', 'Sold'),
     ]
 
+    # =====================================================
+    # ESTATE
+    # =====================================================
+
     estate = models.ForeignKey(
         Estate,
         on_delete=models.CASCADE,
         related_name='properties'
     )
+
+    # =====================================================
+    # ESTATE TYPE
+    # =====================================================
+    #
+    # Nullable so existing properties can remain in the
+    # database while we assign them to specific types.
+    #
+    # =====================================================
+
+    estate_type = models.ForeignKey(
+        EstateType,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='properties'
+    )
+
+    # =====================================================
+    # AGENT
+    # =====================================================
 
     agent = models.ForeignKey(
         Agent,
@@ -82,6 +318,10 @@ class Property(models.Model):
         blank=True,
         related_name='properties'
     )
+
+    # =====================================================
+    # PROPERTY INFORMATION
+    # =====================================================
 
     title = models.CharField(
         max_length=200
@@ -141,6 +381,10 @@ class Property(models.Model):
 
     created_at = models.DateTimeField(
         auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
     )
 
     def __str__(self):
@@ -403,19 +647,6 @@ class ContactMessage(models.Model):
 # =========================================================
 # MARKETPLACE ACCOUNT
 # =========================================================
-#
-# ONE GENERAL ACCOUNT FOR EVERY MARKETPLACE USER.
-#
-# There is NO account_type anymore.
-#
-# A user can have:
-#
-#   1. A general account
-#   2. A Customer profile
-#   3. A SkilledWorker profile
-#
-# They can have both profiles at the same time.
-# =========================================================
 
 class MarketplaceAccount(models.Model):
 
@@ -434,7 +665,10 @@ class MarketplaceAccount(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.get_full_name()} - General Account"
+        return (
+            f"{self.user.get_full_name()} - "
+            f"General Account"
+        )
 
 
 # =========================================================
@@ -459,7 +693,9 @@ class SkilledWorker(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name='skilled_worker_profile'
+        related_name='skilled_worker_profile',
+        null=True,
+        blank=True
     )
 
     full_name = models.CharField(
@@ -555,7 +791,9 @@ class Customer(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name='customer_profile'
+        related_name='customer_profile',
+        null=True,
+        blank=True
     )
 
     full_name = models.CharField(
@@ -606,6 +844,96 @@ class Customer(models.Model):
         return self.full_name
 
 
+# =========================================================
+# UNIFIED ACCOUNT SETTINGS
+# =========================================================
+#
+# One settings record belongs to one Django User.
+#
+# This is the account-wide settings system.
+# It is NOT a customer settings system and NOT a
+# skilled-worker settings system.
+#
+# =========================================================
+
+class AccountSettings(models.Model):
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='account_settings'
+    )
+
+    # =====================================================
+    # PERSONAL INFORMATION
+    # =====================================================
+
+    phone = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    address = models.CharField(
+        max_length=300,
+        blank=True
+    )
+
+    profile_image = models.ImageField(
+        upload_to='account_profiles/',
+        blank=True,
+        null=True
+    )
+
+    # =====================================================
+    # NOTIFICATIONS
+    # =====================================================
+
+    property_alerts = models.BooleanField(
+        default=True
+    )
+
+    plot_availability_alerts = models.BooleanField(
+        default=True
+    )
+
+    estate_alerts = models.BooleanField(
+        default=True
+    )
+
+    hire_notifications = models.BooleanField(
+        default=True
+    )
+
+    security_notifications = models.BooleanField(
+        default=True
+    )
+
+    # =====================================================
+    # PRIVACY
+    # =====================================================
+
+    profile_visible = models.BooleanField(
+        default=True
+    )
+
+    # =====================================================
+    # SYSTEM INFORMATION
+    # =====================================================
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return (
+            f"{self.user.get_full_name() or self.user.username} "
+            f"- Account Settings"
+        )
+        
 # =========================================================
 # WORKER HIRE
 # =========================================================
@@ -847,7 +1175,10 @@ class MarketplaceImage(models.Model):
     )
 
     def __str__(self):
-        return f"{self.listing.title} - Marketplace Image"
+        return (
+            f"{self.listing.title} - "
+            f"Marketplace Image"
+        )
 
 
 # =========================================================
@@ -875,7 +1206,10 @@ class MarketplaceFavourite(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'listing'],
+                fields=[
+                    'user',
+                    'listing'
+                ],
                 name='unique_marketplace_favourite'
             )
         ]

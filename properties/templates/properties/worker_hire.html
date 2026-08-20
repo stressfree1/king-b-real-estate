@@ -1,7 +1,6 @@
 {% extends 'properties/base.html' %}
 {% load static %}
 
-
 {% block title %}
     Hire {{ worker.full_name }} | King B Real Estate
 {% endblock %}
@@ -11,422 +10,886 @@
 
 <style>
 
-    /* =========================================
-       HIRE WORKER PAGE
-    ========================================= */
+/* =========================================================
+   KING B REAL ESTATE
+   PREMIUM HIRE WORKER PAGE
+========================================================= */
+
+.hire-page {
+
+    --green: #123c2f;
+    --dark-green: #08271e;
+    --gold: #b58b3b;
+    --light-gold: #d4af63;
+    --cream: #f6f7f3;
+    --white: #ffffff;
+    --text: #18231f;
+    --muted: #69736e;
+    --border: #e2e8e4;
+    --soft-green: #edf5f0;
+
+    min-height: 100vh;
+
+    padding: 70px 20px 110px;
+
+    background: var(--cream);
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.hire-container {
+
+    width: min(920px, 100%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   BACK LINK
+========================================================= */
+
+.hire-back {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 30px;
+
+    color: var(--green);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        color .2s ease;
+}
+
+
+.hire-back:hover {
+
+    color: var(--gold);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.hire-header {
+
+    margin-bottom: 36px;
+
+    text-align: center;
+}
+
+
+.hire-label {
+
+    margin: 0 0 10px;
+
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.3px;
+
+    text-transform: uppercase;
+}
+
+
+.hire-header h1 {
+
+    margin: 0 0 14px;
+
+    color: var(--green);
+
+    font-size: clamp(
+        38px,
+        5vw,
+        58px
+    );
+
+    font-weight: 750;
+
+    line-height: 1;
+
+    letter-spacing: -1.8px;
+}
+
+
+.hire-header > p:last-child {
+
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    color: var(--muted);
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   WORKER CARD
+========================================================= */
+
+.worker-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        95px
+        minmax(
+            0,
+            1fr
+        )
+        auto;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
+
+    padding: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--dark-green),
+            var(--green)
+        );
+
+    border-radius: 18px;
+
+    color: var(--white);
+
+    box-shadow:
+        0 18px 45px
+        rgba(
+            8,
+            39,
+            30,
+            .13
+        );
+}
+
+
+/* =========================================================
+   WORKER IMAGE
+========================================================= */
+
+.worker-summary-image,
+.worker-summary-placeholder {
+
+    width: 95px;
+
+    height: 95px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+
+.worker-summary-image {
+
+    display: block;
+
+    object-fit: cover;
+
+    border:
+        3px solid
+        var(--light-gold);
+
+    background: #ffffff;
+}
+
+
+.worker-summary-placeholder {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        3px solid
+        var(--light-gold);
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .10
+    );
+
+    color: var(--white);
+
+    font-size: 30px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   WORKER INFORMATION
+========================================================= */
+
+.worker-summary-info {
+
+    min-width: 0;
+}
+
+
+.worker-summary-info h2 {
+
+    margin: 0 0 6px;
+
+    color: #ffffff;
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    line-height: 1.15;
+}
+
+
+.worker-summary-info p {
+
+    margin: 4px 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .72
+        );
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+.worker-summary-info .worker-skill {
+
+    color: var(--light-gold);
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   VERIFIED BADGE
+========================================================= */
+
+.worker-verified {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .16
+        );
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: .7px;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+
+.worker-verified-icon {
+
+    width: 20px;
+
+    height: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dff3e8;
+
+    color: #26734d;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.hire-card {
+
+    padding: 34px;
+
+    background: var(--white);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 45px
+        rgba(
+            8,
+            39,
+            30,
+            .06
+        );
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.hire-card-header {
+
+    margin-bottom: 25px;
+
+    padding-bottom: 20px;
+
+    border-bottom:
+        1px solid
+        #edf0ee;
+}
+
+
+.hire-card-label {
+
+    margin: 0 0 8px;
+
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.9px;
+
+    text-transform: uppercase;
+}
+
+
+.hire-card h2 {
+
+    margin: 0 0 9px;
+
+    color: var(--green);
+
+    font-size: 25px;
+
+    font-weight: 800;
+}
+
+
+.hire-intro {
+
+    max-width: 680px;
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   CUSTOMER ACCOUNT
+========================================================= */
+
+.customer-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin-bottom: 28px;
+
+    padding: 16px;
+
+    background: var(--soft-green);
+
+    border:
+        1px solid
+        #dfece4;
+
+    border-radius: 11px;
+}
+
+
+.customer-info-icon {
+
+    width: 36px;
+
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #ffffff;
+
+    border-radius: 9px;
+
+    color: var(--green);
+
+    font-size: 15px;
+}
+
+
+.customer-info-content {
+
+    min-width: 0;
+}
+
+
+.customer-info-label {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #7a847f;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+.customer-info strong {
+
+    display: block;
+
+    color: var(--green);
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.customer-info span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.hire-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 22px;
+}
+
+
+.hire-field {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.hire-field label {
+
+    color: var(--text);
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+
+.hire-field input,
+.hire-field textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 14px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #dbe3de;
+
+    border-radius: 9px;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.hire-field input {
+
+    min-height: 49px;
+}
+
+
+.hire-field textarea {
+
+    min-height: 150px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+
+.hire-field input:focus,
+.hire-field textarea:focus {
+
+    border-color: var(--gold);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            181,
+            139,
+            59,
+            .10
+        );
+}
+
+
+.field-help {
+
+    color: #7a847f;
+
+    font-size: 10px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.hire-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.5fr;
+
+    gap: 10px;
+
+    margin-top: 4px;
+}
+
+
+.hire-cancel,
+.hire-submit {
+
+    min-height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+    text-decoration: none;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+
+.hire-cancel {
+
+    border:
+        1px solid
+        #dfe5e1;
+
+    background: #ffffff;
+
+    color: var(--green);
+}
+
+
+.hire-cancel:hover {
+
+    background: #f4f7f4;
+
+    color: var(--green);
+}
+
+
+.hire-submit {
+
+    border:
+        1px solid
+        var(--green);
+
+    background: var(--green);
+
+    color: #ffffff;
+
+    cursor: pointer;
+}
+
+
+.hire-submit:hover {
+
+    background: var(--gold);
+
+    border-color: var(--gold);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.security-notice {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-top: 22px;
+
+    padding-top: 18px;
+
+    border-top:
+        1px solid
+        #edf0ee;
+
+    color: #7a847f;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+
+    text-align: left;
+}
+
+
+.security-icon {
+
+    width: 25px;
+
+    height: 25px;
+
+    flex: 0 0 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #edf5f0;
+
+    color: #26734d;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
 
     .hire-page {
-        background: #f5f6f4;
-        min-height: 100vh;
-        padding: 60px 20px 90px;
+
+        padding:
+            42px
+            15px
+            80px;
     }
 
-
-    .hire-container {
-        max-width: 850px;
-        margin: 0 auto;
-    }
-
-
-    /* =========================================
-       HEADER
-    ========================================= */
 
     .hire-header {
-        text-align: center;
-        margin-bottom: 35px;
+
+        margin-bottom: 28px;
     }
 
 
     .hire-header h1 {
-        margin: 0 0 10px;
 
-        color: #0b2e22;
+        font-size: 36px;
 
-        font-size: 38px;
-
-        font-weight: 700;
+        letter-spacing: -1px;
     }
 
-
-    .hire-header p {
-        color: #666;
-
-        font-size: 16px;
-
-        line-height: 1.7;
-
-        margin: 0;
-    }
-
-
-    /* =========================================
-       WORKER SUMMARY
-    ========================================= */
 
     .worker-summary {
-        background: #0b2e22;
 
-        color: white;
+        grid-template-columns: 1fr;
 
-        border-radius: 16px;
+        justify-items: center;
 
-        padding: 25px;
+        gap: 13px;
 
-        display: flex;
-
-        align-items: center;
-
-        gap: 20px;
-
-        margin-bottom: 30px;
-
-        box-shadow:
-            0 10px 30px rgba(0,0,0,0.10);
-    }
-
-
-    .worker-summary-image {
-        width: 85px;
-
-        height: 85px;
-
-        border-radius: 50%;
-
-        object-fit: cover;
-
-        border: 3px solid #c9a227;
-
-        background: white;
-    }
-
-
-    .worker-summary-placeholder {
-        width: 85px;
-
-        height: 85px;
-
-        border-radius: 50%;
-
-        background: white;
-
-        border: 3px solid #c9a227;
-
-        color: #0b2e22;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        font-size: 32px;
-
-        font-weight: 700;
-    }
-
-
-    .worker-summary h2 {
-        margin: 0 0 6px;
-
-        font-size: 24px;
-    }
-
-
-    .worker-summary p {
-        margin: 4px 0;
-
-        color: #e6e6e6;
-
-        font-size: 14px;
-    }
-
-
-    /* =========================================
-       FORM CARD
-    ========================================= */
-
-    .hire-card {
-        background: white;
-
-        border-radius: 16px;
-
-        padding: 35px;
-
-        box-shadow:
-            0 8px 30px rgba(0,0,0,0.07);
-
-        border: 1px solid #e8e8e8;
-    }
-
-
-    .hire-card h2 {
-        color: #0b2e22;
-
-        margin-top: 0;
-
-        font-size: 24px;
-
-        padding-bottom: 15px;
-
-        border-bottom: 1px solid #eeeeee;
-    }
-
-
-    .hire-intro {
-        color: #666;
-
-        line-height: 1.7;
-
-        margin-bottom: 30px;
-    }
-
-
-    /* =========================================
-       FORM FIELDS
-    ========================================= */
-
-    .hire-field {
-        margin-bottom: 25px;
-    }
-
-
-    .hire-field label {
-        display: block;
-
-        margin-bottom: 8px;
-
-        color: #222;
-
-        font-weight: 700;
-
-        font-size: 15px;
-    }
-
-
-    .hire-field input,
-    .hire-field textarea,
-    .hire-field select {
-        width: 100%;
-
-        box-sizing: border-box;
-
-        padding: 14px 15px;
-
-        border: 1px solid #d8d8d8;
-
-        border-radius: 8px;
-
-        font-family: inherit;
-
-        font-size: 15px;
-
-        background: #ffffff;
-
-        transition: 0.2s;
-    }
-
-
-    .hire-field input:focus,
-    .hire-field textarea:focus,
-    .hire-field select:focus {
-        outline: none;
-
-        border-color: #c9a227;
-
-        box-shadow:
-            0 0 0 3px rgba(201,162,39,0.12);
-    }
-
-
-    .hire-field textarea {
-        min-height: 150px;
-
-        resize: vertical;
-    }
-
-
-    .field-help {
-        display: block;
-
-        margin-top: 7px;
-
-        color: #777;
-
-        font-size: 13px;
-    }
-
-
-    /* =========================================
-       CUSTOMER INFORMATION
-    ========================================= */
-
-    .customer-info {
-        background: #f4f8f5;
-
-        border-left: 4px solid #c9a227;
-
-        padding: 18px;
-
-        border-radius: 8px;
-
-        margin-bottom: 30px;
-    }
-
-
-    .customer-info strong {
-        color: #0b2e22;
-    }
-
-
-    .customer-info p {
-        margin: 5px 0;
-
-        color: #555;
-
-        font-size: 14px;
-    }
-
-
-    /* =========================================
-       BUTTONS
-    ========================================= */
-
-    .hire-actions {
-        display: flex;
-
-        gap: 15px;
-
-        margin-top: 30px;
-    }
-
-
-    .hire-submit {
-        flex: 1;
-
-        border: none;
-
-        padding: 15px 20px;
-
-        border-radius: 8px;
-
-        background: #0b2e22;
-
-        color: white;
-
-        font-size: 16px;
-
-        font-weight: 700;
-
-        cursor: pointer;
-
-        transition: 0.25s;
-    }
-
-
-    .hire-submit:hover {
-        background: #164d38;
-
-        transform: translateY(-2px);
-    }
-
-
-    .hire-cancel {
-        flex: 1;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        box-sizing: border-box;
-
-        padding: 15px 20px;
-
-        border-radius: 8px;
-
-        background: #eeeeee;
-
-        color: #333;
-
-        text-decoration: none;
-
-        font-weight: 700;
-
-        transition: 0.25s;
-    }
-
-
-    .hire-cancel:hover {
-        background: #dddddd;
-    }
-
-
-    /* =========================================
-       SECURITY NOTICE
-    ========================================= */
-
-    .security-notice {
-        margin-top: 25px;
-
-        padding: 18px;
-
-        background: #faf9f2;
-
-        border-radius: 8px;
-
-        color: #666;
-
-        font-size: 13px;
-
-        line-height: 1.6;
+        padding: 24px;
 
         text-align: center;
     }
 
 
-    /* =========================================
-       MOBILE
-    ========================================= */
+    .worker-summary-info h2 {
 
-    @media (max-width: 600px) {
-
-        .hire-page {
-            padding: 40px 15px 70px;
-        }
-
-
-        .hire-header h1 {
-            font-size: 30px;
-        }
-
-
-        .worker-summary {
-            padding: 20px;
-
-            flex-direction: column;
-
-            text-align: center;
-        }
-
-
-        .hire-card {
-            padding: 25px 20px;
-        }
-
-
-        .hire-actions {
-            flex-direction: column;
-        }
-
-
-        .hire-submit,
-        .hire-cancel {
-            width: 100%;
-        }
-
+        font-size: 22px;
     }
+
+
+    .worker-summary-info p {
+
+        font-size: 12px;
+    }
+
+
+    .hire-card {
+
+        padding: 24px 20px;
+
+        border-radius: 15px;
+    }
+
+
+    .hire-actions {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .hire-cancel,
+    .hire-submit {
+
+        width: 100%;
+    }
+
+
+    .security-notice {
+
+        align-items: flex-start;
+    }
+
+}
 
 </style>
 
@@ -435,34 +898,50 @@
 
 {% block content %}
 
-<div class="hire-page">
+<main class="hire-page">
 
     <div class="hire-container">
 
 
-        <!-- =====================================
-             PAGE HEADER
-        ====================================== -->
+        <!-- =================================================
+             BACK
+        ================================================== -->
 
-        <div class="hire-header">
+        <a
+            href="{% url 'skilled_worker_profile' worker.id %}"
+            class="hire-back"
+        >
+            ← Back to Worker Profile
+        </a>
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="hire-header">
+
+            <p class="hire-label">
+                KING B SKILLED WORKER MARKETPLACE
+            </p>
 
             <h1>
                 Hire a Skilled Professional
             </h1>
 
             <p>
-                Submit your request to work with this
-                King B registered professional.
+                Submit a request to work with this approved
+                King B professional.
             </p>
 
-        </div>
+        </header>
 
 
-        <!-- =====================================
+        <!-- =================================================
              WORKER SUMMARY
-        ====================================== -->
+        ================================================== -->
 
-        <div class="worker-summary">
+        <section class="worker-summary">
 
 
             {% if worker.profile_image %}
@@ -484,13 +963,13 @@
             {% endif %}
 
 
-            <div>
+            <div class="worker-summary-info">
 
                 <h2>
                     {{ worker.full_name }}
                 </h2>
 
-                <p>
+                <p class="worker-skill">
                     {{ worker.skill }}
                 </p>
 
@@ -500,56 +979,94 @@
 
             </div>
 
-        </div>
+
+            <div class="worker-verified">
+
+                <span class="worker-verified-icon">
+                    ✓
+                </span>
+
+                <span>
+                    Approved Professional
+                </span>
+
+            </div>
 
 
-        <!-- =====================================
-             HIRE FORM
-        ====================================== -->
-
-        <div class="hire-card">
-
-            <h2>
-                Submit Hire Request
-            </h2>
+        </section>
 
 
-            <p class="hire-intro">
+        <!-- =================================================
+             HIRE FORM CARD
+        ================================================== -->
 
-                Tell us what service you need and provide
-                any additional information that will help
-                the professional understand your request.
-
-            </p>
+        <section class="hire-card">
 
 
-            <!-- CUSTOMER INFORMATION -->
+            <div class="hire-card-header">
 
-            <div class="customer-info">
-
-                <strong>
-                    Your Customer Account
-                </strong>
-
-                <p>
-                    {{ customer.full_name }}
+                <p class="hire-card-label">
+                    HIRE REQUEST
                 </p>
 
-                <p>
-                    {{ customer.email }}
+                <h2>
+                    Tell us what you need
+                </h2>
+
+                <p class="hire-intro">
+                    Provide the details below so the professional
+                    can understand your requirements and respond
+                    appropriately.
                 </p>
 
             </div>
 
 
-            <!-- FORM -->
+            <!-- =================================================
+                 CUSTOMER INFORMATION
+            ================================================== -->
 
-            <form method="POST">
+            <div class="customer-info">
+
+                <div class="customer-info-icon">
+                    ◉
+                </div>
+
+
+                <div class="customer-info-content">
+
+                    <span class="customer-info-label">
+                        Requesting Account
+                    </span>
+
+                    <strong>
+                        {{ customer.full_name }}
+                    </strong>
+
+                    <span>
+                        {{ customer.email }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FORM
+            ================================================== -->
+
+            <form
+                method="POST"
+                class="hire-form"
+            >
 
                 {% csrf_token %}
 
 
-                <!-- SERVICE -->
+                <!-- =============================================
+                     SERVICE
+                ============================================== -->
 
                 <div class="hire-field">
 
@@ -561,18 +1078,22 @@
                         type="text"
                         name="service"
                         id="service"
-                        placeholder="Example: Plumbing installation"
+                        value="{{ service|default:'' }}"
+                        placeholder="e.g. Plumbing installation"
                         required
                     >
 
                     <span class="field-help">
-                        Describe the main service you need.
+                        Clearly describe the main service you
+                        want the professional to provide.
                     </span>
 
                 </div>
 
 
-                <!-- NOTES -->
+                <!-- =============================================
+                     NOTES
+                ============================================== -->
 
                 <div class="hire-field">
 
@@ -583,23 +1104,25 @@
                     <textarea
                         name="notes"
                         id="notes"
-                        placeholder="Tell the professional about the job, location, preferred date, or any other important information."
-                    ></textarea>
+                        placeholder="Tell the professional about the job, location, preferred date, materials, or anything else they should know."
+                    >{{ notes|default:'' }}</textarea>
 
                     <span class="field-help">
-                        This information will help the professional
-                        understand your request.
+                        Additional information helps the professional
+                        understand the scope of your request.
                     </span>
 
                 </div>
 
 
-                <!-- ACTIONS -->
+                <!-- =============================================
+                     ACTIONS
+                ============================================== -->
 
                 <div class="hire-actions">
 
                     <a
-                        href="{% url 'skilled_worker_profile' worker_id=worker.id %}"
+                        href="{% url 'skilled_worker_profile' worker.id %}"
                         class="hire-cancel"
                     >
                         Cancel
@@ -615,22 +1138,32 @@
 
                 </div>
 
+
             </form>
 
 
-            <!-- SECURITY -->
+            <!-- =================================================
+                 SECURITY
+            ================================================== -->
 
             <div class="security-notice">
 
-                🔒 Your hire request is submitted securely
-                through your King B customer account.
+                <span class="security-icon">
+                    ✓
+                </span>
+
+                <span>
+                    Your hire request is submitted securely
+                    through your verified King B account.
+                </span>
 
             </div>
 
-        </div>
+
+        </section>
 
     </div>
 
-</div>
+</main>
 
 {% endblock %}

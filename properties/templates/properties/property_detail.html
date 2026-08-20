@@ -2,533 +2,606 @@
 {% load static %}
 
 {% block title %}
-KING B REAL ESTATE & CONSTRUCTION LTD
+    {{ property.title }} | King B Real Estate
 {% endblock %}
+
 
 {% block content %}
 
-
 <main>
 
+    <!-- =====================================================
+         PROPERTY DETAIL PAGE
+    ====================================================== -->
 
-<!-- =====================================================
-     PROPERTY DETAIL
-===================================================== -->
-
-<section class="property-detail-page">
-
-
-    <!-- =================================================
-         PROPERTY IMAGE GALLERY
-    ================================================== -->
-
-    <div class="property-gallery">
-
-
-        <!-- MAIN IMAGE -->
-
-        <div class="property-gallery-main"
-             onclick="openPropertyLightbox()">
-
-            {% if property.image %}
-
-                <img
-                    id="mainPropertyImage"
-                    src="{{ property.image.url }}"
-                    alt="{{ property.title }}"
-                >
-
-            {% elif property.gallery_images.all %}
-
-                {% with first_image=property.gallery_images.first %}
-
-                    <img
-                        id="mainPropertyImage"
-                        src="{{ first_image.image.url }}"
-                        alt="{{ property.title }}"
-                    >
-
-                {% endwith %}
-
-            {% else %}
-
-                <div class="property-no-image">
-
-                    <span>
-                        No Image Available
-                    </span>
-
-                </div>
-
-            {% endif %}
-
-
-            <!-- VIEW IMAGE LABEL -->
-
-            {% if property.image or property.gallery_images.all %}
-
-                <div class="gallery-view-label">
-                    Click to view image
-                </div>
-
-            {% endif %}
-
-        </div>
-
-
+    <section class="property-detail-page">
 
         <!-- =================================================
-             IMAGE THUMBNAILS
+             PROPERTY IMAGE GALLERY
         ================================================== -->
 
-        {% if property.image or property.gallery_images.all %}
+        <div class="property-gallery">
 
-            <div class="property-gallery-thumbnails">
+            <!-- MAIN IMAGE -->
 
-
-                <!-- MAIN PROPERTY IMAGE -->
+            <div
+                class="property-gallery-main"
+                onclick="openPropertyLightbox()"
+            >
 
                 {% if property.image %}
 
-                    <button
-                        type="button"
-                        class="gallery-thumbnail active"
-                        onclick="changePropertyImage(
-                            '{{ property.image.url }}',
-                            this
-                        )"
+                    <img
+                        id="mainPropertyImage"
+                        src="{{ property.image.url }}"
+                        alt="{{ property.title }}"
                     >
 
+                {% elif property.gallery_images.all %}
+
+                    {% with first_image=property.gallery_images.first %}
+
                         <img
-                            src="{{ property.image.url }}"
+                            id="mainPropertyImage"
+                            src="{{ first_image.image.url }}"
                             alt="{{ property.title }}"
                         >
 
-                    </button>
+                    {% endwith %}
+
+                {% else %}
+
+                    <div class="property-no-image">
+
+                        <span>
+                            No Image Available
+                        </span>
+
+                    </div>
 
                 {% endif %}
 
 
+                <!-- VIEW IMAGE LABEL -->
 
-                <!-- ADDITIONAL PROPERTY IMAGES -->
+                {% if property.image or property.gallery_images.all %}
 
-                {% for gallery_image in property.gallery_images.all %}
+                    <div class="gallery-view-label">
+                        Click to view image
+                    </div>
 
-                    <button
-                        type="button"
-                        class="gallery-thumbnail"
-                        onclick="changePropertyImage(
-                            '{{ gallery_image.image.url }}',
-                            this
-                        )"
-                    >
+                {% endif %}
 
-                        <img
-                            src="{{ gallery_image.image.url }}"
-                            alt="{{ gallery_image.caption|default:property.title }}"
+            </div>
+
+
+            <!-- =================================================
+                 IMAGE THUMBNAILS
+            ================================================== -->
+
+            {% if property.image or property.gallery_images.all %}
+
+                <div class="property-gallery-thumbnails">
+
+                    <!-- MAIN PROPERTY IMAGE -->
+
+                    {% if property.image %}
+
+                        <button
+                            type="button"
+                            class="gallery-thumbnail active"
+                            onclick="changePropertyImage(
+                                '{{ property.image.url }}',
+                                this
+                            )"
                         >
 
-                    </button>
+                            <img
+                                src="{{ property.image.url }}"
+                                alt="{{ property.title }}"
+                            >
 
-                {% endfor %}
+                        </button>
 
-
-            </div>
-
-        {% endif %}
-
-    </div>
+                    {% endif %}
 
 
+                    <!-- ADDITIONAL PROPERTY IMAGES -->
 
-    <!-- =================================================
-         PROPERTY INFORMATION
-    ================================================== -->
+                    {% for gallery_image in property.gallery_images.all %}
 
-    <div class="property-detail-content">
+                        <button
+                            type="button"
+                            class="gallery-thumbnail"
+                            onclick="changePropertyImage(
+                                '{{ gallery_image.image.url }}',
+                                this
+                            )"
+                        >
 
+                            <img
+                                src="{{ gallery_image.image.url }}"
+                                alt="{{ gallery_image.caption|default:property.title }}"
+                            >
 
-        <!-- PROPERTY TITLE + PRICE -->
+                        </button>
 
-        <div class="property-detail-top">
-
-
-            <div>
-
-                <p class="property-detail-type">
-
-                    {{ property.get_property_type_display|upper }}
-
-                </p>
-
-
-                <h1>
-
-                    {{ property.title }}
-
-                </h1>
-
-
-                <p class="property-detail-location">
-
-                    📍 {{ property.location }}
-
-                </p>
-
-            </div>
-
-
-
-            <div class="property-detail-price">
-
-                ₦{{ property.price|floatformat:0 }}
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- =================================================
-             PROPERTY STATUS
-        ================================================== -->
-
-        <div class="property-status">
-
-            <span class="status-label
-                {% if property.status == 'available' %}
-                    status-available
-                {% elif property.status == 'reserved' %}
-                    status-reserved
-                {% else %}
-                    status-sold
-                {% endif %}
-            ">
-
-                {{ property.get_status_display }}
-
-            </span>
-
-        </div>
-
-
-
-        <!-- =================================================
-             PROPERTY DETAILS
-        ================================================== -->
-
-        <div class="property-details-grid">
-
-
-            <!-- ESTATE -->
-
-            <div class="property-detail-item">
-
-                <span>
-                    Estate
-                </span>
-
-                <strong>
-                    {{ property.estate.name }}
-                </strong>
-
-            </div>
-
-
-
-            <!-- PLOT NUMBER -->
-
-            {% if property.plot_number %}
-
-                <div class="property-detail-item">
-
-                    <span>
-                        Plot Number
-                    </span>
-
-                    <strong>
-                        {{ property.plot_number }}
-                    </strong>
+                    {% endfor %}
 
                 </div>
 
             {% endif %}
 
-
-
-            <!-- LAND SIZE -->
-
-            {% if property.land_size %}
-
-                <div class="property-detail-item">
-
-                    <span>
-                        Land Size
-                    </span>
-
-                    <strong>
-                        {{ property.land_size }}
-                    </strong>
-
-                </div>
-
-            {% endif %}
-
-
-
-            <!-- LOCATION -->
-
-            <div class="property-detail-item">
-
-                <span>
-                    Location
-                </span>
-
-                <strong>
-                    {{ property.location }}
-                </strong>
-
-            </div>
-
-
         </div>
 
 
-
         <!-- =================================================
-             DESCRIPTION
+             PROPERTY INFORMATION
         ================================================== -->
 
-        <section class="property-description">
+        <div class="property-detail-content">
 
-            <p class="section-label">
-                PROPERTY OVERVIEW
-            </p>
 
+            <!-- =================================================
+                 PROPERTY TITLE + PRICE
+            ================================================== -->
 
-            <h2>
-                About This Property
-            </h2>
+            <div class="property-detail-top">
 
 
-            <div class="property-description-text">
+                <div>
 
-                {{ property.description|linebreaks }}
+                    <!-- PROPERTY TYPE -->
 
-            </div>
+                    {% if property.property_type %}
 
-        </section>
+                        <p class="property-detail-type">
 
-
-
-        <!-- =================================================
-             LOCATION / GOOGLE MAP
-        ================================================== -->
-
-        <section class="property-location-section">
-
-
-            <div class="property-location-heading">
-
-                <p class="section-label">
-                    LOCATION
-                </p>
-
-
-                <h2>
-                    Property Location
-                </h2>
-
-
-                <p class="property-location-address">
-
-                    📍 {{ property.location }}
-
-                </p>
-
-            </div>
-
-
-
-            {% if property.latitude and property.longitude %}
-
-
-                <!-- GOOGLE MAP -->
-
-                <div class="property-map-container">
-
-                    <iframe
-                        src="https://www.google.com/maps?q={{ property.latitude }},{{ property.longitude }}&output=embed"
-                        width="100%"
-                        height="450"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-
-                </div>
-
-
-
-                <!-- MAP BUTTON -->
-
-                <div class="property-location-actions">
-
-                    <a
-                        href="https://www.google.com/maps?q={{ property.latitude }},{{ property.longitude }}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="property-map-button"
-                    >
-
-                        View on Google Maps →
-
-                    </a>
-
-                </div>
-
-
-            {% else %}
-
-
-                <!-- LOCATION NOT AVAILABLE -->
-
-                <div class="property-no-location">
-
-                    <span>
-                        📍
-                    </span>
-
-
-                    <h3>
-                        Location information unavailable
-                    </h3>
-
-
-                    <p>
-                        The exact map location for this property
-                        has not been added yet.
-                    </p>
-
-                </div>
-
-
-            {% endif %}
-
-
-        </section>
-
-
-
-        <!-- =================================================
-             AGENT
-        ================================================== -->
-
-        {% if property.agent %}
-
-
-            <section class="property-agent-section">
-
-
-                <p class="section-label">
-
-                    YOUR PROPERTY CONSULTANT
-
-                </p>
-
-
-                <h2>
-
-                    Speak With Our Agent
-
-                </h2>
-
-
-
-                <div class="property-agent-card">
-
-
-                    <h3>
-
-                        {{ property.agent.name }}
-
-                    </h3>
-
-
-
-                    {% if property.agent.bio %}
-
-                        <p>
-
-                            {{ property.agent.bio }}
+                            {{ property.get_property_type_display|upper }}
 
                         </p>
 
                     {% endif %}
 
 
+                    <h1>
 
-                    <a
-                        href="tel:{{ property.agent.phone }}"
-                        class="property-agent-button"
-                    >
+                        {{ property.title }}
 
-                        Contact Agent
+                    </h1>
 
-                    </a>
 
+                    <p class="property-detail-location">
+
+                        📍 {{ property.location }}
+
+                    </p>
 
                 </div>
+
+
+                <!-- PRICE -->
+
+                <div class="property-detail-price">
+
+                    ₦{{ property.price|floatformat:0 }}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PROPERTY STATUS
+            ================================================== -->
+
+            <div class="property-status">
+
+                <span
+                    class="
+                        status-label
+                        {% if property.status == 'available' %}
+                            status-available
+                        {% elif property.status == 'reserved' %}
+                            status-reserved
+                        {% else %}
+                            status-sold
+                        {% endif %}
+                    "
+                >
+
+                    {{ property.get_status_display }}
+
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 PROPERTY DETAILS
+            ================================================== -->
+
+            <div class="property-details-grid">
+
+
+                <!-- =========================================
+                     ESTATE
+                ========================================== -->
+
+                {% if property.estate %}
+
+                    <div class="property-detail-item">
+
+                        <span>
+                            Estate
+                        </span>
+
+                        <strong>
+                            {{ property.estate.name }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =========================================
+                     PROPERTY TYPE
+                ========================================== -->
+
+                {% if property.property_type %}
+
+                    <div class="property-detail-item">
+
+                        <span>
+                            Property Type
+                        </span>
+
+                        <strong>
+                            {{ property.get_property_type_display }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =========================================
+                     ESTATE TYPE
+                ========================================== -->
+
+                {% if property.estate_type %}
+
+                    <div class="property-detail-item">
+
+                        <span>
+                            Estate Type
+                        </span>
+
+                        <strong>
+                            {{ property.estate_type.name }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =========================================
+                     PLOT NUMBER
+                ========================================== -->
+
+                {% if property.plot_number %}
+
+                    <div class="property-detail-item">
+
+                        <span>
+                            Plot Number
+                        </span>
+
+                        <strong>
+                            {{ property.plot_number }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =========================================
+                     LAND SIZE
+                ========================================== -->
+
+                {% if property.land_size %}
+
+                    <div class="property-detail-item">
+
+                        <span>
+                            Land Size
+                        </span>
+
+                        <strong>
+                            {{ property.land_size }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =========================================
+                     LOCATION
+                ========================================== -->
+
+                {% if property.location %}
+
+                    <div class="property-detail-item">
+
+                        <span>
+                            Location
+                        </span>
+
+                        <strong>
+                            {{ property.location }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- =================================================
+                 DESCRIPTION
+            ================================================== -->
+
+            <section class="property-description">
+
+                <p class="section-label">
+                    PROPERTY OVERVIEW
+                </p>
+
+
+                <h2>
+                    About This Property
+                </h2>
+
+
+                {% if property.description %}
+
+                    <div class="property-description-text">
+
+                        {{ property.description|linebreaks }}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="property-description-text">
+
+                        <p>
+                            Detailed information about this
+                            property is currently being prepared.
+                            Please contact King B Real Estate
+                            for further information.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- =================================================
+                 LOCATION / GOOGLE MAP
+            ================================================== -->
+
+            <section class="property-location-section">
+
+
+                <div class="property-location-heading">
+
+                    <p class="section-label">
+                        LOCATION
+                    </p>
+
+
+                    <h2>
+                        Property Location
+                    </h2>
+
+
+                    {% if property.location %}
+
+                        <p class="property-location-address">
+
+                            📍 {{ property.location }}
+
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                {% if property.latitude and property.longitude %}
+
+
+                    <!-- GOOGLE MAP -->
+
+                    <div class="property-map-container">
+
+                        <iframe
+                            src="https://www.google.com/maps?q={{ property.latitude }},{{ property.longitude }}&output=embed"
+                            width="100%"
+                            height="450"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="{{ property.title }} location map"
+                        >
+                        </iframe>
+
+                    </div>
+
+
+                    <!-- MAP BUTTON -->
+
+                    <div class="property-location-actions">
+
+                        <a
+                            href="https://www.google.com/maps?q={{ property.latitude }},{{ property.longitude }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="property-map-button"
+                        >
+
+                            View on Google Maps →
+
+                        </a>
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <!-- LOCATION NOT AVAILABLE -->
+
+                    <div class="property-no-location">
+
+                        <span>
+                            📍
+                        </span>
+
+
+                        <h3>
+                            Location information unavailable
+                        </h3>
+
+
+                        <p>
+
+                            The exact map location for this
+                            property has not been added yet.
+
+                        </p>
+
+                    </div>
+
+
+                {% endif %}
 
 
             </section>
 
 
-        {% endif %}
+            <!-- =================================================
+                 AGENT
+            ================================================== -->
+
+            {% if property.agent %}
+
+                <section class="property-agent-section">
 
 
+                    <p class="section-label">
 
-        <!-- =================================================
-             ACTION BUTTONS
-        ================================================== -->
+                        YOUR PROPERTY CONSULTANT
 
-        <div class="property-detail-actions">
-
-
-            <a
-                href="/contact/"
-                class="property-primary-button"
-            >
-
-                Make an Enquiry
-
-            </a>
+                    </p>
 
 
+                    <h2>
 
-            <a
-                href="/properties/"
-                class="property-secondary-button"
-            >
+                        Speak With Our Agent
 
-                ← Back to Properties
+                    </h2>
 
-            </a>
+
+                    <div class="property-agent-card">
+
+
+                        <h3>
+
+                            {{ property.agent.name }}
+
+                        </h3>
+
+
+                        {% if property.agent.bio %}
+
+                            <p>
+
+                                {{ property.agent.bio }}
+
+                            </p>
+
+                        {% endif %}
+
+
+                        {% if property.agent.phone %}
+
+                            <a
+                                href="tel:{{ property.agent.phone }}"
+                                class="property-agent-button"
+                            >
+
+                                Contact Agent
+
+                            </a>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </section>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 ACTION BUTTONS
+            ================================================== -->
+
+            <div class="property-detail-actions">
+
+
+                <a
+                    href="{% url 'contact' %}"
+                    class="property-primary-button"
+                >
+
+                    Make an Enquiry
+
+                </a>
+
+
+                <a
+                    href="{% url 'property_list' %}"
+                    class="property-secondary-button"
+                >
+
+                    ← Back to Properties
+
+                </a>
+
+
+            </div>
 
 
         </div>
 
 
-    </div>
-
-
-</section>
-
+    </section>
 
 </main>
-
 
 
 <!-- =====================================================
@@ -545,13 +618,13 @@ KING B REAL ESTATE & CONSTRUCTION LTD
     <button
         type="button"
         class="property-lightbox-close"
-        onclick="closePropertyLightbox()"
+        onclick="closePropertyLightbox(event)"
+        aria-label="Close image viewer"
     >
 
         ×
 
     </button>
-
 
 
     <img
@@ -565,18 +638,11 @@ KING B REAL ESTATE & CONSTRUCTION LTD
 </div>
 
 
-
-
-
-
-
-
 <!-- =====================================================
      GALLERY JAVASCRIPT
 ===================================================== -->
 
 <script>
-
 
 /* =====================================================
    CHANGE MAIN IMAGE
@@ -584,9 +650,10 @@ KING B REAL ESTATE & CONSTRUCTION LTD
 
 function changePropertyImage(imageUrl, thumbnail) {
 
-
     const mainImage =
-        document.getElementById("mainPropertyImage");
+        document.getElementById(
+            "mainPropertyImage"
+        );
 
 
     if (!mainImage) {
@@ -594,34 +661,17 @@ function changePropertyImage(imageUrl, thumbnail) {
     }
 
 
-    /*
-       Fade the current image out
-    */
-
     mainImage.style.opacity = "0";
 
 
     setTimeout(function () {
 
-
         mainImage.src = imageUrl;
-
-
-        /*
-           Fade the new image in
-        */
 
         mainImage.style.opacity = "1";
 
-
     }, 150);
 
-
-
-    /*
-       Remove active state
-       from all thumbnails
-    */
 
     const thumbnails =
         document.querySelectorAll(
@@ -636,12 +686,6 @@ function changePropertyImage(imageUrl, thumbnail) {
     });
 
 
-
-    /*
-       Add active state
-       to selected thumbnail
-    */
-
     if (thumbnail) {
 
         thumbnail.classList.add("active");
@@ -651,13 +695,11 @@ function changePropertyImage(imageUrl, thumbnail) {
 }
 
 
-
 /* =====================================================
    OPEN LIGHTBOX
 ===================================================== */
 
 function openPropertyLightbox() {
-
 
     const mainImage =
         document.getElementById(
@@ -677,10 +719,19 @@ function openPropertyLightbox() {
         );
 
 
-    if (!mainImage || !lightbox || !lightboxImage) {
+    if (
+        !mainImage ||
+        !lightbox ||
+        !lightboxImage
+    ) {
 
         return;
 
+    }
+
+
+    if (!mainImage.src) {
+        return;
     }
 
 
@@ -699,12 +750,17 @@ function openPropertyLightbox() {
 }
 
 
-
 /* =====================================================
    CLOSE LIGHTBOX
 ===================================================== */
 
-function closePropertyLightbox() {
+function closePropertyLightbox(event) {
+
+    if (event) {
+
+        event.stopPropagation();
+
+    }
 
 
     const lightbox =
@@ -731,17 +787,17 @@ function closePropertyLightbox() {
 }
 
 
-
 /* =====================================================
-   CLOSE WITH ESCAPE KEY
+   ESCAPE KEY
 ===================================================== */
 
 document.addEventListener(
     "keydown",
     function(event) {
 
-
-        if (event.key === "Escape") {
+        if (
+            event.key === "Escape"
+        ) {
 
             closePropertyLightbox();
 
@@ -750,12 +806,7 @@ document.addEventListener(
     }
 );
 
-
 </script>
 
-
-</body>
-
-</html>
 
 {% endblock %}

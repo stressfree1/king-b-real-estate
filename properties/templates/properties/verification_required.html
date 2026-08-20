@@ -1,0 +1,768 @@
+{% extends "properties/base.html" %}
+{% load static %}
+
+
+{% block title %}
+    Verification Required | King B Real Estate
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   VERIFICATION REQUIRED
+========================================================= */
+
+.verification-required-page {
+
+    min-height: 78vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 70px 20px 100px;
+
+    background: #f6f7f3;
+}
+
+
+.verification-required-container {
+
+    width: min(560px, 100%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   MODAL CARD
+========================================================= */
+
+.verification-required-card {
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8e4;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 30px 90px
+        rgba(
+            8,
+            39,
+            30,
+            .15
+        );
+
+    animation:
+        verification-card-in
+        .3s ease;
+}
+
+
+@keyframes verification-card-in {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(18px)
+            scale(.98);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* =========================================================
+   TOP ACCENT
+========================================================= */
+
+.verification-required-accent {
+
+    height: 6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #123c2f 0%,
+            #b58b3b 100%
+        );
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.verification-required-content {
+
+    padding: 40px;
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.verification-required-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 22px;
+
+    border-radius: 50%;
+
+    background: #f7f0df;
+
+    color: #b58b3b;
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(
+            181,
+            139,
+            59,
+            .08
+        );
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.verification-required-label {
+
+    margin: 0 0 9px;
+
+    color: #b58b3b;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.verification-required-content h1 {
+
+    margin: 0 0 14px;
+
+    color: #123c2f;
+
+    font-size: clamp(
+        30px,
+        5vw,
+        38px
+    );
+
+    font-weight: 800;
+
+    line-height: 1.08;
+
+    letter-spacing: -1px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.verification-required-description {
+
+    margin: 0 0 25px;
+
+    color: #69736e;
+
+    font-size: 14px;
+
+    line-height: 1.85;
+}
+
+
+/* =========================================================
+   WORKER CONTEXT
+========================================================= */
+
+.verification-worker {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+
+    padding: 14px;
+
+    background: #f5f8f5;
+
+    border: 1px solid #e5ece7;
+
+    border-radius: 11px;
+}
+
+
+.verification-worker-avatar {
+
+    width: 42px;
+
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123c2f,
+            #1c5b46
+        );
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+
+.verification-worker-avatar img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+.verification-worker-details {
+
+    min-width: 0;
+}
+
+
+.verification-worker-label {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #7a847f;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+.verification-worker-details strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    color: #123c2f;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.verification-worker-details span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    overflow: hidden;
+
+    color: #69736e;
+
+    font-size: 11px;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BENEFITS
+========================================================= */
+
+.verification-required-benefits {
+
+    margin-bottom: 28px;
+
+    padding: 17px;
+
+    background: #f8faf8;
+
+    border: 1px solid #e7ede9;
+
+    border-radius: 12px;
+}
+
+
+.verification-benefit {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+
+.verification-benefit:last-child {
+
+    margin-bottom: 0;
+}
+
+
+.verification-benefit-icon {
+
+    width: 22px;
+
+    height: 22px;
+
+    flex: 0 0 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e7f2eb;
+
+    color: #26734d;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+.verification-benefit span {
+
+    color: #34423c;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.verification-required-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        1.25fr
+        1fr;
+
+    gap: 10px;
+}
+
+
+.verification-required-button {
+
+    min-height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding: 0 16px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+
+.verification-required-primary {
+
+    background: #123c2f;
+
+    border: 1px solid #123c2f;
+
+    color: #ffffff;
+}
+
+
+.verification-required-primary:hover {
+
+    background: #b58b3b;
+
+    border-color: #b58b3b;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+.verification-required-secondary {
+
+    background: #ffffff;
+
+    border: 1px solid #dfe5e1;
+
+    color: #123c2f;
+}
+
+
+.verification-required-secondary:hover {
+
+    background: #f3f7f4;
+
+    color: #123c2f;
+}
+
+
+/* =========================================================
+   NOTE
+========================================================= */
+
+.verification-required-note {
+
+    margin: 20px 0 0;
+
+    color: #7a847f;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .verification-required-page {
+
+        padding:
+            45px
+            15px
+            80px;
+    }
+
+
+    .verification-required-content {
+
+        padding:
+            29px
+            21px;
+    }
+
+
+    .verification-required-content h1 {
+
+        font-size: 30px;
+    }
+
+
+    .verification-required-actions {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .verification-required-button {
+
+        width: 100%;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="verification-required-page">
+
+    <div class="verification-required-container">
+
+        <section class="verification-required-card">
+
+
+            <!-- =================================================
+                 ACCENT
+            ================================================== -->
+
+            <div class="verification-required-accent"></div>
+
+
+            <!-- =================================================
+                 CONTENT
+            ================================================== -->
+
+            <div class="verification-required-content">
+
+
+                <!-- ICON -->
+
+                <div class="verification-required-icon">
+                    ✓
+                </div>
+
+
+                <!-- LABEL -->
+
+                <p class="verification-required-label">
+                    ACCOUNT VERIFICATION
+                </p>
+
+
+                <!-- TITLE -->
+
+                <h1>
+                    Verify your account to hire
+                </h1>
+
+
+                <!-- DESCRIPTION -->
+
+                <p class="verification-required-description">
+
+                    Your King B account has not been verified yet.
+                    Verification is required before you can submit
+                    a hire request to a skilled professional.
+
+                </p>
+
+
+                <!-- =================================================
+                     WORKER BEING HIRED
+                ================================================== -->
+
+                <div class="verification-worker">
+
+
+                    <div class="verification-worker-avatar">
+
+                        {% if worker.profile_image %}
+
+                            <img
+                                src="{{ worker.profile_image.url }}"
+                                alt="{{ worker.full_name }}"
+                            >
+
+                        {% else %}
+
+                            {{ worker.full_name|first|upper }}
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="verification-worker-details">
+
+                        <span class="verification-worker-label">
+                            You're trying to hire
+                        </span>
+
+                        <strong>
+                            {{ worker.full_name }}
+                        </strong>
+
+                        <span>
+                            {{ worker.skill }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     BENEFITS
+                ================================================== -->
+
+                <div class="verification-required-benefits">
+
+
+                    <div class="verification-benefit">
+
+                        <span class="verification-benefit-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Secure your account and protect your
+                            personal information.
+                        </span>
+
+                    </div>
+
+
+                    <div class="verification-benefit">
+
+                        <span class="verification-benefit-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Gain access to hiring skilled professionals
+                            through King B.
+                        </span>
+
+                    </div>
+
+
+                    <div class="verification-benefit">
+
+                        <span class="verification-benefit-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Help us maintain a trusted and secure
+                            professional marketplace.
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     ACTIONS
+                ================================================== -->
+
+                <div class="verification-required-actions">
+
+
+                    <a
+                        href="{% url 'customer_profile_edit' %}"
+                        class="verification-required-button verification-required-primary"
+                    >
+                        Verify My Account
+                    </a>
+
+
+                    <a
+                        href="{% url 'skilled_worker_profile' worker.id %}"
+                        class="verification-required-button verification-required-secondary"
+                    >
+                        Back to Profile
+                    </a>
+
+
+                </div>
+
+
+                <p class="verification-required-note">
+
+                    Your information will be reviewed by King B
+                    before your account is approved for hiring.
+
+                </p>
+
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}
+

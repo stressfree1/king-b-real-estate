@@ -1,0 +1,1265 @@
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+    Verify Your Account | King B Real Estate
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   CUSTOMER VERIFICATION PAGE
+========================================================= */
+
+.customer-verification-page {
+
+    min-height: 80vh;
+
+    padding: 65px 20px 110px;
+
+    background: #f6f7f3;
+}
+
+
+.customer-verification-container {
+
+    width: min(1050px, 100%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.customer-verification-header {
+
+    margin-bottom: 35px;
+}
+
+
+.customer-verification-label {
+
+    margin: 0 0 9px;
+
+    color: #b58b3b;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+.customer-verification-header h1 {
+
+    margin: 0 0 12px;
+
+    color: #123c2f;
+
+    font-size: clamp(
+        38px,
+        5vw,
+        58px
+    );
+
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: -1.8px;
+}
+
+
+.customer-verification-header p {
+
+    max-width: 720px;
+
+    margin: 0;
+
+    color: #69736e;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.customer-verification-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        300px
+        minmax(
+            0,
+            1fr
+        );
+
+    gap: 25px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   STATUS CARD
+========================================================= */
+
+.verification-status-card {
+
+    position: sticky;
+
+    top: 25px;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8e4;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 14px 40px
+        rgba(
+            8,
+            39,
+            30,
+            .06
+        );
+}
+
+
+.verification-status-top {
+
+    padding: 25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #123c2f,
+            #08271e
+        );
+
+    color: #ffffff;
+}
+
+
+.verification-status-icon {
+
+    width: 56px;
+
+    height: 56px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .18
+        );
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.verification-status-top h2 {
+
+    margin: 0 0 6px;
+
+    color: #ffffff;
+
+    font-size: 19px;
+
+    font-weight: 800;
+}
+
+
+.verification-status-top p {
+
+    margin: 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .68
+        );
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+.verification-status-body {
+
+    padding: 20px 22px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.verification-status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px 11px;
+
+    margin-bottom: 16px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: .6px;
+
+    text-transform: uppercase;
+}
+
+
+.verification-status-badge.pending {
+
+    background: #f7f0df;
+
+    color: #806329;
+}
+
+
+.verification-status-badge.verified {
+
+    background: #e2f4e9;
+
+    color: #26734d;
+}
+
+
+.verification-status-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+}
+
+
+.pending .verification-status-dot {
+
+    background: #b58b3b;
+}
+
+
+.verified .verification-status-dot {
+
+    background: #26734d;
+}
+
+
+/* =========================================================
+   ACCOUNT DETAILS
+========================================================= */
+
+.verification-account-detail {
+
+    padding: 12px 0;
+
+    border-bottom:
+        1px solid
+        #edf0ee;
+}
+
+
+.verification-account-detail:last-child {
+
+    border-bottom: none;
+}
+
+
+.verification-account-detail span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #7a847f;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .8px;
+
+    text-transform: uppercase;
+}
+
+
+.verification-account-detail strong {
+
+    color: #18231f;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   FORM CARD
+========================================================= */
+
+.customer-verification-card {
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8e4;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 14px 40px
+        rgba(
+            8,
+            39,
+            30,
+            .05
+        );
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.customer-verification-card-header {
+
+    margin-bottom: 25px;
+
+    padding-bottom: 18px;
+
+    border-bottom:
+        1px solid
+        #edf0ee;
+}
+
+
+.customer-verification-section-label {
+
+    margin: 0 0 7px;
+
+    color: #b58b3b;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.8px;
+
+    text-transform: uppercase;
+}
+
+
+.customer-verification-card-header h2 {
+
+    margin: 0 0 8px;
+
+    color: #123c2f;
+
+    font-size: 24px;
+
+    font-weight: 800;
+}
+
+
+.customer-verification-card-header p {
+
+    margin: 0;
+
+    color: #69736e;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.verification-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+.verification-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 16px;
+}
+
+
+.verification-field {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.verification-field label {
+
+    color: #18231f;
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+
+.verification-field input,
+.verification-field select,
+.verification-field textarea {
+
+    width: 100%;
+
+    min-height: 49px;
+
+    box-sizing: border-box;
+
+    padding: 0 14px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #dbe3de;
+
+    border-radius: 9px;
+
+    color: #18231f;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.verification-field textarea {
+
+    min-height: 110px;
+
+    padding-top: 13px;
+
+    padding-bottom: 13px;
+
+    resize: vertical;
+}
+
+
+.verification-field input:focus,
+.verification-field select:focus,
+.verification-field textarea:focus {
+
+    border-color: #b58b3b;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            181,
+            139,
+            59,
+            .10
+        );
+}
+
+
+/* =========================================================
+   FILE
+========================================================= */
+
+.verification-file {
+
+    padding: 15px;
+
+    background: #f7f9f7;
+
+    border:
+        1px solid
+        #e7ede9;
+
+    border-radius: 10px;
+}
+
+
+.verification-file input {
+
+    min-height: auto;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   HELP
+========================================================= */
+
+.verification-help {
+
+    color: #7a847f;
+
+    font-size: 10px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   ERRORS
+========================================================= */
+
+.verification-error {
+
+    color: #a33a3a;
+
+    font-size: 11px;
+
+    line-height: 1.4;
+}
+
+
+.verification-error-box {
+
+    padding: 13px 15px;
+
+    background: #fff3f3;
+
+    border:
+        1px solid
+        #efdada;
+
+    border-radius: 9px;
+
+    color: #a33a3a;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   INFORMATION BOX
+========================================================= */
+
+.verification-information {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 16px;
+
+    background: #f4f8f5;
+
+    border:
+        1px solid
+        #e1ebe4;
+
+    border-radius: 11px;
+}
+
+
+.verification-information-icon {
+
+    width: 28px;
+
+    height: 28px;
+
+    flex: 0 0 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #edf5f0;
+
+    color: #26734d;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.verification-information-text strong {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #123c2f;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.verification-information-text p {
+
+    margin: 0;
+
+    color: #69736e;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.verification-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid
+        #edf0ee;
+}
+
+
+.verification-button {
+
+    min-height: 45px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0 19px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+
+.verification-cancel {
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #dfe5e1;
+
+    color: #123c2f;
+}
+
+
+.verification-submit {
+
+    border:
+        1px solid
+        #123c2f;
+
+    background: #123c2f;
+
+    color: #ffffff;
+
+    cursor: pointer;
+}
+
+
+.verification-submit:hover {
+
+    background: #b58b3b;
+
+    border-color: #b58b3b;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .customer-verification-layout {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .verification-status-card {
+
+        position: static;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .customer-verification-page {
+
+        padding:
+            45px
+            15px
+            80px;
+    }
+
+
+    .customer-verification-container {
+
+        width: 100%;
+    }
+
+
+    .verification-row {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .customer-verification-card {
+
+        padding: 22px;
+
+        border-radius: 15px;
+    }
+
+
+    .verification-actions {
+
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+    }
+
+
+    .verification-button {
+
+        width: 100%;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="customer-verification-page">
+
+    <div class="customer-verification-container">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <div class="customer-verification-header">
+
+            <p class="customer-verification-label">
+                KING B ACCOUNT
+            </p>
+
+            <h1>
+                Verify Your Account
+            </h1>
+
+            <p>
+                Complete your customer information so King B can
+                review and verify your account. Verification is
+                required before you can hire skilled professionals.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             LAYOUT
+        ================================================== -->
+
+        <div class="customer-verification-layout">
+
+
+            <!-- =================================================
+                 STATUS
+            ================================================== -->
+
+            <aside class="verification-status-card">
+
+
+                <div class="verification-status-top">
+
+                    <div class="verification-status-icon">
+                        ✓
+                    </div>
+
+                    <h2>
+                        Account Verification
+                    </h2>
+
+                    <p>
+                        Your verification status and account
+                        information are shown here.
+                    </p>
+
+                </div>
+
+
+                <div class="verification-status-body">
+
+
+                    {% if customer.is_verified %}
+
+                        <div class="verification-status-badge verified">
+
+                            <span class="verification-status-dot"></span>
+
+                            Verified
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="verification-status-badge pending">
+
+                            <span class="verification-status-dot"></span>
+
+                            Verification Required
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="verification-account-detail">
+
+                        <span>
+                            Full Name
+                        </span>
+
+                        <strong>
+                            {{ customer.full_name }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="verification-account-detail">
+
+                        <span>
+                            Email Address
+                        </span>
+
+                        <strong>
+                            {{ customer.email }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="verification-account-detail">
+
+                        <span>
+                            Phone Number
+                        </span>
+
+                        <strong>
+                            {{ customer.phone|default:"Not provided" }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+
+            <!-- =================================================
+                 FORM CARD
+            ================================================== -->
+
+            <section class="customer-verification-card">
+
+
+                <div class="customer-verification-card-header">
+
+                    <p class="customer-verification-section-label">
+                        VERIFICATION DETAILS
+                    </p>
+
+                    <h2>
+                        Confirm Your Information
+                    </h2>
+
+                    <p>
+                        Provide accurate information and upload
+                        your identification document for review.
+                    </p>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="verification-form"
+                >
+
+                    {% csrf_token %}
+
+
+                    <!-- =========================================
+                         FORM ERRORS
+                    ========================================== -->
+
+                    {% if form.non_field_errors %}
+
+                        <div class="verification-error-box">
+
+                            {% for error in form.non_field_errors %}
+
+                                <div>
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- =========================================
+                         NAME + PHONE
+                    ========================================== -->
+
+                    <div class="verification-row">
+
+
+                        <div class="verification-field">
+
+                            {{ form.full_name.label_tag }}
+
+                            {{ form.full_name }}
+
+                            {% for error in form.full_name.errors %}
+
+                                <span class="verification-error">
+                                    {{ error }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="verification-field">
+
+                            {{ form.phone.label_tag }}
+
+                            {{ form.phone }}
+
+                            {% for error in form.phone.errors %}
+
+                                <span class="verification-error">
+                                    {{ error }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =========================================
+                         EMAIL
+                    ========================================== -->
+
+                    <div class="verification-field">
+
+                        {{ form.email.label_tag }}
+
+                        {{ form.email }}
+
+                        {% for error in form.email.errors %}
+
+                            <span class="verification-error">
+                                {{ error }}
+                            </span>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ADDRESS
+                    ========================================== -->
+
+                    <div class="verification-field">
+
+                        {{ form.address.label_tag }}
+
+                        {{ form.address }}
+
+                        {% for error in form.address.errors %}
+
+                            <span class="verification-error">
+                                {{ error }}
+                            </span>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ID TYPE + ID NUMBER
+                    ========================================== -->
+
+                    <div class="verification-row">
+
+
+                        <div class="verification-field">
+
+                            {{ form.id_type.label_tag }}
+
+                            {{ form.id_type }}
+
+                            {% for error in form.id_type.errors %}
+
+                                <span class="verification-error">
+                                    {{ error }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="verification-field">
+
+                            {{ form.id_number.label_tag }}
+
+                            {{ form.id_number }}
+
+                            {% for error in form.id_number.errors %}
+
+                                <span class="verification-error">
+                                    {{ error }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ID DOCUMENT
+                    ========================================== -->
+
+                    <div class="verification-field">
+
+                        {{ form.id_document.label_tag }}
+
+
+                        <div class="verification-file">
+
+                            {{ form.id_document }}
+
+                        </div>
+
+
+                        <span class="verification-help">
+
+                            Upload a clear copy of your valid
+                            identification document.
+
+                        </span>
+
+
+                        {% for error in form.id_document.errors %}
+
+                            <span class="verification-error">
+                                {{ error }}
+                            </span>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- =========================================
+                         INFORMATION
+                    ========================================== -->
+
+                    <div class="verification-information">
+
+                        <div class="verification-information-icon">
+                            i
+                        </div>
+
+
+                        <div class="verification-information-text">
+
+                            <strong>
+                                What happens next?
+                            </strong>
+
+                            <p>
+                                Once you submit your information,
+                                King B will review your details.
+                                Your account must be verified before
+                                you can submit requests to hire
+                                skilled professionals.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ACTIONS
+                    ========================================== -->
+
+                    <div class="verification-actions">
+
+                        <a
+                            href="{% url 'marketplace_dashboard' %}"
+                            class="verification-button verification-cancel"
+                        >
+                            Back to My Account
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="verification-button verification-submit"
+                        >
+                            Submit for Verification
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+{% endblock %}
+

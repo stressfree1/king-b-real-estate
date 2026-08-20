@@ -1,0 +1,1577 @@
+
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+    Account Settings | King B Real Estate & Construction Ltd
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   ACCOUNT SETTINGS PAGE
+========================================================= */
+
+.account-settings-page {
+
+    --green: #123c2f;
+    --dark-green: #08271e;
+    --gold: #b58b3b;
+    --light-gold: #d4af63;
+
+    --cream: #f6f7f3;
+    --white: #ffffff;
+
+    --text: #18231f;
+    --muted: #69736e;
+
+    --border: #e2e8e4;
+    --soft-green: #edf5f0;
+    --soft-gold: #f7f1e5;
+
+    --danger: #a33a3a;
+
+    min-height: 100vh;
+
+    padding: 72px 0 120px;
+
+    background: var(--cream);
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.account-settings-container {
+
+    width: min(1180px, 90%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.account-settings-top {
+
+    margin-bottom: 42px;
+}
+
+
+.account-settings-label {
+
+    margin: 0 0 11px;
+
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.3px;
+
+    text-transform: uppercase;
+}
+
+
+.account-settings-top h1 {
+
+    margin: 0 0 14px;
+
+    color: var(--green);
+
+    font-size: clamp(
+        40px,
+        5vw,
+        60px
+    );
+
+    font-weight: 750;
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+}
+
+
+.account-settings-top > p:last-child {
+
+    max-width: 720px;
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 15px;
+
+    line-height: 1.85;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.account-settings-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        275px
+        minmax(
+            0,
+            1fr
+        );
+
+    gap: 28px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.account-settings-sidebar {
+
+    position: sticky;
+
+    top: 25px;
+
+    overflow: hidden;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 16px 40px
+        rgba(
+            8,
+            39,
+            30,
+            .055
+        );
+}
+
+
+/* =========================================================
+   SIDEBAR PROFILE
+========================================================= */
+
+.account-sidebar-header {
+
+    padding: 26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #123c2f,
+            #08271e
+        );
+
+    color: #ffffff;
+}
+
+
+.account-sidebar-avatar {
+
+    width: 56px;
+
+    height: 56px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .20
+        );
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+
+    color: #ffffff;
+
+    font-size: 19px;
+
+    font-weight: 800;
+}
+
+
+.account-sidebar-header strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    line-height: 1.35;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.account-sidebar-header span {
+
+    display: block;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .65
+        );
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SIDEBAR LINKS
+========================================================= */
+
+.account-sidebar-links {
+
+    padding: 10px;
+}
+
+
+.account-sidebar-links a {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    min-height: 45px;
+
+    padding: 0 12px;
+
+    margin-bottom: 3px;
+
+    border-radius: 9px;
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    transition:
+        background .18s ease,
+        color .18s ease;
+}
+
+
+.account-sidebar-links a:last-child {
+
+    margin-bottom: 0;
+}
+
+
+.account-sidebar-links a:hover {
+
+    background: #f3f7f4;
+
+    color: var(--green);
+}
+
+
+.account-sidebar-links a.active {
+
+    background: var(--soft-green);
+
+    color: var(--green);
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   SIDEBAR ICON
+========================================================= */
+
+.account-sidebar-icon {
+
+    width: 28px;
+
+    height: 28px;
+
+    flex: 0 0 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: var(--soft-green);
+
+    color: #26734d;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.account-settings-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 22px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.settings-card {
+
+    padding: 30px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(
+            8,
+            39,
+            30,
+            .05
+        );
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.settings-card-header {
+
+    margin-bottom: 25px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid #edf0ee;
+}
+
+
+.settings-section-label {
+
+    margin: 0 0 8px;
+
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.8px;
+
+    text-transform: uppercase;
+}
+
+
+.settings-card-header h2 {
+
+    margin: 0 0 8px;
+
+    color: var(--green);
+
+    font-size: 23px;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+}
+
+
+.settings-card-header p {
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.settings-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 21px;
+}
+
+
+/* =========================================================
+   TWO COLUMN ROW
+========================================================= */
+
+.settings-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 17px;
+}
+
+
+/* =========================================================
+   FIELD
+========================================================= */
+
+.settings-field {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.settings-field label {
+
+    color: var(--text);
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+
+.settings-field input,
+.settings-field select,
+.settings-field textarea {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #dbe3de;
+
+    border-radius: 9px;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+
+.settings-field textarea {
+
+    min-height: 110px;
+
+    padding-top: 13px;
+
+    padding-bottom: 13px;
+
+    resize: vertical;
+}
+
+
+.settings-field input:focus,
+.settings-field select:focus,
+.settings-field textarea:focus {
+
+    border-color: var(--gold);
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            181,
+            139,
+            59,
+            .10
+        );
+}
+
+
+/* =========================================================
+   FIELD HELP
+========================================================= */
+
+.settings-field small,
+.settings-help {
+
+    color: #7a847f;
+
+    font-size: 10px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.settings-error {
+
+    color: var(--danger);
+
+    font-size: 11px;
+
+    line-height: 1.4;
+}
+
+
+.settings-error-box {
+
+    padding: 13px 15px;
+
+    background: #fff3f3;
+
+    border:
+        1px solid
+        #efdada;
+
+    border-radius: 9px;
+
+    color: var(--danger);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   PROFILE IMAGE
+========================================================= */
+
+.settings-file-wrap {
+
+    padding: 16px;
+
+    background: #f7f9f7;
+
+    border:
+        1px solid
+        #e8eeea;
+
+    border-radius: 10px;
+}
+
+
+.settings-file-wrap input {
+
+    min-height: auto;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   PREFERENCES
+========================================================= */
+
+.settings-preferences {
+
+    margin-top: 8px;
+
+    padding-top: 30px;
+
+    border-top:
+        1px solid
+        #edf0ee;
+}
+
+
+.settings-preference-list {
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.settings-toggle {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    min-height: 66px;
+
+    border-bottom:
+        1px solid
+        #edf0ee;
+
+    cursor: pointer;
+}
+
+
+.settings-toggle:last-child {
+
+    border-bottom: none;
+}
+
+
+.settings-toggle input {
+
+    width: 18px;
+
+    height: 18px;
+
+    flex: 0 0 18px;
+
+    margin: 0;
+
+    accent-color: var(--green);
+
+    cursor: pointer;
+}
+
+
+.settings-toggle-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.settings-toggle-content strong {
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    font-weight: 750;
+}
+
+
+.settings-toggle-content small {
+
+    color: #7a847f;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.settings-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 5px;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid
+        #edf0ee;
+}
+
+
+.settings-cancel,
+.settings-save {
+
+    min-height: 44px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+    text-decoration: none;
+}
+
+
+.settings-cancel {
+
+    padding: 0 17px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #dfe5e1;
+
+    color: var(--green);
+}
+
+
+.settings-save {
+
+    padding: 0 20px;
+
+    background: var(--green);
+
+    border:
+        1px solid
+        var(--green);
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+
+.settings-save:hover {
+
+    background: var(--gold);
+
+    border-color: var(--gold);
+}
+
+
+/* =========================================================
+   PASSWORD CARD
+========================================================= */
+
+.password-card {
+
+    border-top:
+        3px solid
+        var(--gold);
+}
+
+
+.security-action {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding: 18px;
+
+    background: #f7f9f7;
+
+    border:
+        1px solid
+        #e8eeea;
+
+    border-radius: 12px;
+}
+
+
+.security-action strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--green);
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+
+.security-action p {
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .account-settings-layout {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .account-settings-sidebar {
+
+        position: static;
+    }
+
+
+    .account-sidebar-links {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                3,
+                1fr
+            );
+
+        gap: 5px;
+    }
+
+
+    .account-sidebar-links a {
+
+        margin-bottom: 0;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .account-settings-page {
+
+        padding: 45px 0 80px;
+    }
+
+
+    .account-settings-container {
+
+        width: 92%;
+    }
+
+
+    .account-settings-top {
+
+        margin-bottom: 30px;
+    }
+
+
+    .account-settings-top h1 {
+
+        font-size: 38px;
+
+        letter-spacing: -1px;
+    }
+
+
+    .settings-card {
+
+        padding: 22px;
+
+        border-radius: 15px;
+    }
+
+
+    .settings-row {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .account-sidebar-links {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .settings-actions {
+
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+    }
+
+
+    .settings-cancel,
+    .settings-save {
+
+        width: 100%;
+    }
+
+
+    .security-action {
+
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .security-action .settings-save {
+
+        width: 100%;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="account-settings-page">
+
+    <div class="account-settings-container">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="account-settings-top">
+
+            <p class="account-settings-label">
+                ACCOUNT
+            </p>
+
+            <h1>
+                Account Settings
+            </h1>
+
+            <p>
+                Manage your personal information, contact details,
+                communication preferences and account security
+                from one place.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             MAIN LAYOUT
+        ================================================== -->
+
+        <div class="account-settings-layout">
+
+
+            <!-- =================================================
+                 SIDEBAR
+            ================================================== -->
+
+            <aside class="account-settings-sidebar">
+
+
+                <div class="account-sidebar-header">
+
+                    <div class="account-sidebar-avatar">
+
+                        {{ request.user.first_name|default:request.user.username|first|upper }}
+
+                    </div>
+
+
+                    <strong>
+
+                        {% if request.user.get_full_name %}
+
+                            {{ request.user.get_full_name }}
+
+                        {% else %}
+
+                            {{ request.user.username }}
+
+                        {% endif %}
+
+                    </strong>
+
+
+                    <span>
+                        {{ request.user.email }}
+                    </span>
+
+                </div>
+
+
+                <div class="account-sidebar-links">
+
+
+                    <a
+                        href="{% url 'marketplace_dashboard' %}"
+                    >
+
+                        <span class="account-sidebar-icon">
+                            ◉
+                        </span>
+
+                        My Account
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'account_settings' %}"
+                        class="active"
+                    >
+
+                        <span class="account-sidebar-icon">
+                            ⚙
+                        </span>
+
+                        Account Settings
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'site_logout' %}"
+                    >
+
+                        <span class="account-sidebar-icon">
+                            ↪
+                        </span>
+
+                        Logout
+
+                    </a>
+
+                </div>
+
+            </aside>
+
+
+            <!-- =================================================
+                 SETTINGS CONTENT
+            ================================================== -->
+
+            <div class="account-settings-content">
+
+
+                <!-- =================================================
+                     PERSONAL INFORMATION
+                ================================================== -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-header">
+
+                        <p class="settings-section-label">
+                            PROFILE
+                        </p>
+
+                        <h2>
+                            Personal Information
+                        </h2>
+
+                        <p>
+                            Update the information connected to
+                            your King B account.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                        class="settings-form"
+                    >
+
+                        {% csrf_token %}
+
+
+                        {% if form.non_field_errors %}
+
+                            <div class="settings-error-box">
+
+                                {% for error in form.non_field_errors %}
+
+                                    <div>
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- =========================================
+                             FULL NAME
+                        ========================================== -->
+
+                        <div class="settings-field">
+
+                            {{ form.full_name.label_tag }}
+
+                            {{ form.full_name }}
+
+                            {% for error in form.full_name.errors %}
+
+                                <span class="settings-error">
+                                    {{ error }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- =========================================
+                             EMAIL + PHONE
+                        ========================================== -->
+
+                        <div class="settings-row">
+
+
+                            <div class="settings-field">
+
+                                {{ form.email.label_tag }}
+
+                                {{ form.email }}
+
+                                <small>
+                                    This email is used for your
+                                    King B account login.
+                                </small>
+
+                                {% for error in form.email.errors %}
+
+                                    <span class="settings-error">
+                                        {{ error }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <div class="settings-field">
+
+                                {{ form.phone.label_tag }}
+
+                                {{ form.phone }}
+
+                                <small>
+                                    Update the phone number connected
+                                    to your account.
+                                </small>
+
+                                {% for error in form.phone.errors %}
+
+                                    <span class="settings-error">
+                                        {{ error }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =========================================
+                             ADDRESS
+                        ========================================== -->
+
+                        <div class="settings-field">
+
+                            {{ form.address.label_tag }}
+
+                            {{ form.address }}
+
+                            {% for error in form.address.errors %}
+
+                                <span class="settings-error">
+                                    {{ error }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- =========================================
+                             PROFILE IMAGE
+                        ========================================== -->
+
+                        <div class="settings-field">
+
+                            <label>
+                                Profile Image
+                            </label>
+
+                            <div class="settings-file-wrap">
+
+                                {{ form.profile_image }}
+
+                            </div>
+
+                            {% for error in form.profile_image.errors %}
+
+                                <span class="settings-error">
+                                    {{ error }}
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- =========================================
+                             NOTIFICATION PREFERENCES
+                        ========================================== -->
+
+                        <div class="settings-preferences">
+
+
+                            <div class="settings-card-header">
+
+                                <p class="settings-section-label">
+                                    PREFERENCES
+                                </p>
+
+                                <h2>
+                                    Notifications & Privacy
+                                </h2>
+
+                                <p>
+                                    Choose which updates and
+                                    communications you want to receive.
+                                </p>
+
+                            </div>
+
+
+                            <div class="settings-preference-list">
+
+
+                                <label class="settings-toggle">
+
+                                    {{ form.property_alerts }}
+
+                                    <span class="settings-toggle-content">
+
+                                        <strong>
+                                            Property Alerts
+                                        </strong>
+
+                                        <small>
+                                            Receive updates about new
+                                            property opportunities.
+                                        </small>
+
+                                    </span>
+
+                                </label>
+
+
+                                <label class="settings-toggle">
+
+                                    {{ form.plot_availability_alerts }}
+
+                                    <span class="settings-toggle-content">
+
+                                        <strong>
+                                            Plot Availability Alerts
+                                        </strong>
+
+                                        <small>
+                                            Get notified when plots become
+                                            available.
+                                        </small>
+
+                                    </span>
+
+                                </label>
+
+
+                                <label class="settings-toggle">
+
+                                    {{ form.estate_alerts }}
+
+                                    <span class="settings-toggle-content">
+
+                                        <strong>
+                                            Estate Updates
+                                        </strong>
+
+                                        <small>
+                                            Receive important updates about
+                                            estates and developments.
+                                        </small>
+
+                                    </span>
+
+                                </label>
+
+
+                                <label class="settings-toggle">
+
+                                    {{ form.hire_notifications }}
+
+                                    <span class="settings-toggle-content">
+
+                                        <strong>
+                                            Hire Notifications
+                                        </strong>
+
+                                        <small>
+                                            Receive updates about skilled
+                                            worker requests and jobs.
+                                        </small>
+
+                                    </span>
+
+                                </label>
+
+
+                                <label class="settings-toggle">
+
+                                    {{ form.security_notifications }}
+
+                                    <span class="settings-toggle-content">
+
+                                        <strong>
+                                            Security Notifications
+                                        </strong>
+
+                                        <small>
+                                            Receive important account and
+                                            security notifications.
+                                        </small>
+
+                                    </span>
+
+                                </label>
+
+
+                                <label class="settings-toggle">
+
+                                    {{ form.profile_visible }}
+
+                                    <span class="settings-toggle-content">
+
+                                        <strong>
+                                            Profile Visibility
+                                        </strong>
+
+                                        <small>
+                                            Control whether your profile
+                                            can be displayed where applicable.
+                                        </small>
+
+                                    </span>
+
+                                </label>
+
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =========================================
+                             SAVE BUTTONS
+                        ========================================== -->
+
+                        <div class="settings-actions">
+
+                            <a
+                                href="{% url 'marketplace_dashboard' %}"
+                                class="settings-cancel"
+                            >
+                                Cancel
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="settings-save"
+                            >
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =================================================
+                     PASSWORD & SECURITY
+                ================================================== -->
+
+                <section class="settings-card password-card">
+
+
+                    <div class="settings-card-header">
+
+                        <p class="settings-section-label">
+                            SECURITY
+                        </p>
+
+                        <h2>
+                            Password & Security
+                        </h2>
+
+                        <p>
+                            Protect your account with a strong,
+                            private password.
+                        </p>
+
+                    </div>
+
+
+                    <div class="security-action">
+
+
+                        <div>
+
+                            <strong>
+                                Change your password
+                            </strong>
+
+                            <p>
+                                Update your password whenever you
+                                need to strengthen your account security.
+                            </p>
+
+                        </div>
+
+
+                        <a
+                            href="{% url 'password_change' %}"
+                            class="settings-save"
+                        >
+                            Change Password
+                        </a>
+
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+{% endblock %}
+

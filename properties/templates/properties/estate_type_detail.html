@@ -1,0 +1,2365 @@
+{% extends 'properties/base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ estate_type.name }} | {{ estate.name }} | King B Real Estate
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   KING B REAL ESTATE
+   PREMIUM ESTATE TYPE EXPERIENCE
+   ========================================================= */
+
+.estate-type-page {
+
+    --kb-green: #123c2f;
+    --kb-dark: #062119;
+    --kb-dark-2: #0b2d23;
+
+    --kb-gold: #b58b3b;
+    --kb-gold-light: #d4af63;
+
+    --kb-cream: #f5f6f2;
+    --kb-white: #ffffff;
+
+    --kb-text: #17221e;
+    --kb-muted: #69746f;
+    --kb-soft: #eef2ef;
+
+    --kb-border: #e1e7e3;
+
+    min-height: 100vh;
+
+    background: var(--kb-cream);
+
+    color: var(--kb-text);
+
+    padding-bottom: 130px;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+.estate-type-page *,
+.estate-type-page *::before,
+.estate-type-page *::after {
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SHARED WIDTHS
+   ========================================================= */
+
+.kb-shell {
+
+    width: min(1240px, 90%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   TOP NAVIGATION
+   ========================================================= */
+
+.kb-topbar {
+
+    padding: 28px 0 20px;
+}
+
+
+.kb-back {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    color: var(--kb-green);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        color .2s ease;
+}
+
+
+.kb-back:hover {
+
+    color: var(--kb-gold);
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.kb-hero {
+
+    width: min(1380px, 94%);
+
+    min-height: 610px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.16fr)
+        minmax(390px, .84fr);
+
+    overflow: hidden;
+
+    border-radius: 28px;
+
+    background: var(--kb-dark);
+
+    box-shadow:
+        0 30px 90px rgba(
+            6,
+            33,
+            25,
+            .16
+        );
+}
+
+
+/* =========================================================
+   HERO IMAGE
+   ========================================================= */
+
+.kb-hero-image {
+
+    position: relative;
+
+    min-height: 610px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0a3024,
+            #123c2f
+        );
+}
+
+
+.kb-hero-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    object-position: center;
+}
+
+
+.kb-hero-image::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.02),
+            rgba(0,0,0,.08)
+        );
+}
+
+
+.kb-hero-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+    min-height: 610px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--kb-gold-light);
+
+    font-size: 90px;
+}
+
+
+/* =========================================================
+   HERO CONTENT
+   ========================================================= */
+
+.kb-hero-content {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 70px 58px;
+
+    background:
+        linear-gradient(
+            155deg,
+            #143f31 0%,
+            #061e17 100%
+        );
+
+    color: var(--kb-white);
+
+    overflow: hidden;
+}
+
+
+.kb-hero-content::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+
+    height: 260px;
+
+    right: -150px;
+
+    top: -120px;
+
+    border: 1px solid rgba(
+        212,
+        175,
+        99,
+        .16
+    );
+
+    border-radius: 50%;
+}
+
+
+.kb-hero-content::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+
+    height: 170px;
+
+    left: -110px;
+
+    bottom: -90px;
+
+    border: 1px solid rgba(
+        212,
+        175,
+        99,
+        .10
+    );
+
+    border-radius: 50%;
+}
+
+
+/* =========================================================
+   HERO TEXT
+   ========================================================= */
+
+.kb-eyebrow {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0 0 13px;
+
+    color: var(--kb-gold-light);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.7px;
+
+    text-transform: uppercase;
+}
+
+
+.kb-hero-content h1 {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0 0 12px;
+
+    color: var(--kb-white);
+
+    font-size: clamp(
+        48px,
+        5vw,
+        72px
+    );
+
+    line-height: .96;
+
+    letter-spacing: -3px;
+
+    font-weight: 700;
+}
+
+
+.kb-location {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0 0 30px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .68
+        );
+
+    font-size: 14px;
+}
+
+
+.kb-description {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 540px;
+
+    margin: 0 0 34px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .82
+        );
+
+    font-size: 15px;
+
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   HERO SPECIFICATIONS
+   ========================================================= */
+
+.kb-specs {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0,1fr)
+        );
+
+    gap: 9px;
+
+    max-width: 520px;
+
+    margin-bottom: 26px;
+}
+
+
+.kb-spec {
+
+    padding: 14px 15px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .055
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+
+    border-radius: 10px;
+}
+
+
+.kb-spec-label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .43
+        );
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .9px;
+
+    text-transform: uppercase;
+}
+
+
+.kb-spec-value {
+
+    display: block;
+
+    color: var(--kb-white);
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   HERO DOCUMENTS
+   ========================================================= */
+
+.kb-documents {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+
+.kb-document {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 13px;
+
+    color: var(--kb-white);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .15
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .05
+        );
+
+    border-radius: 8px;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+
+.kb-document:hover {
+
+    color: var(--kb-white);
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .12
+        );
+
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            .25
+        );
+}
+
+
+/* =========================================================
+   PACKAGE SECTION
+   ========================================================= */
+
+.kb-package {
+
+    width: min(1100px, 90%);
+
+    margin: 115px auto 0;
+}
+
+
+.kb-package-heading {
+
+    max-width: 760px;
+
+    margin: 0 auto 38px;
+
+    text-align: center;
+}
+
+
+.kb-label {
+
+    margin: 0 0 11px;
+
+    color: var(--kb-gold);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.2px;
+
+    text-transform: uppercase;
+}
+
+
+.kb-package-heading h2 {
+
+    margin: 0 0 15px;
+
+    color: var(--kb-green);
+
+    font-size: clamp(
+        37px,
+        4.4vw,
+        53px
+    );
+
+    line-height: 1.05;
+
+    letter-spacing: -1.5px;
+}
+
+
+.kb-package-heading p:last-child {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 15px;
+
+    line-height: 1.85;
+}
+
+
+/* =========================================================
+   PACKAGE LIST
+   ========================================================= */
+
+.kb-package-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0,1fr)
+        );
+
+    gap: 12px;
+}
+
+
+.kb-package-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-height: 72px;
+
+    padding: 15px 17px;
+
+    background: var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 6px 22px rgba(
+            8,
+            39,
+            30,
+            .035
+        );
+}
+
+
+.kb-check {
+
+    width: 31px;
+
+    height: 31px;
+
+    flex: 0 0 31px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #edf5f0;
+
+    color: #26734d;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.kb-package-item span {
+
+    color: var(--kb-text);
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   DIGITAL LAYOUT SECTION
+   ========================================================= */
+
+.kb-layout-section {
+
+    width: min(1480px, 94%);
+
+    margin: 125px auto 0;
+}
+
+
+/* =========================================================
+   LAYOUT HEADER
+   ========================================================= */
+
+.kb-layout-heading {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 40px;
+
+    margin-bottom: 31px;
+}
+
+
+.kb-layout-heading-content {
+
+    max-width: 800px;
+}
+
+
+.kb-layout-heading-content h2 {
+
+    margin: 0 0 14px;
+
+    color: var(--kb-green);
+
+    font-size: clamp(
+        42px,
+        4.8vw,
+        61px
+    );
+
+    line-height: 1.02;
+
+    letter-spacing: -1.8px;
+}
+
+
+.kb-layout-heading-content p {
+
+    max-width: 735px;
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 15px;
+
+    line-height: 1.85;
+}
+
+
+.kb-layout-tag {
+
+    flex-shrink: 0;
+
+    padding: 10px 14px;
+
+    background: #f6f0e4;
+
+    border: 1px solid #eadfc9;
+
+    border-radius: 999px;
+
+    color: #806329;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   MASTERPLAN VIEWER
+   ========================================================= */
+
+.kb-layout-card {
+
+    width: 100%;
+
+    height: 820px;
+
+    padding: 14px;
+
+    background: var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 30px 80px rgba(
+            8,
+            39,
+            30,
+            .10
+        );
+
+    overflow: hidden;
+}
+
+
+.kb-layout-frame {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 15px;
+
+    background: #ecefeb;
+}
+
+
+/* =========================================================
+   LAYOUT IMAGE
+   ========================================================= */
+
+.kb-layout-frame img {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+    object-position: center;
+
+    background: var(--kb-white);
+}
+
+
+/* =========================================================
+   LAYOUT PDF
+   ========================================================= */
+
+.kb-layout-frame iframe {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    border: none;
+
+    background: var(--kb-white);
+}
+
+
+/* =========================================================
+   LAYOUT ACTION
+   ========================================================= */
+
+.kb-layout-action {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 20px;
+}
+
+
+.kb-layout-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 13px 21px;
+
+    background: var(--kb-green);
+
+    border-radius: 9px;
+
+    color: var(--kb-white);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+
+.kb-layout-button:hover {
+
+    background: var(--kb-gold);
+
+    color: var(--kb-white);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   AVAILABLE PLOTS
+   ========================================================= */
+
+.kb-plots {
+
+    width: min(1240px, 90%);
+
+    margin: 125px auto 0;
+}
+
+
+/* =========================================================
+   PLOT HEADER
+   ========================================================= */
+
+.kb-plots-heading {
+
+    max-width: 850px;
+
+    margin: 0 auto 32px;
+
+    text-align: center;
+}
+
+
+.kb-plots-heading h2 {
+
+    margin: 0 0 14px;
+
+    color: var(--kb-green);
+
+    font-size: clamp(
+        39px,
+        4.6vw,
+        58px
+    );
+
+    line-height: 1.04;
+
+    letter-spacing: -1.6px;
+
+    white-space: nowrap;
+}
+
+
+.kb-plots-heading p {
+
+    max-width: 720px;
+
+    margin: 0 auto;
+
+    color: var(--kb-muted);
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   AVAILABILITY
+   ========================================================= */
+
+.kb-availability {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    width: fit-content;
+
+    margin: 0 auto 38px;
+
+    padding: 11px 19px;
+
+    background: var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 999px;
+
+    box-shadow:
+        0 8px 24px rgba(
+            8,
+            39,
+            30,
+            .04
+        );
+}
+
+
+.kb-availability-number {
+
+    color: var(--kb-green);
+
+    font-size: 25px;
+
+    font-weight: 850;
+}
+
+
+.kb-availability-text {
+
+    color: var(--kb-muted);
+
+    font-size: 12px;
+
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   PLOT GRID
+   ========================================================= */
+
+.kb-plot-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(300px, 1fr)
+        );
+
+    gap: 24px;
+}
+
+
+/* =========================================================
+   PLOT CARD
+   ========================================================= */
+
+.kb-plot-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 32px rgba(
+            8,
+            39,
+            30,
+            .045
+        );
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+
+.kb-plot-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 20px 45px rgba(
+            8,
+            39,
+            30,
+            .09
+        );
+}
+
+
+/* =========================================================
+   PLOT IMAGE
+   ========================================================= */
+
+.kb-plot-image {
+
+    position: relative;
+
+    height: 225px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--kb-dark),
+            var(--kb-green)
+        );
+}
+
+
+.kb-plot-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+.kb-plot-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--kb-gold-light);
+
+    font-size: 50px;
+}
+
+
+.kb-status {
+
+    position: absolute;
+
+    top: 14px;
+
+    right: 14px;
+
+    padding: 7px 11px;
+
+    background: #dff3e8;
+
+    border-radius: 999px;
+
+    color: #26734d;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: .5px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   PLOT CONTENT
+   ========================================================= */
+
+.kb-plot-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    padding: 25px;
+}
+
+
+.kb-plot-number {
+
+    margin: 0 0 7px;
+
+    color: var(--kb-gold);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+}
+
+
+.kb-plot-content h3 {
+
+    margin: 0 0 8px;
+
+    color: var(--kb-green);
+
+    font-size: 24px;
+
+    line-height: 1.15;
+}
+
+
+.kb-plot-location {
+
+    margin: 0 0 20px;
+
+    color: var(--kb-muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   PLOT DETAILS
+   ========================================================= */
+
+.kb-plot-details {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0,1fr)
+        );
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+
+.kb-detail {
+
+    padding: 12px;
+
+    background: #f5f7f5;
+
+    border:
+        1px solid
+        #ebefec;
+
+    border-radius: 9px;
+}
+
+
+.kb-detail span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--kb-muted);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: .6px;
+
+    text-transform: uppercase;
+}
+
+
+.kb-detail strong {
+
+    color: var(--kb-green);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   PLOT PRICE
+   ========================================================= */
+
+.kb-price {
+
+    margin: 0 0 20px;
+
+    color: var(--kb-green);
+
+    font-size: 28px;
+
+    font-weight: 850;
+
+    letter-spacing: -.5px;
+}
+
+
+/* =========================================================
+   PLOT BUTTON
+   ========================================================= */
+
+.kb-plot-button {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    width: 100%;
+
+    margin-top: auto;
+
+    padding: 14px 16px;
+
+    background: var(--kb-green);
+
+    border-radius: 9px;
+
+    color: var(--kb-white);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    transition: .25s ease;
+}
+
+
+.kb-plot-button:hover {
+
+    background: var(--kb-gold);
+
+    color: var(--kb-white);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.kb-empty {
+
+    padding: 75px 30px;
+
+    background: var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 18px;
+
+    text-align: center;
+}
+
+
+.kb-empty-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    background: #f5f0e7;
+
+    border-radius: 50%;
+
+    color: var(--kb-gold);
+
+    font-size: 22px;
+}
+
+
+.kb-empty h3 {
+
+    margin: 0 0 9px;
+
+    color: var(--kb-green);
+
+    font-size: 26px;
+}
+
+
+.kb-empty p {
+
+    max-width: 520px;
+
+    margin: 0 auto;
+
+    color: var(--kb-muted);
+
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    .kb-hero {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .kb-hero-image,
+    .kb-hero-placeholder {
+
+        min-height: 430px;
+
+    }
+
+
+    .kb-hero-image img {
+
+        min-height: 430px;
+
+    }
+
+
+    .kb-layout-heading {
+
+        display: block;
+
+    }
+
+
+    .kb-layout-tag {
+
+        display: inline-flex;
+
+        margin-top: 18px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+    .kb-shell {
+
+        width: 90%;
+
+    }
+
+
+    .kb-topbar {
+
+        padding-top: 22px;
+
+    }
+
+
+    .kb-hero {
+
+        width: 94%;
+
+        border-radius: 18px;
+
+    }
+
+
+    .kb-hero-image,
+    .kb-hero-placeholder {
+
+        min-height: 350px;
+
+    }
+
+
+    .kb-hero-image img {
+
+        min-height: 350px;
+
+    }
+
+
+    .kb-hero-content {
+
+        padding: 44px 28px;
+
+    }
+
+
+    .kb-hero-content h1 {
+
+        font-size: 45px;
+
+        letter-spacing: -1.4px;
+
+    }
+
+
+    .kb-specs {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .kb-package {
+
+        margin-top: 85px;
+
+    }
+
+
+    .kb-package-list {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .kb-layout-section {
+
+        width: 94%;
+
+        margin-top: 90px;
+
+    }
+
+
+    .kb-layout-heading-content h2 {
+
+        font-size: 40px;
+
+        letter-spacing: -.9px;
+
+    }
+
+
+    .kb-layout-card {
+
+        height: 620px;
+
+        padding: 8px;
+
+        border-radius: 16px;
+
+    }
+
+
+    .kb-layout-frame {
+
+        height: 604px;
+
+        overflow: auto;
+
+        align-items: flex-start;
+
+        justify-content: flex-start;
+
+    }
+
+
+    .kb-layout-frame img {
+
+        width: 100%;
+
+        min-width: 100%;
+
+        height: auto;
+
+        min-height: 100%;
+
+        object-fit: contain;
+
+        object-position: top center;
+
+    }
+
+
+    .kb-layout-frame iframe {
+
+        height: 604px;
+
+    }
+
+
+    .kb-plots {
+
+        width: 90%;
+
+        margin-top: 90px;
+
+    }
+
+
+    .kb-plots-heading h2 {
+
+        white-space: normal;
+
+        font-size: 39px;
+
+    }
+
+
+    .kb-plot-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+    .kb-description {
+
+        font-size: 14px;
+
+    }
+
+
+    .kb-plot-details {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .kb-plot-content {
+
+        padding: 22px;
+
+    }
+
+
+    .kb-price {
+
+        font-size: 25px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="estate-type-page">
+
+
+    <!-- =====================================================
+         01. NAVIGATION
+    ====================================================== -->
+
+    <div class="kb-shell kb-topbar">
+
+        <a
+            href="{% url 'estate_detail' estate.id %}"
+            class="kb-back"
+        >
+
+            <span>
+                ←
+            </span>
+
+            <span>
+                Back to {{ estate.name }}
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         02. HERO
+    ====================================================== -->
+
+    <section class="kb-hero">
+
+
+        <!-- =================================================
+             HERO IMAGE
+        ================================================== -->
+
+        <div class="kb-hero-image">
+
+            {% if estate_type.image %}
+
+                <img
+                    src="{{ estate_type.image.url }}"
+                    alt="{{ estate_type.name }} at {{ estate.name }}"
+                >
+
+            {% else %}
+
+                <div class="kb-hero-placeholder">
+                    🏘️
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             HERO INFORMATION
+        ================================================== -->
+
+        <div class="kb-hero-content">
+
+
+            <p class="kb-eyebrow">
+                {{ estate.name }}
+            </p>
+
+
+            <h1>
+                {{ estate_type.name }}
+            </h1>
+
+
+            <p class="kb-location">
+                📍 {{ estate.location }}
+            </p>
+
+
+            {% if estate_type.description %}
+
+                <p class="kb-description">
+
+                    {{ estate_type.description|linebreaksbr }}
+
+                </p>
+
+            {% else %}
+
+                <p class="kb-description">
+
+                    {{ estate_type.name }} is a carefully planned
+                    property option within {{ estate.name }},
+                    offering defined plots within a structured
+                    development designed for ownership and
+                    long-term value.
+
+                </p>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 SPECIFICATIONS
+            ================================================== -->
+
+            <div class="kb-specs">
+
+
+                {% if estate_type.price %}
+
+                    <div class="kb-spec">
+
+                        <span class="kb-spec-label">
+                            Starting Price
+                        </span>
+
+                        <span class="kb-spec-value">
+                            ₦{{ estate_type.price|floatformat:0 }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if estate_type.plot_size %}
+
+                    <div class="kb-spec">
+
+                        <span class="kb-spec-label">
+                            Plot Size
+                        </span>
+
+                        <span class="kb-spec-value">
+                            {{ estate_type.plot_size }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="kb-spec">
+
+                    <span class="kb-spec-label">
+                        Total Plots
+                    </span>
+
+                    <span class="kb-spec-value">
+                        {{ total_properties }}
+                    </span>
+
+                </div>
+
+
+                <div class="kb-spec">
+
+                    <span class="kb-spec-label">
+                        Available Plots
+                    </span>
+
+                    <span class="kb-spec-value">
+                        {{ available_count }}
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 DOCUMENTS
+            ================================================== -->
+
+            {% if estate_type.proposed_company_plan or estate_type.digital_layout %}
+
+                <div class="kb-documents">
+
+
+                    {% if estate_type.proposed_company_plan %}
+
+                        <a
+                            href="{{ estate_type.proposed_company_plan.url }}"
+                            target="_blank"
+                            rel="noopener"
+                            class="kb-document"
+                        >
+
+                            <span>
+                                📄
+                            </span>
+
+                            <span>
+                                Proposed Company Plan
+                            </span>
+
+                        </a>
+
+                    {% endif %}
+
+
+                    {% if estate_type.digital_layout %}
+
+                        <a
+                            href="{{ estate_type.digital_layout.url }}"
+                            target="_blank"
+                            rel="noopener"
+                            class="kb-document"
+                        >
+
+                            <span>
+                                🗺️
+                            </span>
+
+                            <span>
+                                Digital Layout
+                            </span>
+
+                        </a>
+
+                    {% endif %}
+
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         03. PROPERTY PACKAGE
+    ====================================================== -->
+
+    {% if type_features %}
+
+        <section class="kb-package">
+
+
+            <div class="kb-package-heading">
+
+
+                <p class="kb-label">
+                    PROPERTY PACKAGE
+                </p>
+
+
+                <h2>
+                    What Comes With {{ estate_type.name }}
+                </h2>
+
+
+                <p>
+
+                    The {{ estate_type.name }} package includes
+                    the key infrastructure, services and
+                    development benefits associated with
+                    this property option.
+
+                </p>
+
+
+            </div>
+
+
+            <div class="kb-package-list">
+
+
+                {% for feature in type_features %}
+
+                    <div class="kb-package-item">
+
+
+                        <div class="kb-check">
+                            ✓
+                        </div>
+
+
+                        <span>
+                            {{ feature }}
+                        </span>
+
+
+                    </div>
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         04. DIGITAL LAYOUT
+    ====================================================== -->
+
+    {% if estate_type.digital_layout %}
+
+        <section class="kb-layout-section">
+
+
+            <div class="kb-layout-heading">
+
+
+                <div class="kb-layout-heading-content">
+
+
+                    <p class="kb-label">
+                        DEVELOPMENT PLAN
+                    </p>
+
+
+                    <h2>
+                        {{ estate_type.name }}
+                        Digital Layout
+                    </h2>
+
+
+                    <p>
+
+                        Explore the official development layout
+                        for the {{ estate_type.name }} section
+                        of {{ estate.name }}. Review the plot
+                        arrangement, access routes, boundaries
+                        and overall development structure.
+
+                    </p>
+
+
+                </div>
+
+
+                <div class="kb-layout-tag">
+
+                    Official Layout
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 FIXED MASTERPLAN VIEWER
+            ================================================== -->
+
+            <div class="kb-layout-card">
+
+
+                <div class="kb-layout-frame">
+
+
+                    {% with layout_url=estate_type.digital_layout.url %}
+
+
+                        {% if ".pdf" in layout_url|lower %}
+
+                            <iframe
+                                src="{{ layout_url }}"
+                                title="{{ estate.name }} {{ estate_type.name }} Digital Layout"
+                            ></iframe>
+
+
+                        {% else %}
+
+                            <img
+                                src="{{ layout_url }}"
+                                alt="{{ estate.name }} {{ estate_type.name }} Digital Layout"
+                            >
+
+                        {% endif %}
+
+
+                    {% endwith %}
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="kb-layout-action">
+
+
+                <a
+                    href="{{ estate_type.digital_layout.url }}"
+                    target="_blank"
+                    rel="noopener"
+                    class="kb-layout-button"
+                >
+
+                    <span>
+                        Open Full Layout
+                    </span>
+
+                    <span>
+                        ↗
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+        </section>
+
+    {% endif %}
+
+
+
+        <!-- =================================================
+             AVAILABLE COUNT
+        ================================================== -->
+
+        <div class="kb-availability">
+
+
+            <span class="kb-availability-number">
+                {{ available_count }}
+            </span>
+
+
+            <span class="kb-availability-text">
+
+                Available {{ estate_type.name }} plots
+
+            </span>
+
+
+        </div>
+
+
+        <!-- =================================================
+             AVAILABLE PLOTS ONLY
+        ================================================== -->
+
+        {% if available_properties %}
+
+
+            <div class="kb-plot-grid">
+
+
+                {% for property in available_properties %}
+
+
+                    <article class="kb-plot-card">
+
+
+                        <!-- =====================================
+                             IMAGE
+                        ====================================== -->
+
+                        <div class="kb-plot-image">
+
+
+                            {% if property.image %}
+
+                                <img
+                                    src="{{ property.image.url }}"
+                                    alt="{{ property.title }}"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="kb-plot-placeholder">
+
+                                    🌳
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <span class="kb-status">
+
+                                Available
+
+                            </span>
+
+
+                        </div>
+
+
+                        <!-- =====================================
+                             PLOT INFORMATION
+                        ====================================== -->
+
+                        <div class="kb-plot-content">
+
+
+                            {% if property.plot_number %}
+
+                                <p class="kb-plot-number">
+
+                                    Plot {{ property.plot_number }}
+
+                                </p>
+
+                            {% endif %}
+
+
+                            <h3>
+
+                                {{ property.title }}
+
+                            </h3>
+
+
+                            <p class="kb-plot-location">
+
+                                📍 {{ property.location }}
+
+                            </p>
+
+
+                            <div class="kb-plot-details">
+
+
+                                <div class="kb-detail">
+
+                                    <span>
+                                        Property Type
+                                    </span>
+
+                                    <strong>
+                                        {{ property.get_property_type_display }}
+                                    </strong>
+
+                                </div>
+
+
+                                {% if property.land_size %}
+
+                                    <div class="kb-detail">
+
+                                        <span>
+                                            Plot Size
+                                        </span>
+
+                                        <strong>
+                                            {{ property.land_size }}
+                                        </strong>
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="kb-detail">
+
+                                    <span>
+                                        Estate Type
+                                    </span>
+
+                                    <strong>
+                                        {{ estate_type.name }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="kb-detail">
+
+                                    <span>
+                                        Availability
+                                    </span>
+
+                                    <strong>
+                                        Available
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <p class="kb-price">
+
+                                ₦{{ property.price|floatformat:0 }}
+
+                            </p>
+
+
+                            <a
+                                href="{% url 'property_detail' property.id %}"
+                                class="kb-plot-button"
+                            >
+
+                                <span>
+                                    View Plot Details
+                                </span>
+
+                                <span>
+                                    →
+                                </span>
+
+                            </a>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <div class="kb-empty">
+
+
+                <div class="kb-empty-icon">
+                    +
+                </div>
+
+
+                <h3>
+                    No {{ estate_type.name }} Plots Available
+                </h3>
+
+
+                <p>
+
+                    There are currently no available
+                    {{ estate_type.name }} plots within
+                    {{ estate.name }}. Please check back
+                    as availability is updated.
+
+                </p>
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    </section>
+
+
+</main>
+
+{% endblock %}

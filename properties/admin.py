@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from .models import (
     Estate,
+    EstateType,
+    EstateTypeImage,
     Property,
     PropertyImage,
     Agent,
@@ -16,29 +18,226 @@ from .models import (
     CustomerReview,
     MarketplaceListing,
     MarketplaceImage,
-    MarketplaceListing,
-    MarketplaceImage,
     MarketplaceFavourite,
     MarketplaceMessage,
     MarketplaceReport,
     MarketplaceReview,
+    AccountSettings,
 )
 
 
 # =========================================================
-# PROPERTY GALLERY
+# ESTATE TYPE IMAGE INLINE
 # =========================================================
 
-class PropertyImageInline(admin.TabularInline):
+class EstateTypeImageInline(admin.TabularInline):
 
-    model = PropertyImage
-
+    model = EstateTypeImage
     extra = 3
 
     fields = (
         'image',
         'caption',
     )
+
+
+# =========================================================
+# PROPERTY GALLERY INLINE
+# =========================================================
+
+class PropertyImageInline(admin.TabularInline):
+
+    model = PropertyImage
+    extra = 3
+
+    fields = (
+        'image',
+        'caption',
+    )
+
+
+# =========================================================
+# ESTATE TYPE INLINE
+# =========================================================
+
+class EstateTypeInline(admin.TabularInline):
+
+    model = EstateType
+    extra = 1
+
+    fields = (
+        'name',
+        'price',
+        'plot_size',
+        'description',
+        'image',
+        'digital_layout',
+        'proposed_company_plan',
+    )
+
+
+# =========================================================
+# ESTATE ADMIN
+# =========================================================
+
+@admin.register(Estate)
+class EstateAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'name',
+        'location',
+        'property_count',
+        'type_count',
+        'created_at',
+    )
+
+    search_fields = (
+        'name',
+        'location',
+        'description',
+    )
+
+    ordering = (
+        'name',
+    )
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
+
+    inlines = [
+        EstateTypeInline,
+    ]
+
+    fieldsets = (
+        (
+            'Estate Information',
+            {
+                'fields': (
+                    'name',
+                    'location',
+                    'description',
+                )
+            }
+        ),
+        (
+            'Estate Media',
+            {
+                'fields': (
+                    'image',
+                    'digital_layout',
+                )
+            }
+        ),
+        (
+            'System Information',
+            {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                )
+            }
+        ),
+    )
+
+    @admin.display(description='Plots')
+    def property_count(self, obj):
+        return obj.properties.count()
+
+    @admin.display(description='Types')
+    def type_count(self, obj):
+        return obj.estate_types.count()
+
+
+# =========================================================
+# ESTATE TYPE ADMIN
+# =========================================================
+
+@admin.register(EstateType)
+class EstateTypeAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'name',
+        'estate',
+        'price',
+        'plot_size',
+        'property_count',
+        'created_at',
+    )
+
+    list_filter = (
+        'estate',
+        'created_at',
+    )
+
+    search_fields = (
+        'name',
+        'estate__name',
+        'description',
+        'plot_size',
+        'what_comes_with_it',
+    )
+
+    ordering = (
+        'estate',
+        'name',
+    )
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
+
+    inlines = [
+        EstateTypeImageInline,
+    ]
+
+    fieldsets = (
+        (
+            'Estate Type Information',
+            {
+                'fields': (
+                    'estate',
+                    'name',
+                    'description',
+                    'price',
+                    'plot_size',
+                    'what_comes_with_it',
+                )
+            }
+        ),
+        (
+            'Documents & Layout',
+            {
+                'fields': (
+                    'proposed_company_plan',
+                    'digital_layout',
+                )
+            }
+        ),
+        (
+            'Images',
+            {
+                'fields': (
+                    'image',
+                )
+            }
+        ),
+        (
+            'System Information',
+            {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                )
+            }
+        ),
+    )
+
+    @admin.display(description='Plots')
+    def property_count(self, obj):
+        return obj.properties.count()
 
 
 # =========================================================
@@ -50,53 +249,108 @@ class PropertyAdmin(admin.ModelAdmin):
 
     list_display = (
         'title',
+        'plot_number',
         'estate',
+        'estate_type',
         'property_type',
+        'land_size',
         'location',
         'price',
         'status',
-        'latitude',
-        'longitude',
         'created_at',
     )
 
     list_filter = (
+        'estate',
+        'estate_type',
         'property_type',
         'status',
-        'estate',
     )
 
     search_fields = (
         'title',
-        'location',
         'plot_number',
+        'location',
+        'land_size',
         'estate__name',
+        'estate_type__name',
     )
 
     ordering = (
         '-created_at',
     )
 
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
+
     inlines = [
         PropertyImageInline,
     ]
 
-
-# =========================================================
-# ESTATE
-# =========================================================
-
-@admin.register(Estate)
-class EstateAdmin(admin.ModelAdmin):
-
-    list_display = (
-        'name',
-        'location',
-    )
-
-    search_fields = (
-        'name',
-        'location',
+    fieldsets = (
+        (
+            'Estate Assignment',
+            {
+                'fields': (
+                    'estate',
+                    'estate_type',
+                )
+            }
+        ),
+        (
+            'Property Information',
+            {
+                'fields': (
+                    'title',
+                    'property_type',
+                    'plot_number',
+                    'land_size',
+                    'location',
+                    'price',
+                    'status',
+                    'description',
+                )
+            }
+        ),
+        (
+            'Location Coordinates',
+            {
+                'fields': (
+                    'latitude',
+                    'longitude',
+                ),
+                'classes': (
+                    'collapse',
+                ),
+            }
+        ),
+        (
+            'Agent',
+            {
+                'fields': (
+                    'agent',
+                )
+            }
+        ),
+        (
+            'Main Image',
+            {
+                'fields': (
+                    'image',
+                )
+            }
+        ),
+        (
+            'System Information',
+            {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                )
+            }
+        ),
     )
 
 
@@ -327,12 +581,10 @@ class CustomerAdmin(admin.ModelAdmin):
         'phone',
         'email',
         'address',
-        'is_verified',
         'created_at',
     )
 
     list_filter = (
-        'is_verified',
         'created_at',
     )
 
@@ -540,6 +792,7 @@ class CustomerReviewAdmin(admin.ModelAdmin):
             f'{updated} customer review(s) have been unapproved.'
         )
 
+
 # =========================================================
 # MARKETPLACE IMAGE INLINE
 # =========================================================
@@ -547,7 +800,6 @@ class CustomerReviewAdmin(admin.ModelAdmin):
 class MarketplaceImageInline(admin.TabularInline):
 
     model = MarketplaceImage
-
     extra = 3
 
     fields = (
@@ -556,7 +808,7 @@ class MarketplaceImageInline(admin.TabularInline):
 
 
 # =========================================================
-# MARKETPLACE LISTING ADMIN
+# MARKETPLACE LISTING
 # =========================================================
 
 @admin.register(MarketplaceListing)
@@ -594,9 +846,222 @@ class MarketplaceListingAdmin(admin.ModelAdmin):
     )
 
     inlines = [
-        MarketplaceImageInline
+        MarketplaceImageInline,
     ]
 
     ordering = (
         '-created_at',
+    )
+
+
+# =========================================================
+# MARKETPLACE FAVOURITE
+# =========================================================
+
+@admin.register(MarketplaceFavourite)
+class MarketplaceFavouriteAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'user',
+        'listing',
+        'created_at',
+    )
+
+    list_filter = (
+        'created_at',
+    )
+
+    search_fields = (
+        'user__username',
+        'user__email',
+        'listing__title',
+    )
+
+    ordering = (
+        '-created_at',
+    )
+
+    readonly_fields = (
+        'created_at',
+    )
+
+
+# =========================================================
+# MARKETPLACE MESSAGE
+# =========================================================
+
+@admin.register(MarketplaceMessage)
+class MarketplaceMessageAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'listing',
+        'sender',
+        'receiver',
+        'is_read',
+        'created_at',
+    )
+
+    list_filter = (
+        'is_read',
+        'created_at',
+    )
+
+    search_fields = (
+        'listing__title',
+        'sender__username',
+        'sender__email',
+        'receiver__username',
+        'receiver__email',
+        'message',
+    )
+
+    ordering = (
+        '-created_at',
+    )
+
+    readonly_fields = (
+        'created_at',
+    )
+
+
+# =========================================================
+# MARKETPLACE REPORT
+# =========================================================
+
+@admin.register(MarketplaceReport)
+class MarketplaceReportAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'listing',
+        'reporter',
+        'reason',
+        'status',
+        'created_at',
+    )
+
+    list_filter = (
+        'reason',
+        'status',
+        'created_at',
+    )
+
+    search_fields = (
+        'listing__title',
+        'reporter__username',
+        'reporter__email',
+        'description',
+    )
+
+    ordering = (
+        '-created_at',
+    )
+
+    readonly_fields = (
+        'created_at',
+    )
+
+
+# =========================================================
+# MARKETPLACE REVIEW
+# =========================================================
+
+@admin.register(MarketplaceReview)
+class MarketplaceReviewAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'listing',
+        'reviewer',
+        'rating',
+        'is_approved',
+        'created_at',
+    )
+
+    list_filter = (
+        'rating',
+        'is_approved',
+        'created_at',
+    )
+
+    search_fields = (
+        'listing__title',
+        'reviewer__username',
+        'reviewer__email',
+        'comment',
+    )
+
+    ordering = (
+        '-created_at',
+    )
+
+    readonly_fields = (
+        'created_at',
+    )
+
+    actions = (
+        'approve_reviews',
+        'unapprove_reviews',
+    )
+
+    @admin.action(description='Approve selected reviews')
+    def approve_reviews(self, request, queryset):
+
+        updated = queryset.update(
+            is_approved=True
+        )
+
+        self.message_user(
+            request,
+            f'{updated} marketplace review(s) approved successfully.'
+        )
+
+    @admin.action(description='Unapprove selected reviews')
+    def unapprove_reviews(self, request, queryset):
+
+        updated = queryset.update(
+            is_approved=False
+        )
+
+        self.message_user(
+            request,
+            f'{updated} marketplace review(s) have been unapproved.'
+        )
+
+
+# =========================================================
+# ACCOUNT SETTINGS
+# =========================================================
+
+@admin.register(AccountSettings)
+class AccountSettingsAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'user',
+        'phone',
+        'property_alerts',
+        'plot_availability_alerts',
+        'estate_alerts',
+        'hire_notifications',
+        'profile_visible',
+        'updated_at',
+    )
+
+    list_filter = (
+        'property_alerts',
+        'plot_availability_alerts',
+        'estate_alerts',
+        'hire_notifications',
+        'security_notifications',
+        'profile_visible',
+    )
+
+    search_fields = (
+        'user__username',
+        'user__email',
+        'user__first_name',
+        'phone',
+    )
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
     )
