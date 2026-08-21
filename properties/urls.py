@@ -102,6 +102,16 @@ urlpatterns = [
         name='marketplace'
     ),
 
+    # ---------------------------------------------------------
+    # MARKETPLACE LISTING DETAIL
+    # ---------------------------------------------------------
+
+    path(
+        'marketplace/<int:listing_id>/',
+        views.marketplace_detail,
+        name='marketplace_detail'
+    ),
+
     # =========================================================
     # PROPERTIES / ESTATES
     # =========================================================
