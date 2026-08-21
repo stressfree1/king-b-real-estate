@@ -6,17 +6,14 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils import timezone
 from django.db.models import Q
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-
 from django.contrib.auth.views import (
     PasswordResetView,
     PasswordResetDoneView,
     PasswordResetConfirmView,
     PasswordResetCompleteView,
     PasswordChangeView,
-    
 )
+from django.urls import reverse_lazy
 
 from .forms import (
     AccountRegistrationForm,
@@ -89,15 +86,10 @@ def estate_list(request):
         )
     )
 
-    # -----------------------------------------------------
-    # PREPARE ESTATE STATISTICS
-    # -----------------------------------------------------
-
     for estate in estates:
 
         estate.total_plots = (
-            estate.properties
-            .count()
+            estate.properties.count()
         )
 
         estate.available_plots = (
@@ -136,17 +128,6 @@ def estate_list(request):
 # =========================================================
 # ESTATE DETAIL
 # =========================================================
-#
-# Shows:
-#
-# Estate
-# ├── Estate Overview
-# ├── Development Plan
-# ├── Development Features
-# ├── Digital Layout
-# └── Estate Types
-#
-# =========================================================
 
 def estate_detail(
     request,
@@ -161,10 +142,6 @@ def estate_detail(
         id=estate_id,
     )
 
-    # -----------------------------------------------------
-    # ESTATE TYPES
-    # -----------------------------------------------------
-
     estate_types = (
         estate.estate_types
         .all()
@@ -173,13 +150,8 @@ def estate_detail(
         )
     )
 
-    # -----------------------------------------------------
-    # ESTATE-LEVEL PLOT COUNTS
-    # -----------------------------------------------------
-
     total_plots = (
-        estate.properties
-        .count()
+        estate.properties.count()
     )
 
     available_plots = (
@@ -205,10 +177,6 @@ def estate_detail(
         )
         .count()
     )
-
-    # -----------------------------------------------------
-    # ESTATE TYPE COUNTS
-    # -----------------------------------------------------
 
     for estate_type in estate_types:
 
@@ -237,24 +205,8 @@ def estate_detail(
         )
 
         estate_type.total_plot_count = (
-            estate_type.properties
-            .count()
+            estate_type.properties.count()
         )
-
-    # -----------------------------------------------------
-    # DEVELOPMENT FEATURES
-    #
-    # Convert the TextField into a clean Python list.
-    #
-    # Admin example:
-    #
-    # Perimeter Fencing
-    # Main Entrance Gate
-    # Internal Road Network
-    # Drainage System
-    # Security Infrastructure
-    #
-    # -----------------------------------------------------
 
     development_features = [
         feature.strip()
@@ -264,25 +216,16 @@ def estate_detail(
         if feature.strip()
     ]
 
-    # -----------------------------------------------------
-    # CONTEXT
-    # -----------------------------------------------------
-
     context = {
-
         'estate': estate,
-
         'estate_types': estate_types,
 
-        # Estate-level statistics
         'total_plots': total_plots,
         'available_plots': available_plots,
         'reserved_plots': reserved_plots,
         'sold_plots': sold_plots,
 
-        # Development plan
         'development_features': development_features,
-
     }
 
     return render(
@@ -294,19 +237,6 @@ def estate_detail(
 
 # =========================================================
 # ESTATE TYPE DETAIL
-# =========================================================
-#
-# Shows one specific type inside an estate and only the
-# plots assigned to that type.
-#
-# Example:
-#
-# Kings Park Estate
-#     Classic
-#         Plot 001
-#         Plot 002
-#         Plot 003
-#
 # =========================================================
 
 def estate_type_detail(
@@ -360,10 +290,6 @@ def estate_type_detail(
         status='sold'
     )
 
-    # -----------------------------------------------------
-    # ESTATE TYPE FEATURES
-    # -----------------------------------------------------
-
     type_features = [
         feature.strip()
         for feature in (
@@ -373,25 +299,18 @@ def estate_type_detail(
     ]
 
     context = {
-
         'estate': estate,
-
         'estate_type': estate_type,
 
         'properties': properties,
 
         'available_properties': available_properties,
-
         'reserved_properties': reserved_properties,
-
         'sold_properties': sold_properties,
 
         'total_properties': properties.count(),
-
         'available_count': available_properties.count(),
-
         'reserved_count': reserved_properties.count(),
-
         'sold_count': sold_properties.count(),
 
         'type_features': type_features,
@@ -485,11 +404,13 @@ def property_detail(
 ):
 
     property_obj = get_object_or_404(
-        Property.objects.select_related(
+        Property.objects
+        .select_related(
             'estate',
             'estate_type',
             'agent'
-        ).prefetch_related(
+        )
+        .prefetch_related(
             'gallery_images'
         ),
         id=property_id,
@@ -512,7 +433,7 @@ def about(request):
 
     return render(
         request,
-        'properties/about.html',
+        'properties/about.html'
     )
 
 
@@ -552,7 +473,7 @@ def job_detail(
 
     job = get_object_or_404(
         Job,
-        id=job_id,
+        id=job_id
     )
 
     return render(
@@ -575,14 +496,14 @@ def job_apply(
 
     job = get_object_or_404(
         Job,
-        id=job_id,
+        id=job_id
     )
 
     if request.method == 'POST':
 
         form = JobApplicationForm(
             request.POST,
-            request.FILES,
+            request.FILES
         )
 
         if form.is_valid():
@@ -625,7 +546,7 @@ def contact(request):
     if request.method == 'POST':
 
         form = ContactMessageForm(
-            request.POST,
+            request.POST
         )
 
         if form.is_valid():
@@ -634,7 +555,7 @@ def contact(request):
 
             return render(
                 request,
-                'properties/contact_success.html',
+                'properties/contact_success.html'
             )
 
     else:
@@ -725,19 +646,19 @@ def skilled_worker_profile(
     worker = get_object_or_404(
         SkilledWorker,
         id=worker_id,
-        is_approved=True,
+        is_approved=True
     )
 
     reviews = (
         WorkerReview.objects
         .filter(
             hire__worker=worker,
-            is_approved=True,
+            is_approved=True
         )
         .select_related(
             'hire',
             'hire__customer',
-            'hire__worker',
+            'hire__worker'
         )
         .order_by(
             '-created_at'
@@ -773,6 +694,7 @@ def skilled_worker_profile(
         }
     )
 
+
 # =========================================================
 # MARKETPLACE
 # =========================================================
@@ -796,10 +718,6 @@ def marketplace(request):
         )
     )
 
-    # -----------------------------------------------------
-    # SEARCH
-    # -----------------------------------------------------
-
     search = request.GET.get(
         'search',
         ''
@@ -815,10 +733,6 @@ def marketplace(request):
         ''
     ).strip()
 
-    # -----------------------------------------------------
-    # SEARCH FILTER
-    # -----------------------------------------------------
-
     if search:
 
         listings = listings.filter(
@@ -829,29 +743,17 @@ def marketplace(request):
             Q(location__icontains=search)
         )
 
-    # -----------------------------------------------------
-    # CATEGORY FILTER
-    # -----------------------------------------------------
-
     if category:
 
         listings = listings.filter(
             category=category
         )
 
-    # -----------------------------------------------------
-    # LOCATION FILTER
-    # -----------------------------------------------------
-
     if location:
 
         listings = listings.filter(
             location__icontains=location
         )
-
-    # -----------------------------------------------------
-    # CONTEXT
-    # -----------------------------------------------------
 
     return render(
         request,
@@ -863,6 +765,7 @@ def marketplace(request):
             'location': location,
         }
     )
+
 
 # =========================================================
 # UNIFIED SITE REGISTRATION
@@ -884,17 +787,21 @@ def site_register(request):
 
         if form.is_valid():
 
-            full_name = form.cleaned_data[
-                'full_name'
-            ].strip()
+            full_name = (
+                form.cleaned_data['full_name']
+                .strip()
+            )
 
-            email = form.cleaned_data[
-                'email'
-            ].strip().lower()
+            email = (
+                form.cleaned_data['email']
+                .strip()
+                .lower()
+            )
 
-            phone = form.cleaned_data[
-                'phone'
-            ].strip()
+            phone = (
+                form.cleaned_data['phone']
+                .strip()
+            )
 
             password = form.cleaned_data[
                 'password'
@@ -971,7 +878,7 @@ def skilled_worker_register(request):
 
 
 # =========================================================
-# ONE LOGIN FOR THE WHOLE WEBSITE
+# UNIFIED SITE LOGIN
 # =========================================================
 
 @ensure_csrf_cookie
@@ -985,10 +892,14 @@ def site_login(request):
 
     if request.method == 'POST':
 
-        email = request.POST.get(
-            'username',
-            ''
-        ).strip().lower()
+        email = (
+            request.POST.get(
+                'username',
+                ''
+            )
+            .strip()
+            .lower()
+        )
 
         password = request.POST.get(
             'password',
@@ -1031,7 +942,6 @@ def site_login(request):
         try:
 
             user.customer_profile
-
             has_customer = True
 
         except Customer.DoesNotExist:
@@ -1041,7 +951,6 @@ def site_login(request):
         try:
 
             user.skilled_worker_profile
-
             has_worker = True
 
         except SkilledWorker.DoesNotExist:
@@ -1083,7 +992,7 @@ def site_login(request):
 
 
 # =========================================================
-# ONE LOGOUT
+# LOGOUT
 # =========================================================
 
 @login_required(login_url='site_login')
@@ -1170,18 +1079,14 @@ def marketplace_dashboard(request):
 
         pass
 
-    customer_exists = (
-        customer is not None
-    )
+    customer_exists = customer is not None
 
     customer_verified = (
         customer_exists
         and customer.is_verified
     )
 
-    worker_exists = (
-        worker is not None
-    )
+    worker_exists = worker is not None
 
     worker_approved = (
         worker_exists
@@ -1301,12 +1206,14 @@ def marketplace_dashboard(request):
         'worker_pending': worker_pending,
 
         'customer_hires': customer_hires,
+
         'total_hires': total_hires,
         'customer_active_hires': customer_active_hires,
         'customer_pending_hires': customer_pending_hires,
         'customer_completed_hires': customer_completed_hires,
 
         'worker_hires': worker_hires,
+
         'worker_pending_requests': worker_pending_requests,
         'worker_active_jobs': worker_active_jobs,
         'worker_completed_jobs': worker_completed_jobs,
@@ -1455,9 +1362,7 @@ def customer_profile_edit(request):
             )
 
             customer.user = request.user
-            customer.email = (
-                request.user.email
-            )
+            customer.email = request.user.email
 
             customer.save()
 
@@ -1521,7 +1426,10 @@ def customer_dashboard(request):
         )
 
     hires = (
-        customer.worker_hires
+        WorkerHire.objects
+        .filter(
+            customer=customer
+        )
         .exclude(
             status='cancelled'
         )
@@ -1547,19 +1455,29 @@ def customer_dashboard(request):
         status='requested'
     ).count()
 
-    cancelled_hires = WorkerHire.objects.filter(
-        customer=customer,
-        status='cancelled'
-    ).count()
+    cancelled_hires = (
+        WorkerHire.objects
+        .filter(
+            customer=customer,
+            status='cancelled'
+        )
+        .count()
+    )
 
-    reviews_count = WorkerReview.objects.filter(
-        hire__customer=customer
-    ).count()
+    reviews_count = (
+        WorkerReview.objects
+        .filter(
+            hire__customer=customer
+        )
+        .count()
+    )
 
     reviewed_hire_ids = set(
-        WorkerReview.objects.filter(
+        WorkerReview.objects
+        .filter(
             hire__customer=customer
-        ).values_list(
+        )
+        .values_list(
             'hire_id',
             flat=True
         )
@@ -1625,7 +1543,10 @@ def worker_dashboard(request):
         )
 
     hires = (
-        worker.customer_hires
+        WorkerHire.objects
+        .filter(
+            worker=worker
+        )
         .select_related(
             'customer'
         )
@@ -1694,6 +1615,17 @@ def worker_dashboard(request):
 
         average_rating = 0
 
+    customer_reviewed_hire_ids = set(
+        CustomerReview.objects
+        .filter(
+            hire__worker=worker
+        )
+        .values_list(
+            'hire_id',
+            flat=True
+        )
+    )
+
     context = {
 
         'worker': worker,
@@ -1708,7 +1640,9 @@ def worker_dashboard(request):
         'reviews': reviews,
         'reviews_count': reviews_count,
         'average_rating': average_rating,
+
         'reviewed_hire_ids': reviewed_hire_ids,
+        'customer_reviewed_hire_ids': customer_reviewed_hire_ids,
     }
 
     return render(
@@ -1756,11 +1690,11 @@ def my_worker_profile(request):
         WorkerReview.objects
         .filter(
             hire__worker=worker,
-            is_approved=True,
+            is_approved=True
         )
         .select_related(
             'hire',
-            'hire__customer',
+            'hire__customer'
         )
         .order_by(
             '-created_at'
@@ -1815,8 +1749,8 @@ def my_worker_profile(request):
     context = {
 
         'worker': worker,
-        'reviews': reviews,
 
+        'reviews': reviews,
         'reviews_count': reviews_count,
         'average_rating': average_rating,
 
@@ -1876,10 +1810,14 @@ def customer_profile(
         id=customer_id
     )
 
-    has_worked_with_customer = WorkerHire.objects.filter(
-        worker=worker,
-        customer=customer
-    ).exists()
+    has_worked_with_customer = (
+        WorkerHire.objects
+        .filter(
+            worker=worker,
+            customer=customer
+        )
+        .exists()
+    )
 
     if not has_worked_with_customer:
 
@@ -2049,14 +1987,18 @@ def worker_hire(
             worker_id=worker.id
         )
 
-    existing_hire = WorkerHire.objects.filter(
-        customer=customer,
-        worker=worker,
-        status__in=[
-            'requested',
-            'active'
-        ]
-    ).first()
+    existing_hire = (
+        WorkerHire.objects
+        .filter(
+            customer=customer,
+            worker=worker,
+            status__in=[
+                'requested',
+                'active'
+            ]
+        )
+        .first()
+    )
 
     if existing_hire:
 
@@ -2491,9 +2433,13 @@ def worker_review(
             'customer_dashboard'
         )
 
-    existing_review = WorkerReview.objects.filter(
-        hire=hire
-    ).first()
+    existing_review = (
+        WorkerReview.objects
+        .filter(
+            hire=hire
+        )
+        .first()
+    )
 
     if existing_review:
 
@@ -2513,10 +2459,13 @@ def worker_review(
             'rating'
         )
 
-        comment = request.POST.get(
-            'comment',
-            ''
-        ).strip()
+        comment = (
+            request.POST.get(
+                'comment',
+                ''
+            )
+            .strip()
+        )
 
         try:
 
@@ -2643,9 +2592,13 @@ def customer_review(
             'worker_dashboard'
         )
 
-    existing_review = CustomerReview.objects.filter(
-        hire=hire
-    ).first()
+    existing_review = (
+        CustomerReview.objects
+        .filter(
+            hire=hire
+        )
+        .first()
+    )
 
     if existing_review:
 
@@ -2665,10 +2618,13 @@ def customer_review(
             'rating'
         )
 
-        comment = request.POST.get(
-            'comment',
-            ''
-        ).strip()
+        comment = (
+            request.POST.get(
+                'comment',
+                ''
+            )
+            .strip()
+        )
 
         try:
 
@@ -2764,8 +2720,8 @@ class AccountPasswordChangeView(
         'properties/account_password_change.html'
     )
 
-    success_url = (
-        '/account/settings/'
+    success_url = reverse_lazy(
+        'account_settings'
     )
 
 
@@ -2791,8 +2747,8 @@ class SkilledWorkerPasswordResetView(
         'properties/skilled_worker_password_reset_subject.txt'
     )
 
-    success_url = (
-        '/skilled-workers/password-reset/done/'
+    success_url = reverse_lazy(
+        'worker_password_reset_done'
     )
 
 
@@ -2821,8 +2777,8 @@ class SkilledWorkerPasswordResetConfirmView(
         'properties/skilled_worker_password_reset_confirm.html'
     )
 
-    success_url = (
-        '/skilled-workers/password-reset/complete/'
+    success_url = reverse_lazy(
+        'worker_password_reset_complete'
     )
 
 
@@ -2837,9 +2793,12 @@ class SkilledWorkerPasswordResetCompleteView(
     template_name = (
         'properties/skilled_worker_password_reset_complete.html'
     )
+
+
 # =========================================================
 # ACCOUNT SETTINGS
 # =========================================================
+
 @login_required(login_url='site_login')
 def account_settings(request):
 
@@ -2851,8 +2810,10 @@ def account_settings(request):
 
     except AccountSettings.DoesNotExist:
 
-        account_settings_obj = AccountSettings.objects.create(
-            user=request.user
+        account_settings_obj = (
+            AccountSettings.objects.create(
+                user=request.user
+            )
         )
 
     if request.method == 'POST':
