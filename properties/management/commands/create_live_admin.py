@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 
 class Command(BaseCommand):
-    help = "Create or reset the live admin account"
+    help = "Create the live admin account if it does not already exist"
 
     def handle(self, *args, **kwargs):
         User = get_user_model()
@@ -38,26 +38,25 @@ class Command(BaseCommand):
             )
             return
 
-        user, created = User.objects.get_or_create(
+        user = User.objects.filter(username=username).first()
+
+        if user:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"Admin user '{username}' already exists. "
+                    "No changes were made."
+                )
+            )
+            return
+
+        user = User.objects.create_superuser(
             username=username,
-            defaults={
-                "email": email,
-                "is_staff": True,
-                "is_superuser": True,
-            },
+            email=email,
+            password=password,
         )
 
-        user.email = email
-        user.set_password(password)
-        user.is_staff = True
-        user.is_superuser = True
-        user.save()
-
-        if created:
-            message = "Live admin created successfully."
-        else:
-            message = "Live admin password and details reset successfully."
-
         self.stdout.write(
-            self.style.SUCCESS(message)
+            self.style.SUCCESS(
+                f"Live admin '{user.username}' created successfully."
+            )
         )
