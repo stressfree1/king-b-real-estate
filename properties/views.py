@@ -39,6 +39,7 @@ from .models import (
     WorkerReview,
     CustomerReview,
     AccountSettings,
+    MarketplaceListing,
 )
 
 
@@ -772,18 +773,96 @@ def skilled_worker_profile(
         }
     )
 
-
 # =========================================================
 # MARKETPLACE
 # =========================================================
 
 def marketplace(request):
 
-    return render(
-        request,
-        'properties/marketplace.html'
+    listings = (
+        MarketplaceListing.objects
+        .filter(
+            status='available',
+            is_approved=True
+        )
+        .select_related(
+            'seller'
+        )
+        .prefetch_related(
+            'gallery_images'
+        )
+        .order_by(
+            '-created_at'
+        )
     )
 
+    # -----------------------------------------------------
+    # SEARCH
+    # -----------------------------------------------------
+
+    search = request.GET.get(
+        'search',
+        ''
+    ).strip()
+
+    category = request.GET.get(
+        'category',
+        ''
+    ).strip()
+
+    location = request.GET.get(
+        'location',
+        ''
+    ).strip()
+
+    # -----------------------------------------------------
+    # SEARCH FILTER
+    # -----------------------------------------------------
+
+    if search:
+
+        listings = listings.filter(
+            Q(title__icontains=search)
+            |
+            Q(description__icontains=search)
+            |
+            Q(location__icontains=search)
+        )
+
+    # -----------------------------------------------------
+    # CATEGORY FILTER
+    # -----------------------------------------------------
+
+    if category:
+
+        listings = listings.filter(
+            category=category
+        )
+
+    # -----------------------------------------------------
+    # LOCATION FILTER
+    # -----------------------------------------------------
+
+    if location:
+
+        listings = listings.filter(
+            location__icontains=location
+        )
+
+    # -----------------------------------------------------
+    # CONTEXT
+    # -----------------------------------------------------
+
+    return render(
+        request,
+        'properties/marketplace.html',
+        {
+            'listings': listings,
+            'search': search,
+            'category': category,
+            'location': location,
+        }
+    )
 
 # =========================================================
 # UNIFIED SITE REGISTRATION
