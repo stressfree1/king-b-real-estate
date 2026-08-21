@@ -766,6 +766,36 @@ def marketplace(request):
         }
     )
 
+# =========================================================
+# MARKETPLACE LISTING DETAIL
+# =========================================================
+
+def marketplace_detail(
+    request,
+    listing_id
+):
+
+    listing = get_object_or_404(
+        MarketplaceListing.objects
+        .select_related(
+            'seller'
+        )
+        .prefetch_related(
+            'gallery_images'
+        ),
+        id=listing_id,
+        status='available',
+        is_approved=True,
+    )
+
+    return render(
+        request,
+        'properties/marketplace_detail.html',
+        {
+            'listing': listing,
+        }
+    )
+
 
 # =========================================================
 # UNIFIED SITE REGISTRATION
