@@ -100,9 +100,7 @@
         >
 
 
-            <!-- =================================================
-                 PUBLIC WEBSITE
-            ================================================== -->
+            <!-- PUBLIC WEBSITE -->
 
             <a
                 href="{% url 'home' %}"
@@ -163,11 +161,6 @@
                     id="profileMenu"
                 >
 
-
-                    <!-- =========================================
-                         PROFILE BUTTON
-                    ========================================== -->
-
                     <button
                         type="button"
                         class="profile-button"
@@ -176,9 +169,6 @@
                         aria-label="Open account menu"
                         aria-expanded="false"
                     >
-
-
-                        <!-- PROFILE IMAGE -->
 
                         <span class="profile-avatar">
 
@@ -202,16 +192,12 @@
                         </span>
 
 
-                        <!-- USER NAME -->
-
                         <span class="profile-user-name">
 
                             {{ request.user.first_name|default:request.user.username }}
 
                         </span>
 
-
-                        <!-- DROPDOWN ARROW -->
 
                         <span
                             class="profile-arrow"
@@ -223,9 +209,7 @@
                     </button>
 
 
-                    <!-- =========================================
-                         PROFILE DROPDOWN
-                    ========================================== -->
+                    <!-- PROFILE DROPDOWN -->
 
                     <div
                         class="profile-dropdown"
@@ -236,7 +220,6 @@
                         <!-- PROFILE HEADER -->
 
                         <div class="profile-dropdown-header">
-
 
                             <div class="profile-dropdown-avatar">
 
@@ -279,12 +262,9 @@
                         </div>
 
 
-                        <!-- =====================================
-                             ACCOUNT LINKS
-                        ====================================== -->
+                        <!-- ACCOUNT LINKS -->
 
                         <div class="profile-dropdown-links">
-
 
                             <a
                                 href="{% url 'marketplace_dashboard' %}"
@@ -333,13 +313,10 @@
 
                             </a>
 
-
                         </div>
 
 
-                        <!-- =====================================
-                             LOGOUT
-                        ====================================== -->
+                        <!-- LOGOUT -->
 
                         <div class="profile-dropdown-footer">
 
@@ -360,7 +337,6 @@
 
                         </div>
 
-
                     </div>
 
                 </div>
@@ -369,9 +345,7 @@
             {% else %}
 
 
-                <!-- =================================================
-                     LOGGED OUT USER
-                ================================================== -->
+                <!-- LOGGED OUT -->
 
                 <div class="nav-auth-actions">
 
@@ -384,7 +358,6 @@
 
                 </div>
 
-
             {% endif %}
 
 
@@ -396,15 +369,13 @@
 
 
 <!-- =====================================================
-     MAIN PAGE CONTENT
+     MAIN CONTENT
 ===================================================== -->
 
 <main>
 
 
-    <!-- =================================================
-         SITE MESSAGES
-    ================================================== -->
+    <!-- SITE MESSAGES -->
 
     {% if messages %}
 
@@ -458,138 +429,103 @@
 </main>
 
 
-<!-- =====================================================
-     FOOTER
-===================================================== -->
+<footer class="modern-footer">
 
-<footer>
+    <div class="footer-top-accent"></div>
 
+    <div class="footer-container">
 
-    <!-- =================================================
-         COMPANY
-    ================================================== -->
+        <div class="footer-brand">
 
-    <div>
+            <a href="{% url 'home' %}" class="footer-logo">
+                <img src="{% static 'properties/Image/kingb-logo.png' %}" alt="King B Real Estate & Construction Ltd">
+                <div>
+                    <strong>KING B</strong>
+                    <span>REAL ESTATE & CONSTRUCTION LTD</span>
+                </div>
+            </a>
 
-        <h3>
-            KING B REAL ESTATE & CONSTRUCTION
-        </h3>
+            <p>
+                Building value. Creating opportunities.
+                Connecting people with quality property,
+                land and professional services.
+            </p>
 
-        <p>
-            Your trusted real estate partner.
-        </p>
+            <div class="footer-socials">
+                <a href="#" aria-label="Facebook" class="footer-social-icon">f</a>
+                <a href="#" aria-label="Instagram" class="footer-social-icon">ig</a>
+                <a href="#" aria-label="LinkedIn" class="footer-social-icon">in</a>
+                <a href="#" aria-label="X" class="footer-social-icon">x</a>
+            </div>
+
+        </div>
+
+        <div class="footer-links">
+            <h4>Explore</h4>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'property_list' %}">Properties</a>
+            <a href="{% url 'marketplace' %}">Marketplace</a>
+            <a href="{% url 'skilled_workers' %}">Skilled Workers</a>
+        </div>
+
+        <div class="footer-links">
+            <h4>Company</h4>
+            <a href="{% url 'about' %}">About Us</a>
+            <a href="{% url 'jobs' %}">Careers</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'marketplace_dashboard' %}">My Account</a>
+            {% else %}
+                <a href="{% url 'site_login' %}">Login</a>
+            {% endif %}
+        </div>
+
+        <div class="footer-contact">
+            <h4>Get in touch</h4>
+
+            <a href="tel:+234XXXXXXXXXX" class="footer-contact-row">
+                <span class="footer-contact-icon">☎</span>
+                <span>+234 XXX XXX XXXX</span>
+            </a>
+
+            <a href="mailto:info@kingbrealestate.com" class="footer-contact-row">
+                <span class="footer-contact-icon">✉</span>
+                <span>info@kingbrealestate.com</span>
+            </a>
+
+            <div class="footer-contact-row">
+                <span class="footer-contact-icon">📍</span>
+                <span>Port Harcourt, Rivers State</span>
+            </div>
+
+        </div>
 
     </div>
 
-
-    <!-- =================================================
-         QUICK LINKS
-    ================================================== -->
-
-    <div>
-
-        <h4>
-            Quick Links
-        </h4>
-
-
-        <a href="{% url 'home' %}">
-            Home
-        </a>
-
-
-        <a href="{% url 'property_list' %}">
-            Properties
-        </a>
-
-
-        <a href="{% url 'about' %}">
-            About Us
-        </a>
-
-
-        <a href="{% url 'jobs' %}">
-            Jobs
-        </a>
-
-
-        <a href="{% url 'skilled_workers' %}">
-            Skilled Workers
-        </a>
-
-
-        <a href="{% url 'marketplace' %}">
-            Marketplace
-        </a>
-
-
-        <a href="{% url 'contact' %}">
-            Contact
-        </a>
-
-
-        {% if request.user.is_authenticated %}
-
-            <a href="{% url 'marketplace_dashboard' %}">
-                My Account
-            </a>
-
-
-            <a href="{% url 'account_settings' %}">
-                Account Settings
-            </a>
-
-
-        {% else %}
-
-            <a href="{% url 'site_login' %}">
-                Login
-            </a>
-
-        {% endif %}
-
+    <div class="footer-bottom">
+        <div class="footer-bottom-inner">
+            <span>© {% now "Y" %} King B Real Estate & Construction Ltd. All rights reserved.</span>
+            <span class="footer-tagline">Excellence in Property & Construction</span>
+        </div>
     </div>
-
-
-    <!-- =================================================
-         CONTACT
-    ================================================== -->
-
-    <div>
-
-        <h4>
-            Contact
-        </h4>
-
-
-        <p>
-            Phone: +234 XXX XXX XXXX
-        </p>
-
-
-        <p>
-            Email: info@kingbrealestate.com
-        </p>
-
-
-        <p>
-            Port Harcourt, Rivers State
-        </p>
-
-    </div>
-
 
 </footer>
 
 
-<!-- =====================================================
-     PROFILE / NAVIGATION CSS
-===================================================== -->
 
 <style>
+    /* =====================================================
+     NAVIGATION / PROFILE CSS
+===================================================== */
+
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .site-header {
     position: relative;
+
     z-index: 1000;
 }
 
@@ -656,7 +592,7 @@
 
 
 /* =========================================================
-   AUTH ACTIONS
+   AUTH
 ========================================================= */
 
 .nav-auth-actions {
@@ -668,7 +604,6 @@
 }
 
 
-
 .nav-login:hover {
     color: #ffffff;
 
@@ -677,13 +612,13 @@
 
 
 /* =========================================================
-   PROFILE MENU
+   PROFILE
 ========================================================= */
 
 .profile-menu {
     position: relative;
 
-    z-index: 1100;
+    z-index: 99999;
 }
 
 
@@ -727,12 +662,7 @@
 
     box-shadow:
         0 7px 22px
-        rgba(
-            8,
-            39,
-            30,
-            .08
-        );
+        rgba(8, 39, 30, .08);
 }
 
 
@@ -809,76 +739,67 @@
 
 
 /* =========================================================
-   ACCOUNT DROPDOWN
+   PROFILE DROPDOWN
 ========================================================= */
 
-.profile-menu {
-    position: relative !important;
-
-    z-index: 99999 !important;
-}
-
-
 .profile-dropdown {
-    position: absolute !important;
+    position: absolute;
 
-    top: calc(100% + 14px) !important;
+    top: calc(100% + 14px);
 
-    right: 0 !important;
+    right: 0;
 
-    width: 320px !important;
+    width: 320px;
 
-    display: block !important;
+    display: block;
 
-    padding: 0 !important;
+    padding: 0;
 
-    margin: 0 !important;
+    margin: 0;
 
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 
-    background: #ffffff !important;
+    background: #ffffff;
 
-    color: #18231f !important;
+    color: #18231f;
 
-    border: 1px solid #d9e1dc !important;
+    border: 1px solid #d9e1dc;
 
-    border-radius: 16px !important;
+    border-radius: 16px;
 
-    overflow: hidden !important;
+    overflow: hidden;
 
     box-shadow:
         0 20px 55px
-        rgba(8, 39, 30, 0.20) !important;
+        rgba(8, 39, 30, .20);
 
-    opacity: 0 !important;
+    opacity: 0;
 
-    visibility: hidden !important;
+    visibility: hidden;
 
-    pointer-events: none !important;
+    pointer-events: none;
 
-    transform:
-        translateY(-8px) !important;
+    transform: translateY(-8px);
 
-    transform-origin: top right !important;
+    transform-origin: top right;
 
     transition:
-        opacity 0.2s ease,
-        visibility 0.2s ease,
-        transform 0.2s ease !important;
+        opacity .2s ease,
+        visibility .2s ease,
+        transform .2s ease;
 
-    z-index: 999999 !important;
+    z-index: 999999;
 }
 
 
 .profile-dropdown.open {
-    opacity: 1 !important;
+    opacity: 1;
 
-    visibility: visible !important;
+    visibility: visible;
 
-    pointer-events: auto !important;
+    pointer-events: auto;
 
-    transform:
-        translateY(0) !important;
+    transform: translateY(0);
 }
 
 
@@ -887,232 +808,217 @@
 ========================================================= */
 
 .profile-dropdown-header {
-    display: flex !important;
+    display: flex;
 
-    align-items: center !important;
+    align-items: center;
 
-    gap: 13px !important;
+    gap: 13px;
 
-    width: 100% !important;
+    width: 100%;
 
-    padding: 18px !important;
+    padding: 18px;
 
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 
-    background: #ffffff !important;
+    background: #ffffff;
 
-    color: #18231f !important;
+    color: #18231f;
 
-    border-bottom: 1px solid #edf0ee !important;
+    border-bottom: 1px solid #edf0ee;
 }
 
 
 .profile-dropdown-avatar {
-    width: 48px !important;
+    width: 48px;
 
-    height: 48px !important;
+    height: 48px;
 
-    min-width: 48px !important;
+    min-width: 48px;
 
-    flex: 0 0 48px !important;
+    flex: 0 0 48px;
 
-    display: flex !important;
+    display: flex;
 
-    align-items: center !important;
+    align-items: center;
 
-    justify-content: center !important;
+    justify-content: center;
 
-    overflow: hidden !important;
+    overflow: hidden;
 
-    box-sizing: border-box !important;
-
-    border-radius: 50% !important;
+    border-radius: 50%;
 
     background:
         linear-gradient(
             135deg,
             #123c2f,
             #1d604c
-        ) !important;
+        );
 
-    color: #ffffff !important;
+    color: #ffffff;
 
-    font-size: 16px !important;
+    font-size: 16px;
 
-    font-weight: 800 !important;
+    font-weight: 800;
 }
 
 
 .profile-dropdown-avatar img {
-    width: 100% !important;
+    width: 100%;
 
-    height: 100% !important;
+    height: 100%;
 
-    display: block !important;
+    display: block;
 
-    object-fit: cover !important;
+    object-fit: cover;
 }
 
 
 .profile-dropdown-user {
-    min-width: 0 !important;
+    min-width: 0;
 
-    flex: 1 !important;
+    flex: 1;
 
-    display: flex !important;
+    display: flex;
 
-    flex-direction: column !important;
+    flex-direction: column;
 
-    gap: 5px !important;
+    gap: 5px;
 
-    overflow: hidden !important;
+    overflow: hidden;
 }
 
 
 .profile-dropdown-user strong {
-    display: block !important;
+    display: block;
 
-    margin: 0 !important;
+    margin: 0;
 
-    padding: 0 !important;
+    padding: 0;
 
-    color: #123c2f !important;
+    color: #123c2f;
 
-    font-size: 14px !important;
+    font-size: 14px;
 
-    font-weight: 800 !important;
+    font-weight: 800;
 
-    line-height: 1.3 !important;
+    line-height: 1.3;
 
-    overflow: hidden !important;
+    overflow: hidden;
 
-    text-overflow: ellipsis !important;
+    text-overflow: ellipsis;
 
-    white-space: nowrap !important;
+    white-space: nowrap;
 }
 
 
 .profile-dropdown-user span {
-    display: block !important;
+    display: block;
 
-    margin: 0 !important;
+    margin: 0;
 
-    padding: 0 !important;
+    padding: 0;
 
-    color: #68736e !important;
+    color: #68736e;
 
-    font-size: 11px !important;
+    font-size: 11px;
 
-    font-weight: 500 !important;
+    font-weight: 500;
 
-    line-height: 1.4 !important;
+    line-height: 1.4;
 
-    overflow: hidden !important;
+    overflow: hidden;
 
-    text-overflow: ellipsis !important;
+    text-overflow: ellipsis;
 
-    white-space: nowrap !important;
+    white-space: nowrap;
 }
 
 
 /* =========================================================
-   ACCOUNT LINKS
+   DROPDOWN LINKS
 ========================================================= */
 
 .profile-dropdown-links {
-    width: 100% !important;
+    width: 100%;
 
-    padding: 8px !important;
+    padding: 8px;
 
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 
-    background: #ffffff !important;
+    background: #ffffff;
 }
 
 
 .profile-dropdown-link {
-    width: 100% !important;
+    width: 100%;
 
-    min-height: 48px !important;
+    min-height: 48px;
 
-    display: flex !important;
+    display: flex;
 
-    align-items: center !important;
+    align-items: center;
 
-    gap: 11px !important;
+    gap: 11px;
 
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 
-    margin: 0 !important;
+    margin: 0;
 
-    padding: 9px 11px !important;
+    padding: 9px 11px;
 
-    background: #ffffff !important;
+    background: #ffffff;
 
-    color: #263731 !important;
+    color: #263731;
 
-    border-radius: 9px !important;
+    border-radius: 9px;
 
-    text-decoration: none !important;
+    text-decoration: none;
 
-    font-size: 13px !important;
+    font-size: 13px;
 
-    font-weight: 650 !important;
+    font-weight: 650;
 
-    line-height: 1.3 !important;
+    line-height: 1.3;
 
     transition:
-        background 0.18s ease,
-        color 0.18s ease !important;
+        background .18s ease,
+        color .18s ease;
 }
 
 
 .profile-dropdown-link:hover {
-    background: #f2f6f3 !important;
+    background: #f2f6f3;
 
-    color: #123c2f !important;
+    color: #123c2f;
 }
 
 
 .dropdown-icon {
-    width: 30px !important;
+    width: 30px;
 
-    height: 30px !important;
+    height: 30px;
 
-    min-width: 30px !important;
+    min-width: 30px;
 
-    flex: 0 0 30px !important;
+    flex: 0 0 30px;
 
-    display: flex !important;
+    display: flex;
 
-    align-items: center !important;
+    align-items: center;
 
-    justify-content: center !important;
+    justify-content: center;
 
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 
-    border-radius: 8px !important;
+    border-radius: 8px;
 
-    background: #edf5f0 !important;
+    background: #edf5f0;
 
-    color: #26734d !important;
+    color: #26734d;
 
-    font-size: 13px !important;
+    font-size: 13px;
 
-    font-weight: 800 !important;
-}
-
-
-.profile-dropdown-link > span:last-child {
-    display: block !important;
-
-    color: inherit !important;
-
-    font-size: 13px !important;
-
-    font-weight: 650 !important;
-
-    white-space: nowrap !important;
+    font-weight: 800;
 }
 
 
@@ -1121,65 +1027,322 @@
 ========================================================= */
 
 .profile-dropdown-footer {
-    width: 100% !important;
+    width: 100%;
 
-    padding: 8px !important;
+    padding: 8px;
 
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 
-    background: #ffffff !important;
+    background: #ffffff;
 
-    border-top: 1px solid #edf0ee !important;
+    border-top: 1px solid #edf0ee;
 }
 
 
 .profile-dropdown-logout {
-    width: 100% !important;
+    width: 100%;
 
-    min-height: 48px !important;
+    min-height: 48px;
 
-    display: flex !important;
+    display: flex;
 
-    align-items: center !important;
+    align-items: center;
 
-    gap: 11px !important;
+    gap: 11px;
 
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 
-    margin: 0 !important;
+    margin: 0;
 
-    padding: 9px 11px !important;
+    padding: 9px 11px;
 
-    background: #ffffff !important;
+    background: #ffffff;
 
-    color: #a33a3a !important;
+    color: #a33a3a;
 
-    border-radius: 9px !important;
+    border-radius: 9px;
 
-    text-decoration: none !important;
+    text-decoration: none;
 
-    font-size: 13px !important;
+    font-size: 13px;
 
-    font-weight: 700 !important;
+    font-weight: 700;
 }
 
 
 .profile-dropdown-logout:hover {
-    background: #fff3f3 !important;
-
-    color: #a33a3a !important;
+    background: #fff3f3;
 }
 
 
 .profile-dropdown-logout .dropdown-icon {
-    background: #f9eaea !important;
+    background: #f9eaea;
 
-    color: #a33a3a !important;
+    color: #a33a3a;
 }
 
 
 /* =========================================================
-   MOBILE
+   =========================================================
+   MODERN FOOTER
+   =========================================================
+========================================================= */
+
+.modern-footer {
+    position: relative;
+    margin-top: 75px;
+    background: linear-gradient(145deg, #091c16, #0d291f);
+    color: #ffffff;
+}
+
+.footer-top-accent {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #d4af63, transparent);
+}
+
+.footer-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 30px 46px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.25fr;
+    gap: 50px;
+    box-sizing: border-box;
+}
+
+.footer-brand {
+    max-width: 390px;
+}
+
+.footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 18px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-logo img {
+    width: 50px;
+    height: 50px;
+    display: block;
+    object-fit: contain;
+}
+
+.footer-logo div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.footer-logo strong {
+    color: #d4af63;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+}
+
+.footer-logo span {
+    color: #ffffff;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+}
+
+.footer-brand p {
+    margin: 0 0 22px;
+    max-width: 370px;
+    color: #9fb0a8;
+    font-size: 12.5px;
+    line-height: 1.8;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 10px;
+}
+
+.footer-social-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 50%;
+    color: #d4af63;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.footer-social-icon:hover {
+    border-color: #d4af63;
+    background: rgba(212, 175, 99, .08);
+    transform: translateY(-2px);
+}
+
+.modern-footer h4 {
+    margin: 3px 0 18px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+}
+
+.modern-footer h4::after {
+    content: "";
+    display: block;
+    width: 25px;
+    height: 2px;
+    margin-top: 8px;
+    background: #d4af63;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+.footer-links a {
+    position: relative;
+    color: #9fb0a8;
+    font-size: 12.5px;
+    text-decoration: none;
+    transition: color .2s ease, transform .2s ease;
+}
+
+.footer-links a:hover {
+    color: #d4af63;
+    transform: translateX(3px);
+}
+
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.footer-contact-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    color: #cfd9d4;
+    font-size: 12.5px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    width: 100%;
+    transition: color .2s ease;
+}
+
+.footer-contact-row:last-child {
+    border-bottom: none;
+}
+
+.footer-contact-row:hover {
+    color: #d4af63;
+}
+
+.footer-contact-icon {
+    width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    background: rgba(212, 175, 99, .1);
+    color: #d4af63;
+    font-size: 12px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.footer-bottom-inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-sizing: border-box;
+    color: #71847b;
+    font-size: 9.5px;
+}
+
+.footer-tagline {
+    color: #8c9d95;
+    text-align: right;
+}
+
+@media (max-width: 900px) {
+    .footer-container {
+        grid-template-columns: 1.5fr 1fr 1fr;
+        gap: 40px;
+    }
+    .footer-brand {
+        grid-column: 1 / -1;
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 600px) {
+    .modern-footer {
+        margin-top: 55px;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 44px 22px 34px;
+    }
+    .footer-brand {
+        grid-column: auto;
+        max-width: 100%;
+    }
+    .footer-logo img {
+        width: 45px;
+        height: 45px;
+    }
+    .footer-logo strong {
+        font-size: 17px;
+    }
+    .footer-logo span {
+        font-size: 7px;
+    }
+    .footer-brand p {
+        font-size: 11px;
+        line-height: 1.7;
+    }
+    .modern-footer h4 {
+        margin-bottom: 14px;
+    }
+    .footer-bottom-inner {
+        padding: 16px 22px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        line-height: 1.5;
+    }
+    .footer-tagline {
+        text-align: left;
+    }
+}
+
+/* =========================================================
+   MOBILE NAVIGATION
 ========================================================= */
 
 @media (max-width: 850px) {
@@ -1381,7 +1544,7 @@
 
         box-shadow:
             0 18px 40px
-            rgba(0, 0, 0, 0.12) !important;
+            rgba(0, 0, 0, .12) !important;
 
         z-index: 9998 !important;
     }
@@ -1433,9 +1596,7 @@
     }
 
 
-    /* =====================================================
-       MOBILE PROFILE
-    ===================================================== */
+    /* MOBILE PROFILE */
 
     .profile-menu {
         position: relative !important;
@@ -1561,7 +1722,7 @@
 
         box-shadow:
             0 18px 45px
-            rgba(0, 0, 0, 0.20) !important;
+            rgba(0, 0, 0, .20) !important;
 
         transform: translateY(-6px) !important;
 
@@ -1817,10 +1978,7 @@
     }
 
 
-    /* =====================================================
-       LOGGED OUT
-       LOGIN ONLY
-    ===================================================== */
+    /* LOGIN */
 
     .nav-auth-actions {
         width: 100% !important;
@@ -1859,6 +2017,94 @@
         border: 1px solid #dfe5e1 !important;
 
         border-radius: 8px !important;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE FOOTER
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .modern-footer {
+        margin-top: 55px;
+    }
+
+
+    .footer-container {
+        grid-template-columns: 1fr;
+
+        gap: 28px;
+
+        padding:
+            40px 22px 32px;
+    }
+
+
+    .footer-brand {
+        grid-column: auto;
+
+        max-width: 100%;
+    }
+
+
+    .footer-logo img {
+        width: 45px;
+
+        height: 45px;
+    }
+
+
+    .footer-logo strong {
+        font-size: 17px;
+    }
+
+
+    .footer-logo span {
+        font-size: 7px;
+    }
+
+
+    .footer-brand p {
+        font-size: 11px;
+
+        line-height: 1.7;
+    }
+
+
+    .modern-footer h4 {
+        margin-bottom: 13px;
+    }
+
+
+    .footer-links {
+        gap: 9px;
+    }
+
+
+    .footer-contact p {
+        margin-bottom: 10px;
+    }
+
+
+    .footer-bottom-inner {
+        padding:
+            15px 22px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 6px;
+
+        line-height: 1.5;
+    }
+
+
+    .footer-tagline {
+        text-align: left;
     }
 
 }
@@ -1932,6 +2178,20 @@
         min-height: 44px !important;
     }
 
+
+    .footer-container {
+        padding-left: 18px;
+
+        padding-right: 18px;
+    }
+
+
+    .footer-bottom-inner {
+        padding-left: 18px;
+
+        padding-right: 18px;
+    }
+
 }
 
 </style>
@@ -1955,6 +2215,7 @@ function toggleMenu() {
 
     const button =
         document.querySelector(".menu-toggle");
+
 
     if (!menu) {
 
