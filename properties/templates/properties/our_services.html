@@ -2,74 +2,51 @@
 {% load static %}
 
 {% block title %}
-    Our Services | King B Real Estate
+Our Services | King B Real Estate
 {% endblock %}
-
 
 {% block extra_css %}
 
 <style>
 
 /* =========================================================
-   KING B REAL ESTATE
-   PREMIUM OUR SERVICES PAGE
+   KING B REAL ESTATE — INTERACTIVE SERVICES PAGE
 ========================================================= */
 
 .services-page {
-
     --kb-green: #123c2f;
     --kb-dark: #062119;
     --kb-dark-2: #0b2d23;
-
     --kb-gold: #b58b3b;
     --kb-gold-light: #d4af63;
-
     --kb-cream: #f6f7f4;
     --kb-white: #ffffff;
-
     --kb-text: #17221e;
     --kb-muted: #69746f;
-
     --kb-border: #e2e8e4;
 
     min-height: 100vh;
-
     background: var(--kb-cream);
-
     color: var(--kb-text);
-
     padding-bottom: 120px;
-
     overflow: hidden;
 }
-
-
-/* =========================================================
-   GLOBAL
-========================================================= */
 
 .services-page *,
 .services-page *::before,
 .services-page *::after {
-
     box-sizing: border-box;
 }
-
 
 /* =========================================================
    HERO
 ========================================================= */
 
 .services-hero {
-
     position: relative;
-
     min-height: 610px;
-
     display: flex;
-
     align-items: center;
-
     overflow: hidden;
 
     background:
@@ -83,190 +60,107 @@
     color: var(--kb-white);
 }
 
-
-/* =========================================================
-   HERO DECORATION
-========================================================= */
-
 .services-hero::before {
-
     content: "";
-
     position: absolute;
-
     width: 520px;
-
     height: 520px;
-
     right: -190px;
-
     top: -210px;
-
-    border:
-        1px solid
-        rgba(
-            212,
-            175,
-            99,
-            .18
-        );
-
+    border: 1px solid rgba(212,175,99,.18);
     border-radius: 50%;
+    animation: heroCircle 8s ease-in-out infinite;
 }
-
 
 .services-hero::after {
-
     content: "";
-
     position: absolute;
-
     width: 320px;
-
     height: 320px;
-
     left: -170px;
-
     bottom: -180px;
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .08
-        );
-
+    border: 1px solid rgba(255,255,255,.08);
     border-radius: 50%;
+    animation: heroCircle 10s ease-in-out infinite reverse;
 }
 
+@keyframes heroCircle {
+    0%,100% {
+        transform: translate(0,0) scale(1);
+    }
+
+    50% {
+        transform: translate(12px,15px) scale(1.04);
+    }
+}
 
 .services-hero-container {
-
     position: relative;
-
     z-index: 2;
-
     width: min(1240px, 90%);
-
     margin: 0 auto;
 
     display: grid;
-
     grid-template-columns:
         minmax(0, 1.25fr)
         minmax(300px, .75fr);
 
     gap: 70px;
-
     align-items: center;
 }
 
-
-/* =========================================================
-   HERO LEFT
-========================================================= */
-
 .services-hero-content {
-
     max-width: 720px;
 }
 
-
 .services-eyebrow {
-
     margin: 0 0 16px;
-
     color: var(--kb-gold-light);
-
     font-size: 11px;
-
     font-weight: 850;
-
     letter-spacing: 3px;
-
     text-transform: uppercase;
 }
 
-
 .services-hero h1 {
-
     margin: 0 0 24px;
-
     color: #ffffff;
 
-    font-size:
-        clamp(
-            48px,
-            6.8vw,
-            82px
-        );
-
+    font-size: clamp(48px, 6.8vw, 82px);
     line-height: .96;
-
     letter-spacing: -3px;
-
     font-weight: 750;
 }
 
-
 .services-hero-description {
-
     max-width: 650px;
-
     margin: 0;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            .78
-        );
-
+    color: rgba(255,255,255,.78);
     font-size: 16px;
-
     line-height: 1.9;
 }
 
-
-/* =========================================================
-   HERO ACTIONS
-========================================================= */
-
 .services-hero-actions {
-
     display: flex;
-
     flex-wrap: wrap;
-
     gap: 11px;
-
     margin-top: 31px;
 }
 
-
 .services-hero-button {
-
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 9px;
 
     min-height: 47px;
-
     padding: 0 18px;
 
     border-radius: 10px;
-
     text-decoration: none;
 
     font-size: 12px;
-
     font-weight: 800;
 
     transition:
@@ -276,104 +170,48 @@
         box-shadow .22s ease;
 }
 
-
 .services-button-primary {
-
     background: var(--kb-gold);
-
-    border:
-        1px solid
-        var(--kb-gold);
-
+    border: 1px solid var(--kb-gold);
     color: #ffffff;
 
     box-shadow:
-        0 10px 25px rgba(
-            181,
-            139,
-            59,
-            .18
-        );
+        0 10px 25px rgba(181,139,59,.18);
 }
 
-
 .services-button-primary:hover {
-
     background: #c49a4e;
-
     border-color: #c49a4e;
-
     color: #ffffff;
 
     transform: translateY(-3px);
 
     box-shadow:
-        0 14px 30px rgba(
-            181,
-            139,
-            59,
-            .24
-        );
+        0 14px 30px rgba(181,139,59,.24);
 }
 
-
 .services-button-secondary {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .06
-        );
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .18
-        );
-
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18);
     color: #ffffff;
 
     backdrop-filter: blur(8px);
 }
 
-
 .services-button-secondary:hover {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .12
-        );
-
-    border-color:
-        rgba(
-            255,
-            255,
-            255,
-            .30
-        );
-
+    background: rgba(255,255,255,.12);
+    border-color: rgba(255,255,255,.30);
     color: #ffffff;
 
     transform: translateY(-3px);
 }
 
-
 /* =========================================================
-   HERO SIDE PANEL
+   HERO PANEL
 ========================================================= */
 
 .services-hero-panel {
-
     position: relative;
-
     padding: 27px;
 
     background:
@@ -383,284 +221,177 @@
             rgba(255,255,255,.035)
         );
 
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .13
-        );
-
+    border: 1px solid rgba(255,255,255,.13);
     border-radius: 20px;
 
     backdrop-filter: blur(12px);
 
     box-shadow:
-        0 25px 60px rgba(
-            0,
-            0,
-            0,
-            .13
-        );
+        0 25px 60px rgba(0,0,0,.13);
+
+    animation: panelFloat 5s ease-in-out infinite;
 }
 
+@keyframes panelFloat {
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+}
 
 .services-hero-panel-label {
-
     margin-bottom: 9px;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            .48
-        );
+    color: rgba(255,255,255,.48);
 
     font-size: 9px;
-
     font-weight: 800;
-
     letter-spacing: 1.4px;
-
     text-transform: uppercase;
 }
 
-
 .services-hero-panel h2 {
-
     margin: 0 0 12px;
-
     color: #ffffff;
-
     font-size: 24px;
-
     line-height: 1.2;
 }
 
-
 .services-hero-panel p {
-
     margin: 0;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            .68
-        );
+    color: rgba(255,255,255,.68);
 
     font-size: 12px;
-
     line-height: 1.7;
 }
 
-
-/* =========================================================
-   HERO PANEL STATS
-========================================================= */
-
 .services-panel-stats {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
+    grid-template-columns: repeat(2,1fr);
     gap: 9px;
-
     margin-top: 23px;
 }
 
-
 .services-panel-stat {
-
     padding: 13px;
 
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .055
-        );
+    background: rgba(255,255,255,.055);
 
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .09
-        );
-
+    border: 1px solid rgba(255,255,255,.09);
     border-radius: 10px;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
 }
 
+.services-panel-stat:hover {
+    transform: translateY(-4px);
+    background: rgba(255,255,255,.10);
+}
 
 .services-panel-stat strong {
-
     display: block;
-
-    color:
-        var(--kb-gold-light);
-
+    color: var(--kb-gold-light);
     font-size: 22px;
-
     font-weight: 850;
 }
 
-
 .services-panel-stat span {
-
     display: block;
-
     margin-top: 3px;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            .50
-        );
+    color: rgba(255,255,255,.50);
 
     font-size: 9px;
-
     text-transform: uppercase;
-
     letter-spacing: .06em;
 }
 
-
 /* =========================================================
-   INTRO SECTION
+   INTRO
 ========================================================= */
 
 .services-intro {
-
-    width: min(1120px, 90%);
-
+    width: min(1120px,90%);
     margin: 105px auto 0;
-
     text-align: center;
 }
 
-
 .services-intro-label {
-
     margin: 0 0 12px;
 
     color: var(--kb-gold);
 
     font-size: 11px;
-
     font-weight: 850;
-
     letter-spacing: 2.4px;
-
     text-transform: uppercase;
 }
 
-
 .services-intro h2 {
-
     max-width: 780px;
-
     margin: 0 auto 17px;
 
     color: var(--kb-green);
 
-    font-size:
-        clamp(
-            35px,
-            4.5vw,
-            54px
-        );
-
+    font-size: clamp(35px,4.5vw,54px);
     line-height: 1.05;
-
     letter-spacing: -1.5px;
-
     font-weight: 750;
 }
 
-
 .services-intro p {
-
     max-width: 760px;
-
     margin: 0 auto;
 
     color: var(--kb-muted);
 
     font-size: 15px;
-
     line-height: 1.85;
 }
 
-
 /* =========================================================
-   SERVICES GRID SECTION
+   SERVICES GRID
 ========================================================= */
 
 .services-list-section {
-
-    width: min(1240px, 90%);
-
+    width: min(1240px,90%);
     margin: 80px auto 0;
 }
 
-
 .services-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
-        );
-
+    grid-template-columns: repeat(3,minmax(0,1fr));
     gap: 18px;
 }
-
 
 /* =========================================================
    SERVICE CARD
 ========================================================= */
 
 .service-card {
-
     position: relative;
 
     display: flex;
-
     flex-direction: column;
 
     min-height: 320px;
-
     padding: 27px;
 
     overflow: hidden;
 
     background: var(--kb-white);
 
-    border:
-        1px solid
-        var(--kb-border);
-
+    border: 1px solid var(--kb-border);
     border-radius: 18px;
 
     box-shadow:
-        0 9px 30px rgba(
-            8,
-            39,
-            30,
-            .045
-        );
+        0 9px 30px rgba(8,39,30,.045);
 
     transition:
         transform .28s ease,
@@ -668,76 +399,35 @@
         border-color .28s ease;
 }
 
-
-.service-card::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 110px;
-
-    height: 110px;
-
-    right: -50px;
-
-    bottom: -55px;
-
-    border:
-        1px solid
-        rgba(
-            181,
-            139,
-            59,
-            .10
-        );
-
-    border-radius: 50%;
-
-    transition:
-        transform .35s ease;
-}
-
-
 .service-card:hover {
+    transform: translateY(-7px);
 
-    transform:
-        translateY(-7px);
-
-    border-color:
-        #d7e1db;
+    border-color: #d7e1db;
 
     box-shadow:
-        0 22px 45px rgba(
-            8,
-            39,
-            30,
-            .09
+        0 22px 45px rgba(8,39,30,.09);
+}
+
+.service-card.featured {
+    background:
+        linear-gradient(
+            145deg,
+            #123c2f,
+            #09271f
         );
+
+    border-color: #123c2f;
+
+    box-shadow:
+        0 18px 42px rgba(9,39,31,.14);
 }
-
-
-.service-card:hover::after {
-
-    transform:
-        scale(1.35);
-}
-
-
-/* =========================================================
-   SERVICE ICON
-========================================================= */
 
 .service-icon {
-
     width: 53px;
-
     height: 53px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     margin-bottom: 22px;
@@ -751,9 +441,7 @@
             #f7f8f5
         );
 
-    border:
-        1px solid
-        #dce8e1;
+    border: 1px solid #dce8e1;
 
     color: var(--kb-green);
 
@@ -764,334 +452,350 @@
         background .25s ease;
 }
 
-
 .service-card:hover .service-icon {
-
     transform:
-        scale(1.06)
-        rotate(-2deg);
+        scale(1.08)
+        rotate(-3deg);
 
-    background:
-        #f3eee2;
-
-    border-color:
-        #e9dfc9;
+    background: #f3eee2;
 }
 
-
-/* =========================================================
-   SERVICE CONTENT
-========================================================= */
+.service-card.featured .service-icon {
+    background: rgba(255,255,255,.09);
+    border-color: rgba(255,255,255,.13);
+    color: var(--kb-gold-light);
+}
 
 .service-card h3 {
-
     margin: 0 0 11px;
 
     color: var(--kb-green);
 
     font-size: 21px;
-
     line-height: 1.2;
-
     font-weight: 750;
 }
 
+.service-card.featured h3 {
+    color: #ffffff;
+}
 
 .service-card p {
-
     margin: 0;
 
     color: var(--kb-muted);
 
     font-size: 13px;
-
     line-height: 1.75;
 }
 
+.service-card.featured p {
+    color: rgba(255,255,255,.70);
+}
 
 /* =========================================================
-   SERVICE LINK
+   LEARN MORE BUTTON
 ========================================================= */
 
-.service-card-link {
+.service-expand-button {
+    margin-top: auto;
+    padding-top: 22px;
 
     display: inline-flex;
-
     align-items: center;
+    justify-content: space-between;
+    gap: 10px;
 
-    gap: 7px;
+    width: 100%;
 
-    margin-top: auto;
-
-    padding-top: 22px;
+    background: transparent;
+    border: 0;
 
     color: var(--kb-green);
 
-    text-decoration: none;
+    cursor: pointer;
 
+    text-align: left;
+
+    font-family: inherit;
     font-size: 11px;
-
     font-weight: 850;
 }
 
+.service-card.featured .service-expand-button {
+    color: var(--kb-gold-light);
+}
 
-.service-card-link span {
+.service-expand-arrow {
+    display: inline-flex;
+
+    width: 25px;
+    height: 25px;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(18,60,47,.07);
 
     transition:
-        transform .2s ease;
+        transform .3s ease,
+        background .3s ease;
 }
 
-
-.service-card:hover .service-card-link span {
-
-    transform:
-        translateX(4px);
+.service-card.featured .service-expand-arrow {
+    background: rgba(255,255,255,.08);
 }
 
+.service-card.active .service-expand-arrow {
+    transform: rotate(180deg);
+}
 
 /* =========================================================
-   FEATURED SERVICE
+   EXPANDED SERVICE CONTENT
 ========================================================= */
 
-.service-card.featured {
+.service-details {
+    display: grid;
+    grid-template-rows: 0fr;
 
-    background:
-        linear-gradient(
-            145deg,
-            #123c2f,
-            #09271f
-        );
+    opacity: 0;
 
-    border-color:
-        #123c2f;
-
-    box-shadow:
-        0 18px 42px rgba(
-            9,
-            39,
-            31,
-            .14
-        );
+    transition:
+        grid-template-rows .4s ease,
+        opacity .3s ease,
+        margin-top .4s ease;
 }
 
-
-.service-card.featured .service-icon {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .09
-        );
-
-    border-color:
-        rgba(
-            255,
-            255,
-            255,
-            .13
-        );
-
-    color:
-        var(--kb-gold-light);
+.service-details-inner {
+    overflow: hidden;
 }
 
-
-.service-card.featured h3 {
-
-    color:
-        #ffffff;
+.service-card.active .service-details {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: 20px;
 }
 
+.service-details-content {
+    padding-top: 18px;
 
-.service-card.featured p {
-
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            .70
-        );
+    border-top: 1px solid rgba(18,60,47,.10);
 }
 
-
-.service-card.featured .service-card-link {
-
-    color:
-        var(--kb-gold-light);
+.service-card.featured .service-details-content {
+    border-top-color: rgba(255,255,255,.12);
 }
 
+.service-details-content p {
+    margin-bottom: 13px;
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.service-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.service-details-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+
+    color: var(--kb-muted);
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.service-card.featured .service-details-list li {
+    color: rgba(255,255,255,.67);
+}
+
+.service-details-list li::before {
+    content: "✓";
+
+    flex-shrink: 0;
+
+    color: var(--kb-gold);
+
+    font-weight: 900;
+}
 
 /* =========================================================
-   PROCESS SECTION
+   SERVICE ACTION
+========================================================= */
+
+.service-action {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 17px;
+
+    min-height: 38px;
+    padding: 0 14px;
+
+    border-radius: 8px;
+
+    background: var(--kb-green);
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 850;
+
+    transition:
+        transform .2s ease,
+        background .2s ease;
+}
+
+.service-action:hover {
+    background: var(--kb-gold);
+    color: #ffffff;
+
+    transform: translateY(-2px);
+}
+
+.service-card.featured .service-action {
+    background: var(--kb-gold);
+}
+
+.service-card.featured .service-action:hover {
+    background: #c49a4e;
+}
+
+/* =========================================================
+   PROCESS
 ========================================================= */
 
 .services-process {
-
-    width: min(1120px, 90%);
-
+    width: min(1120px,90%);
     margin: 120px auto 0;
 }
 
-
 .services-process-header {
-
     max-width: 760px;
-
     margin-bottom: 42px;
 }
 
-
 .services-process-label {
-
     margin: 0 0 11px;
 
     color: var(--kb-gold);
 
     font-size: 11px;
-
     font-weight: 850;
-
     letter-spacing: 2.3px;
-
     text-transform: uppercase;
 }
 
-
 .services-process-header h2 {
-
     margin: 0 0 14px;
 
     color: var(--kb-green);
 
-    font-size:
-        clamp(
-            34px,
-            4vw,
-            48px
-        );
-
+    font-size: clamp(34px,4vw,48px);
     line-height: 1.08;
-
     letter-spacing: -1px;
 }
 
-
 .services-process-header p {
-
     margin: 0;
 
     color: var(--kb-muted);
 
     font-size: 14px;
-
     line-height: 1.8;
 }
 
-
-/* =========================================================
-   PROCESS GRID
-========================================================= */
-
 .process-grid {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(
-            4,
-            minmax(0, 1fr)
-        );
-
+    grid-template-columns: repeat(4,minmax(0,1fr));
     gap: 11px;
 }
 
-
 .process-item {
-
     position: relative;
 
     padding: 23px 20px;
 
-    background:
-        var(--kb-white);
+    background: var(--kb-white);
 
-    border:
-        1px solid
-        var(--kb-border);
+    border: 1px solid var(--kb-border);
+    border-radius: 14px;
 
-    border-radius:
-        14px;
-
-    box-shadow:
-        0 7px 22px rgba(
-            8,
-            39,
-            30,
-            .035
-        );
+    cursor: pointer;
 
     transition:
         transform .22s ease,
         box-shadow .22s ease,
-        border-color .22s ease;
+        border-color .22s ease,
+        background .22s ease;
 }
 
+.process-item:hover,
+.process-item.active {
+    transform: translateY(-4px);
 
-.process-item:hover {
-
-    transform:
-        translateY(-4px);
-
-    border-color:
-        #d7e1db;
+    border-color: var(--kb-gold);
 
     box-shadow:
-        0 14px 30px rgba(
-            8,
-            39,
-            30,
-            .07
-        );
+        0 14px 30px rgba(8,39,30,.07);
 }
 
+.process-number {
+    display: block;
+
+    margin-bottom: 13px;
+
+    color: var(--kb-gold);
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
 
 .process-item h3 {
-
     margin: 0 0 8px;
 
     color: var(--kb-green);
 
     font-size: 15px;
-
     font-weight: 750;
 }
 
-
 .process-item p {
-
     margin: 0;
 
     color: var(--kb-muted);
 
     font-size: 11px;
-
     line-height: 1.65;
 }
-
 
 /* =========================================================
    CTA
 ========================================================= */
 
 .services-cta {
-
     position: relative;
 
-    width: min(1180px, 90%);
-
+    width: min(1180px,90%);
     margin: 120px auto 0;
 
     padding: 55px 60px;
@@ -1108,173 +812,75 @@
         );
 
     box-shadow:
-        0 28px 70px rgba(
-            8,
-            39,
-            30,
-            .13
-        );
+        0 28px 70px rgba(8,39,30,.13);
 
     color: #ffffff;
 }
 
-
-.services-cta::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 300px;
-
-    height: 300px;
-
-    right: -120px;
-
-    top: -160px;
-
-    border:
-        1px solid
-        rgba(
-            212,
-            175,
-            99,
-            .15
-        );
-
-    border-radius: 50%;
-}
-
-
-.services-cta::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 220px;
-
-    height: 220px;
-
-    left: -120px;
-
-    bottom: -140px;
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .07
-        );
-
-    border-radius: 50%;
-}
-
-
 .services-cta-content {
-
     position: relative;
-
     z-index: 2;
 
     display: flex;
 
     align-items: center;
-
     justify-content: space-between;
 
     gap: 40px;
 }
 
-
 .services-cta-copy {
-
     max-width: 720px;
 }
 
-
 .services-cta-label {
-
     margin: 0 0 10px;
 
-    color:
-        var(--kb-gold-light);
+    color: var(--kb-gold-light);
 
     font-size: 10px;
-
     font-weight: 850;
-
     letter-spacing: 2.2px;
-
     text-transform: uppercase;
 }
 
-
 .services-cta h2 {
-
     margin: 0 0 12px;
 
     color: #ffffff;
 
-    font-size:
-        clamp(
-            31px,
-            4vw,
-            48px
-        );
-
+    font-size: clamp(31px,4vw,48px);
     line-height: 1.06;
-
     letter-spacing: -1px;
 }
 
-
 .services-cta p {
-
     margin: 0;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            .68
-        );
+    color: rgba(255,255,255,.68);
 
     font-size: 13px;
-
     line-height: 1.75;
 }
 
-
 .services-cta-button {
-
-    position: relative;
-
     flex-shrink: 0;
 
     display: inline-flex;
 
     align-items: center;
-
     justify-content: center;
 
     gap: 10px;
 
     min-width: 165px;
-
     min-height: 49px;
 
     padding: 0 18px;
 
     background: var(--kb-gold);
 
-    border:
-        1px solid
-        var(--kb-gold);
-
+    border: 1px solid var(--kb-gold);
     border-radius: 10px;
 
     color: #ffffff;
@@ -1282,7 +888,6 @@
     text-decoration: none;
 
     font-size: 12px;
-
     font-weight: 850;
 
     transition:
@@ -1291,11 +896,8 @@
         box-shadow .22s ease;
 }
 
-
 .services-cta-button:hover {
-
     background: #c49a4e;
-
     border-color: #c49a4e;
 
     color: #ffffff;
@@ -1303,25 +905,17 @@
     transform: translateY(-3px);
 
     box-shadow:
-        0 12px 27px rgba(
-            181,
-            139,
-            59,
-            .24
-        );
+        0 12px 27px rgba(181,139,59,.24);
 }
 
-
 /* =========================================================
-   FLOATING CONTACT BUTTON
+   FLOATING CONTACT
 ========================================================= */
 
 .services-floating-contact {
-
     position: fixed;
 
     right: 22px;
-
     bottom: 22px;
 
     z-index: 100;
@@ -1329,26 +923,16 @@
     display: inline-flex;
 
     align-items: center;
-
     justify-content: center;
 
     gap: 7px;
 
     min-height: 43px;
-
     padding: 0 15px;
 
     background: var(--kb-green);
 
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .10
-        );
-
+    border: 1px solid rgba(255,255,255,.10);
     border-radius: 999px;
 
     color: #ffffff;
@@ -1356,46 +940,24 @@
     text-decoration: none;
 
     font-size: 10px;
-
     font-weight: 850;
 
     box-shadow:
-        0 12px 30px rgba(
-            9,
-            39,
-            31,
-            .22
-        );
+        0 12px 30px rgba(9,39,31,.22);
 
     transition:
         transform .22s ease,
-        background .22s ease,
-        box-shadow .22s ease;
+        background .22s ease;
 }
-
 
 .services-floating-contact:hover {
-
     background: var(--kb-gold);
-
     color: #ffffff;
-
     transform: translateY(-3px);
-
-    box-shadow:
-        0 16px 32px rgba(
-            181,
-            139,
-            59,
-            .25
-        );
 }
 
-
 .services-floating-contact-pulse {
-
     width: 6px;
-
     height: 6px;
 
     border-radius: 50%;
@@ -1403,1099 +965,1140 @@
     background: #64c987;
 
     box-shadow:
-        0 0 0 4px
-        rgba(
-            100,
-            201,
-            135,
-            .12
-        );
+        0 0 0 4px rgba(100,201,135,.12);
+
+    animation: contactPulse 2s infinite;
 }
 
+@keyframes contactPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(100,201,135,.35);
+    }
+
+    70% {
+        box-shadow: 0 0 0 7px rgba(100,201,135,0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(100,201,135,0);
+    }
+}
+
+/* =========================================================
+   BACK TO TOP
+========================================================= */
+
+.services-top-button {
+    position: fixed;
+
+    right: 22px;
+    bottom: 78px;
+
+    z-index: 99;
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--kb-border);
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color: var(--kb-green);
+
+    cursor: pointer;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(10px);
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease,
+        transform .25s ease;
+}
+
+.services-top-button.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.services-top-button:hover {
+    background: var(--kb-green);
+    color: #ffffff;
+}
+
+/* =========================================================
+   REVEAL
+========================================================= */
+
+.reveal-service,
+.reveal-section {
+    opacity: 0;
+    transform: translateY(22px);
+
+    transition:
+        opacity .65s ease,
+        transform .65s ease;
+}
+
+.reveal-service.revealed,
+.reveal-section.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1050px) {
+@media (max-width:1050px) {
 
     .services-hero-container {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
         gap: 40px;
-
     }
-
 
     .services-hero-panel {
-
         max-width: 550px;
-
     }
-
 
     .services-grid {
-
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0,1fr)
-            );
-
+        grid-template-columns: repeat(2,minmax(0,1fr));
     }
-
 
     .process-grid {
-
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0,1fr)
-            );
-
+        grid-template-columns: repeat(2,minmax(0,1fr));
     }
-
 
     .services-cta-content {
-
-        align-items:
-            flex-start;
-
-        flex-direction:
-            column;
-
+        align-items: flex-start;
+        flex-direction: column;
     }
-
 }
 
-
-@media (max-width: 700px) {
+@media (max-width:700px) {
 
     .services-page {
-
         padding-bottom: 80px;
-
     }
-
 
     .services-hero {
-
-        min-height:
-            auto;
-
-        padding:
-            78px 0 70px;
-
+        min-height: auto;
+        padding: 78px 0 70px;
     }
-
 
     .services-hero-container {
-
-        width:
-            90%;
-
+        width: 90%;
     }
-
 
     .services-hero h1 {
-
-        font-size:
-            47px;
-
-        letter-spacing:
-            -1.8px;
-
+        font-size: 47px;
+        letter-spacing: -1.8px;
     }
-
 
     .services-hero-description {
-
-        font-size:
-            14px;
-
+        font-size: 14px;
     }
-
 
     .services-hero-actions {
-
-        flex-direction:
-            column;
-
-        align-items:
-            stretch;
-
+        flex-direction: column;
+        align-items: stretch;
     }
-
 
     .services-hero-button {
-
-        width:
-            100%;
-
+        width: 100%;
     }
-
 
     .services-hero-panel {
-
-        width:
-            100%;
-
+        width: 100%;
     }
-
 
     .services-intro {
-
-        margin-top:
-            75px;
-
+        margin-top: 75px;
     }
-
 
     .services-intro h2 {
-
-        font-size:
-            33px;
-
+        font-size: 33px;
     }
-
 
     .services-intro p {
-
-        font-size:
-            14px;
-
+        font-size: 14px;
     }
-
 
     .services-list-section {
-
-        margin-top:
-            60px;
-
+        margin-top: 60px;
     }
-
 
     .services-grid {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
-
 
     .service-card {
-
-        min-height:
-            285px;
-
+        min-height: 285px;
     }
-
 
     .services-process {
-
-        margin-top:
-            85px;
-
+        margin-top: 85px;
     }
-
 
     .process-grid {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
-
 
     .services-cta {
-
-        margin-top:
-            85px;
-
-        padding:
-            38px 25px;
-
+        margin-top: 85px;
+        padding: 38px 25px;
     }
-
 
     .services-cta h2 {
-
-        font-size:
-            32px;
-
+        font-size: 32px;
     }
-
 
     .services-cta-button {
-
-        width:
-            100%;
-
+        width: 100%;
     }
-
 
     .services-floating-contact {
-
-        right:
-            12px;
-
-        bottom:
-            12px;
-
+        right: 12px;
+        bottom: 12px;
     }
 
+    .services-top-button {
+        right: 12px;
+        bottom: 67px;
+    }
 }
 
-
-@media (max-width: 420px) {
+@media (max-width:420px) {
 
     .services-panel-stats {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
-
 
     .services-hero h1 {
-
-        font-size:
-            42px;
-
+        font-size: 42px;
     }
-
 
     .service-card {
-
-        padding:
-            24px;
-
+        padding: 24px;
     }
-
 }
 
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
 
     *,
     *::before,
     *::after {
-
-        animation:
-            none !important;
-
-        transition:
-            none !important;
-
-        scroll-behavior:
-            auto !important;
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
     }
-
 }
 
 </style>
 
 {% endblock %}
 
-
 {% block content %}
 
 <main class="services-page">
 
+<!-- =====================================================
+     HERO
+====================================================== -->
 
-    <!-- =====================================================
-         HERO
-    ====================================================== -->
+<section class="services-hero">
 
-    <section class="services-hero">
+    <div class="services-hero-container">
 
+        <div class="services-hero-content">
 
-        <div class="services-hero-container">
-
-
-            <div class="services-hero-content">
-
-
-                <p class="services-eyebrow">
-                    KING B REAL ESTATE & CONSTRUCTION
-                </p>
-
-
-                <h1>
-                    Our Services
-                </h1>
-
-
-                <p class="services-hero-description">
-
-                    From finding the right property to developing,
-                    managing and maintaining valuable real estate,
-                    King B Real Estate provides professional
-                    solutions designed around your goals.
-
-                </p>
-
-
-                <div class="services-hero-actions">
-
-
-                    <a
-                        href="{% url 'contact' %}"
-                        class="services-hero-button services-button-primary"
-                    >
-
-                        <span>
-                            Contact Us
-                        </span>
-
-                        <span>
-                            →
-                        </span>
-
-                    </a>
-
-
-                    <a
-                        href="#services"
-                        class="services-hero-button services-button-secondary"
-                    >
-
-                        <span>
-                            Explore Services
-                        </span>
-
-                        <span>
-                            ↓
-                        </span>
-
-                    </a>
-
-
-                </div>
-
-
-            </div>
-
-
-            <!-- =================================================
-                 HERO PANEL
-            ================================================== -->
-
-            <div class="services-hero-panel">
-
-
-                <div class="services-hero-panel-label">
-                    WHY KING B
-                </div>
-
-
-                <h2>
-                    One trusted partner
-                    for your property journey.
-                </h2>
-
-
-                <p>
-
-                    We combine real estate knowledge,
-                    development experience and practical
-                    property management solutions to help
-                    clients make confident decisions.
-
-                </p>
-
-
-                <div class="services-panel-stats">
-
-
-                    <div class="services-panel-stat">
-
-                        <strong>
-                            •
-                        </strong>
-
-                        <span>
-                            Property
-                        </span>
-
-                    </div>
-
-
-                    <div class="services-panel-stat">
-
-                        <strong>
-                            •
-                        </strong>
-
-                        <span>
-                            Development
-                        </span>
-
-                    </div>
-
-
-                    <div class="services-panel-stat">
-
-                        <strong>
-                            •
-                        </strong>
-
-                        <span>
-                            Management
-                        </span>
-
-                    </div>
-
-
-                    <div class="services-panel-stat">
-
-                        <strong>
-                            •
-                        </strong>
-
-                        <span>
-                            Construction
-                        </span>
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         INTRODUCTION
-    ====================================================== -->
-
-    <section class="services-intro">
-
-
-        <p class="services-intro-label">
-            WHAT WE DO
-        </p>
-
-
-        <h2>
-            Professional solutions
-            for real estate and construction.
-        </h2>
-
-
-        <p>
-
-            Whether you are buying land, developing property,
-            searching for an investment opportunity or
-            protecting the value of an existing property,
-            our services are structured to provide practical,
-            reliable and professional support.
-
-        </p>
-
-
-    </section>
-
-
-    <!-- =====================================================
-         SERVICES
-    ====================================================== -->
-
-    <section
-        class="services-list-section"
-        id="services"
-    >
-
-
-        <div class="services-grid">
-
-
-            <!-- =================================================
-                 REAL ESTATE SALES
-            ================================================== -->
-
-            <article class="service-card featured">
-
-
-                <div class="service-icon">
-                    🏡
-                </div>
-
-
-                <h3>
-                    Real Estate Sales
-                </h3>
-
-
-                <p>
-
-                    Discover residential, commercial and
-                    land opportunities carefully presented
-                    to help you make informed property
-                    ownership and investment decisions.
-
-                </p>
-
-
-                <a
-                    href="{% url 'property_list' %}"
-                    class="service-card-link"
-                >
-
-                    Explore Properties
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-            <!-- =================================================
-                 LAND & ESTATE DEVELOPMENT
-            ================================================== -->
-
-            <article class="service-card">
-
-
-                <div class="service-icon">
-                    🌳
-                </div>
-
-
-                <h3>
-                    Land & Estate Development
-                </h3>
-
-
-                <p>
-
-                    We offer structured land opportunities
-                    within carefully planned developments,
-                    helping clients identify suitable locations,
-                    plot options and investment opportunities.
-
-                </p>
-
-
-                <a
-                    href="{% url 'property_list' %}"
-                    class="service-card-link"
-                >
-
-                    View Estates
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-            <!-- =================================================
-                 CONSTRUCTION
-            ================================================== -->
-
-            <article class="service-card">
-
-
-                <div class="service-icon">
-                    🏗️
-                </div>
-
-
-                <h3>
-                    Construction Services
-                </h3>
-
-
-                <p>
-
-                    From project planning through construction,
-                    we support property owners and investors with
-                    practical construction and development solutions.
-
-                </p>
-
-
-                <a
-                    href="{% url 'contact' %}"
-                    class="service-card-link"
-                >
-
-                    Discuss a Project
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-            <!-- =================================================
-                 PROPERTY MANAGEMENT
-            ================================================== -->
-
-            <article class="service-card">
-
-
-                <div class="service-icon">
-                    🔑
-                </div>
-
-
-                <h3>
-                    Property Management
-                </h3>
-
-
-                <p>
-
-                    Professional oversight of properties,
-                    helping owners maintain their assets,
-                    coordinate services and protect long-term
-                    property value.
-
-                </p>
-
-
-                <a
-                    href="{% url 'contact' %}"
-                    class="service-card-link"
-                >
-
-                    Talk to Our Team
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-            <!-- =================================================
-                 FACILITY MANAGEMENT
-            ================================================== -->
-
-            <article class="service-card">
-
-
-                <div class="service-icon">
-                    🏢
-                </div>
-
-
-                <h3>
-                    Facility Management
-                </h3>
-
-
-                <p>
-
-                    We help organisations and property owners
-                    coordinate facilities, maintenance activities,
-                    service providers and day-to-day operational
-                    requirements.
-
-                </p>
-
-
-                <a
-                    href="{% url 'contact' %}"
-                    class="service-card-link"
-                >
-
-                    Request Consultation
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-            <!-- =================================================
-                 INVESTMENT ADVISORY
-            ================================================== -->
-
-            <article class="service-card">
-
-
-                <div class="service-icon">
-                    📈
-                </div>
-
-
-                <h3>
-                    Real Estate Investment Advisory
-                </h3>
-
-
-                <p>
-
-                    Practical guidance for clients evaluating
-                    property opportunities, development projects
-                    and real estate investments.
-
-                </p>
-
-
-                <a
-                    href="{% url 'contact' %}"
-                    class="service-card-link"
-                >
-
-                    Speak With Us
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-            <!-- =================================================
-                 PROPERTY MARKETING
-            ================================================== -->
-
-            <article class="service-card">
-
-
-                <div class="service-icon">
-                    📣
-                </div>
-
-
-                <h3>
-                    Property Marketing
-                </h3>
-
-
-                <p>
-
-                    Professional presentation and marketing
-                    support designed to increase visibility
-                    and connect property opportunities with
-                    potential buyers and investors.
-
-                </p>
-
-
-                <a
-                    href="{% url 'contact' %}"
-                    class="service-card-link"
-                >
-
-                    Market Your Property
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-            <!-- =================================================
-                 CONSULTANCY
-            ================================================== -->
-
-            <article class="service-card">
-
-
-                <div class="service-icon">
-                    🧭
-                </div>
-
-
-                <h3>
-                    Property & Land Consultancy
-                </h3>
-
-
-                <p>
-
-                    Get professional guidance when evaluating
-                    land, property locations, development
-                    opportunities and the right next step
-                    for your real estate plans.
-
-                </p>
-
-
-                <a
-                    href="{% url 'contact' %}"
-                    class="service-card-link"
-                >
-
-                    Book a Consultation
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-            <!-- =================================================
-                 MAINTENANCE
-            ================================================== -->
-
-            <article class="service-card">
-
-
-                <div class="service-icon">
-                    🛠️
-                </div>
-
-
-                <h3>
-                    Property Maintenance
-                </h3>
-
-
-                <p>
-
-                    Support for maintaining buildings,
-                    facilities and property environments
-                    so assets remain functional, attractive
-                    and valuable over time.
-
-                </p>
-
-
-                <a
-                    href="{% url 'contact' %}"
-                    class="service-card-link"
-                >
-
-                    Contact Maintenance Team
-
-                    <span>
-                        →
-                    </span>
-
-                </a>
-
-            </article>
-
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================================
-         OUR PROCESS
-    ====================================================== -->
-
-    <section class="services-process">
-
-
-        <div class="services-process-header">
-
-
-            <p class="services-process-label">
-                OUR APPROACH
+            <p class="services-eyebrow">
+                KING B REAL ESTATE & CONSTRUCTION
             </p>
 
+            <h1>
+                Our Services
+            </h1>
+
+            <p class="services-hero-description">
+                From finding the right property to developing,
+                managing and maintaining valuable real estate,
+                King B Real Estate provides professional
+                solutions designed around your goals.
+            </p>
+
+            <div class="services-hero-actions">
+
+                <a
+                    href="{% url 'contact' %}"
+                    class="services-hero-button services-button-primary"
+                >
+                    Contact Us
+                    <span>→</span>
+                </a>
+
+                <a
+                    href="#services"
+                    class="services-hero-button services-button-secondary"
+                >
+                    Explore Services
+                    <span>↓</span>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="services-hero-panel">
+
+            <div class="services-hero-panel-label">
+                WHY KING B
+            </div>
 
             <h2>
-                From your first conversation
-                to the right solution.
+                One trusted partner
+                for your property journey.
             </h2>
 
-
             <p>
-
-                We focus on understanding what you actually
-                need before recommending a property,
-                development, management or construction
-                solution.
-
+                We combine real estate knowledge,
+                development experience and practical
+                property management solutions to help
+                clients make confident decisions.
             </p>
 
+            <div class="services-panel-stats">
+
+                <div class="services-panel-stat">
+                    <strong>01</strong>
+                    <span>Property</span>
+                </div>
+
+                <div class="services-panel-stat">
+                    <strong>02</strong>
+                    <span>Development</span>
+                </div>
+
+                <div class="services-panel-stat">
+                    <strong>03</strong>
+                    <span>Management</span>
+                </div>
+
+                <div class="services-panel-stat">
+                    <strong>04</strong>
+                    <span>Construction</span>
+                </div>
+
+            </div>
 
         </div>
 
+    </div>
 
-        <div class="process-grid">
+</section>
+
+<!-- =====================================================
+     INTRO
+====================================================== -->
+
+<section class="services-intro reveal-section">
+
+    <p class="services-intro-label">
+        WHAT WE DO
+    </p>
+
+    <h2>
+        Professional solutions
+        for real estate and construction.
+    </h2>
+
+    <p>
+        Whether you are buying land, developing property,
+        searching for an investment opportunity or
+        protecting the value of an existing property,
+        our services are structured to provide practical,
+        reliable and professional support.
+    </p>
+
+</section>
+
+<!-- =====================================================
+     SERVICES
+====================================================== -->
+
+<section
+    class="services-list-section reveal-section"
+    id="services"
+>
+
+    <div class="services-grid">
 
 
-            <div class="process-item">
+        <!-- REAL ESTATE SALES -->
 
+        <article class="service-card featured reveal-service">
 
-                <h3>
-                    Tell Us Your Goal
-                </h3>
+            <div class="service-icon">
+                🏡
+            </div>
 
+            <h3>
+                Real Estate Sales
+            </h3>
 
-                <p>
+            <p>
+                Discover residential, commercial and
+                land opportunities carefully presented
+                to help you make informed property
+                ownership and investment decisions.
+            </p>
 
-                    Share what you are looking to buy,
-                    build, manage or achieve.
+            <div class="service-details">
 
-                </p>
+                <div class="service-details-inner">
 
+                    <div class="service-details-content">
+
+                        <p>
+                            We help clients identify suitable
+                            properties and land opportunities
+                            based on their ownership,
+                            investment and development goals.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Residential properties</li>
+                            <li>Commercial properties</li>
+                            <li>Land and investment opportunities</li>
+                            <li>Property selection support</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'property_list' %}"
+                            class="service-action"
+                        >
+                            Explore Properties →
+                        </a>
+
+                    </div>
+
+                </div>
 
             </div>
 
-
-            <div class="process-item">
-
-
-                <h3>
-                    We Understand
-                </h3>
-
-
-                <p>
-
-                    Our team reviews your requirements
-                    and identifies suitable options.
-
-                </p>
-
-
-            </div>
-
-
-            <div class="process-item">
-
-
-                <h3>
-                    We Recommend
-                </h3>
-
-
-                <p>
-
-                    We present practical solutions
-                    aligned with your objectives.
-
-                </p>
-
-
-            </div>
-
-
-            <div class="process-item">
-
-
-                <h3>
-                    Move Forward
-                </h3>
-
-
-                <p>
-
-                    Once you are satisfied, we help you
-                    take the next step.
-
-                </p>
-
-
-            </div>
-
-
-        </div>
-
-
-    </section>
-
-
-    <!-- =====================================================
-         CONTACT CTA
-    ====================================================== -->
-
-    <section class="services-cta">
-
-
-        <div class="services-cta-content">
-
-
-            <div class="services-cta-copy">
-
-
-                <p class="services-cta-label">
-                    LET'S WORK TOGETHER
-                </p>
-
-
-                <h2>
-                    Have a property,
-                    construction or investment goal?
-                </h2>
-
-
-                <p>
-
-                    Speak with the King B team and let us
-                    understand what you need. We will help
-                    you identify the right next step.
-
-                </p>
-
-
-            </div>
-
-
-            <a
-                href="{% url 'contact' %}"
-                class="services-cta-button"
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
             >
-
-                <span>
-                    Contact Us
+                <span class="service-expand-text">
+                    Learn More
                 </span>
 
-                <span>
-                    →
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
+
+
+        <!-- LAND -->
+
+        <article class="service-card reveal-service">
+
+            <div class="service-icon">
+                🌳
+            </div>
+
+            <h3>
+                Land & Estate Development
+            </h3>
+
+            <p>
+                We offer structured land opportunities
+                within carefully planned developments,
+                helping clients identify suitable locations,
+                plot options and investment opportunities.
+            </p>
+
+            <div class="service-details">
+
+                <div class="service-details-inner">
+
+                    <div class="service-details-content">
+
+                        <p>
+                            Our land and estate services help
+                            clients understand available
+                            locations and make informed
+                            decisions before committing to
+                            a property.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Estate plot opportunities</li>
+                            <li>Location assessment</li>
+                            <li>Land investment guidance</li>
+                            <li>Development opportunities</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'property_list' %}"
+                            class="service-action"
+                        >
+                            View Estates →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
+            >
+                <span class="service-expand-text">
+                    Learn More
                 </span>
 
-            </a>
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
 
 
+        <!-- CONSTRUCTION -->
+
+        <article class="service-card reveal-service">
+
+            <div class="service-icon">
+                🏗️
+            </div>
+
+            <h3>
+                Construction Services
+            </h3>
+
+            <p>
+                From project planning through construction,
+                we support property owners and investors with
+                practical construction and development solutions.
+            </p>
+
+            <div class="service-details">
+
+                <div class="service-details-inner">
+
+                    <div class="service-details-content">
+
+                        <p>
+                            We support construction projects
+                            with practical planning, coordination
+                            and development-focused solutions.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Project planning</li>
+                            <li>Construction coordination</li>
+                            <li>Development support</li>
+                            <li>Property improvement</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'contact' %}"
+                            class="service-action"
+                        >
+                            Discuss a Project →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
+            >
+                <span class="service-expand-text">
+                    Learn More
+                </span>
+
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
+
+
+        <!-- PROPERTY MANAGEMENT -->
+
+        <article class="service-card reveal-service">
+
+            <div class="service-icon">
+                🔑
+            </div>
+
+            <h3>
+                Property Management
+            </h3>
+
+            <p>
+                Professional oversight of properties,
+                helping owners maintain their assets,
+                coordinate services and protect long-term
+                property value.
+            </p>
+
+            <div class="service-details">
+
+                <div class="service-details-inner">
+
+                    <div class="service-details-content">
+
+                        <p>
+                            We help property owners maintain
+                            and coordinate their assets while
+                            reducing the everyday burden of
+                            property management.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Property oversight</li>
+                            <li>Maintenance coordination</li>
+                            <li>Service provider coordination</li>
+                            <li>Asset care</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'contact' %}"
+                            class="service-action"
+                        >
+                            Talk to Our Team →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
+            >
+                <span class="service-expand-text">
+                    Learn More
+                </span>
+
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
+
+
+        <!-- FACILITY -->
+
+        <article class="service-card reveal-service">
+
+            <div class="service-icon">
+                🏢
+            </div>
+
+            <h3>
+                Facility Management
+            </h3>
+
+            <p>
+                We help organisations and property owners
+                coordinate facilities, maintenance activities,
+                service providers and day-to-day operational
+                requirements.
+            </p>
+
+            <div class="service-details">
+
+                <div class="service-details-inner">
+
+                    <div class="service-details-content">
+
+                        <p>
+                            Our facility management support
+                            helps keep buildings and operational
+                            environments organised, functional
+                            and properly maintained.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Facility coordination</li>
+                            <li>Maintenance support</li>
+                            <li>Service coordination</li>
+                            <li>Operational support</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'contact' %}"
+                            class="service-action"
+                        >
+                            Request Consultation →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
+            >
+                <span class="service-expand-text">
+                    Learn More
+                </span>
+
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
+
+
+        <!-- INVESTMENT -->
+
+        <article class="service-card reveal-service">
+
+            <div class="service-icon">
+                📈
+            </div>
+
+            <h3>
+                Real Estate Investment Advisory
+            </h3>
+
+            <p>
+                Practical guidance for clients evaluating
+                property opportunities, development projects
+                and real estate investments.
+            </p>
+
+            <div class="service-details">
+
+                <div class="service-details-inner">
+
+                    <div class="service-details-content">
+
+                        <p>
+                            We help clients assess potential
+                            property opportunities and understand
+                            the factors that can influence a
+                            real estate investment decision.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Investment opportunity review</li>
+                            <li>Property evaluation support</li>
+                            <li>Development opportunity guidance</li>
+                            <li>Real estate planning</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'contact' %}"
+                            class="service-action"
+                        >
+                            Speak With Us →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
+            >
+                <span class="service-expand-text">
+                    Learn More
+                </span>
+
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
+
+
+        <!-- MARKETING -->
+
+        <article class="service-card reveal-service">
+
+            <div class="service-icon">
+                📣
+            </div>
+
+            <h3>
+                Property Marketing
+            </h3>
+
+            <p>
+                Professional presentation and marketing
+                support designed to increase visibility
+                and connect property opportunities with
+                potential buyers and investors.
+            </p>
+
+            <div class="service-details">
+
+                <div class="service-details-inner">
+
+                    <div class="service-details-content">
+
+                        <p>
+                            We help property owners present
+                            their properties professionally and
+                            improve their visibility to potential
+                            buyers and investors.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Property presentation</li>
+                            <li>Marketing support</li>
+                            <li>Buyer visibility</li>
+                            <li>Investment promotion</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'contact' %}"
+                            class="service-action"
+                        >
+                            Market Your Property →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
+            >
+                <span class="service-expand-text">
+                    Learn More
+                </span>
+
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
+
+
+        <!-- CONSULTANCY -->
+
+        <article class="service-card reveal-service">
+
+            <div class="service-icon">
+                🧭
+            </div>
+
+            <h3>
+                Property & Land Consultancy
+            </h3>
+
+            <p>
+                Get professional guidance when evaluating
+                land, property locations, development
+                opportunities and the right next step
+                for your real estate plans.
+            </p>
+
+            <div class="service-details">
+
+                <div class="service-details-inner">
+
+                    <div class="service-details-content">
+
+                        <p>
+                            We provide practical guidance to
+                            clients who need help understanding
+                            property, land and development
+                            opportunities.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Land evaluation guidance</li>
+                            <li>Property location advice</li>
+                            <li>Development planning</li>
+                            <li>Real estate decision support</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'contact' %}"
+                            class="service-action"
+                        >
+                            Book a Consultation →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
+            >
+                <span class="service-expand-text">
+                    Learn More
+                </span>
+
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
+
+
+        <!-- MAINTENANCE -->
+
+        <article class="service-card reveal-service">
+
+            <div class="service-icon">
+                🛠️
+            </div>
+
+            <h3>
+                Property Maintenance
+            </h3>
+
+            <p>
+                Support for maintaining buildings,
+                facilities and property environments
+                so assets remain functional, attractive
+                and valuable over time.
+            </p>
+
+            <div class="service-details">
+
+                <div class="service-details-inner">
+
+                    <div class="service-details-content">
+
+                        <p>
+                            We help property owners keep their
+                            buildings and facilities in good
+                            condition through practical
+                            maintenance support.
+                        </p>
+
+                        <ul class="service-details-list">
+                            <li>Building maintenance</li>
+                            <li>Facility maintenance</li>
+                            <li>Maintenance coordination</li>
+                            <li>Property upkeep</li>
+                        </ul>
+
+                        <a
+                            href="{% url 'contact' %}"
+                            class="service-action"
+                        >
+                            Contact Maintenance Team →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="service-expand-button"
+                aria-expanded="false"
+            >
+                <span class="service-expand-text">
+                    Learn More
+                </span>
+
+                <span class="service-expand-arrow">
+                    ↓
+                </span>
+            </button>
+
+        </article>
+
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     PROCESS
+====================================================== -->
+
+<section class="services-process reveal-section">
+
+    <div class="services-process-header">
+
+        <p class="services-process-label">
+            OUR APPROACH
+        </p>
+
+        <h2>
+            From your first conversation
+            to the right solution.
+        </h2>
+
+        <p>
+            We focus on understanding what you actually
+            need before recommending a property,
+            development, management or construction
+            solution.
+        </p>
+
+    </div>
+
+
+    <div class="process-grid">
+
+        <div class="process-item active">
+            <span class="process-number">01</span>
+
+            <h3>
+                Tell Us Your Goal
+            </h3>
+
+            <p>
+                Share what you are looking to buy,
+                build, manage or achieve.
+            </p>
         </div>
 
 
-    </section>
+        <div class="process-item">
+            <span class="process-number">02</span>
 
+            <h3>
+                We Understand
+            </h3>
+
+            <p>
+                Our team reviews your requirements
+                and identifies suitable options.
+            </p>
+        </div>
+
+
+        <div class="process-item">
+            <span class="process-number">03</span>
+
+            <h3>
+                We Recommend
+            </h3>
+
+            <p>
+                We present practical solutions
+                aligned with your objectives.
+            </p>
+        </div>
+
+
+        <div class="process-item">
+            <span class="process-number">04</span>
+
+            <h3>
+                Move Forward
+            </h3>
+
+            <p>
+                Once you are satisfied, we help you
+                take the next step.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     CTA
+====================================================== -->
+
+<section class="services-cta reveal-section">
+
+    <div class="services-cta-content">
+
+        <div class="services-cta-copy">
+
+            <p class="services-cta-label">
+                LET'S WORK TOGETHER
+            </p>
+
+            <h2>
+                Have a property,
+                construction or investment goal?
+            </h2>
+
+            <p>
+                Speak with the King B team and let us
+                understand what you need. We will help
+                you identify the right next step.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'contact' %}"
+            class="services-cta-button"
+        >
+            Contact Us
+            <span>→</span>
+        </a>
+
+    </div>
+
+</section>
 
 </main>
 
-
-<!-- =========================================================
-     FLOATING CONTACT BUTTON
-========================================================= -->
+<!-- =====================================================
+     FLOATING CONTACT
+====================================================== -->
 
 <a
     href="{% url 'contact' %}"
@@ -2507,143 +2110,313 @@
 
     Contact Us
 
-    <span>
-        →
-    </span>
+    <span>→</span>
 
 </a>
 
+<!-- =====================================================
+     BACK TO TOP
+====================================================== -->
 
-<!-- =========================================================
+<button
+    type="button"
+    class="services-top-button"
+    id="servicesTopButton"
+    aria-label="Back to top"
+>
+
+    ↑
+
+</button>
+
+<!-- =====================================================
      INTERACTION JAVASCRIPT
-========================================================= -->
+====================================================== -->
 
 <script>
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* =====================================================
+       SERVICE CARD EXPANSION
+    ===================================================== */
+
+    const serviceCards =
+        document.querySelectorAll(".service-card");
 
 
-        /* =====================================================
-           SMOOTH SCROLL TO SERVICES
-        ===================================================== */
+    serviceCards.forEach(function (card) {
 
-        const exploreButton =
-            document.querySelector(
-                'a[href="#services"]'
-            );
+        const button =
+            card.querySelector(".service-expand-button");
 
-
-        if (exploreButton) {
-
-            exploreButton.addEventListener(
-                "click",
-                function (event) {
-
-                    const target =
-                        document.getElementById(
-                            "services"
-                        );
-
-
-                    if (target) {
-
-                        event.preventDefault();
-
-
-                        target.scrollIntoView(
-                            {
-                                behavior: "smooth",
-                                block: "start"
-                            }
-                        );
-
-                    }
-
-                }
-            );
-
+        if (!button) {
+            return;
         }
 
 
-        /* =====================================================
-           SERVICE CARD REVEAL
-        ===================================================== */
+        button.addEventListener("click", function () {
 
-        const serviceCards =
-            document.querySelectorAll(
-                ".service-card"
-            );
+            const isAlreadyOpen =
+                card.classList.contains("active");
 
 
-        if (
-            "IntersectionObserver"
-            in window
-        ) {
+            /*
+             * Close every other service
+             */
 
-            const observer =
-                new IntersectionObserver(
-                    function (
-                        entries,
-                        observer
-                    ) {
+            serviceCards.forEach(function (otherCard) {
 
-                        entries.forEach(
-                            function (entry) {
+                otherCard.classList.remove("active");
 
-                                if (
-                                    entry.isIntersecting
-                                ) {
-
-                                    entry.target.style.opacity =
-                                        "1";
-
-                                    entry.target.style.transform =
-                                        "translateY(0)";
-
-                                    observer.unobserve(
-                                        entry.target
-                                    );
-
-                                }
-
-                            }
-                        );
-
-                    },
-                    {
-                        threshold: 0.12
-                    }
-                );
-
-
-            serviceCards.forEach(
-                function (card) {
-
-                    card.style.opacity =
-                        "0";
-
-                    card.style.transform =
-                        "translateY(18px)";
-
-                    card.style.transition =
-                        "opacity .55s ease, transform .55s ease, box-shadow .28s ease, border-color .28s ease";
-
-
-                    observer.observe(
-                        card
+                const otherButton =
+                    otherCard.querySelector(
+                        ".service-expand-button"
                     );
 
+                if (otherButton) {
+
+                    otherButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                    const text =
+                        otherButton.querySelector(
+                            ".service-expand-text"
+                        );
+
+                    if (text) {
+                        text.textContent = "Learn More";
+                    }
+
+                }
+
+            });
+
+
+            /*
+             * Open selected service
+             */
+
+            if (!isAlreadyOpen) {
+
+                card.classList.add("active");
+
+                button.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+                const text =
+                    button.querySelector(
+                        ".service-expand-text"
+                    );
+
+                if (text) {
+                    text.textContent = "Show Less";
+                }
+
+            }
+
+        });
+
+    });
+
+
+    /* =====================================================
+       SMOOTH SCROLL
+    ===================================================== */
+
+    const exploreButton =
+        document.querySelector(
+            'a[href="#services"]'
+        );
+
+
+    if (exploreButton) {
+
+        exploreButton.addEventListener(
+            "click",
+            function (event) {
+
+                const target =
+                    document.getElementById("services");
+
+
+                if (target) {
+
+                    event.preventDefault();
+
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SCROLL REVEAL
+    ===================================================== */
+
+    const revealElements =
+        document.querySelectorAll(
+            ".reveal-section, .reveal-service"
+        );
+
+
+    if ("IntersectionObserver" in window) {
+
+        const revealObserver =
+            new IntersectionObserver(
+                function (entries, observer) {
+
+                    entries.forEach(function (entry) {
+
+                        if (entry.isIntersecting) {
+
+                            entry.target.classList.add(
+                                "revealed"
+                            );
+
+                            observer.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    });
+
+                },
+                {
+                    threshold: 0.12
                 }
             );
+
+
+        revealElements.forEach(function (element) {
+
+            revealObserver.observe(element);
+
+        });
+
+    } else {
+
+        revealElements.forEach(function (element) {
+
+            element.classList.add("revealed");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       STAGGER SERVICE CARDS
+    ===================================================== */
+
+    serviceCards.forEach(function (card, index) {
+
+        card.style.transitionDelay =
+            (index * 0.05) + "s";
+
+    });
+
+
+    /* =====================================================
+       PROCESS ITEM INTERACTION
+    ===================================================== */
+
+    const processItems =
+        document.querySelectorAll(
+            ".process-item"
+        );
+
+
+    processItems.forEach(function (item) {
+
+        item.addEventListener(
+            "click",
+            function () {
+
+                processItems.forEach(function (other) {
+
+                    other.classList.remove("active");
+
+                });
+
+                item.classList.add("active");
+
+            }
+        );
+
+    });
+
+
+    /* =====================================================
+       BACK TO TOP
+    ===================================================== */
+
+    const topButton =
+        document.getElementById(
+            "servicesTopButton"
+        );
+
+
+    function checkScroll() {
+
+        if (!topButton) {
+            return;
+        }
+
+
+        if (window.scrollY > 500) {
+
+            topButton.classList.add("visible");
+
+        } else {
+
+            topButton.classList.remove("visible");
 
         }
 
     }
-);
+
+
+    window.addEventListener(
+        "scroll",
+        checkScroll,
+        { passive: true }
+    );
+
+
+    checkScroll();
+
+
+    if (topButton) {
+
+        topButton.addEventListener(
+            "click",
+            function () {
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            }
+        );
+
+    }
+
+});
 
 </script>
-
 
 {% endblock %}

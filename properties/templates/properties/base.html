@@ -1,809 +1,803 @@
+{% extends "properties/base.html" %}
+{% load humanize %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}
+    KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
 
-<head>
 
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        {% block title %}
-            KING B REAL ESTATE & CONSTRUCTION LTD
-        {% endblock %}
-    </title>
-
-
-    <link
-        rel="icon"
-        type="image/png"
-        href="{% static 'properties/Image/kingb-logo.png' %}"
-    >
-
-
-    <link
-        rel="stylesheet"
-        href="{% static 'properties/style.css' %}"
-    >
-
-
-    {% block extra_css %}{% endblock %}
-
-</head>
-
-
-<body>
-
-
-<!-- =====================================================
-     NAVIGATION
-===================================================== -->
-
-<header class="site-header">
-
-    <nav class="main-navbar">
-
-
-        <!-- =================================================
-             LOGO / BRAND
-        ================================================== -->
-
-        <div class="nav-brand">
-
-            <a href="{% url 'home' %}">
-
-                <img
-                    src="{% static 'properties/Image/kingb-logo.png' %}"
-                    alt="King B Logo"
-                >
-
-                <span>
-                    KING B REAL ESTATE & CONSTRUCTION LTD
-                </span>
-
-            </a>
-
-        </div>
-
-
-        <!-- =================================================
-             MOBILE MENU BUTTON
-        ================================================== -->
-
-        <button
-            class="menu-toggle"
-            type="button"
-            onclick="toggleMenu()"
-            aria-label="Open navigation menu"
-            aria-expanded="false"
-        >
-
-            <span></span>
-            <span></span>
-            <span></span>
-
-        </button>
-
-
-        <!-- =================================================
-             NAVIGATION
-        ================================================== -->
-
-        <div
-            class="nav-links"
-            id="navLinks"
-        >
-
-
-            <!-- PUBLIC WEBSITE -->
-
-            <a
-                href="{% url 'home' %}"
-                class="nav-link"
-            >
-                Home
-            </a>
-
-
-            <a
-                href="{% url 'property_list' %}"
-                class="nav-link"
-            >
-                Properties
-            </a>
-
-
-            <a
-                href="{% url 'jobs' %}"
-                class="nav-link"
-            >
-                Jobs
-            </a>
-
-
-            <a
-                href="{% url 'skilled_workers' %}"
-                class="nav-link"
-            >
-                Skilled Workers
-            </a>
-
-
-            <a
-                href="{% url 'marketplace' %}"
-                class="nav-link"
-            >
-                Marketplace
-            </a>
-{% if not request.user.is_authenticated %}
-
-    <a
-        href="{% url 'our_services' %}"
-        class="nav-link"
-    >
-        Our Services
-    </a>
-
-{% endif %}
-            <a
-                href="{% url 'contact' %}"
-                class="nav-link"
-            >
-                Contact
-            </a>
-
-
-            <!-- =================================================
-                 AUTHENTICATED USER
-            ================================================== -->
-
-            {% if request.user.is_authenticated %}
-
-                <div
-                    class="profile-menu"
-                    id="profileMenu"
-                >
-
-                    <button
-                        type="button"
-                        class="profile-button"
-                        id="profileButton"
-                        onclick="toggleProfileMenu(event)"
-                        aria-label="Open account menu"
-                        aria-expanded="false"
-                    >
-
-                        <span class="profile-avatar">
-
-                            {% if request.user.account_settings.profile_image %}
-
-                                <img
-                                    src="{{ request.user.account_settings.profile_image.url }}"
-                                    alt="Profile"
-                                >
-
-                            {% else %}
-
-                                <span class="profile-avatar-letter">
-
-                                    {{ request.user.first_name|default:request.user.username|first|upper }}
-
-                                </span>
-
-                            {% endif %}
-
-                        </span>
-
-
-                        <span class="profile-user-name">
-
-                            {{ request.user.first_name|default:request.user.username }}
-
-                        </span>
-
-
-                        <span
-                            class="profile-arrow"
-                            aria-hidden="true"
-                        >
-                            ▾
-                        </span>
-
-                    </button>
-
-
-                    <!-- PROFILE DROPDOWN -->
-
-                    <div
-                        class="profile-dropdown"
-                        id="profileDropdown"
-                    >
-
-
-                        <!-- PROFILE HEADER -->
-
-                        <div class="profile-dropdown-header">
-
-                            <div class="profile-dropdown-avatar">
-
-                                {% if request.user.account_settings.profile_image %}
-
-                                    <img
-                                        src="{{ request.user.account_settings.profile_image.url }}"
-                                        alt="Profile"
-                                    >
-
-                                {% else %}
-
-                                    <span>
-
-                                        {{ request.user.first_name|default:request.user.username|first|upper }}
-
-                                    </span>
-
-                                {% endif %}
-
-                            </div>
-
-
-                            <div class="profile-dropdown-user">
-
-                                <strong>
-
-                                    {{ request.user.get_full_name|default:request.user.username }}
-
-                                </strong>
-
-                                <span>
-
-                                    {{ request.user.email }}
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- ACCOUNT LINKS -->
-
-                        <div class="profile-dropdown-links">
-
-                            <a
-                                href="{% url 'marketplace_dashboard' %}"
-                                class="profile-dropdown-link"
-                            >
-
-                                <span class="dropdown-icon">
-                                    ◉
-                                </span>
-
-                                <span>
-                                    My Account
-                                </span>
-
-                            </a>
-
-
-                            <a
-                                href="{% url 'account_settings' %}"
-                                class="profile-dropdown-link"
-                            >
-
-                                <span class="dropdown-icon">
-                                    ⚙
-                                </span>
-
-                                <span>
-                                    Account Settings
-                                </span>
-
-                            </a>
-
-
-                            <a
-                                href="{% url 'property_list' %}"
-                                class="profile-dropdown-link"
-                            >
-
-                                <span class="dropdown-icon">
-                                    ◇
-                                </span>
-
-                                <span>
-                                    Browse Properties
-                                </span>
-
-                            </a>
-
-                        </div>
-
-
-                        <!-- LOGOUT -->
-
-                        <div class="profile-dropdown-footer">
-
-                            <a
-                                href="{% url 'site_logout' %}"
-                                class="profile-dropdown-logout"
-                            >
-
-                                <span class="dropdown-icon">
-                                    ↪
-                                </span>
-
-                                <span>
-                                    Logout
-                                </span>
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-            {% else %}
-
-
-                <!-- LOGGED OUT -->
-
-                <div class="nav-auth-actions">
-
-                    <a
-                        href="{% url 'site_login' %}"
-                        class="nav-login"
-                    >
-                        Login
-                    </a>
-
-                </div>
-
-            {% endif %}
-
-
-        </div>
-
-    </nav>
-
-</header>
-
-
-<!-- =====================================================
-     MAIN CONTENT
-===================================================== -->
-
-<main>
-
-
-    <!-- SITE MESSAGES -->
-
-    {% if messages %}
-
-        <div class="site-messages">
-
-            {% for message in messages %}
-
-                <div class="site-message site-message-{{ message.tags }}">
-
-                    <span class="message-icon">
-
-                        {% if message.tags == "success" %}
-
-                            ✓
-
-                        {% elif message.tags == "error" %}
-
-                            !
-
-                        {% elif message.tags == "warning" %}
-
-                            ⚠
-
-                        {% else %}
-
-                            ℹ
-
-                        {% endif %}
-
-                    </span>
-
-
-                    <span>
-                        {{ message }}
-                    </span>
-
-                </div>
-
-            {% endfor %}
-
-        </div>
-
-    {% endif %}
-
-
-    {% block content %}
-
-    {% endblock %}
-
-
-</main>
-
-
-<footer class="modern-footer">
-
-    <div class="footer-top-accent"></div>
-
-    <div class="footer-container">
-
-        <div class="footer-brand">
-
-            <a href="{% url 'home' %}" class="footer-logo">
-                <img src="{% static 'properties/Image/kingb-logo.png' %}" alt="King B Real Estate & Construction Ltd">
-                <div>
-                    <strong>KING B</strong>
-                    <span>REAL ESTATE & CONSTRUCTION LTD</span>
-                </div>
-            </a>
-
-            <p>
-                Building value. Creating opportunities.
-                Connecting people with quality property,
-                land and professional services.
-            </p>
-<div class="footer-socials">
-
-    <!-- FACEBOOK -->
-    <a
-        href="https://www.facebook.com/kingbrealestate/"
-        aria-label="Facebook"
-        class="footer-social-icon"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-
-        <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            focusable="false"
-        >
-            <path
-                fill="currentColor"
-                d="M13.5 21v-8h2.75l.4-3h-3.15V8.08c0-.87.24-1.46 1.5-1.46h1.8V3.94c-.31-.04-1.37-.14-2.61-.14-2.58 0-4.35 1.57-4.35 4.46V10H7v3h2.84v8h3.66z"
-            />
-        </svg>
-
-    </a>
-
-
-    <!-- X / TWITTER -->
-    <a
-        href="https://x.com/kingbrealestate"
-        aria-label="X"
-        class="footer-social-icon"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-
-        <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            focusable="false"
-        >
-            <path
-                fill="currentColor"
-                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817-5.965 6.817H1.682l7.73-8.835L1.254 2.25h6.826l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"
-            />
-        </svg>
-
-    </a>
-
-
-    <!-- INSTAGRAM -->
-    <a
-        href="https://www.instagram.com/kingbrealestate/"
-        aria-label="Instagram"
-        class="footer-social-icon"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-
-        <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            focusable="false"
-        >
-            <path
-                fill="currentColor"
-                d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5A3.75 3.75 0 0 0 20 16.25v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5zm8.75 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"
-            />
-        </svg>
-
-    </a>
-
-
-    <!-- WHATSAPP -->
-    <a
-        href="https://wa.me/2349134312508?text=Hello%20King%20B%20Real%20Estate,%20I%20would%20like%20to%20make%20an%20enquiry."
-        aria-label="WhatsApp"
-        class="footer-social-icon"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-
-        <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            focusable="false"
-        >
-            <path
-                fill="currentColor"
-                d="M20.52 3.48A11.82 11.82 0 0 0 12.08 0C5.55 0 .24 5.3.24 11.84c0 2.09.55 4.13 1.59 5.93L.14 24l6.39-1.67a11.86 11.86 0 0 0 5.55 1.41h.01c6.53 0 11.84-5.31 11.84-11.84 0-3.16-1.23-6.13-3.41-8.42zM12.09 21.74h-.01a9.84 9.84 0 0 1-5.01-1.37l-.36-.21-3.79.99 1.01-3.69-.23-.38a9.83 9.83 0 0 1-1.5-5.24C2.2 6.4 6.63 1.98 12.09 1.98c2.65 0 5.14 1.03 7.01 2.91a9.86 9.86 0 0 1 2.9 7.01c0 5.46-4.44 9.9-9.91 9.9zm5.43-7.42c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.66.15-.2.3-.76.97-.93 1.17-.17.2-.34.22-.63.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.34.44-.51.15-.17.2-.29.3-.49.1-.2.05-.37-.02-.52-.07-.15-.66-1.59-.9-2.18-.24-.58-.48-.5-.66-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.03 1.01-1.03 2.46s1.06 2.85 1.21 3.05c.15.2 2.08 3.18 5.03 4.45.7.3 1.25.48 1.68.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.69.25-1.29.17-1.42-.07-.12-.27-.2-.56-.34z"
-            />
-        </svg>
-
-    </a>
-
-
-   
-
-</div>
-        </div>
-
-        <div class="footer-links">
-            <h4>Explore</h4>
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'property_list' %}">Properties</a>
-            <a href="{% url 'marketplace' %}">Marketplace</a>
-            <a href="{% url 'skilled_workers' %}">Skilled Workers</a>
-        </div>
-
-        <div class="footer-links">
-            <h4>Company</h4>
-            <a href="{% url 'about' %}">About Us</a>
-            <a href="{% url 'jobs' %}">Careers</a>
-            <a href="{% url 'contact' %}">Contact</a>
-            {% if request.user.is_authenticated %}
-                <a href="{% url 'marketplace_dashboard' %}">My Account</a>
-            {% else %}
-                <a href="{% url 'site_login' %}">Login</a>
-            {% endif %}
-        </div>
-
-        <div class="footer-contact">
-            <h4>Get in touch</h4>
-
-            <a href="tel:+234XXXXXXXXXX" class="footer-contact-row">
-                <span class="footer-contact-icon">☎</span>
-                <span>+234 913 431 2508</span>
-            </a>
-            
-            <a href="tel:+234XXXXXXXXXX" class="footer-contact-row">
-                
-                <span>+234 913 431 2508</span>
-            </a>
-
-            <a href="mailto:info@kingbrealestate.com" class="footer-contact-row">
-                <span class="footer-contact-icon">✉</span>
-                <span>hello@kingbrealestate.com</span>
-            </a>
-
-            <div class="footer-contact-row">
-                <span class="footer-contact-icon">📍</span>
-                <a
-     href="https://www.google.com/maps/search/?api=1&query=Plot+122C+General+Diriya+Lane,+Tombia+Extension,+GRA+Phase+2,+Port+Harcourt,+Rivers+State"
-    target="_blank"
-    rel="noopener"
-    class="kb-address-link"
->
-                <span>Plot 122C General Diriya Lane Tombia Extension GRA phase 2 Port Harcourt Rivers State</span>
-                </a>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        <div class="footer-bottom-inner">
-            <span>© {% now "Y" %} King B Real Estate & Construction Ltd. All rights reserved.</span>
-            <span class="footer-tagline">Excellence in Property & Construction</span>
-        </div>
-    </div>
-
-</footer>
-
-
+{% block extra_css %}
 
 <style>
-    /* =====================================================
-     NAVIGATION / PROFILE CSS
-===================================================== */
+
+/* =========================================================
+   KING B REAL ESTATE
+   PREMIUM MODERN HOMEPAGE
+========================================================= */
+
+.home-page {
+
+    --kb-green: #123c2f;
+    --kb-dark: #062119;
+    --kb-dark-2: #0b2d23;
+
+    --kb-gold: #b58b3b;
+    --kb-gold-light: #d4af63;
+
+    --kb-cream: #f5f7f4;
+    --kb-white: #ffffff;
+
+    --kb-text: #17231e;
+    --kb-muted: #69746f;
+
+    --kb-border: #e2e8e4;
+
+    background:
+        linear-gradient(rgba(245,247,244,.94), rgba(245,247,244,.94)),
+        url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=85")
+        center / cover fixed no-repeat;
+
+    color: var(--kb-text);
+
+    overflow: hidden;
+}
 
 
 /* =========================================================
-   HEADER
+   RESET
 ========================================================= */
 
-.site-header {
-    position: relative;
-
-    z-index: 1000;
+.home-page *,
+.home-page *::before,
+.home-page *::after {
+    box-sizing: border-box;
 }
 
 
-.main-navbar {
+/* =========================================================
+   SHARED CONTAINER
+========================================================= */
+
+.home-container {
+
+    width: min(1240px, 90%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.home-hero {
+
     position: relative;
+
+    min-height: 760px;
 
     display: flex;
 
     align-items: center;
 
-    justify-content: space-between;
+    overflow: hidden;
 
-    gap: 30px;
+    background:
+        linear-gradient(
+            115deg,
+            rgba(6,33,25,.96) 0%,
+            rgba(18,60,47,.88) 48%,
+            rgba(18,60,47,.60) 100%
+        ),
+        url("{% static 'properties/images/about-home.jpg' %}")
+        center / cover no-repeat;
+
+    color: #ffffff;
 }
 
 
-.nav-links {
-    display: flex;
+/* =========================================================
+   HERO DECOR
+========================================================= */
 
-    align-items: center;
+.home-hero::before {
 
-    gap: 24px;
-}
-
-
-.nav-link {
-    position: relative;
-
-    color: inherit;
-
-    text-decoration: none;
-
-    white-space: nowrap;
-}
-
-
-.nav-link::after {
     content: "";
 
     position: absolute;
 
-    left: 0;
-    right: 0;
+    width: 620px;
 
-    bottom: -7px;
+    height: 620px;
 
-    height: 2px;
+    right: -240px;
 
-    background: #b58b3b;
+    top: -260px;
 
-    transform: scaleX(0);
+    border:
+        1px solid
+        rgba(
+            212,
+            175,
+            99,
+            .16
+        );
 
-    transform-origin: center;
-
-    transition:
-        transform .25s ease;
+    border-radius: 50%;
 }
 
 
-.nav-link:hover::after {
-    transform: scaleX(1);
+.home-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 340px;
+
+    height: 340px;
+
+    left: -190px;
+
+    bottom: -200px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+    border-radius: 50%;
 }
 
 
 /* =========================================================
-   AUTH
+   HERO CONTENT
 ========================================================= */
 
-.nav-auth-actions {
-    display: flex;
+.home-hero-content {
 
-    align-items: center;
-
-    gap: 10px;
-}
-
-
-.nav-login:hover {
-    color: #ffffff;
-
-    background: #123c2f;
-}
-
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-.profile-menu {
     position: relative;
 
-    z-index: 99999;
+    z-index: 2;
+
+    width: min(1240px, 90%);
+
+    margin: 0 auto;
+
+    padding:
+        105px 0 95px;
 }
 
 
-.profile-button {
+.home-hero-eyebrow {
+
+    margin: 0 0 17px;
+
+    color: var(--kb-gold-light);
+
+    font-size: 11px;
+
+    font-weight: 850;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+.home-hero h1 {
+
+    max-width: 850px;
+
+    margin: 0 0 23px;
+
+    color: #ffffff;
+
+    font-size:
+        clamp(
+            52px,
+            7vw,
+            92px
+        );
+
+    line-height: .95;
+
+    letter-spacing: -4px;
+
+    font-weight: 760;
+}
+
+
+.home-hero-description {
+
+    max-width: 620px;
+
+    margin: 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .76
+        );
+
+    font-size: 16px;
+
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   HERO BUTTONS
+========================================================= */
+
+.home-hero-actions {
+
     display: flex;
 
-    align-items: center;
+    flex-wrap: wrap;
 
-    gap: 9px;
+    gap: 11px;
 
-    padding: 5px 10px 5px 5px;
-
-    background: #ffffff;
-
-    border: 1px solid #dfe5e1;
-
-    border-radius: 999px;
-
-    color: #123c2f;
-
-    cursor: pointer;
-
-    font-family: inherit;
-
-    font-size: 13px;
-
-    font-weight: 700;
-
-    transition:
-        box-shadow .2s ease,
-        border-color .2s ease,
-        background .2s ease;
+    margin-top: 32px;
 }
 
 
-.profile-button:hover,
-.profile-button.active {
-    border-color: #cdd8d2;
+.home-hero-button {
 
-    background: #f8faf8;
-
-    box-shadow:
-        0 7px 22px
-        rgba(8, 39, 30, .08);
-}
-
-
-.profile-avatar {
-    width: 34px;
-
-    height: 34px;
-
-    flex: 0 0 34px;
-
-    display: flex;
+    display: inline-flex;
 
     align-items: center;
 
     justify-content: center;
 
-    overflow: hidden;
+    gap: 10px;
+
+    min-height: 49px;
+
+    padding:
+        0 20px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+    transition:
+        transform .22s ease,
+        background .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+
+.home-button-primary {
+
+    background: var(--kb-gold);
+
+    border:
+        1px solid
+        var(--kb-gold);
+
+    color: #ffffff;
+
+    box-shadow:
+        0 12px 28px
+        rgba(
+            181,
+            139,
+            59,
+            .18
+        );
+}
+
+
+.home-button-primary:hover {
+
+    background: #c49a4e;
+
+    border-color: #c49a4e;
+
+    color: #ffffff;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 16px 34px
+        rgba(
+            181,
+            139,
+            59,
+            .26
+        );
+}
+
+
+.home-button-secondary {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .06
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .18
+        );
+
+    color: #ffffff;
+
+    backdrop-filter: blur(10px);
+}
+
+
+.home-button-secondary:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .12
+        );
+
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            .30
+        );
+
+    color: #ffffff;
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================================================
+   HERO TRUST BAR
+========================================================= */
+
+.home-hero-trust {
+
+    margin-top: 55px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+
+.home-trust-item {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 36px;
+
+    padding:
+        0 12px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .055
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+
+    border-radius: 999px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .68
+        );
+
+    font-size: 9px;
+
+    font-weight: 750;
+
+    letter-spacing: .05em;
+}
+
+
+.home-trust-dot {
+
+    width: 6px;
+
+    height: 6px;
 
     border-radius: 50%;
 
     background:
-        linear-gradient(
-            135deg,
-            #123c2f,
-            #1c5b46
-        );
-
-    color: #ffffff;
+        var(--kb-gold-light);
 }
 
 
-.profile-avatar img {
+/* =========================================================
+   SEARCH SECTION
+========================================================= */
+
+.home-search-section {
+
+    position: relative;
+
+    z-index: 5;
+
+    margin-top: -52px;
+}
+
+
+.home-search-card {
+
+    width: min(1120px, 90%);
+
+    margin: 0 auto;
+
+    padding: 20px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 24px 60px
+        rgba(
+            18,
+            60,
+            47,
+            .12
+        );
+}
+
+
+.home-search-heading {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 15px;
+}
+
+
+.home-search-heading h2 {
+
+    margin: 0;
+
+    color: var(--kb-green);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.home-search-heading p {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 11px;
+}
+
+
+.home-search-form {
+
+    display: grid;
+
+    grid-template-columns:
+        1.4fr
+        1fr
+        1.1fr
+        auto;
+
+    gap: 9px;
+}
+
+
+.home-search-input,
+.home-search-select {
+
+    width: 100%;
+
+    min-height: 47px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        #dce4df;
+
+    border-radius: 9px;
+
+    background: #f8faf8;
+
+    color: var(--kb-text);
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.home-search-input:focus,
+.home-search-select:focus {
+
+    background: #ffffff;
+
+    border-color: var(--kb-gold);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            181,
+            139,
+            59,
+            .10
+        );
+}
+
+
+.home-search-button {
+
+    min-height: 47px;
+
+    padding:
+        0 19px;
+
+    border:
+        1px solid
+        var(--kb-green);
+
+    border-radius: 9px;
+
+    background: var(--kb-green);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+
+.home-search-button:hover {
+
+    background: var(--kb-gold);
+
+    border-color: var(--kb-gold);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.home-section-header {
+
+    max-width: 780px;
+
+    margin-bottom: 34px;
+}
+
+
+.home-section-label {
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+    color: var(--kb-gold);
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    letter-spacing: 2.4px;
+
+    text-transform: uppercase;
+}
+
+
+.home-section-header h2 {
+
+    margin: 0 0 12px;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            34px,
+            4.2vw,
+            52px
+        );
+
+    line-height: 1.04;
+
+    letter-spacing: -1.5px;
+
+    font-weight: 760;
+}
+
+
+.home-section-header p {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   FEATURED PROPERTIES
+========================================================= */
+
+.home-properties {
+
+    padding:
+        105px 0 0;
+}
+
+
+.home-property-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   PROPERTY CARD
+========================================================= */
+
+.home-property-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background:
+        var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 9px 30px
+        rgba(
+            8,
+            39,
+            30,
+            .045
+        );
+
+    transition:
+        transform .28s ease,
+        box-shadow .28s ease,
+        border-color .28s ease;
+}
+
+
+.home-property-card:hover {
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        #d5dfd9;
+
+    box-shadow:
+        0 22px 46px
+        rgba(
+            8,
+            39,
+            30,
+            .10
+        );
+}
+
+
+/* =========================================================
+   PROPERTY IMAGE
+========================================================= */
+
+.home-property-image {
+
+    position: relative;
+
+    height: 280px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b2d23,
+            #123c2f
+        );
+}
+
+
+.home-property-image img {
+
     width: 100%;
 
     height: 100%;
@@ -811,140 +805,701 @@
     display: block;
 
     object-fit: cover;
-}
-
-
-.profile-avatar-letter {
-    color: #ffffff;
-
-    font-size: 13px;
-
-    font-weight: 800;
-}
-
-
-.profile-user-name {
-    max-width: 120px;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-
-.profile-arrow {
-    font-size: 13px;
 
     transition:
-        transform .2s ease;
+        transform .45s ease;
 }
 
 
-.profile-button.active .profile-arrow {
-    transform: rotate(180deg);
+.home-property-card:hover
+.home-property-image img {
+
+    transform:
+        scale(1.045);
 }
 
 
-/* =========================================================
-   PROFILE DROPDOWN
-========================================================= */
+.home-property-placeholder {
 
-.profile-dropdown {
-    position: absolute;
+    width: 100%;
 
-    top: calc(100% + 14px);
+    height: 100%;
 
-    right: 0;
-
-    width: 320px;
-
-    display: block;
-
-    padding: 0;
-
-    margin: 0;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    color: #18231f;
-
-    border: 1px solid #d9e1dc;
-
-    border-radius: 16px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 20px 55px
-        rgba(8, 39, 30, .20);
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    pointer-events: none;
-
-    transform: translateY(-8px);
-
-    transform-origin: top right;
-
-    transition:
-        opacity .2s ease,
-        visibility .2s ease,
-        transform .2s ease;
-
-    z-index: 999999;
-}
-
-
-.profile-dropdown.open {
-    opacity: 1;
-
-    visibility: visible;
-
-    pointer-events: auto;
-
-    transform: translateY(0);
-}
-
-
-/* =========================================================
-   DROPDOWN HEADER
-========================================================= */
-
-.profile-dropdown-header {
     display: flex;
 
     align-items: center;
 
-    gap: 13px;
+    justify-content: center;
 
-    width: 100%;
+    color:
+        var(--kb-gold-light);
 
-    padding: 18px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    color: #18231f;
-
-    border-bottom: 1px solid #edf0ee;
+    font-size: 42px;
 }
 
 
-.profile-dropdown-avatar {
+/* =========================================================
+   PROPERTY TYPE PILL
+========================================================= */
+
+.home-property-type {
+
+    position: absolute;
+
+    top: 13px;
+
+    left: 13px;
+
+    padding:
+        7px 9px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            6,
+            33,
+            25,
+            .82
+        );
+
+    color: #ffffff;
+
+    font-size: 8px;
+
+    font-weight: 850;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* =========================================================
+   PROPERTY CONTENT
+========================================================= */
+
+.home-property-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    padding:
+        22px;
+}
+
+
+.home-property-location {
+
+    margin: 0 0 8px;
+
+    color: var(--kb-muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.home-property-content h3 {
+
+    margin: 0 0 12px;
+
+    color: var(--kb-green);
+
+    font-size: 21px;
+
+    line-height: 1.2;
+
+    font-weight: 760;
+}
+
+
+.home-property-price {
+
+    margin: 0;
+
+    color: var(--kb-gold);
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    font-weight: 900;
+}
+
+
+.home-property-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+    padding-top: 15px;
+
+    border-top:
+        1px solid
+        #edf1ee;
+}
+
+
+.home-property-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--kb-green);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 850;
+}
+
+
+.home-property-link span {
+
+    transition:
+        transform .2s ease;
+}
+
+
+.home-property-link:hover {
+
+    color: var(--kb-gold);
+}
+
+
+.home-property-link:hover span {
+
+    transform:
+        translateX(4px);
+}
+
+
+/* =========================================================
+   EMPTY PROPERTIES
+========================================================= */
+
+.home-empty {
+
+    grid-column: 1 / -1;
+
+    padding:
+        70px 25px;
+
+    background:
+        var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 17px;
+
+    text-align: center;
+}
+
+
+.home-empty h3 {
+
+    margin: 0 0 8px;
+
+    color: var(--kb-green);
+
+    font-size: 21px;
+}
+
+
+.home-empty p {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   ABOUT SECTION
+========================================================= */
+
+.home-about {
+
+    padding:
+        120px 0 0;
+}
+
+
+.home-about-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 75px;
+
+    align-items: center;
+}
+
+
+/* =========================================================
+   ABOUT IMAGE
+========================================================= */
+
+.home-about-visual {
+
+    position: relative;
+}
+
+
+.home-about-image {
+
+    width: 100%;
+
+    height: 570px;
+
+    overflow: hidden;
+
+    border-radius:
+        20px;
+
+    background:
+        #dfe8e3;
+
+    box-shadow:
+        0 24px 60px
+        rgba(
+            8,
+            39,
+            30,
+            .09
+        );
+}
+
+
+.home-about-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition: transform .7s cubic-bezier(.2,.7,.2,1), filter .4s ease;
+}
+
+.home-about-image {
+    position: relative;
+}
+
+.home-about-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(6,33,25,.08), rgba(181,139,59,.04) 45%, rgba(6,33,25,.18));
+}
+
+.home-about-visual:hover .home-about-image img {
+    transform: scale(1.025);
+    filter: saturate(1.05) contrast(1.02);
+}
+
+.home-about-image-tag {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 3;
+    padding: 9px 12px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 999px;
+    background: rgba(6,33,25,.72);
+    color: #fff;
+    font-size: 8px;
+    font-weight: 850;
+    letter-spacing: .13em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(6,33,25,.15);
+}
+
+
+/* =========================================================
+   ABOUT BADGE
+========================================================= */
+
+.home-about-badge {
+
+    position: absolute;
+
+    right: -18px;
+
+    bottom: 35px;
+
+    width: 190px;
+
+    padding:
+        20px;
+
+    background:
+        var(--kb-green);
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+    border-radius:
+        15px;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 18px 40px
+        rgba(
+            8,
+            39,
+            30,
+            .18
+        );
+}
+
+
+.home-about-badge strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        var(--kb-gold-light);
+
+    font-size: 31px;
+
+    line-height: 1;
+
+    font-weight: 900;
+}
+
+
+.home-about-badge span {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .65
+        );
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    text-transform: uppercase;
+
+    letter-spacing: .07em;
+}
+
+
+/* =========================================================
+   ABOUT CONTENT
+========================================================= */
+
+.home-about-content {
+
+    max-width: 620px;
+}
+
+
+.home-about-content h2 {
+
+    margin: 0 0 17px;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            36px,
+            4.2vw,
+            55px
+        );
+
+    line-height: 1.03;
+
+    letter-spacing: -1.7px;
+
+    font-weight: 760;
+}
+
+
+.home-about-content h2 em {
+
+    color: var(--kb-gold);
+
+    font-style: normal;
+}
+
+
+.home-about-divider {
+
+    width: 45px;
+
+    height: 2px;
+
+    margin:
+        21px 0 23px;
+
+    background:
+        var(--kb-gold);
+}
+
+
+.home-about-lead {
+
+    margin: 0 0 16px;
+
+    color: var(--kb-text);
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+    font-weight: 550;
+}
+
+
+.home-about-content p:not(.home-about-lead) {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 14px;
+
+    line-height: 1.85;
+}
+
+
+.home-about-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 28px;
+
+    color: var(--kb-green);
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 850;
+}
+
+
+.home-about-link span {
+
+    transition:
+        transform .2s ease;
+}
+
+
+.home-about-link:hover {
+
+    color: var(--kb-gold);
+}
+
+
+.home-about-link:hover span {
+
+    transform:
+        translateX(5px);
+}
+
+
+/* =========================================================
+   VALUES SECTION
+========================================================= */
+
+.home-values {
+
+    margin-top:
+        125px;
+
+    padding:
+        95px 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef4f0,
+            #f6f8f6
+        );
+
+    border-top:
+        1px solid
+        #e5ebe7;
+
+    border-bottom:
+        1px solid
+        #e5ebe7;
+}
+
+
+.home-values-header {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, .85fr)
+        minmax(0, 1.15fr);
+
+    gap: 55px;
+
+    align-items: end;
+
+    margin-bottom: 38px;
+}
+
+
+.home-values-header h2 {
+
+    margin: 0;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            35px,
+            4.2vw,
+            53px
+        );
+
+    line-height: 1.04;
+
+    letter-spacing: -1.5px;
+}
+
+
+.home-values-header p {
+
+    max-width: 590px;
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   VALUES GRID
+========================================================= */
+
+.home-values-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 14px;
+}
+
+
+.home-value-card {
+
+    position: relative;
+
+    padding:
+        26px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius:
+        15px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(
+            8,
+            39,
+            30,
+            .035
+        );
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+.home-value-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    border-color:
+        #d2ddd6;
+
+    box-shadow:
+        0 15px 32px
+        rgba(
+            8,
+            39,
+            30,
+            .07
+        );
+}
+
+
+.home-value-icon {
+
     width: 48px;
 
     height: 48px;
 
-    min-width: 48px;
-
-    flex: 0 0 48px;
+    margin-bottom: 20px;
 
     display: flex;
 
@@ -952,1516 +1507,1408 @@
 
     justify-content: center;
 
+    border-radius: 12px;
+
+    background:
+        #eff5f1;
+
+    border:
+        1px solid
+        #dce8e1;
+
+    font-size: 21px;
+}
+
+
+.home-value-card h3 {
+
+    margin: 0 0 10px;
+
+    color: var(--kb-green);
+
+    font-size: 19px;
+
+    font-weight: 760;
+}
+
+
+.home-value-card p {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 12px;
+
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   CTA SECTION
+========================================================= */
+
+.home-cta {
+
+    padding:
+        120px 0;
+}
+
+
+.home-cta-card {
+
+    position: relative;
+
     overflow: hidden;
 
-    border-radius: 50%;
+    padding:
+        57px 62px;
+
+    border-radius:
+        22px;
 
     background:
         linear-gradient(
             135deg,
-            #123c2f,
-            #1d604c
+            #0a2f23,
+            #123c2f
         );
 
     color: #ffffff;
 
-    font-size: 16px;
-
-    font-weight: 800;
+    box-shadow:
+        0 28px 70px
+        rgba(
+            8,
+            39,
+            30,
+            .14
+        );
 }
 
 
-.profile-dropdown-avatar img {
-    width: 100%;
+.home-cta-card::before {
 
-    height: 100%;
+    content: "";
 
-    display: block;
+    position: absolute;
 
-    object-fit: cover;
+    width: 300px;
+
+    height: 300px;
+
+    right: -120px;
+
+    top: -170px;
+
+    border:
+        1px solid
+        rgba(
+            212,
+            175,
+            99,
+            .15
+        );
+
+    border-radius: 50%;
 }
 
 
-.profile-dropdown-user {
-    min-width: 0;
+.home-cta-card::after {
 
-    flex: 1;
+    content: "";
 
-    display: flex;
+    position: absolute;
 
-    flex-direction: column;
+    width: 220px;
 
-    gap: 5px;
+    height: 220px;
 
-    overflow: hidden;
+    left: -120px;
+
+    bottom: -150px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .07
+        );
+
+    border-radius: 50%;
 }
 
 
-.profile-dropdown-user strong {
-    display: block;
+.home-cta-content {
 
-    margin: 0;
-
-    padding: 0;
-
-    color: #123c2f;
-
-    font-size: 14px;
-
-    font-weight: 800;
-
-    line-height: 1.3;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-
-.profile-dropdown-user span {
-    display: block;
-
-    margin: 0;
-
-    padding: 0;
-
-    color: #68736e;
-
-    font-size: 11px;
-
-    font-weight: 500;
-
-    line-height: 1.4;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   DROPDOWN LINKS
-========================================================= */
-
-.profile-dropdown-links {
-    width: 100%;
-
-    padding: 8px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-}
-
-
-.profile-dropdown-link {
-    width: 100%;
-
-    min-height: 48px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    box-sizing: border-box;
-
-    margin: 0;
-
-    padding: 9px 11px;
-
-    background: #ffffff;
-
-    color: #263731;
-
-    border-radius: 9px;
-
-    text-decoration: none;
-
-    font-size: 13px;
-
-    font-weight: 650;
-
-    line-height: 1.3;
-
-    transition:
-        background .18s ease,
-        color .18s ease;
-}
-
-
-.profile-dropdown-link:hover {
-    background: #f2f6f3;
-
-    color: #123c2f;
-}
-
-
-.dropdown-icon {
-    width: 30px;
-
-    height: 30px;
-
-    min-width: 30px;
-
-    flex: 0 0 30px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    box-sizing: border-box;
-
-    border-radius: 8px;
-
-    background: #edf5f0;
-
-    color: #26734d;
-
-    font-size: 13px;
-
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-.profile-dropdown-footer {
-    width: 100%;
-
-    padding: 8px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    border-top: 1px solid #edf0ee;
-}
-
-
-.profile-dropdown-logout {
-    width: 100%;
-
-    min-height: 48px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    box-sizing: border-box;
-
-    margin: 0;
-
-    padding: 9px 11px;
-
-    background: #ffffff;
-
-    color: #a33a3a;
-
-    border-radius: 9px;
-
-    text-decoration: none;
-
-    font-size: 13px;
-
-    font-weight: 700;
-}
-
-
-.profile-dropdown-logout:hover {
-    background: #fff3f3;
-}
-
-
-.profile-dropdown-logout .dropdown-icon {
-    background: #f9eaea;
-
-    color: #a33a3a;
-}
-
-
-/* =========================================================
-   =========================================================
-   MODERN FOOTER
-   =========================================================
-========================================================= */
-
-.modern-footer {
     position: relative;
-    margin-top: 75px;
-    background: linear-gradient(145deg, #091c16, #0d291f);
-    color: #ffffff;
-}
 
-.footer-top-accent {
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #d4af63, transparent);
-}
+    z-index: 2;
 
-.footer-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 60px 30px 46px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.25fr;
-    gap: 50px;
-    box-sizing: border-box;
-}
-
-.footer-brand {
-    max-width: 390px;
-}
-
-.footer-logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 13px;
-    margin-bottom: 18px;
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.footer-logo img {
-    width: 50px;
-    height: 50px;
-    display: block;
-    object-fit: contain;
-}
-
-.footer-logo div {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 40px;
 }
 
-.footer-social-icon svg {
-    width: 15px;
-    height: 15px;
-    display: block;
-    fill: currentColor;
+
+.home-cta-copy {
+
+    max-width: 720px;
 }
 
-.footer-logo strong {
-    color: #d4af63;
-    font-size: 19px;
-    font-weight: 800;
-    letter-spacing: 1.6px;
+
+.home-cta-copy .home-section-label {
+
+    color:
+        var(--kb-gold-light);
 }
 
-.footer-logo span {
+
+.home-cta-copy h2 {
+
+    margin: 0 0 12px;
+
     color: #ffffff;
-    font-size: 8px;
-    font-weight: 600;
-    letter-spacing: 1.1px;
+
+    font-size:
+        clamp(
+            34px,
+            4.5vw,
+            56px
+        );
+
+    line-height: 1.02;
+
+    letter-spacing: -1.8px;
 }
 
-.footer-brand p {
-    margin: 0 0 22px;
-    max-width: 370px;
-    color: #9fb0a8;
-    font-size: 12.5px;
+
+.home-cta-copy p {
+
+    margin: 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .68
+        );
+
+    font-size: 13px;
+
     line-height: 1.8;
 }
 
-.footer-socials {
-    display: flex;
-    gap: 10px;
-}
 
-.footer-social-icon {
-    width: 34px;
-    height: 34px;
-    display: flex;
+.home-cta-button {
+
+    flex-shrink: 0;
+
+    min-width:
+        165px;
+
+    min-height:
+        49px;
+
+    display: inline-flex;
+
     align-items: center;
+
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, .14);
-    border-radius: 50%;
-    color: #d4af63;
-    font-size: 11px;
-    font-weight: 700;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+
+    gap: 9px;
+
+    padding:
+        0 18px;
+
+    border-radius:
+        10px;
+
+    background:
+        var(--kb-gold);
+
+    border:
+        1px solid
+        var(--kb-gold);
+
+    color:
+        #ffffff;
+
+    text-decoration:
+        none;
+
+    font-size:
+        12px;
+
+    font-weight:
+        850;
+
+    transition:
+        transform .22s ease,
+        background .22s ease,
+        box-shadow .22s ease;
 }
 
-.footer-social-icon:hover {
-    border-color: #d4af63;
-    background: rgba(212, 175, 99, .08);
-    transform: translateY(-2px);
+
+.home-cta-button:hover {
+
+    background:
+        #c49a4e;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 12px 27px
+        rgba(
+            181,
+            139,
+            59,
+            .24
+        );
 }
 
-.modern-footer h4 {
-    margin: 3px 0 18px;
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: .8px;
-    text-transform: uppercase;
-}
-
-.modern-footer h4::after {
-    content: "";
-    display: block;
-    width: 25px;
-    height: 2px;
-    margin-top: 8px;
-    background: #d4af63;
-}
-
-.footer-links {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 11px;
-}
-
-.footer-links a {
-    position: relative;
-    color: #9fb0a8;
-    font-size: 12.5px;
-    text-decoration: none;
-    transition: color .2s ease, transform .2s ease;
-}
-
-.footer-links a:hover {
-    color: #d4af63;
-    transform: translateX(3px);
-}
-
-.footer-contact {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-}
-
-.footer-contact-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    color: #cfd9d4;
-    font-size: 12.5px;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(255, 255, 255, .06);
-    width: 100%;
-    transition: color .2s ease;
-}
-
-.footer-contact-row:last-child {
-    border-bottom: none;
-}
-
-.footer-contact-row:hover {
-    color: #d4af63;
-}
-
-.footer-contact-icon {
-    width: 26px;
-    height: 26px;
-    flex: 0 0 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 7px;
-    background: rgba(212, 175, 99, .1);
-    color: #d4af63;
-    font-size: 12px;
-}
-
-.footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, .08);
-}
-
-.footer-bottom-inner {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 18px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    box-sizing: border-box;
-    color: #71847b;
-    font-size: 9.5px;
-}
-
-.footer-tagline {
-    color: #8c9d95;
-    text-align: right;
-}
-
-@media (max-width: 900px) {
-    .footer-container {
-        grid-template-columns: 1.5fr 1fr 1fr;
-        gap: 40px;
-    }
-    .footer-brand {
-        grid-column: 1 / -1;
-        max-width: 600px;
-    }
-}
-
-@media (max-width: 600px) {
-    .modern-footer {
-        margin-top: 55px;
-    }
-    .footer-container {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        padding: 44px 22px 34px;
-    }
-    .footer-brand {
-        grid-column: auto;
-        max-width: 100%;
-    }
-    .footer-logo img {
-        width: 45px;
-        height: 45px;
-    }
-    .footer-logo strong {
-        font-size: 17px;
-    }
-    .footer-logo span {
-        font-size: 7px;
-    }
-    .footer-brand p {
-        font-size: 11px;
-        line-height: 1.7;
-    }
-    .modern-footer h4 {
-        margin-bottom: 14px;
-    }
-    .footer-bottom-inner {
-        padding: 16px 22px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-        line-height: 1.5;
-    }
-    .footer-tagline {
-        text-align: left;
-    }
-}
 
 /* =========================================================
-   MOBILE NAVIGATION
+   RESPONSIVE
 ========================================================= */
 
-@media (max-width: 850px) {
+@media (max-width: 1050px) {
 
-    html,
-    body {
-        width: 100% !important;
+    .home-search-form {
 
-        max-width: 100% !important;
+        grid-template-columns:
+            1fr 1fr;
 
-        min-width: 0 !important;
-
-        overflow-x: hidden !important;
     }
 
 
-    .site-header {
-        width: 100% !important;
+    .home-search-button {
 
-        position: relative !important;
+        width: 100%;
 
-        z-index: 9999 !important;
     }
 
 
-    .main-navbar {
-        width: 100% !important;
+    .home-property-grid {
 
-        max-width: 100% !important;
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
 
-        height: 68px !important;
-
-        min-height: 68px !important;
-
-        padding: 0 12px !important;
-
-        margin: 0 !important;
-
-        display: flex !important;
-
-        flex-direction: row !important;
-
-        align-items: center !important;
-
-        justify-content: space-between !important;
-
-        gap: 8px !important;
-
-        box-sizing: border-box !important;
     }
 
 
-    .nav-brand {
-        display: block !important;
+    .home-about-grid {
 
-        flex: 1 1 auto !important;
+        grid-template-columns:
+            1fr;
 
-        min-width: 0 !important;
+        gap: 45px;
 
-        max-width: calc(100% - 52px) !important;
-
-        overflow: hidden !important;
     }
 
 
-    .nav-brand > a {
-        width: 100% !important;
+    .home-about-content {
 
-        display: flex !important;
+        max-width:
+            760px;
 
-        flex-direction: row !important;
-
-        align-items: center !important;
-
-        gap: 8px !important;
-
-        min-width: 0 !important;
-
-        overflow: hidden !important;
     }
 
 
-    .nav-brand img {
-        width: 38px !important;
+    .home-about-image {
 
-        height: 38px !important;
+        height:
+            520px;
 
-        min-width: 38px !important;
-
-        flex: 0 0 38px !important;
-
-        display: block !important;
-
-        object-fit: contain !important;
     }
 
 
-    .nav-brand a > span {
-        display: block !important;
+    .home-values-header {
 
-        flex: 1 1 auto !important;
+        grid-template-columns:
+            1fr;
 
-        min-width: 0 !important;
+        gap: 18px;
 
-        overflow: hidden !important;
-
-        color: #d4af63 !important;
-
-        font-size: 10px !important;
-
-        font-weight: 800 !important;
-
-        line-height: 1.15 !important;
-
-        white-space: nowrap !important;
-
-        text-overflow: ellipsis !important;
     }
 
 
-    .menu-toggle {
-        display: flex !important;
+    .home-values-grid {
 
-        width: 44px !important;
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
 
-        height: 44px !important;
-
-        min-width: 44px !important;
-
-        min-height: 44px !important;
-
-        flex: 0 0 44px !important;
-
-        margin: 0 !important;
-
-        padding: 0 !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-        flex-direction: column !important;
-
-        gap: 4px !important;
-
-        background: #f1e7d4 !important;
-
-        border: 1px solid #d6bb88 !important;
-
-        border-radius: 9px !important;
-
-        position: relative !important;
-
-        z-index: 10000 !important;
     }
 
 
-    .menu-toggle span {
-        display: block !important;
+    .home-cta-content {
 
-        width: 20px !important;
+        align-items:
+            flex-start;
 
-        height: 2px !important;
+        flex-direction:
+            column;
 
-        background: #123c2f !important;
+    }
 
-        border-radius: 3px !important;
+}
+
+
+@media (max-width: 700px) {
+
+    .home-hero {
+
+        min-height:
+            680px;
+
     }
 
 
-    .nav-links {
-        position: absolute !important;
+    .home-hero-content {
 
-        top: 68px !important;
+        width:
+            90%;
 
-        left: 0 !important;
-
-        right: 0 !important;
-
-        width: 100% !important;
-
-        max-width: 100% !important;
-
-        display: none !important;
-
-        flex-direction: column !important;
-
-        align-items: stretch !important;
-
-        gap: 0 !important;
-
-        padding: 12px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border-top: 1px solid #e5ebe7 !important;
-
-        box-shadow:
-            0 18px 40px
-            rgba(0, 0, 0, .12) !important;
-
-        z-index: 9998 !important;
     }
 
 
-    .nav-links.active {
-        display: flex !important;
+    .home-hero h1 {
+
+        font-size:
+            48px;
+
+        letter-spacing:
+            -2.3px;
+
     }
 
 
-    .nav-link {
-        width: 100% !important;
+    .home-hero-description {
 
-        min-height: 46px !important;
+        font-size:
+            14px;
 
-        display: flex !important;
-
-        align-items: center !important;
-
-        padding: 0 12px !important;
-
-        box-sizing: border-box !important;
-
-        color: #263731 !important;
-
-        background: #ffffff !important;
-
-        border-radius: 8px !important;
-
-        font-size: 14px !important;
-
-        font-weight: 700 !important;
-
-        white-space: nowrap !important;
-
-        text-decoration: none !important;
     }
 
 
-    .nav-link:hover {
-        background: #f3f7f4 !important;
+    .home-hero-actions {
 
-        color: #123c2f !important;
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
     }
 
 
-    .nav-link::after {
-        display: none !important;
+    .home-hero-button {
+
+        width:
+            100%;
+
     }
 
 
-    /* MOBILE PROFILE */
+    .home-search-section {
 
-    .profile-menu {
-        position: relative !important;
+        margin-top:
+            -28px;
 
-        width: 100% !important;
-
-        margin-top: 8px !important;
-
-        padding-top: 8px !important;
-
-        border-top: 1px solid #e8edeb !important;
-
-        z-index: 10000 !important;
     }
 
 
-    .profile-button {
-        width: 100% !important;
+    .home-search-card {
 
-        min-height: 48px !important;
+        padding:
+            15px;
 
-        display: flex !important;
-
-        align-items: center !important;
-
-        gap: 9px !important;
-
-        padding: 6px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border: 1px solid #dfe5e1 !important;
-
-        border-radius: 10px !important;
-
-        color: #123c2f !important;
     }
 
 
-    .profile-avatar {
-        width: 35px !important;
+    .home-search-heading {
 
-        height: 35px !important;
+        display:
+            block;
 
-        min-width: 35px !important;
-
-        flex: 0 0 35px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
     }
 
 
-    .profile-user-name {
-        display: block !important;
+    .home-search-heading p {
 
-        flex: 1 !important;
+        margin-top:
+            5px;
 
-        min-width: 0 !important;
-
-        color: #123c2f !important;
-
-        font-size: 13px !important;
-
-        font-weight: 700 !important;
-
-        text-align: left !important;
-
-        white-space: nowrap !important;
-
-        overflow: hidden !important;
-
-        text-overflow: ellipsis !important;
     }
 
 
-    .profile-arrow {
-        display: block !important;
+    .home-search-form {
 
-        margin-left: auto !important;
+        grid-template-columns:
+            1fr;
 
-        color: #68736e !important;
     }
 
 
-    .profile-dropdown {
-        position: absolute !important;
+    .home-properties {
 
-        top: calc(100% + 8px) !important;
+        padding-top:
+            75px;
 
-        left: 0 !important;
+    }
 
-        right: 0 !important;
 
-        width: 100% !important;
+    .home-property-grid {
 
-        display: block !important;
+        grid-template-columns:
+            1fr;
 
-        visibility: hidden !important;
+    }
 
-        opacity: 0 !important;
 
-        pointer-events: none !important;
+    .home-property-image {
 
-        overflow: hidden !important;
+        height:
+            255px;
 
-        padding: 0 !important;
+    }
 
-        margin: 0 !important;
 
-        box-sizing: border-box !important;
+    .home-about {
 
-        background: #ffffff !important;
+        padding-top:
+            85px;
 
-        border: 1px solid #d8e1dc !important;
+    }
 
-        border-radius: 14px !important;
 
-        box-shadow:
-            0 18px 45px
-            rgba(0, 0, 0, .20) !important;
+    .home-about-image {
 
-        transform: translateY(-6px) !important;
+        height:
+            390px;
 
-        z-index: 999999 !important;
+    }
+
+
+    .home-about-badge {
+
+        right:
+            14px;
+
+        bottom:
+            20px;
+
+        width:
+            165px;
+
+    }
+
+
+    .home-about-content h2 {
+
+        font-size:
+            35px;
+
+    }
+
+
+    .home-values {
+
+        margin-top:
+            90px;
+
+        padding:
+            75px 0;
+
+    }
+
+
+    .home-values-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .home-cta {
+
+        padding:
+            85px 0;
+
+    }
+
+
+    .home-cta-card {
+
+        padding:
+            40px 24px;
+
+    }
+
+
+    .home-cta-button {
+
+        width:
+            100%;
+
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .home-hero h1 {
+
+        font-size:
+            42px;
+
+    }
+
+
+    .home-hero-trust {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .home-about-image {
+
+        height:
+            330px;
+
+    }
+
+
+    .home-about-badge {
+
+        width:
+            145px;
+
+        padding:
+            15px;
+
+    }
+
+
+    .home-about-badge strong {
+
+        font-size:
+            25px;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation:
+            none !important;
 
         transition:
-            opacity .18s ease,
-            visibility .18s ease,
-            transform .18s ease !important;
-    }
+            none !important;
 
-
-    .profile-dropdown.open {
-        visibility: visible !important;
-
-        opacity: 1 !important;
-
-        pointer-events: auto !important;
-
-        transform: translateY(0) !important;
-    }
-
-
-    .profile-dropdown-header {
-        width: 100% !important;
-
-        min-height: 72px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        gap: 12px !important;
-
-        padding: 15px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border-bottom: 1px solid #edf0ee !important;
-    }
-
-
-    .profile-dropdown-avatar {
-        width: 44px !important;
-
-        height: 44px !important;
-
-        min-width: 44px !important;
-
-        flex: 0 0 44px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-        overflow: hidden !important;
-
-        border-radius: 50% !important;
-
-        background:
-            linear-gradient(
-                135deg,
-                #123c2f,
-                #1c5b46
-            ) !important;
-
-        color: #ffffff !important;
-    }
-
-
-    .profile-dropdown-avatar img {
-        width: 100% !important;
-
-        height: 100% !important;
-
-        display: block !important;
-
-        object-fit: cover !important;
-    }
-
-
-    .profile-dropdown-user {
-        min-width: 0 !important;
-
-        flex: 1 !important;
-
-        display: flex !important;
-
-        flex-direction: column !important;
-
-        gap: 4px !important;
-
-        overflow: hidden !important;
-    }
-
-
-    .profile-dropdown-user strong {
-        width: 100% !important;
-
-        display: block !important;
-
-        color: #123c2f !important;
-
-        font-size: 13px !important;
-
-        font-weight: 800 !important;
-
-        white-space: nowrap !important;
-
-        overflow: hidden !important;
-
-        text-overflow: ellipsis !important;
-    }
-
-
-    .profile-dropdown-user span {
-        width: 100% !important;
-
-        display: block !important;
-
-        color: #68736e !important;
-
-        font-size: 10px !important;
-
-        white-space: nowrap !important;
-
-        overflow: hidden !important;
-
-        text-overflow: ellipsis !important;
-    }
-
-
-    .profile-dropdown-links {
-        width: 100% !important;
-
-        padding: 7px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-    }
-
-
-    .profile-dropdown-link {
-        width: 100% !important;
-
-        min-height: 46px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        gap: 10px !important;
-
-        padding: 8px 10px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        color: #263731 !important;
-
-        border-radius: 8px !important;
-
-        text-decoration: none !important;
-
-        font-size: 13px !important;
-
-        font-weight: 650 !important;
-    }
-
-
-    .profile-dropdown-link:hover {
-        background: #f2f6f3 !important;
-
-        color: #123c2f !important;
-    }
-
-
-    .dropdown-icon {
-        width: 29px !important;
-
-        height: 29px !important;
-
-        min-width: 29px !important;
-
-        flex: 0 0 29px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-        background: #edf5f0 !important;
-
-        color: #26734d !important;
-
-        border-radius: 7px !important;
-
-        font-size: 12px !important;
-    }
-
-
-    .profile-dropdown-footer {
-        width: 100% !important;
-
-        padding: 7px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border-top: 1px solid #edf0ee !important;
-    }
-
-
-    .profile-dropdown-logout {
-        width: 100% !important;
-
-        min-height: 46px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        gap: 10px !important;
-
-        padding: 8px 10px !important;
-
-        box-sizing: border-box !important;
-
-        color: #a33a3a !important;
-
-        background: #ffffff !important;
-
-        border-radius: 8px !important;
-
-        text-decoration: none !important;
-
-        font-size: 13px !important;
-
-        font-weight: 700 !important;
-    }
-
-
-    .profile-dropdown-logout:hover {
-        background: #fff3f3 !important;
-    }
-
-
-    /* LOGIN */
-
-    .nav-auth-actions {
-        width: 100% !important;
-
-        display: flex !important;
-
-        flex-direction: row !important;
-
-        gap: 8px !important;
-
-        padding-top: 8px !important;
-    }
-
-
-    .nav-login {
-        width: 100% !important;
-
-        flex: 1 1 auto !important;
-
-        min-height: 44px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-        box-sizing: border-box !important;
-
-        white-space: nowrap !important;
-
-        color: #123c2f !important;
-
-        background: #ffffff !important;
-
-        border: 1px solid #dfe5e1 !important;
-
-        border-radius: 8px !important;
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE FOOTER
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .modern-footer {
-        margin-top: 55px;
-    }
-
-
-    .footer-container {
-        grid-template-columns: 1fr;
-
-        gap: 28px;
-
-        padding:
-            40px 22px 32px;
-    }
-
-
-    .footer-brand {
-        grid-column: auto;
-
-        max-width: 100%;
-    }
-
-
-    .footer-logo img {
-        width: 45px;
-
-        height: 45px;
-    }
-
-
-    .footer-logo strong {
-        font-size: 17px;
-    }
-
-
-    .footer-logo span {
-        font-size: 7px;
-    }
-
-
-    .footer-brand p {
-        font-size: 11px;
-
-        line-height: 1.7;
-    }
-
-
-    .modern-footer h4 {
-        margin-bottom: 13px;
-    }
-
-
-    .footer-links {
-        gap: 9px;
-    }
-
-
-    .footer-contact p {
-        margin-bottom: 10px;
-    }
-
-
-    .footer-bottom-inner {
-        padding:
-            15px 22px;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 6px;
-
-        line-height: 1.5;
-    }
-
-
-    .footer-tagline {
-        text-align: left;
-    }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-
-    .main-navbar {
-        height: 64px !important;
-
-        min-height: 64px !important;
-
-        padding: 0 10px !important;
-    }
-
-
-    .nav-brand img {
-        width: 35px !important;
-
-        height: 35px !important;
-
-        min-width: 35px !important;
-
-        flex-basis: 35px !important;
-    }
-
-
-    .nav-brand a > span {
-        font-size: 9px !important;
-    }
-
-
-    .menu-toggle {
-        width: 40px !important;
-
-        height: 40px !important;
-
-        min-width: 40px !important;
-
-        flex-basis: 40px !important;
-    }
-
-
-    .nav-links {
-        top: 64px !important;
-    }
-
-
-    .profile-dropdown-header {
-        padding: 13px !important;
-    }
-
-
-    .profile-dropdown-avatar {
-        width: 42px !important;
-
-        height: 42px !important;
-
-        min-width: 42px !important;
-
-        flex-basis: 42px !important;
-    }
-
-
-    .profile-dropdown-link,
-    .profile-dropdown-logout {
-        min-height: 44px !important;
-    }
-
-
-    .footer-container {
-        padding-left: 18px;
-
-        padding-right: 18px;
-    }
-
-
-    .footer-bottom-inner {
-        padding-left: 18px;
-
-        padding-right: 18px;
+        scroll-behavior:
+            auto !important;
     }
 
 }
 
 </style>
 
+{% endblock %}
 
-<!-- =====================================================
-     NAVIGATION JAVASCRIPT
-===================================================== -->
+
+{% block content %}
+
+<div class="home-page">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="home-hero">
+
+
+        <div class="home-hero-content">
+
+
+            <p class="home-hero-eyebrow">
+
+                KING B REAL ESTATE & CONSTRUCTION
+
+            </p>
+
+
+            <h1>
+
+                Find a Place
+                You’ll Be Proud
+                to Call Home.
+
+            </h1>
+
+
+            <p class="home-hero-description">
+
+                Discover quality land and properties in
+                carefully selected locations. Whether you are
+                buying your first property, expanding your
+                investment portfolio or planning your next
+                development, King B is here to help.
+
+            </p>
+
+
+            <div class="home-hero-actions">
+
+
+                <a
+                    href="{% url 'property_list' %}"
+                    class="home-hero-button home-button-primary"
+                >
+
+                    Explore Properties
+
+                    <span>
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{% url 'contact' %}"
+                    class="home-hero-button home-button-secondary"
+                >
+
+                    Speak With Us
+
+                    <span>
+                        ↗
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+            <div class="home-hero-trust">
+
+
+                <div class="home-trust-item">
+
+                    <span class="home-trust-dot"></span>
+
+                    Quality Property Opportunities
+
+                </div>
+
+
+                <div class="home-trust-item">
+
+                    <span class="home-trust-dot"></span>
+
+                    Professional Guidance
+
+                </div>
+
+
+                <div class="home-trust-item">
+
+                    <span class="home-trust-dot"></span>
+
+                    Client-Focused Service
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROPERTY SEARCH
+    ====================================================== -->
+
+    <section class="home-search-section">
+
+
+        <div class="home-search-card">
+
+
+            <div class="home-search-heading">
+
+                <h2>
+                    Find Your Property
+                </h2>
+
+                <p>
+                    Search by property, type or location
+                </p>
+
+            </div>
+
+
+            <form
+                class="home-search-form"
+                method="GET"
+                action="{% url 'property_list' %}"
+            >
+
+
+                <input
+                    type="text"
+                    name="search"
+                    class="home-search-input"
+                    placeholder="Search property..."
+                >
+
+
+                <select
+                    name="property_type"
+                    class="home-search-select"
+                >
+
+                    <option value="">
+                        Property Type
+                    </option>
+
+                    <option value="land">
+                        Land
+                    </option>
+
+                    <option value="house">
+                        House
+                    </option>
+
+                    <option value="apartment">
+                        Apartment
+                    </option>
+
+                    <option value="commercial">
+                        Commercial
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="text"
+                    name="location"
+                    class="home-search-input"
+                    placeholder="Location"
+                >
+
+
+                <button
+                    type="submit"
+                    class="home-search-button"
+                >
+
+                    Search
+
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FEATURED PROPERTIES
+    ====================================================== -->
+
+    <section class="home-properties">
+
+
+        <div class="home-container">
+
+
+            <div class="home-section-header">
+
+
+                <span class="home-section-label">
+                    EXPLORE OUR PROPERTIES
+                </span>
+
+
+                <h2>
+                    Opportunities worth discovering.
+                </h2>
+
+
+                <p>
+
+                    Explore selected land and property
+                    opportunities available through King B
+                    Real Estate & Construction.
+
+                </p>
+
+
+            </div>
+
+
+            <div class="home-property-grid">
+
+
+                {% for property in properties %}
+
+
+                    <article class="home-property-card">
+
+
+                        <!-- IMAGE -->
+
+                        <div class="home-property-image">
+
+
+                            {% if property.image %}
+
+                                <img
+                                    src="{{ property.image.url }}"
+                                    alt="{{ property.title }}"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="home-property-placeholder">
+
+                                    🏡
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <span class="home-property-type">
+
+                                {{ property.get_property_type_display }}
+
+                            </span>
+
+
+                        </div>
+
+
+                        <!-- CONTENT -->
+
+                        <div class="home-property-content">
+
+
+                            <p class="home-property-location">
+
+                                📍 {{ property.location }}
+
+                            </p>
+
+
+                            <h3>
+
+                                {{ property.title }}
+
+                            </h3>
+
+
+                            <p class="home-property-price">
+
+                                ₦{{ property.price|floatformat:0|intcomma }}
+
+                            </p>
+
+
+                            <div class="home-property-footer">
+
+
+                                <a
+                                    href="{% url 'property_detail' property.id %}"
+                                    class="home-property-link"
+                                >
+
+                                    View Property
+
+                                    <span>
+                                        →
+                                    </span>
+
+                                </a>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                {% empty %}
+
+
+                    <div class="home-empty">
+
+                        <h3>
+                            No Properties Currently Available
+                        </h3>
+
+                        <p>
+                            Please check back soon for new
+                            property opportunities.
+                        </p>
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         ABOUT KING B
+    ====================================================== -->
+
+    <section class="home-about">
+
+
+        <div class="home-container">
+
+
+            <div class="home-about-grid">
+
+
+                <div class="home-about-visual">
+
+
+                    <div class="home-about-image">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=90"
+                            alt="King B Real Estate & Construction"
+                            loading="lazy"
+                        >
+
+                    </div>
+
+
+                    <div class="home-about-image-tag">
+                        PREMIUM PROPERTY EXPERIENCE
+                    </div>
+
+                    <div class="home-about-badge">
+
+                        <strong>
+                            King B
+                        </strong>
+
+                        <span>
+                            Real Estate
+                            & Construction
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="home-about-content">
+
+
+                    <span class="home-section-label">
+                        WHO WE ARE
+                    </span>
+
+
+                    <h2>
+
+                        Building trust
+                        through
+                        <em>real estate.</em>
+
+                    </h2>
+
+
+                    <div class="home-about-divider"></div>
+
+
+                    <p class="home-about-lead">
+
+                        King B Real Estate & Construction is
+                        committed to providing quality properties
+                        and professional real estate services to
+                        individuals, families and investors.
+
+                    </p>
+
+
+                    <p>
+
+                        We believe that finding the right property
+                        is more than a transaction. It is about
+                        creating opportunities, protecting
+                        investments and building lasting
+                        relationships with our clients.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'about' %}"
+                        class="home-about-link"
+                    >
+
+                        Discover King B
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         WHY KING B
+    ====================================================== -->
+
+    <section class="home-values">
+
+
+        <div class="home-container">
+
+
+            <div class="home-values-header">
+
+
+                <div>
+
+                    <span class="home-section-label">
+                        WHY KING B
+                    </span>
+
+
+                    <h2>
+
+                        A better standard
+                        of real estate.
+
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    We combine property expertise,
+                    professional service and a genuine
+                    commitment to our clients to create
+                    a better real estate experience.
+
+                </p>
+
+
+            </div>
+
+
+            <div class="home-values-grid">
+
+
+                <!-- QUALITY -->
+
+                <article class="home-value-card">
+
+
+                    <div class="home-value-icon">
+                        ◆
+                    </div>
+
+
+                    <h3>
+                        Quality Properties
+                    </h3>
+
+
+                    <p>
+
+                        Carefully selected properties and
+                        land opportunities designed to offer
+                        genuine value to our clients.
+
+                    </p>
+
+
+                </article>
+
+
+                <!-- TRUST -->
+
+                <article class="home-value-card">
+
+
+                    <div class="home-value-icon">
+                        ✓
+                    </div>
+
+
+                    <h3>
+                        Trusted Service
+                    </h3>
+
+
+                    <p>
+
+                        Transparency, integrity and
+                        professionalism guide every client
+                        relationship.
+
+                    </p>
+
+
+                </article>
+
+
+                <!-- GUIDANCE -->
+
+                <article class="home-value-card">
+
+
+                    <div class="home-value-icon">
+                        ◎
+                    </div>
+
+
+                    <h3>
+                        Expert Guidance
+                    </h3>
+
+
+                    <p>
+
+                        We help individuals, families and
+                        investors make confident property
+                        decisions.
+
+                    </p>
+
+
+                </article>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         FINAL CTA
+    ====================================================== -->
+
+    <section class="home-cta">
+
+
+        <div class="home-container">
+
+
+            <div class="home-cta-card">
+
+
+                <div class="home-cta-content">
+
+
+                    <div class="home-cta-copy">
+
+
+                        <span class="home-section-label">
+
+                            YOUR NEXT OPPORTUNITY
+
+                        </span>
+
+
+                        <h2>
+
+                            Find a property
+                            worth investing in.
+
+                        </h2>
+
+
+                        <p>
+
+                            Explore our available properties
+                            or speak with the King B team about
+                            your next real estate opportunity.
+
+                        </p>
+
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'property_list' %}"
+                        class="home-cta-button"
+                    >
+
+                        Explore Properties
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+<!-- =========================================================
+     HOMEPAGE INTERACTIONS
+========================================================= -->
 
 <script>
 
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-function toggleMenu() {
-
-    const menu =
-        document.getElementById("navLinks");
-
-    const button =
-        document.querySelector(".menu-toggle");
-
-
-    if (!menu) {
-
-        return;
-
-    }
-
-
-    const isOpen =
-        menu.classList.toggle("active");
-
-
-    if (button) {
-
-        button.setAttribute(
-            "aria-expanded",
-            isOpen ? "true" : "false"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   PROFILE DROPDOWN
-========================================================= */
-
-function toggleProfileMenu(event) {
-
-    if (event) {
-
-        event.stopPropagation();
-
-    }
-
-
-    const dropdown =
-        document.getElementById(
-            "profileDropdown"
-        );
-
-
-    const button =
-        document.getElementById(
-            "profileButton"
-        );
-
-
-    if (!dropdown || !button) {
-
-        return;
-
-    }
-
-
-    const isOpen =
-        dropdown.classList.toggle("open");
-
-
-    button.classList.toggle(
-        "active",
-        isOpen
-    );
-
-
-    button.setAttribute(
-        "aria-expanded",
-        isOpen ? "true" : "false"
-    );
-
-}
-
-
-/* =========================================================
-   CLOSE PROFILE DROPDOWN
-========================================================= */
-
 document.addEventListener(
-    "click",
-    function(event) {
+    "DOMContentLoaded",
+    function () {
 
-        const menu =
-            document.getElementById(
-                "profileMenu"
-            );
-
-
-        const dropdown =
-            document.getElementById(
-                "profileDropdown"
-            );
-
-
-        const button =
-            document.getElementById(
-                "profileButton"
+        const cards =
+            document.querySelectorAll(
+                ".home-property-card, .home-value-card"
             );
 
 
         if (
-            !menu ||
-            !dropdown ||
-            !button
+            "IntersectionObserver"
+            in window
         ) {
 
-            return;
+            const observer =
+                new IntersectionObserver(
+                    function (
+                        entries,
+                        observer
+                    ) {
 
-        }
+                        entries.forEach(
+                            function (entry) {
+
+                                if (
+                                    entry.isIntersecting
+                                ) {
+
+                                    entry.target.classList.add(
+                                        "home-visible"
+                                    );
+
+                                    observer.unobserve(
+                                        entry.target
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    },
+                    {
+                        threshold: 0.12
+                    }
+                );
 
 
-        if (
-            !menu.contains(
-                event.target
-            )
-        ) {
+            cards.forEach(
+                function (card) {
 
-            dropdown.classList.remove(
-                "open"
-            );
+                    card.classList.add(
+                        "home-reveal"
+                    );
 
+                    observer.observe(
+                        card
+                    );
 
-            button.classList.remove(
-                "active"
-            );
-
-
-            button.setAttribute(
-                "aria-expanded",
-                "false"
+                }
             );
 
         }
@@ -2471,62 +2918,42 @@ document.addEventListener(
 
 
 /* =========================================================
-   ESCAPE KEY
+   REVEAL STYLES
 ========================================================= */
 
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key !== "Escape"
-        ) {
-
-            return;
-
-        }
+const homeRevealStyle =
+document.createElement("style");
 
 
-        const dropdown =
-            document.getElementById(
-                "profileDropdown"
-            );
+homeRevealStyle.textContent = `
 
+    .home-reveal {
 
-        const button =
-            document.getElementById(
-                "profileButton"
-            );
+        opacity: 0;
 
+        transform:
+            translateY(18px);
 
-        if (!dropdown || !button) {
-
-            return;
-
-        }
-
-
-        dropdown.classList.remove(
-            "open"
-        );
-
-
-        button.classList.remove(
-            "active"
-        );
-
-
-        button.setAttribute(
-            "aria-expanded",
-            "false"
-        );
-
+        transition:
+            opacity .55s ease,
+            transform .55s ease;
     }
+
+    .home-reveal.home-visible {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
+`;
+
+
+document.head.appendChild(
+    homeRevealStyle
 );
 
 </script>
 
-
-</body>
-
-</html>
+{% endblock %}

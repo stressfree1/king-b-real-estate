@@ -33,7 +33,10 @@
 
     --kb-border: #e2e8e4;
 
-    background: var(--kb-cream);
+    background:
+        linear-gradient(rgba(245,247,244,.94), rgba(245,247,244,.94)),
+        url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=85")
+        center / cover fixed no-repeat;
 
     color: var(--kb-text);
 
@@ -1102,6 +1105,42 @@
     display: block;
 
     object-fit: cover;
+
+    transition: transform .7s cubic-bezier(.2,.7,.2,1), filter .4s ease;
+}
+
+.home-about-image {
+    position: relative;
+}
+
+.home-about-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(6,33,25,.08), rgba(181,139,59,.04) 45%, rgba(6,33,25,.18));
+}
+
+.home-about-visual:hover .home-about-image img {
+    transform: scale(1.025);
+    filter: saturate(1.05) contrast(1.02);
+}
+
+.home-about-image-tag {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 3;
+    padding: 9px 12px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 999px;
+    background: rgba(6,33,25,.72);
+    color: #fff;
+    font-size: 8px;
+    font-weight: 850;
+    letter-spacing: .13em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(6,33,25,.15);
 }
 
 
@@ -2496,13 +2535,17 @@
                     <div class="home-about-image">
 
                         <img
-                            src="{% static 'properties/images/about-home.jpg' %}"
+                            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1600&q=90"
                             alt="King B Real Estate & Construction"
                             loading="lazy"
                         >
 
                     </div>
 
+
+                    <div class="home-about-image-tag">
+                        PREMIUM PROPERTY EXPERIENCE
+                    </div>
 
                     <div class="home-about-badge">
 

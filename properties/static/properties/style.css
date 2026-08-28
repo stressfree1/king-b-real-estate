@@ -8646,7 +8646,6 @@ header nav {
     }
 
 }
-
 /* =========================================================
    PREMIUM KING B NAVIGATION
    Works with the base.html structure
@@ -8655,8 +8654,14 @@ header nav {
 header {
     width: 100%;
     background: #0b2e22;
-    position: relative;
+
+    /* FIXED NAVBAR */
+    position: fixed;
+    top: 0;
+    left: 0;
+
     z-index: 1000;
+
     border-bottom: 1px solid rgba(201, 162, 39, 0.25);
 }
 
@@ -8718,6 +8723,14 @@ header nav {
     max-width: 300px;
 }
 
+/* =========================================================
+   FIXED NAVBAR PAGE OFFSET
+   Prevents content from hiding behind the 82px navbar.
+========================================================= */
+
+body {
+    padding-top: 82px;
+}
 /* =========================================================
    NAVIGATION LINKS
 ========================================================= */
