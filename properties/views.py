@@ -8,8 +8,14 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
 from django.db.models import Avg
 from django.utils import timezone
+import secrets
+from datetime import timedelta
+from django.core.mail import send_mail
 from django.urls import reverse, reverse_lazy
-
+from django.contrib.auth.hashers import (
+    make_password,
+    check_password,
+)
 from django.db.models import Q, F
 from django.contrib.auth.views import (
     PasswordResetView,

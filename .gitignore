@@ -42,7 +42,7 @@ staticfiles/
 # PRIVATE USER UPLOADS
 # =========================================================
 
-Media/account_profiles/
-Media/customer_ids/
-Media/job_applications/
-Media/skilled_workers/
+media/account_profiles/
+media/customer_ids/
+media/job_applications/
+media/skilled_workers/

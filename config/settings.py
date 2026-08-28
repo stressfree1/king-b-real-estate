@@ -192,21 +192,36 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # =========================================================
 # STATIC FILES
 # =========================================================
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
-)
+STATICFILES_DIRS = [
+    BASE_DIR / "properties" / "static",
+]
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+
+    "staticfiles": {
+        "BACKEND": (
+            "whitenoise.storage."
+            "CompressedManifestStaticFilesStorage"
+        ),
+    },
+}
 
 # =========================================================
+# MEDIA FILES
+# =========================================================
+
+M# =========================================================
 # MEDIA FILES
 # =========================================================
 
