@@ -14,7 +14,6 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # =========================================================
 # SECURITY
 # =========================================================
@@ -34,7 +33,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get(
         "ALLOWED_HOSTS",
-        "127.0.0.1,localhost"
+        "127.0.0.1,localhost,king-b-real-estate-1.onrender.com"
     ).split(",")
     if host.strip()
 ]
@@ -45,11 +44,10 @@ CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
         "CSRF_TRUSTED_ORIGINS",
-        "http://127.0.0.1:8000,http://localhost:8000"
+        "http://127.0.0.1:8000,http://localhost:8000,https://king-b-real-estate-1.onrender.com"
     ).split(",")
     if origin.strip()
 ]
-
 
 # =========================================================
 # APPLICATIONS
