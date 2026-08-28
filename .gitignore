@@ -46,3 +46,5 @@ media/account_profiles/
 media/customer_ids/
 media/job_applications/
 media/skilled_workers/
+
+local_database.json
