@@ -25,16 +25,29 @@ SECRET_KEY = os.environ.get(
 )
 
 # Local development = True
-# Render = False
+# Render production = False
 DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
 
-ALLOWED_HOSTS = ["*"]
+# Allowed hosts
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        "ALLOWED_HOSTS",
+        "127.0.0.1,localhost"
+    ).split(",")
+    if host.strip()
+]
 
 
+# CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
+    origin.strip()
+    for origin in os.environ.get(
+        "CSRF_TRUSTED_ORIGINS",
+        "http://127.0.0.1:8000,http://localhost:8000"
+    ).split(",")
+    if origin.strip()
 ]
 
 
@@ -192,6 +205,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # =========================================================
 # STATIC FILES
 # =========================================================
@@ -203,6 +217,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "properties" / "static",
 ]
+
 
 STORAGES = {
     "default": {
@@ -217,9 +232,6 @@ STORAGES = {
     },
 }
 
-# =========================================================
-# MEDIA FILES
-# =========================================================
 
 # =========================================================
 # MEDIA FILES
@@ -234,9 +246,37 @@ MEDIA_ROOT = BASE_DIR / "media"
 # SECURITY / COOKIES
 # =========================================================
 
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = not DEBUG
 
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = not DEBUG
+
+
+# Prevent browsers from guessing content types
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+# Clickjacking protection
+X_FRAME_OPTIONS = "DENY"
+
+
+# HTTPS security settings are enabled only in production.
+# Render provides HTTPS, so these are safe when DEBUG=False.
+
+if not DEBUG:
+
+    SECURE_SSL_REDIRECT = True
+
+    SECURE_PROXY_SSL_HEADER = (
+        "HTTP_X_FORWARDED_PROTO",
+        "https",
+    )
+
+    SECURE_HSTS_SECONDS = 31536000
+
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+    SECURE_HSTS_PRELOAD = True
+
 
 # =========================================================
 # EMAIL - CPANEL SMTP
@@ -246,10 +286,12 @@ EMAIL_BACKEND = (
     "properties.email_backend.CustomSMTPEmailBackend"
 )
 
+
 EMAIL_HOST = os.environ.get(
     "EMAIL_HOST",
     "mail.kingbrealestate.com"
 )
+
 
 EMAIL_PORT = int(
     os.environ.get(
@@ -258,12 +300,14 @@ EMAIL_PORT = int(
     )
 )
 
+
 EMAIL_USE_SSL = (
     os.environ.get(
         "EMAIL_USE_SSL",
         "True"
     ).lower() == "true"
 )
+
 
 EMAIL_USE_TLS = (
     os.environ.get(
@@ -272,20 +316,28 @@ EMAIL_USE_TLS = (
     ).lower() == "true"
 )
 
+
 EMAIL_HOST_USER = os.environ.get(
     "EMAIL_HOST_USER",
     "hello@kingbrealestate.com"
 )
+
 
 EMAIL_HOST_PASSWORD = os.environ.get(
     "EMAIL_HOST_PASSWORD",
     ""
 )
 
+
 DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL",
     "King B Real Estate <hello@kingbrealestate.com>"
 )
+
+
+# =========================================================
+# PASSWORD RESET
+# =========================================================
 
 PASSWORD_RESET_TIMEOUT = int(
     os.environ.get(
@@ -293,3 +345,10 @@ PASSWORD_RESET_TIMEOUT = int(
         "259200"
     )
 )
+
+
+# =========================================================
+# DEFAULT PRIMARY KEY
+# =========================================================
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
