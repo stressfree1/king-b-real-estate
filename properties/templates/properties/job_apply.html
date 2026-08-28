@@ -2,25 +2,935 @@
 {% load static %}
 
 {% block title %}
-KING B REAL ESTATE & CONSTRUCTION LTD
+    Apply for {{ job.title }} | KING B REAL ESTATE & CONSTRUCTION LTD
 {% endblock %}
 
-{% block content %}
-<main>
 
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   KING B REAL ESTATE & CONSTRUCTION
+   PREMIUM JOB APPLICATION PAGE
+========================================================= */
+
+.application-page {
+
+    --kb-green: #123c2f;
+    --kb-dark: #062119;
+    --kb-dark-2: #09271f;
+
+    --kb-gold: #b58b3b;
+    --kb-gold-light: #d4af63;
+
+    --kb-cream: #f5f7f4;
+    --kb-white: #ffffff;
+
+    --kb-text: #17231e;
+    --kb-muted: #69746f;
+
+    --kb-border: #e1e8e3;
+
+    min-height: 100vh;
+
+    padding: 70px 20px 110px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(181,139,59,.06),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at bottom left,
+            rgba(18,60,47,.045),
+            transparent 25%
+        ),
+        var(--kb-cream);
+
+    color: var(--kb-text);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+.application-page *,
+.application-page *::before,
+.application-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.application-container {
+
+    width: min(960px, 100%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.application-heading {
+
+    max-width: 760px;
+
+    margin: 0 auto 42px;
+
+    text-align: center;
+}
+
+
+.application-heading p {
+
+    margin: 0 0 12px;
+
+    color: var(--kb-gold);
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 2.8px;
+
+    text-transform: uppercase;
+}
+
+
+.application-heading h1 {
+
+    margin: 0 0 15px;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            36px,
+            5.5vw,
+            62px
+        );
+
+    line-height: 1.02;
+
+    letter-spacing: -2px;
+
+    font-weight: 800;
+}
+
+
+.application-heading span {
+
+    display: block;
+
+    max-width: 600px;
+
+    margin: 0 auto;
+
+    color: var(--kb-muted);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.application-form {
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   APPLICATION SECTION
+========================================================= */
+
+.application-section {
+
+    margin-bottom: 18px;
+
+    padding: 30px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .96
+        );
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 38px
+        rgba(
+            8,
+            39,
+            30,
+            .055
+        );
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.application-section:hover {
+
+    border-color:
+        #d4dfd8;
+
+    box-shadow:
+        0 17px 43px
+        rgba(
+            8,
+            39,
+            30,
+            .07
+        );
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.application-section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 24px;
+
+    padding-bottom: 18px;
+
+    border-bottom:
+        1px solid
+        #edf1ee;
+}
+
+
+.application-section-title::before {
+
+    content: "";
+
+    width: 5px;
+
+    height: 38px;
+
+    flex: 0 0 5px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--kb-gold),
+            var(--kb-gold-light)
+        );
+}
+
+
+.application-section-title h2 {
+
+    margin: 0 0 4px;
+
+    color:
+        var(--kb-green);
+
+    font-size: 19px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -.3px;
+}
+
+
+.application-section-title p {
+
+    margin: 0;
+
+    color:
+        var(--kb-muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FORM FIELDS GRID
+========================================================= */
+
+.application-fields {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 17px;
+}
+
+
+.application-field {
+
+    min-width: 0;
+}
+
+
+.application-full {
+
+    grid-column:
+        1 / -1;
+}
+
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+.application-field label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        #35443d;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: .15px;
+}
+
+
+/* =========================================================
+   DJANGO INPUTS
+========================================================= */
+
+.application-field input,
+.application-field select,
+.application-field textarea {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding:
+        12px 13px;
+
+    border:
+        1px solid
+        #dbe3de;
+
+    border-radius:
+        10px;
+
+    background:
+        #f8faf8;
+
+    color:
+        var(--kb-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    outline:
+        none;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.application-field textarea {
+
+    min-height:
+        135px;
+
+    resize:
+        vertical;
+
+    line-height:
+        1.6;
+}
+
+
+.application-field input:hover,
+.application-field select:hover,
+.application-field textarea:hover {
+
+    border-color:
+        #cfdad4;
+}
+
+
+.application-field input:focus,
+.application-field select:focus,
+.application-field textarea:focus {
+
+    background:
+        #ffffff;
+
+    border-color:
+        var(--kb-gold);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            181,
+            139,
+            59,
+            .09
+        );
+}
+
+
+/* =========================================================
+   FILE INPUT
+========================================================= */
+
+.application-field input[type="file"] {
+
+    min-height:
+        50px;
+
+    padding:
+        10px;
+
+    background:
+        #f8faf8;
+
+    cursor:
+        pointer;
+}
+
+
+.application-field input[type="file"]::file-selector-button {
+
+    margin-right:
+        10px;
+
+    padding:
+        9px 12px;
+
+    border:
+        1px solid
+        #dbe3de;
+
+    border-radius:
+        7px;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--kb-green);
+
+    font-family:
+        inherit;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+
+.application-field input[type="file"]::file-selector-button:hover {
+
+    background:
+        #f3f6f4;
+
+    border-color:
+        #cbd8d0;
+}
+
+
+/* =========================================================
+   ERRORS
+========================================================= */
+
+.application-error {
+
+    margin-top:
+        6px;
+
+    color:
+        #a33a3a;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.5;
+}
+
+
+.application-error ul {
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    list-style:
+        none;
+}
+
+
+/* =========================================================
+   HELP TEXT
+========================================================= */
+
+.application-field .helptext {
+
+    display:
+        block;
+
+    margin-top:
+        5px;
+
+    color:
+        #8a958f;
+
+    font-size:
+        9px;
+
+    line-height:
+        1.5;
+}
+
+
+/* =========================================================
+   SUBMIT AREA
+========================================================= */
+
+.application-submit-area {
+
+    margin-top:
+        10px;
+
+    padding:
+        30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0a2f23,
+            #123c2f
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+    border-radius:
+        18px;
+
+    text-align:
+        center;
+
+    box-shadow:
+        0 18px 48px
+        rgba(
+            8,
+            39,
+            30,
+            .14
+        );
+}
+
+
+.application-submit-area p {
+
+    max-width:
+        600px;
+
+    margin:
+        0 auto 19px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .64
+        );
+
+    font-size:
+        10px;
+
+    line-height:
+        1.65;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.application-submit {
+
+    min-width:
+        190px;
+
+    min-height:
+        48px;
+
+    padding:
+        0 20px;
+
+    border:
+        1px solid
+        var(--kb-gold);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--kb-gold);
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 9px 22px
+        rgba(
+            181,
+            139,
+            59,
+            .18
+        );
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.application-submit:hover {
+
+    background:
+        #c49a4e;
+
+    border-color:
+        #c49a4e;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 13px 28px
+        rgba(
+            181,
+            139,
+            59,
+            .25
+        );
+}
+
+
+/* =========================================================
+   BACK LINK
+========================================================= */
+
+.application-back {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        7px;
+
+    margin-top:
+        14px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .62
+        );
+
+    text-decoration:
+        none;
+
+    font-size:
+        10px;
+
+    font-weight:
+        750;
+
+    transition:
+        color .2s ease;
+}
+
+
+.application-back:hover {
+
+    color:
+        var(--kb-gold-light);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .application-page {
+
+        padding:
+            55px 15px 80px;
+    }
+
+
+    .application-heading {
+
+        margin-bottom:
+            37px;
+    }
+
+
+    .application-heading h1 {
+
+        font-size:
+            40px;
+
+        letter-spacing:
+            -1.3px;
+    }
+
+
+    .application-heading span {
+
+        font-size:
+            13px;
+    }
+
+
+    .application-section {
+
+        padding:
+            23px 19px;
+
+        border-radius:
+            15px;
+    }
+
+
+    .application-section-title {
+
+        margin-bottom:
+            20px;
+    }
+
+
+    .application-section-title h2 {
+
+        font-size:
+            17px;
+    }
+
+
+    .application-section-title p {
+
+        font-size:
+            10px;
+    }
+
+
+    .application-fields {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            15px;
+    }
+
+
+    .application-full {
+
+        grid-column:
+            auto;
+    }
+
+
+    .application-submit-area {
+
+        padding:
+            27px 20px;
+
+        border-radius:
+            15px;
+    }
+
+
+    .application-submit {
+
+        width:
+            100%;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .application-heading h1 {
+
+        font-size:
+            35px;
+    }
+
+
+    .application-section {
+
+        padding:
+            21px 16px;
+    }
+
+
+    .application-field input,
+    .application-field select,
+    .application-field textarea {
+
+        font-size:
+            12px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main>
 
 <section class="application-page">
 
     <div class="application-container">
 
 
+        <!-- =====================================================
+             APPLICATION HEADING
+        ====================================================== -->
+
         <div class="application-heading">
 
-            <p>CAREERS AT KING B REAL ESTATE</p>
+            <p>
+                CAREERS AT KING B REAL ESTATE
+            </p>
+
 
             <h1>
                 Apply for {{ job.title }}
             </h1>
+
 
             <span>
                 Complete the application below and submit your details.
@@ -29,263 +939,476 @@ KING B REAL ESTATE & CONSTRUCTION LTD
         </div>
 
 
-        <form method="POST"
-              enctype="multipart/form-data"
-              class="application-form">
+
+        <!-- =====================================================
+             APPLICATION FORM
+        ====================================================== -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="application-form"
+        >
 
             {% csrf_token %}
 
 
+
+            <!-- =================================================
+                 PERSONAL INFORMATION
+            ================================================== -->
+
             <div class="application-section">
+
 
                 <div class="application-section-title">
 
-                    <span>01</span>
 
                     <div>
-                        <h2>Personal Information</h2>
-                        <p>Tell us how we can contact you.</p>
+
+                        <h2>
+                            Personal Information
+                        </h2>
+
+
+                        <p>
+                            Tell us how we can contact you.
+                        </p>
+
                     </div>
+
 
                 </div>
 
 
+
                 <div class="application-fields">
+
+
+                    <!-- FULL NAME -->
 
                     <div class="application-field">
 
-                        <label for="{{ form.full_name.id_for_label }}">
+
+                        <label
+                            for="{{ form.full_name.id_for_label }}"
+                        >
                             Full Name
                         </label>
 
+
                         {{ form.full_name }}
 
+
                         {% if form.full_name.errors %}
+
                             <div class="application-error">
+
                                 {{ form.full_name.errors }}
+
                             </div>
+
                         {% endif %}
+
 
                     </div>
 
 
+
+                    <!-- EMAIL -->
+
                     <div class="application-field">
 
-                        <label for="{{ form.email.id_for_label }}">
+
+                        <label
+                            for="{{ form.email.id_for_label }}"
+                        >
                             Email Address
                         </label>
 
+
                         {{ form.email }}
 
+
                         {% if form.email.errors %}
+
                             <div class="application-error">
+
                                 {{ form.email.errors }}
+
                             </div>
+
                         {% endif %}
+
 
                     </div>
 
 
+
+                    <!-- PHONE -->
+
                     <div class="application-field">
 
-                        <label for="{{ form.phone.id_for_label }}">
+
+                        <label
+                            for="{{ form.phone.id_for_label }}"
+                        >
                             Phone Number
                         </label>
 
+
                         {{ form.phone }}
 
+
                         {% if form.phone.errors %}
+
                             <div class="application-error">
+
                                 {{ form.phone.errors }}
+
                             </div>
+
                         {% endif %}
+
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- =================================================
+                 PROFESSIONAL INFORMATION
+            ================================================== -->
+
             <div class="application-section">
+
 
                 <div class="application-section-title">
 
-                    <span>02</span>
 
                     <div>
-                        <h2>Professional Information</h2>
-                        <p>Tell us about your experience and skills.</p>
+
+                        <h2>
+                            Professional Information
+                        </h2>
+
+
+                        <p>
+                            Tell us about your experience and skills.
+                        </p>
+
                     </div>
+
 
                 </div>
 
 
+
                 <div class="application-fields">
+
+
+                    <!-- SKILL -->
 
                     <div class="application-field">
 
-                        <label for="{{ form.skill.id_for_label }}">
+
+                        <label
+                            for="{{ form.skill.id_for_label }}"
+                        >
                             Skill / Profession
                         </label>
 
+
                         {{ form.skill }}
 
+
                         {% if form.skill.errors %}
+
                             <div class="application-error">
+
                                 {{ form.skill.errors }}
+
                             </div>
+
                         {% endif %}
+
 
                     </div>
 
+
+
+                    <!-- EXPERIENCE -->
 
                     <div class="application-field">
 
-                        <label for="{{ form.years_of_experience.id_for_label }}">
+
+                        <label
+                            for="{{ form.years_of_experience.id_for_label }}"
+                        >
                             Years of Experience
                         </label>
 
+
                         {{ form.years_of_experience }}
 
+
                         {% if form.years_of_experience.errors %}
+
                             <div class="application-error">
+
                                 {{ form.years_of_experience.errors }}
+
                             </div>
+
                         {% endif %}
+
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- =================================================
+                 IDENTIFICATION
+            ================================================== -->
+
             <div class="application-section">
+
 
                 <div class="application-section-title">
 
-                    <span>03</span>
 
                     <div>
-                        <h2>Identification</h2>
-                        <p>Provide a valid means of identification.</p>
+
+                        <h2>
+                            Identification
+                        </h2>
+
+
+                        <p>
+                            Provide a valid means of identification.
+                        </p>
+
                     </div>
 
+
                 </div>
+
 
 
                 <div class="application-fields">
 
+
+                    <!-- IDENTIFICATION TYPE -->
+
                     <div class="application-field">
 
-                        <label for="{{ form.id_type.id_for_label }}">
+
+                        <label
+                            for="{{ form.id_type.id_for_label }}"
+                        >
                             Identification Type
                         </label>
 
+
                         {{ form.id_type }}
 
+
                         {% if form.id_type.errors %}
+
                             <div class="application-error">
+
                                 {{ form.id_type.errors }}
+
                             </div>
+
                         {% endif %}
+
 
                     </div>
 
+
+
+                    <!-- IDENTIFICATION NUMBER -->
 
                     <div class="application-field">
 
-                        <label for="{{ form.id_number.id_for_label }}">
+
+                        <label
+                            for="{{ form.id_number.id_for_label }}"
+                        >
                             Identification Number
                         </label>
 
+
                         {{ form.id_number }}
 
+
                         {% if form.id_number.errors %}
+
                             <div class="application-error">
+
                                 {{ form.id_number.errors }}
+
                             </div>
+
                         {% endif %}
+
 
                     </div>
 
 
-                    <div class="application-field application-full">
 
-                        <label for="{{ form.id_document.id_for_label }}">
+                    <!-- DOCUMENT -->
+
+                    <div
+                        class="application-field application-full"
+                    >
+
+
+                        <label
+                            for="{{ form.id_document.id_for_label }}"
+                        >
                             Upload Identification Document
                         </label>
 
+
                         {{ form.id_document }}
 
+
                         {% if form.id_document.errors %}
+
                             <div class="application-error">
+
                                 {{ form.id_document.errors }}
+
                             </div>
+
                         {% endif %}
+
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- =================================================
+                 CV
+            ================================================== -->
+
             <div class="application-section">
+
 
                 <div class="application-section-title">
 
-                    <span>04</span>
 
                     <div>
-                        <h2>Curriculum Vitae</h2>
-                        <p>Upload your most recent CV.</p>
+
+                        <h2>
+                            Curriculum Vitae
+                        </h2>
+
+
+                        <p>
+                            Upload your most recent CV.
+                        </p>
+
                     </div>
 
+
                 </div>
+
 
 
                 <div class="application-field application-full">
 
-                    <label for="{{ form.cv.id_for_label }}">
+
+                    <label
+                        for="{{ form.cv.id_for_label }}"
+                    >
                         Upload CV
                     </label>
 
+
                     {{ form.cv }}
 
+
                     {% if form.cv.errors %}
+
                         <div class="application-error">
+
                             {{ form.cv.errors }}
+
                         </div>
+
                     {% endif %}
 
+
                 </div>
+
 
             </div>
 
 
+
+            <!-- =================================================
+                 SUBMIT
+            ================================================== -->
+
             <div class="application-submit-area">
 
+
                 <p>
+
                     By submitting this application, you confirm that
                     the information provided is accurate.
+
                 </p>
 
-                <button type="submit"
-                        class="application-submit">
+
+                <button
+                    type="submit"
+                    class="application-submit"
+                >
+
                     Submit Application
+                    <span>
+                        →
+                    </span>
+
                 </button>
 
-                <a href="{% url 'job_detail' job.id %}"
-                   class="application-back">
+
+                <a
+                    href="{% url 'job_detail' job.id %}"
+                    class="application-back"
+                >
+
                     ← Back to Job
+
                 </a>
+
 
             </div>
 
 
         </form>
+
 
     </div>
 
@@ -293,6 +1416,5 @@ KING B REAL ESTATE & CONSTRUCTION LTD
 
 
 </main>
-
 
 {% endblock %}

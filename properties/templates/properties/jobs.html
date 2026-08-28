@@ -2,83 +2,1014 @@
 {% load static %}
 
 {% block title %}
-KING B REAL ESTATE & CONSTRUCTION LTD
+    Careers | KING B REAL ESTATE & CONSTRUCTION LTD
 {% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   KING B REAL ESTATE
+   PREMIUM CAREERS PAGE
+   STRUCTURE UNCHANGED
+========================================================= */
+
+.jobs-page {
+
+    --kb-green: #123c2f;
+    --kb-dark: #062119;
+    --kb-dark-2: #09271f;
+
+    --kb-gold: #b58b3b;
+    --kb-gold-light: #d4af63;
+
+    --kb-cream: #f5f7f4;
+    --kb-white: #ffffff;
+
+    --kb-text: #17231e;
+    --kb-muted: #69746f;
+
+    --kb-border: #e1e8e3;
+
+    min-height: 100vh;
+
+    padding: 85px 20px 120px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(181,139,59,.06),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 5% 30%,
+            rgba(18,60,47,.045),
+            transparent 26%
+        ),
+        var(--kb-cream);
+
+    color: var(--kb-text);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+.jobs-page *,
+.jobs-page *::before,
+.jobs-page *::after {
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE HEADING
+========================================================= */
+
+.jobs-heading {
+
+    width: min(850px, 100%);
+
+    margin: 0 auto 65px;
+
+    text-align: center;
+}
+
+
+.jobs-heading > p:first-child {
+
+    margin: 0 0 13px;
+
+    color: var(--kb-gold);
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+.jobs-heading h1 {
+
+    margin: 0 0 17px;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            42px,
+            6vw,
+            70px
+        );
+
+    line-height: 1;
+
+    letter-spacing: -2.8px;
+
+    font-weight: 800;
+}
+
+
+.jobs-heading > p:last-child {
+
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    color: var(--kb-muted);
+
+    font-size: 15px;
+
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   JOBS GRID
+========================================================= */
+
+.jobs-grid {
+
+    width: min(1180px, 100%);
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 19px;
+}
+
+
+/* =========================================================
+   JOB CARD
+========================================================= */
+
+.job-card {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 320px;
+
+    overflow: hidden;
+
+    background:
+        var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius:
+        18px;
+
+    box-shadow:
+        0 10px 32px
+        rgba(
+            8,
+            39,
+            30,
+            .045
+        );
+
+    transition:
+        transform .28s ease,
+        box-shadow .28s ease,
+        border-color .28s ease;
+}
+
+
+.job-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    width: 100%;
+
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--kb-green),
+            var(--kb-gold)
+        );
+
+    opacity: .9;
+}
+
+
+.job-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+
+    height: 150px;
+
+    right: -85px;
+
+    bottom: -85px;
+
+    border:
+        1px solid
+        rgba(
+            181,
+            139,
+            59,
+            .10
+        );
+
+    border-radius: 50%;
+
+    transition:
+        transform .35s ease;
+}
+
+
+.job-card:hover {
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        #d0ddd6;
+
+    box-shadow:
+        0 22px 48px
+        rgba(
+            8,
+            39,
+            30,
+            .10
+        );
+}
+
+
+.job-card:hover::after {
+
+    transform:
+        scale(1.3);
+}
+
+
+/* =========================================================
+   JOB INFORMATION
+========================================================= */
+
+.job-card-info {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    padding:
+        29px 27px;
+}
+
+
+/* =========================================================
+   JOB TYPE
+========================================================= */
+
+.job-type {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    width: fit-content;
+
+    margin: 0 0 14px;
+
+    padding:
+        7px 10px;
+
+    background:
+        #f4efe4;
+
+    border:
+        1px solid
+        #e9dfcb;
+
+    border-radius:
+        999px;
+
+    color:
+        #806329;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* =========================================================
+   JOB TITLE
+========================================================= */
+
+.job-card-info h2 {
+
+    margin:
+        0 0 10px;
+
+    color:
+        var(--kb-green);
+
+    font-size:
+        23px;
+
+    line-height:
+        1.18;
+
+    letter-spacing:
+        -.4px;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   JOB LOCATION
+========================================================= */
+
+.job-card-info > p:nth-of-type(2) {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    margin:
+        0 0 16px;
+
+    color:
+        #7b8781;
+
+    font-size:
+        10px;
+
+    font-weight:
+        650;
+}
+
+
+.job-card-info > p:nth-of-type(2)::before {
+
+    content:
+        "⌖";
+
+    color:
+        var(--kb-gold);
+
+    font-size:
+        13px;
+}
+
+
+/* =========================================================
+   JOB DESCRIPTION
+========================================================= */
+
+.job-card-info > p:nth-of-type(3) {
+
+    margin:
+        0;
+
+    display:
+        -webkit-box;
+
+    -webkit-line-clamp:
+        5;
+
+    -webkit-box-orient:
+        vertical;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--kb-muted);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.8;
+}
+
+
+/* =========================================================
+   APPLY / VIEW BUTTON
+========================================================= */
+
+.job-apply-button {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    width:
+        100%;
+
+    min-height:
+        45px;
+
+    margin-top:
+        auto;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        var(--kb-green);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--kb-green);
+
+    color:
+        #ffffff;
+
+    text-decoration:
+        none;
+
+    font-size:
+        11px;
+
+    font-weight:
+        850;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.job-apply-button::after {
+
+    content:
+        "→";
+
+    font-size:
+        14px;
+
+    transition:
+        transform .2s ease;
+}
+
+
+.job-apply-button:hover {
+
+    background:
+        var(--kb-gold);
+
+    border-color:
+        var(--kb-gold);
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(
+            181,
+            139,
+            59,
+            .16
+        );
+}
+
+
+.job-apply-button:hover::after {
+
+    transform:
+        translateX(4px);
+}
+
+
+/* =========================================================
+   NO JOBS
+========================================================= */
+
+.no-jobs {
+
+    grid-column:
+        1 / -1;
+
+    padding:
+        75px 30px;
+
+    background:
+        var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius:
+        18px;
+
+    text-align:
+        center;
+
+    box-shadow:
+        0 12px 35px
+        rgba(
+            8,
+            39,
+            30,
+            .05
+        );
+}
+
+
+.no-jobs::before {
+
+    content:
+        "✦";
+
+    width:
+        60px;
+
+    height:
+        60px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    margin:
+        0 auto 18px;
+
+    border-radius:
+        50%;
+
+    background:
+        #f4f0e7;
+
+    color:
+        var(--kb-gold);
+
+    font-size:
+        23px;
+}
+
+
+.no-jobs h2 {
+
+    margin:
+        0 0 10px;
+
+    color:
+        var(--kb-green);
+
+    font-size:
+        27px;
+
+    font-weight:
+        800;
+}
+
+
+.no-jobs p {
+
+    max-width:
+        540px;
+
+    margin:
+        0 auto;
+
+    color:
+        var(--kb-muted);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.8;
+}
+
+
+/* =========================================================
+   CARD ENTRY ANIMATION
+========================================================= */
+
+.job-card {
+
+    opacity: 0;
+
+    transform:
+        translateY(18px);
+
+    animation:
+        jobReveal .55s ease forwards;
+}
+
+
+.job-card:nth-child(1) {
+    animation-delay:
+        .04s;
+}
+
+
+.job-card:nth-child(2) {
+    animation-delay:
+        .09s;
+}
+
+
+.job-card:nth-child(3) {
+    animation-delay:
+        .14s;
+}
+
+
+.job-card:nth-child(4) {
+    animation-delay:
+        .19s;
+}
+
+
+.job-card:nth-child(5) {
+    animation-delay:
+        .24s;
+}
+
+
+.job-card:nth-child(6) {
+    animation-delay:
+        .29s;
+}
+
+
+@keyframes jobReveal {
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .jobs-grid {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .jobs-page {
+
+        padding:
+            60px 15px 85px;
+
+    }
+
+
+    .jobs-heading {
+
+        margin-bottom:
+            45px;
+
+    }
+
+
+    .jobs-heading h1 {
+
+        font-size:
+            43px;
+
+        letter-spacing:
+            -1.6px;
+
+    }
+
+
+    .jobs-heading > p:last-child {
+
+        font-size:
+            13px;
+
+    }
+
+
+    .jobs-grid {
+
+        width:
+            100%;
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            15px;
+
+    }
+
+
+    .job-card {
+
+        min-height:
+            295px;
+
+    }
+
+
+    .job-card-info {
+
+        padding:
+            25px 21px;
+
+    }
+
+
+    .job-card-info h2 {
+
+        font-size:
+            21px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .jobs-heading h1 {
+
+        font-size:
+            38px;
+
+    }
+
+
+    .job-card-info {
+
+        padding:
+            23px 18px;
+
+    }
+
+
+    .job-card-info > p:nth-of-type(3) {
+
+        font-size:
+            12px;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    * {
+
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
 
 {% block content %}
 
 <main>
 
+
     <section class="jobs-page">
+
+
+        <!-- =====================================================
+             PAGE HEADING
+        ====================================================== -->
 
         <div class="jobs-heading">
 
-            <p>CAREERS AT KING B REAL ESTATE</p>
+
+            <p>
+                CAREERS AT KING B REAL ESTATE
+            </p>
+
 
             <h1>
                 Join Our Team
             </h1>
 
+
             <p>
+
                 Explore current career opportunities
                 and become part of our growing team.
+
             </p>
+
 
         </div>
 
 
+
+        <!-- =====================================================
+             JOBS
+        ====================================================== -->
+
         <div class="jobs-grid">
+
 
             {% for job in jobs %}
 
+
                 <article class="job-card">
+
 
                     <div class="job-card-info">
 
+
                         <p class="job-type">
+
                             {{ job.get_job_type_display|upper }}
+
                         </p>
+
 
                         <h2>
+
                             {{ job.title }}
+
                         </h2>
 
+
                         <p>
+
                             {{ job.location }}
+
                         </p>
+
 
                         <p>
+
                             {{ job.description }}
+
                         </p>
 
-                        <a href="{% url 'job_detail' job.id %}" class="job-apply-button">
-    View Job
-</a>
+
+                        <a
+                            href="{% url 'job_detail' job.id %}"
+                            class="job-apply-button"
+                        >
+
+                            <span>
+                                View Job
+                            </span>
+
+                        </a>
+
 
                     </div>
 
+
                 </article>
+
 
             {% empty %}
 
+
                 <div class="no-jobs">
+
 
                     <h2>
                         No Current Vacancies
                     </h2>
 
+
                     <p>
+
                         There are currently no job openings.
                         Please check back later for new opportunities.
+
                     </p>
+
 
                 </div>
 
+
             {% endfor %}
+
 
         </div>
 
+
     </section>
+
 
 </main>
 

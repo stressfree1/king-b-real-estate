@@ -14,6 +14,7 @@ urlpatterns = [
         name='home'
     ),
 
+
     # =========================================================
     # GENERAL ACCOUNT
     # =========================================================
@@ -36,6 +37,7 @@ urlpatterns = [
         name='site_logout'
     ),
 
+
     # =========================================================
     # GENERAL ACCOUNT DASHBOARD
     # =========================================================
@@ -45,6 +47,13 @@ urlpatterns = [
         views.marketplace_dashboard,
         name='marketplace_dashboard'
     ),
+
+    path(
+        'marketplace/sell/',
+        views.marketplace_create,
+        name='marketplace_create'
+    ),
+
 
     # =========================================================
     # ACCOUNT SETTINGS
@@ -62,6 +71,7 @@ urlpatterns = [
         name='password_change'
     ),
 
+
     # =========================================================
     # CUSTOMER PROFILE
     # =========================================================
@@ -71,6 +81,7 @@ urlpatterns = [
         views.customer_profile_edit,
         name='customer_profile_edit'
     ),
+
 
     # =========================================================
     # BECOME SKILLED WORKER
@@ -82,6 +93,7 @@ urlpatterns = [
         name='become_skilled_worker'
     ),
 
+
     # =========================================================
     # MY WORKER PROFILE
     # =========================================================
@@ -91,6 +103,7 @@ urlpatterns = [
         views.my_worker_profile,
         name='my_worker_profile'
     ),
+
 
     # =========================================================
     # MARKETPLACE
@@ -102,9 +115,14 @@ urlpatterns = [
         name='marketplace'
     ),
 
-    # ---------------------------------------------------------
+    path(
+        'marketplace/my-listing/<int:listing_id>/edit/',
+        views.marketplace_edit,
+        name='marketplace_edit'
+    ),
+    # =========================================================
     # MARKETPLACE LISTING DETAIL
-    # ---------------------------------------------------------
+    # =========================================================
 
     path(
         'marketplace/<int:listing_id>/',
@@ -112,41 +130,46 @@ urlpatterns = [
         name='marketplace_detail'
     ),
 
+
+    # =========================================================
+    # MY MARKETPLACE LISTING
+    # =========================================================
+
+    path(
+        'marketplace/my-listing/<int:listing_id>/',
+        views.my_listing_detail,
+        name='my_listing_detail'
+    ),
+
+
     # =========================================================
     # PROPERTIES / ESTATES
     # =========================================================
 
-    # Main estate page
     path(
         'properties/',
         views.estate_list,
         name='property_list'
     ),
 
-    # Single estate
     path(
         'properties/estate/<int:estate_id>/',
         views.estate_detail,
         name='estate_detail'
     ),
 
-    # Single estate type
-    #
-    # Example:
-    # /properties/estate/1/type/2/
-    #
     path(
         'properties/estate/<int:estate_id>/type/<int:estate_type_id>/',
         views.estate_type_detail,
         name='estate_type_detail'
     ),
 
-    # Individual plot/property
     path(
         'properties/<int:property_id>/',
         views.property_detail,
         name='property_detail'
     ),
+
 
     # =========================================================
     # ABOUT
@@ -157,6 +180,18 @@ urlpatterns = [
         views.about,
         name='about'
     ),
+
+
+    # =========================================================
+    # OUR SERVICES
+    # =========================================================
+
+    path(
+        'our-services/',
+        views.our_services,
+        name='our_services'
+    ),
+
 
     # =========================================================
     # JOBS
@@ -180,6 +215,7 @@ urlpatterns = [
         name='job_apply'
     ),
 
+
     # =========================================================
     # CONTACT
     # =========================================================
@@ -189,6 +225,7 @@ urlpatterns = [
         views.contact,
         name='contact'
     ),
+
 
     # =========================================================
     # PUBLIC SKILLED WORKERS
@@ -212,6 +249,7 @@ urlpatterns = [
         name='worker_hire'
     ),
 
+
     # =========================================================
     # WORKER DASHBOARD
     # =========================================================
@@ -222,6 +260,7 @@ urlpatterns = [
         name='worker_dashboard'
     ),
 
+
     # =========================================================
     # CUSTOMER PROFILE VIEWED BY WORKER
     # =========================================================
@@ -231,6 +270,7 @@ urlpatterns = [
         views.customer_profile,
         name='customer_profile'
     ),
+
 
     # =========================================================
     # WORKER HIRE ACTIONS
@@ -254,6 +294,7 @@ urlpatterns = [
         name='complete_worker_hire'
     ),
 
+
     # =========================================================
     # CUSTOMER REVIEWS WORKER
     # =========================================================
@@ -270,6 +311,7 @@ urlpatterns = [
         name='worker_review_create'
     ),
 
+
     # =========================================================
     # WORKER REVIEWS CUSTOMER
     # =========================================================
@@ -279,6 +321,7 @@ urlpatterns = [
         views.customer_review,
         name='customer_review'
     ),
+
 
     # =========================================================
     # OLD CUSTOMER ROUTES
@@ -314,6 +357,7 @@ urlpatterns = [
         name='cancel_worker_hire'
     ),
 
+
     # =========================================================
     # OLD SKILLED WORKER ROUTES
     # =========================================================
@@ -335,6 +379,7 @@ urlpatterns = [
         views.skilled_worker_logout,
         name='skilled_worker_logout'
     ),
+
 
     # =========================================================
     # SKILLED WORKER PASSWORD RESET
@@ -364,4 +409,140 @@ urlpatterns = [
         name='worker_password_reset_complete'
     ),
 
+
+    # =========================================================
+    # GENERAL MARKETPLACE USER DASHBOARD
+    # =========================================================
+
+    path(
+        'marketplace/user-dashboard/',
+        views.marketplace_dashboard,
+        name='marketplace_seller_dashboard'
+    ),
+
+
+    # =========================================================
+    # MARKETPLACE SELLER DASHBOARD
+    # =========================================================
+
+    path(
+        'marketplace/seller-dashboard/',
+        views.marketplace_seller_dashboard,
+        name='seller_dashboard'
+    ),
+
+
+    # =========================================================
+    # MARKETPLACE SELLER REVIEW
+    # =========================================================
+
+    path(
+        'marketplace/<int:listing_id>/review-seller/',
+        views.marketplace_review_seller,
+        name='marketplace_review_seller'
+    ),
+
+
+    # =========================================================
+    # MARKETPLACE SELLER PROFILE
+    # =========================================================
+
+    path(
+        'marketplace/seller/<int:seller_id>/',
+        views.marketplace_seller_profile,
+        name='marketplace_seller_profile'
+    ),
+
+
+    # =========================================================
+    # MARKETPLACE CHAT
+    # =========================================================
+
+    # ---------------------------------------------------------
+    # BUYER CHAT
+    #
+    # Example:
+    # /marketplace/1/chat/
+    #
+    # A buyer uses this to chat with the seller of listing #1.
+    # ---------------------------------------------------------
+
+    path(
+        'marketplace/<int:listing_id>/chat/',
+        views.marketplace_chat,
+        name='marketplace_chat'
+    ),
+
+
+    # ---------------------------------------------------------
+    # SELLER CHAT WITH SPECIFIC BUYER
+    #
+    # Example:
+    # /marketplace/1/chat/7/
+    #
+    # Seller of listing #1 is chatting with buyer/user #7.
+    # ---------------------------------------------------------
+
+    path(
+        'marketplace/<int:listing_id>/chat/<int:buyer_id>/',
+        views.marketplace_chat,
+        name='marketplace_chat_with_buyer'
+    ),
+
+
+    # =========================================================
+    # UNIFIED MARKETPLACE MESSAGES
+    # =========================================================
+
+    path(
+        'marketplace/messages/',
+        views.marketplace_messages,
+        name='marketplace_messages'
+    ),
+    path(
+        'marketplace/my-listing/<int:listing_id>/edit/',
+        views.marketplace_edit,
+        name='marketplace_edit'
+    ),
+
+   path(
+        'my-listing/<int:listing_id>/delete-photo/<int:photo_id>/',
+        views.marketplace_delete_photo,
+        name='marketplace_delete_photo'
+    ),
+
+   path(
+        "marketplace/my-listing/<int:listing_id>/delete-main-photo/",
+        views.marketplace_delete_main_photo,
+        name="marketplace_delete_main_photo",
+    ),
+
+
+# =========================================================
+# GENERAL ACCOUNT PASSWORD RESET
+# =========================================================
+
+    path(
+        'account/password-reset/',
+        views.AccountPasswordResetView.as_view(),
+        name='account_password_reset'
+    ),
+
+    path(
+        'account/password-reset/done/',
+        views.AccountPasswordResetDoneView.as_view(),
+        name='account_password_reset_done'
+    ),
+
+    path(
+        'account/password-reset/confirm/<uidb64>/<token>/',
+        views.AccountPasswordResetConfirmView.as_view(),
+        name='account_password_reset_confirm'
+    ),
+
+    path(
+        'account/password-reset/complete/',
+        views.AccountPasswordResetCompleteView.as_view(),
+        name='account_password_reset_complete'
+    ),
 ]

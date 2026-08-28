@@ -1,0 +1,1627 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}
+    {{ listing.title }} — My Listing
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   KING B MARKETPLACE
+   WORLD-CLASS MY LISTING PAGE
+========================================================= */
+
+:root {
+    --kb-green: #123c2f;
+    --kb-green-dark: #0b2b22;
+    --kb-green-light: #eaf3ef;
+
+    --kb-gold: #b58b3b;
+    --kb-gold-light: #f8f1df;
+
+    --kb-text: #17231f;
+    --kb-muted: #7d8984;
+
+    --kb-border: #e5ebe8;
+    --kb-bg: #f5f7f6;
+    --kb-white: #ffffff;
+
+    --kb-shadow:
+        0 20px 60px rgba(18, 60, 47, .08);
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.my-listing-page {
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 85% 5%,
+            rgba(181,139,59,.08),
+            transparent 28%
+        ),
+        linear-gradient(
+            180deg,
+            #f7f9f8 0%,
+            #f3f6f4 100%
+        );
+
+    padding:
+        55px
+        20px
+        100px;
+
+    color:
+        var(--kb-text);
+}
+
+
+.my-listing-container {
+
+    width: 100%;
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   TOP HEADER
+========================================================= */
+
+.my-listing-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 35px;
+}
+
+
+.my-listing-eyebrow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    color:
+        var(--kb-gold);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.8px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 10px;
+}
+
+
+.my-listing-eyebrow-line {
+
+    width: 30px;
+
+    height: 2px;
+
+    background:
+        var(--kb-gold);
+
+    border-radius: 10px;
+}
+
+
+.my-listing-header h1 {
+
+    margin: 0;
+
+    color:
+        var(--kb-green);
+
+    font-size:
+        clamp(
+            32px,
+            5vw,
+            48px
+        );
+
+    line-height: 1;
+
+    letter-spacing: -1.8px;
+
+    font-weight: 900;
+}
+
+
+.my-listing-header p {
+
+    margin:
+        10px 0 0;
+
+    color:
+        var(--kb-muted);
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    min-height: 46px;
+
+    padding:
+        0 18px;
+
+    background:
+        white;
+
+    border:
+        1px solid var(--kb-border);
+
+    border-radius: 11px;
+
+    color:
+        var(--kb-green);
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 6px 20px rgba(18,60,47,.04);
+
+    transition: .2s ease;
+}
+
+
+.back-button:hover {
+
+    border-color:
+        var(--kb-green);
+
+    background:
+        #f9fbfa;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   MAIN PRODUCT CARD
+========================================================= */
+
+.my-listing-card {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.05fr)
+        minmax(420px, .95fr);
+
+    background:
+        var(--kb-white);
+
+    border:
+        1px solid var(--kb-border);
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        var(--kb-shadow);
+}
+
+
+/* =========================================================
+   IMAGE SECTION
+========================================================= */
+
+.my-listing-image {
+
+    position: relative;
+
+    min-height: 600px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #edf3f0,
+            #dfe9e4
+        );
+
+    overflow: hidden;
+}
+
+
+.my-listing-image::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            transparent 60%,
+            rgba(0,0,0,.12)
+        );
+
+    pointer-events: none;
+}
+
+
+.my-listing-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    min-height: 600px;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform .6s ease;
+}
+
+
+.my-listing-card:hover
+.my-listing-image img {
+
+    transform:
+        scale(1.025);
+}
+
+
+/* =========================================================
+   IMAGE LABEL
+========================================================= */
+
+.image-label {
+
+    position: absolute;
+
+    top: 22px;
+
+    left: 22px;
+
+    z-index: 3;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        9px 13px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(255,255,255,.94);
+
+    color:
+        var(--kb-green);
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: .7px;
+
+    text-transform: uppercase;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.08);
+
+    backdrop-filter:
+        blur(8px);
+}
+
+
+.image-label-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background:
+        #32a866;
+}
+
+
+/* =========================================================
+   NO IMAGE
+========================================================= */
+
+.no-image {
+
+    min-height: 600px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    color:
+        #8b9791;
+
+    font-size: 13px;
+}
+
+
+.no-image-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.75);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+
+/* =========================================================
+   INFORMATION SIDE
+========================================================= */
+
+.my-listing-info {
+
+    padding: 42px;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   STATUS TOP
+========================================================= */
+
+.listing-top-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+}
+
+
+.listing-reference {
+
+    color:
+        #9aa49f;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.my-listing-info h2 {
+
+    margin:
+        0 0 15px;
+
+    color:
+        var(--kb-green);
+
+    font-size:
+        clamp(
+            27px,
+            3vw,
+            38px
+        );
+
+    line-height: 1.08;
+
+    letter-spacing: -1.2px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.listing-price {
+
+    display: inline-block;
+
+    margin-bottom: 18px;
+
+    color:
+        var(--kb-green);
+
+    font-size: 27px;
+
+    font-weight: 900;
+
+    letter-spacing: -.7px;
+}
+
+
+.listing-price span {
+
+    color:
+        var(--kb-gold);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    margin-left: 5px;
+}
+
+
+/* =========================================================
+   META
+========================================================= */
+
+.listing-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    margin-bottom: 25px;
+}
+
+
+.meta-item {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        8px 11px;
+
+    border-radius: 8px;
+
+    background:
+        #f5f8f6;
+
+    color:
+        #66736d;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.meta-item strong {
+
+    color:
+        var(--kb-green);
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.listing-divider {
+
+    height: 1px;
+
+    background:
+        var(--kb-border);
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.listing-description-label {
+
+    margin-bottom: 9px;
+
+    color:
+        var(--kb-green);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+.listing-description {
+
+    color:
+        #66736d;
+
+    font-size: 13px;
+
+    line-height: 1.8;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   APPROVAL STATUS
+========================================================= */
+
+.approval-section {
+
+    padding: 20px;
+
+    border-radius: 15px;
+
+    background:
+        #f8faf9;
+
+    border:
+        1px solid #e7eeea;
+
+    margin-bottom: 22px;
+}
+
+
+.status-label {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color:
+        #89958f;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+.status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        9px 13px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
+    font-weight: 900;
+}
+
+
+.status-badge::before {
+
+    content: "";
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+}
+
+
+.status-badge.under-review {
+
+    background:
+        #fff5dc;
+
+    color:
+        #946c1d;
+}
+
+
+.status-badge.under-review::before {
+
+    background:
+        #e1a62c;
+}
+
+
+.status-badge.approved {
+
+    background:
+        #e8f6ed;
+
+    color:
+        #247448;
+}
+
+
+.status-badge.approved::before {
+
+    background:
+        #35a966;
+}
+
+
+.status-badge.rejected {
+
+    background:
+        #fff0ef;
+
+    color:
+        #a9322a;
+}
+
+
+.status-badge.rejected::before {
+
+    background:
+        #d94439;
+}
+
+
+.status-message {
+
+    margin:
+        11px 0 0;
+
+    color:
+        #7b8781;
+
+    font-size: 11px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   LISTING ACTIONS
+========================================================= */
+
+.listing-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 28px;
+}
+
+
+.listing-action-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 44px;
+
+    padding:
+        0 18px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition: .2s ease;
+
+    box-sizing: border-box;
+}
+
+
+.listing-action-edit {
+
+    background:
+        var(--kb-green);
+
+    color:
+        white;
+
+    border:
+        1px solid var(--kb-green);
+}
+
+
+.listing-action-edit:hover {
+
+    background:
+        var(--kb-gold);
+
+    border-color:
+        var(--kb-gold);
+
+    color:
+        white;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.listing-action-view {
+
+    background:
+        white;
+
+    color:
+        var(--kb-green);
+
+    border:
+        1px solid var(--kb-border);
+}
+
+
+.listing-action-view:hover {
+
+    border-color:
+        var(--kb-green);
+
+    background:
+        #f8fbf9;
+
+    color:
+        var(--kb-green);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.statistics-header {
+
+    margin-bottom: 13px;
+
+    color:
+        var(--kb-green);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+.listing-statistics {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    border:
+        1px solid var(--kb-border);
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+
+.stat-box {
+
+    position: relative;
+
+    padding:
+        18px 13px;
+
+    text-align: center;
+
+    background:
+        white;
+
+    border-right:
+        1px solid var(--kb-border);
+}
+
+
+.stat-box:last-child {
+
+    border-right:
+        none;
+}
+
+
+.stat-icon {
+
+    width: 32px;
+
+    height: 32px;
+
+    margin:
+        0 auto 9px;
+
+    border-radius:
+        9px;
+
+    background:
+        var(--kb-green-light);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 14px;
+}
+
+
+.stat-number {
+
+    color:
+        var(--kb-green);
+
+    font-size: 21px;
+
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+.stat-title {
+
+    margin-top: 6px;
+
+    color:
+        #929d98;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+/* =========================================================
+   FOOTER NOTE
+========================================================= */
+
+.listing-footer-note {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: auto;
+
+    padding-top: 25px;
+}
+
+
+.footer-note-icon {
+
+    width: 30px;
+
+    height: 30px;
+
+    flex: 0 0 30px;
+
+    border-radius: 9px;
+
+    background:
+        var(--kb-gold-light);
+
+    color:
+        var(--kb-gold);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 13px;
+}
+
+
+.listing-footer-note span {
+
+    color:
+        #8a9690;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .my-listing-card {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .my-listing-image,
+    .my-listing-image img,
+    .no-image {
+
+        min-height:
+            500px;
+    }
+
+
+    .my-listing-info {
+
+        padding:
+            35px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .my-listing-page {
+
+        padding:
+            30px 14px 70px;
+    }
+
+
+    .my-listing-header {
+
+        display: block;
+
+        margin-bottom: 25px;
+    }
+
+
+    .my-listing-header h1 {
+
+        font-size:
+            34px;
+    }
+
+
+    .my-listing-header p {
+
+        font-size:
+            12px;
+    }
+
+
+    .back-button {
+
+        margin-top:
+            18px;
+
+        width:
+            100%;
+
+        justify-content:
+            center;
+    }
+
+
+    .my-listing-card {
+
+        border-radius:
+            18px;
+    }
+
+
+    .my-listing-image,
+    .my-listing-image img,
+    .no-image {
+
+        min-height:
+            330px;
+    }
+
+
+    .my-listing-info {
+
+        padding:
+            25px 20px;
+    }
+
+
+    .my-listing-info h2 {
+
+        font-size:
+            27px;
+    }
+
+
+    .listing-price {
+
+        font-size:
+            24px;
+    }
+
+
+    .listing-actions {
+
+        flex-direction:
+            column;
+    }
+
+
+    .listing-action-button {
+
+        width:
+            100%;
+    }
+
+
+    .listing-statistics {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .stat-box {
+
+        border-right:
+            none;
+
+        border-bottom:
+            1px solid var(--kb-border);
+    }
+
+
+    .stat-box:last-child {
+
+        border-bottom:
+            none;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .my-listing-page {
+
+        padding-left:
+            10px;
+
+        padding-right:
+            10px;
+    }
+
+
+    .my-listing-info {
+
+        padding:
+            22px 17px;
+    }
+
+
+    .listing-meta {
+
+        flex-direction:
+            column;
+    }
+
+
+    .meta-item {
+
+        width:
+            100%;
+
+        box-sizing:
+            border-box;
+    }
+
+}
+
+</style>
+
+
+<div class="my-listing-page">
+
+<div class="my-listing-container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="my-listing-header">
+
+        <div>
+
+            <div class="my-listing-eyebrow">
+
+                <span class="my-listing-eyebrow-line"></span>
+
+                SELLER CENTRE
+
+            </div>
+
+            <h1>
+                My Listing
+            </h1>
+
+            <p>
+                Track your product, approval status and marketplace performance.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'marketplace' %}"
+            class="back-button"
+        >
+            ← Back to Marketplace
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         PRODUCT
+    ====================================================== -->
+
+    <div class="my-listing-card">
+
+
+        <!-- =================================================
+             IMAGE
+        ================================================== -->
+
+        <div class="my-listing-image">
+
+            <div class="image-label">
+
+                <span class="image-label-dot"></span>
+
+                Your Product
+
+            </div>
+
+
+            {% if listing.image %}
+
+                <img
+                    src="{{ listing.image.url }}"
+                    alt="{{ listing.title }}"
+                >
+
+            {% elif listing.gallery_images.all %}
+
+                {% with listing.gallery_images.first as first_image %}
+
+                    <img
+                        src="{{ first_image.image.url }}"
+                        alt="{{ listing.title }}"
+                    >
+
+                {% endwith %}
+
+            {% else %}
+
+                <div class="no-image">
+
+                    <div class="no-image-icon">
+                        📷
+                    </div>
+
+                    <span>
+                        No product image available
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- =================================================
+             INFORMATION
+        ================================================== -->
+
+        <div class="my-listing-info">
+
+
+            <div class="listing-top-row">
+
+                <span class="listing-reference">
+                    Marketplace Listing
+                </span>
+
+            </div>
+
+
+            <!-- TITLE -->
+
+            <h2>
+                {{ listing.title }}
+            </h2>
+
+
+            <!-- PRICE -->
+
+            <div class="listing-price">
+
+                ₦{{ listing.price|floatformat:2 }}
+
+                <span>
+                    ASKING PRICE
+                </span>
+
+            </div>
+
+
+            <!-- META -->
+
+            <div class="listing-meta">
+
+                <div class="meta-item">
+
+                    📍
+
+                    <strong>
+                        {{ listing.location }}
+                    </strong>
+
+                </div>
+
+
+                <div class="meta-item">
+
+                    🏷️
+
+                    <strong>
+                        {{ listing.get_category_display }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="listing-divider"></div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="listing-description-label">
+                Product Description
+            </div>
+
+            <div class="listing-description">
+
+                {{ listing.description|linebreaksbr }}
+
+            </div>
+
+
+            <!-- =================================================
+                 APPROVAL
+            ================================================== -->
+
+            <div class="approval-section">
+
+                <span class="status-label">
+                    Listing Status
+                </span>
+
+
+                {% if listing.approval_status == 'under_review' %}
+
+                    <div class="status-badge under-review">
+                        Under Review
+                    </div>
+
+                    <p class="status-message">
+
+                        Your listing has been submitted successfully.
+                        King B is currently reviewing your product before
+                        it becomes visible to buyers.
+
+                    </p>
+
+
+                {% elif listing.approval_status == 'approved' %}
+
+                    <div class="status-badge approved">
+                        Approved
+                    </div>
+
+                    <p class="status-message">
+
+                        Great news! Your product has been approved
+                        and is now visible to buyers on King B Marketplace.
+
+                    </p>
+
+
+                {% elif listing.approval_status == 'rejected' %}
+
+                    <div class="status-badge rejected">
+                        Rejected
+                    </div>
+
+                    <p class="status-message">
+
+                        Your product was not approved for publication
+                        on the marketplace.
+
+                    </p>
+
+
+                {% else %}
+
+                    <div class="status-badge under-review">
+                        Pending Review
+                    </div>
+
+                    <p class="status-message">
+
+                        Your listing is waiting for marketplace review.
+
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LISTING ACTIONS
+            ================================================== -->
+
+            <div class="listing-actions">
+
+
+                <!-- EDIT -->
+
+                <a
+                    href="{% url 'marketplace_edit' listing.id %}"
+                    class="listing-action-button listing-action-edit"
+                >
+
+                    ✏️
+
+                    Edit Advertisement
+
+                </a>
+
+
+                <!-- VIEW PUBLIC AD -->
+
+                {% if listing.approval_status == 'approved' %}
+
+                    <a
+                        href="{% url 'marketplace_detail' listing.id %}"
+                        class="listing-action-button listing-action-view"
+                    >
+
+                        👁
+
+                        View Advertisement
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
+            <div class="statistics-header">
+                Listing Performance
+            </div>
+
+
+            <div class="listing-statistics">
+
+
+                <!-- VIEWS -->
+
+                <div class="stat-box">
+
+                    <div class="stat-icon">
+                        👁
+                    </div>
+
+                    <div class="stat-number">
+                        {{ listing.views|default:"0" }}
+                    </div>
+
+                    <div class="stat-title">
+                        Views
+                    </div>
+
+                </div>
+
+
+                <!-- CHATTERS -->
+
+                <div class="stat-box">
+
+                    <div class="stat-icon">
+                        💬
+                    </div>
+
+                    <div class="stat-number">
+                        {{ chatters_count|default:"0" }}
+                    </div>
+
+                    <div class="stat-title">
+                        Interested
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGES -->
+
+                <div class="stat-box">
+
+                    <div class="stat-icon">
+                        ✉
+                    </div>
+
+                    <div class="stat-number">
+                        {{ messages_count|default:"0" }}
+                    </div>
+
+                    <div class="stat-title">
+                        Messages
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FOOTER NOTE
+            ================================================== -->
+
+            <div class="listing-footer-note">
+
+                <div class="footer-note-icon">
+                    ✓
+                </div>
+
+                <span>
+                    Keep your product information accurate and
+                    respond quickly to interested buyers for better
+                    marketplace performance.
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

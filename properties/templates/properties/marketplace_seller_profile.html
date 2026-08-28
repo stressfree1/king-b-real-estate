@@ -1,0 +1,1109 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}
+    {{ seller.get_full_name|default:seller.username }} | King B Marketplace
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+.seller-profile-page {
+    min-height: 100vh;
+
+    padding: 50px 5% 90px;
+
+    background: #f5f7f5;
+}
+
+
+.seller-profile-container {
+    width: min(1200px, 100%);
+
+    margin: auto;
+}
+
+
+/* =========================================================
+   SELLER HEADER
+========================================================= */
+
+.seller-profile-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #123c2f,
+            #09271f
+        );
+
+    color: white;
+
+    padding: 35px;
+
+    border-radius: 22px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 15px 40px rgba(18,60,47,.12);
+}
+
+
+.seller-profile-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+.seller-profile-avatar {
+
+    width: 75px;
+
+    height: 75px;
+
+    border-radius: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #b58b3b;
+
+    color: white;
+
+    font-size: 27px;
+
+    font-weight: 900;
+
+    flex-shrink: 0;
+}
+
+
+.seller-profile-name {
+
+    margin: 0;
+
+    font-size: 30px;
+
+    font-weight: 850;
+}
+
+
+.seller-profile-label {
+
+    margin-top: 6px;
+
+    color: rgba(255,255,255,.75);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RATING
+========================================================= */
+
+.seller-rating-summary {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin-top: 22px;
+}
+
+
+.seller-rating-number {
+
+    font-size: 36px;
+
+    font-weight: 900;
+
+    color: #d4af63;
+}
+
+
+.seller-stars {
+
+    color: #d4af63;
+
+    font-size: 21px;
+
+    letter-spacing: 2px;
+}
+
+
+.seller-review-count {
+
+    color: rgba(255,255,255,.7);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.profile-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 25px;
+}
+
+
+.profile-stat {
+
+    background: white;
+
+    padding: 22px;
+
+    border-radius: 15px;
+
+    border: 1px solid #e2e8e4;
+
+    text-align: center;
+}
+
+
+.profile-stat-number {
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    color: #123c2f;
+}
+
+
+.profile-stat-label {
+
+    margin-top: 5px;
+
+    color: #718078;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   TWO COLUMN
+========================================================= */
+
+.profile-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1.4fr .8fr;
+
+    gap: 25px;
+
+    align-items: start;
+}
+
+
+.profile-card {
+
+    background: white;
+
+    border: 1px solid #e2e8e4;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 6px 24px rgba(18,60,47,.05);
+}
+
+
+.profile-card h2 {
+
+    margin: 0 0 22px;
+
+    color: #123c2f;
+
+    font-size: 22px;
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+.review-item {
+
+    padding: 20px 0;
+
+    border-bottom: 1px solid #edf0ee;
+}
+
+
+.review-item:last-child {
+
+    border-bottom: none;
+
+    padding-bottom: 0;
+}
+
+
+.review-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.reviewer-name {
+
+    color: #123c2f;
+
+    font-weight: 800;
+
+    font-size: 14px;
+}
+
+
+.review-stars {
+
+    color: #b58b3b;
+
+    letter-spacing: 1px;
+
+    font-size: 15px;
+}
+
+
+.review-date {
+
+    margin-top: 4px;
+
+    color: #87928c;
+
+    font-size: 11px;
+}
+
+
+.review-listing {
+
+    margin-top: 10px;
+
+    color: #68756e;
+
+    font-size: 12px;
+}
+
+
+.review-comment {
+
+    margin-top: 10px;
+
+    color: #4f5c55;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   RATING BREAKDOWN
+========================================================= */
+
+.rating-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 11px;
+}
+
+
+.rating-label {
+
+    width: 38px;
+
+    color: #68756e;
+
+    font-size: 12px;
+}
+
+
+.rating-bar {
+
+    flex: 1;
+
+    height: 8px;
+
+    background: #edf0ee;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+.rating-fill {
+
+    height: 100%;
+
+    background: #b58b3b;
+}
+
+
+/* =========================================================
+   LISTINGS
+========================================================= */
+
+.seller-listing {
+
+    display: flex;
+
+    gap: 15px;
+
+    padding: 17px 0;
+
+    border-bottom: 1px solid #edf0ee;
+}
+
+
+.seller-listing:last-child {
+
+    border-bottom: none;
+}
+
+
+.seller-listing-image {
+
+    width: 95px;
+
+    height: 78px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #edf2ef;
+
+    flex-shrink: 0;
+}
+
+
+.seller-listing-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.seller-listing-title {
+
+    color: #123c2f;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+
+.seller-listing-price {
+
+    margin-top: 5px;
+
+    color: #b58b3b;
+
+    font-weight: 800;
+}
+
+
+.seller-listing-location {
+
+    margin-top: 5px;
+
+    color: #7a867f;
+
+    font-size: 11px;
+}
+
+
+.view-listing {
+
+    display: inline-block;
+
+    margin-top: 8px;
+
+    color: #123c2f;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+}
+
+
+.view-listing:hover {
+
+    color: #b58b3b;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+
+    padding: 30px;
+
+    text-align: center;
+
+    color: #7a867f;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .profile-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .seller-profile-page {
+
+        padding:
+            30px 4% 60px;
+
+    }
+
+
+    .seller-profile-header {
+
+        padding: 25px;
+
+    }
+
+
+    .seller-profile-top {
+
+        align-items: flex-start;
+
+    }
+
+
+    .seller-profile-avatar {
+
+        width: 60px;
+
+        height: 60px;
+
+    }
+
+
+    .seller-profile-name {
+
+        font-size: 24px;
+
+    }
+
+
+    .profile-stats {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .seller-rating-summary {
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .review-top {
+
+        flex-direction: column;
+
+        gap: 5px;
+
+    }
+
+}
+
+</style>
+
+
+<section class="seller-profile-page">
+
+<div class="seller-profile-container">
+
+
+    <!-- =====================================================
+         SELLER HEADER
+    ====================================================== -->
+
+    <div class="seller-profile-header">
+
+        <div class="seller-profile-top">
+
+
+            <div class="seller-profile-avatar">
+
+                {% if seller.first_name %}
+
+                    {{ seller.first_name|first|upper }}
+
+                {% else %}
+
+                    {{ seller.username|first|upper }}
+
+                {% endif %}
+
+            </div>
+
+
+            <div>
+
+                <h1 class="seller-profile-name">
+
+                    {{ seller.get_full_name|default:seller.username }}
+
+                </h1>
+
+
+                <div class="seller-profile-label">
+
+                    King B Marketplace Seller
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RATING -->
+
+        <div class="seller-rating-summary">
+
+            <div class="seller-rating-number">
+
+                {{ average_rating }}
+
+            </div>
+
+
+            <div>
+
+                <div class="seller-stars">
+
+                    ★★★★★
+
+                </div>
+
+
+                <div class="seller-review-count">
+
+                    {{ total_reviews }} approved reviews
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PROFILE STATISTICS
+    ====================================================== -->
+
+    <div class="profile-stats">
+
+
+        <div class="profile-stat">
+
+            <div class="profile-stat-number">
+
+                {{ total_listings }}
+
+            </div>
+
+            <div class="profile-stat-label">
+
+                Advertisements
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat">
+
+            <div class="profile-stat-number">
+
+                {{ total_views }}
+
+            </div>
+
+            <div class="profile-stat-label">
+
+                Advertisement Views
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat">
+
+            <div class="profile-stat-number">
+
+                {{ total_reviews }}
+
+            </div>
+
+            <div class="profile-stat-label">
+
+                Reviews
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="profile-grid">
+
+
+        <!-- =================================================
+             LEFT
+        ================================================= -->
+
+        <div>
+
+
+            <!-- SELLER'S ADVERTISEMENTS -->
+
+            <div class="profile-card">
+
+                <h2>
+                    {{ seller.get_full_name|default:seller.username }}'s Advertisements
+                </h2>
+
+
+                {% if listings %}
+
+                    {% for listing in listings %}
+
+                        <div class="seller-listing">
+
+
+                            <div class="seller-listing-image">
+
+                                {% if listing.image %}
+
+                                    <img
+                                        src="{{ listing.image.url }}"
+                                        alt="{{ listing.title }}"
+                                    >
+
+                                {% elif listing.gallery_images.all %}
+
+                                    {% with listing.gallery_images.first as image %}
+
+                                        <img
+                                            src="{{ image.image.url }}"
+                                            alt="{{ listing.title }}"
+                                        >
+
+                                    {% endwith %}
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="seller-listing-title">
+
+                                    {{ listing.title }}
+
+                                </div>
+
+
+                                <div class="seller-listing-price">
+
+                                    ₦{{ listing.price|floatformat:0 }}
+
+                                </div>
+
+
+                                <div class="seller-listing-location">
+
+                                    📍 {{ listing.location }}
+
+                                    &nbsp; • &nbsp;
+
+                                    👁 {{ listing.views }}
+
+                                </div>
+
+
+                                <a
+                                    href="{% url 'marketplace_detail' listing.id %}"
+                                    class="view-listing"
+                                >
+
+                                    View Advertisement →
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        This seller has no approved advertisements.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- REVIEWS -->
+
+            <div class="profile-card">
+
+                <h2>
+                    Buyer Reviews
+                </h2>
+
+
+                {% if reviews %}
+
+                    {% for review in reviews %}
+
+                        <div class="review-item">
+
+
+                            <div class="review-top">
+
+                                <div>
+
+                                    <div class="reviewer-name">
+
+                                        {{ review.reviewer.get_full_name|default:review.reviewer.username }}
+
+                                    </div>
+
+
+                                    <div class="review-date">
+
+                                        {{ review.created_at|date:"M d, Y" }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="review-stars">
+
+                                    {% if review.rating == 5 %}
+                                        ★★★★★
+                                    {% elif review.rating == 4 %}
+                                        ★★★★☆
+                                    {% elif review.rating == 3 %}
+                                        ★★★☆☆
+                                    {% elif review.rating == 2 %}
+                                        ★★☆☆☆
+                                    {% else %}
+                                        ★☆☆☆☆
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+                            {% if review.listing %}
+
+                                <div class="review-listing">
+
+                                    Advertisement:
+                                    <strong>
+                                        {{ review.listing.title }}
+                                    </strong>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="review-comment">
+
+                                {{ review.comment }}
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        This seller has not received any reviews yet.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT
+        ================================================== -->
+
+        <div>
+
+
+            <!-- RATING BREAKDOWN -->
+
+            <div class="profile-card">
+
+                <h2>
+                    Seller Rating
+                </h2>
+
+
+                <!-- 5 STAR -->
+
+                <div class="rating-row">
+
+                    <span class="rating-label">
+                        5 ★
+                    </span>
+
+                    <div class="rating-bar">
+
+                        <div
+                            class="rating-fill"
+                            style="width:
+                            {% if total_reviews %}
+                                {% widthratio five_star_reviews total_reviews 100 %}
+                            {% else %}
+                                0
+                            {% endif %}%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 4 STAR -->
+
+                <div class="rating-row">
+
+                    <span class="rating-label">
+                        4 ★
+                    </span>
+
+                    <div class="rating-bar">
+
+                        <div
+                            class="rating-fill"
+                            style="width:
+                            {% if total_reviews %}
+                                {% widthratio four_star_reviews total_reviews 100 %}
+                            {% else %}
+                                0
+                            {% endif %}%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 3 STAR -->
+
+                <div class="rating-row">
+
+                    <span class="rating-label">
+                        3 ★
+                    </span>
+
+                    <div class="rating-bar">
+
+                        <div
+                            class="rating-fill"
+                            style="width:
+                            {% if total_reviews %}
+                                {% widthratio three_star_reviews total_reviews 100 %}
+                            {% else %}
+                                0
+                            {% endif %}%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 2 STAR -->
+
+                <div class="rating-row">
+
+                    <span class="rating-label">
+                        2 ★
+                    </span>
+
+                    <div class="rating-bar">
+
+                        <div
+                            class="rating-fill"
+                            style="width:
+                            {% if total_reviews %}
+                                {% widthratio two_star_reviews total_reviews 100 %}
+                            {% else %}
+                                0
+                            {% endif %}%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 1 STAR -->
+
+                <div class="rating-row">
+
+                    <span class="rating-label">
+                        1 ★
+                    </span>
+
+                    <div class="rating-bar">
+
+                        <div
+                            class="rating-fill"
+                            style="width:
+                            {% if total_reviews %}
+                                {% widthratio one_star_reviews total_reviews 100 %}
+                            {% else %}
+                                0
+                            {% endif %}%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT -->
+
+            <div class="profile-card">
+
+                <h2>
+                    Contact Seller
+                </h2>
+
+                <p style="
+                    color:#68756e;
+                    font-size:13px;
+                    line-height:1.7;
+                ">
+
+                    Interested in one of this seller's
+                    advertisements? Contact the seller
+                    directly through the marketplace.
+
+                </p>
+
+
+                {% if seller.email %}
+
+                    <a
+                        href="mailto:{{ seller.email }}"
+                        class="view-listing"
+                    >
+
+                        ✉ Contact Seller
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}

@@ -17,12 +17,12 @@ from .models import (
     WorkerReview,
     CustomerReview,
     MarketplaceListing,
-    MarketplaceImage,
     MarketplaceFavourite,
     MarketplaceMessage,
     MarketplaceReport,
     MarketplaceReview,
     AccountSettings,
+    MarketplaceListingImage,
 )
 
 
@@ -797,15 +797,14 @@ class CustomerReviewAdmin(admin.ModelAdmin):
 # MARKETPLACE IMAGE INLINE
 # =========================================================
 
-class MarketplaceImageInline(admin.TabularInline):
+class MarketplaceListingImageInline(admin.TabularInline):
 
-    model = MarketplaceImage
+    model = MarketplaceListingImage
     extra = 3
 
     fields = (
         'image',
     )
-
 
 # =========================================================
 # MARKETPLACE LISTING
@@ -821,14 +820,15 @@ class MarketplaceListingAdmin(admin.ModelAdmin):
         'price',
         'location',
         'status',
-        'is_approved',
+        'approval_status',
+        'views',
         'created_at',
     )
 
     list_filter = (
         'category',
         'status',
-        'is_approved',
+        'approval_status',
         'created_at',
     )
 
@@ -842,50 +842,65 @@ class MarketplaceListingAdmin(admin.ModelAdmin):
 
     list_editable = (
         'status',
-        'is_approved',
+        'approval_status',
+    )
+
+    readonly_fields = (
+        'views',
+        'created_at',
+        'updated_at',
     )
 
     inlines = [
-        MarketplaceImageInline,
+        MarketplaceListingImageInline,
     ]
 
     ordering = (
         '-created_at',
     )
 
-
-# =========================================================
-# MARKETPLACE FAVOURITE
-# =========================================================
-
-@admin.register(MarketplaceFavourite)
-class MarketplaceFavouriteAdmin(admin.ModelAdmin):
-
-    list_display = (
-        'user',
-        'listing',
-        'created_at',
+    fieldsets = (
+        (
+            'Listing Information',
+            {
+                'fields': (
+                    'seller',
+                    'title',
+                    'category',
+                    'price',
+                    'location',
+                    'description',
+                    'image',
+                )
+            }
+        ),
+        (
+            'Listing Status',
+            {
+                'fields': (
+                    'status',
+                    'approval_status',
+                )
+            }
+        ),
+        (
+            'Marketplace Statistics',
+            {
+                'fields': (
+                    'views',
+                )
+            }
+        ),
+        (
+            'System Information',
+            {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                )
+            }
+        ),
     )
-
-    list_filter = (
-        'created_at',
-    )
-
-    search_fields = (
-        'user__username',
-        'user__email',
-        'listing__title',
-    )
-
-    ordering = (
-        '-created_at',
-    )
-
-    readonly_fields = (
-        'created_at',
-    )
-
-
 # =========================================================
 # MARKETPLACE MESSAGE
 # =========================================================

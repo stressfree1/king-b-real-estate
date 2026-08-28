@@ -24,14 +24,12 @@ class Estate(models.Model):
     # ESTATE MEDIA
     # =====================================================
 
-    # Main estate image
     image = models.ImageField(
         upload_to='estates/',
         blank=True,
         null=True
     )
 
-    # General digital layout for the estate
     digital_layout = models.FileField(
         upload_to='estates/layouts/',
         blank=True,
@@ -40,26 +38,6 @@ class Estate(models.Model):
 
     # =====================================================
     # ESTATE DEVELOPMENT PLAN
-    # =====================================================
-    #
-    # This belongs to the entire estate, not an EstateType.
-    #
-    # Example:
-    #
-    # Kings Park Estate
-    #
-    # Development Plan:
-    #     Kings Park Estate Master Development Plan
-    #
-    # Development Features:
-    #     Perimeter fencing
-    #     Internal roads
-    #     Drainage
-    #     Security
-    #     Street lighting
-    #     Water infrastructure
-    #     Electricity infrastructure
-    #
     # =====================================================
 
     development_plan_title = models.CharField(
@@ -98,17 +76,6 @@ class Estate(models.Model):
 # =========================================================
 # ESTATE TYPE
 # =========================================================
-#
-# Example:
-#
-# Kings Park Estate
-#     ├── Classic
-#     ├── Standard
-#     └── Premium
-#
-# Each EstateType belongs to one Estate.
-# Properties/plots can then belong to a specific EstateType.
-# =========================================================
 
 class EstateType(models.Model):
 
@@ -138,26 +105,22 @@ class EstateType(models.Model):
         blank=True
     )
 
-    # What comes with this specific estate type
     what_comes_with_it = models.TextField(
         blank=True
     )
 
-    # Proposed company plan for this estate type
     proposed_company_plan = models.FileField(
         upload_to='estates/company_plans/',
         blank=True,
         null=True
     )
 
-    # Digital layout specifically for this estate type
     digital_layout = models.FileField(
         upload_to='estates/type_layouts/',
         blank=True,
         null=True
     )
 
-    # Main image for this estate type
     image = models.ImageField(
         upload_to='estates/types/',
         blank=True,
@@ -194,17 +157,6 @@ class EstateType(models.Model):
 
 # =========================================================
 # ESTATE TYPE GALLERY
-# =========================================================
-#
-# Allows multiple images/documents for a specific estate type.
-#
-# Example:
-#
-# Kings Park Estate → Classic
-#     ├── Classic front image
-#     ├── Classic layout image
-#     └── Classic facilities image
-#
 # =========================================================
 
 class EstateTypeImage(models.Model):
@@ -292,11 +244,6 @@ class Property(models.Model):
 
     # =====================================================
     # ESTATE TYPE
-    # =====================================================
-    #
-    # Nullable so existing properties can remain in the
-    # database while we assign them to specific types.
-    #
     # =====================================================
 
     estate_type = models.ForeignKey(
@@ -847,14 +794,6 @@ class Customer(models.Model):
 # =========================================================
 # UNIFIED ACCOUNT SETTINGS
 # =========================================================
-#
-# One settings record belongs to one Django User.
-#
-# This is the account-wide settings system.
-# It is NOT a customer settings system and NOT a
-# skilled-worker settings system.
-#
-# =========================================================
 
 class AccountSettings(models.Model):
 
@@ -863,10 +802,6 @@ class AccountSettings(models.Model):
         on_delete=models.CASCADE,
         related_name='account_settings'
     )
-
-    # =====================================================
-    # PERSONAL INFORMATION
-    # =====================================================
 
     phone = models.CharField(
         max_length=50,
@@ -883,10 +818,6 @@ class AccountSettings(models.Model):
         blank=True,
         null=True
     )
-
-    # =====================================================
-    # NOTIFICATIONS
-    # =====================================================
 
     property_alerts = models.BooleanField(
         default=True
@@ -908,17 +839,9 @@ class AccountSettings(models.Model):
         default=True
     )
 
-    # =====================================================
-    # PRIVACY
-    # =====================================================
-
     profile_visible = models.BooleanField(
         default=True
     )
-
-    # =====================================================
-    # SYSTEM INFORMATION
-    # =====================================================
 
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -933,7 +856,8 @@ class AccountSettings(models.Model):
             f"{self.user.get_full_name() or self.user.username} "
             f"- Account Settings"
         )
-        
+
+
 # =========================================================
 # WORKER HIRE
 # =========================================================
@@ -1073,12 +997,15 @@ class CustomerReview(models.Model):
             f"({self.rating} Stars)"
         )
 
-
 # =========================================================
 # MARKETPLACE LISTING
 # =========================================================
 
 class MarketplaceListing(models.Model):
+
+    # =====================================================
+    # CATEGORY
+    # =====================================================
 
     CATEGORY_CHOICES = [
         ('electronics', 'Electronics'),
@@ -1094,17 +1021,39 @@ class MarketplaceListing(models.Model):
         ('other', 'Other'),
     ]
 
+    # =====================================================
+    # SALES STATUS
+    # =====================================================
+
     STATUS_CHOICES = [
         ('available', 'Available'),
         ('sold', 'Sold'),
         ('reserved', 'Reserved'),
     ]
 
+    # =====================================================
+    # ADMIN APPROVAL STATUS
+    # =====================================================
+
+    APPROVAL_STATUS_CHOICES = [
+        ('under_review', 'Under Review'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    # =====================================================
+    # SELLER
+    # =====================================================
+
     seller = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='marketplace_listings'
     )
+
+    # =====================================================
+    # LISTING INFORMATION
+    # =====================================================
 
     title = models.CharField(
         max_length=200
@@ -1132,15 +1081,172 @@ class MarketplaceListing(models.Model):
         null=True
     )
 
+        # =====================================================
+    # LISTING DETAILS
+    # =====================================================
+
+    SUBCATEGORY_CHOICES = [
+        ('', 'Select subcategory'),
+        ('new', 'New'),
+        ('used', 'Used'),
+        ('refurbished', 'Refurbished'),
+    ]
+
+    CONDITION_CHOICES = [
+        ('new', 'New'),
+        ('used', 'Used'),
+        ('refurbished', 'Refurbished'),
+        ('fair', 'Fair'),
+    ]
+
+    PRICE_TYPE_CHOICES = [
+        ('fixed', 'Fixed Price'),
+        ('negotiable', 'Negotiable'),
+        ('contact', 'Contact Seller'),
+    ]
+
+    subcategory = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    condition = models.CharField(
+        max_length=30,
+        choices=CONDITION_CHOICES,
+        blank=True
+    )
+
+    # =====================================================
+    # PRICING
+    # =====================================================
+
+    price_type = models.CharField(
+        max_length=20,
+        choices=PRICE_TYPE_CHOICES,
+        default='fixed'
+    )
+
+    negotiable = models.BooleanField(
+        default=False
+    )
+
+    # =====================================================
+    # LOCATION
+    # =====================================================
+
+    state = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    city = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    specific_location = models.CharField(
+        max_length=200,
+        blank=True
+    )
+
+    # =====================================================
+    # PRODUCT INFORMATION
+    # =====================================================
+
+    brand = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    model = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    year = models.PositiveIntegerField(
+        blank=True,
+        null=True
+    )
+
+    color = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    quantity = models.PositiveIntegerField(
+        default=1
+    )
+
+    # =====================================================
+    # SELLER PREFERENCES
+    # =====================================================
+
+    contact_phone = models.CharField(
+        max_length=30,
+        blank=True
+    )
+
+    whatsapp_available = models.BooleanField(
+        default=False
+    )
+
+    delivery_available = models.BooleanField(
+        default=False
+    )
+    
+
+    # =====================================================
+    # SALES STATUS
+    # =====================================================
+
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='available'
     )
 
-    is_approved = models.BooleanField(
-        default=False
+    # =====================================================
+    # ADMIN APPROVAL STATUS
+    # =====================================================
+
+    approval_status = models.CharField(
+        max_length=20,
+        choices=APPROVAL_STATUS_CHOICES,
+        default='under_review'
     )
+
+    # =====================================================
+    # LISTING VIEWS
+    # =====================================================
+    #
+    # Number of times people have viewed this listing.
+    #
+    # A newly submitted listing starts at 0.
+    #
+    # =====================================================
+
+    views = models.PositiveIntegerField(
+        default=0
+    )
+
+    # =====================================================
+    # CHAT STATISTICS
+    # =====================================================
+    #
+    # Number of people who have started a conversation
+    # about this listing.
+    #
+    # A newly submitted listing starts at 0.
+    #
+    # =====================================================
+
+    chats_count = models.PositiveIntegerField(
+        default=0
+    )
+
+    # =====================================================
+    # SYSTEM INFORMATION
+    # =====================================================
 
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -1150,15 +1256,17 @@ class MarketplaceListing(models.Model):
         auto_now=True
     )
 
+    # =====================================================
+    # STRING REPRESENTATION
+    # =====================================================
+
     def __str__(self):
         return self.title
-
 
 # =========================================================
 # MARKETPLACE GALLERY
 # =========================================================
-
-class MarketplaceImage(models.Model):
+class MarketplaceListingImage(models.Model):
 
     listing = models.ForeignKey(
         MarketplaceListing,
@@ -1170,17 +1278,13 @@ class MarketplaceImage(models.Model):
         upload_to='marketplace/gallery/'
     )
 
-    created_at = models.DateTimeField(
+    uploaded_at = models.DateTimeField(
         auto_now_add=True
     )
 
     def __str__(self):
-        return (
-            f"{self.listing.title} - "
-            f"Marketplace Image"
-        )
-
-
+        return f"{self.listing.title} - Image"
+        
 # =========================================================
 # MARKETPLACE FAVOURITE
 # =========================================================
@@ -1320,23 +1424,31 @@ class MarketplaceReport(models.Model):
             f"{self.reason}"
         )
 
-
 # =========================================================
-# MARKETPLACE REVIEW
+# MARKETPLACE SELLER REVIEW
 # =========================================================
 
 class MarketplaceReview(models.Model):
+    seller = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='marketplace_seller_reviews',
+        null=True,
+        blank=True
+    )
 
     listing = models.ForeignKey(
         MarketplaceListing,
         on_delete=models.CASCADE,
-        related_name='reviews'
+        related_name='seller_reviews',
+        null=True,
+        blank=True
     )
 
     reviewer = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='marketplace_reviews'
+        related_name='marketplace_reviews_given'
     )
 
     rating = models.PositiveIntegerField(
@@ -1352,15 +1464,64 @@ class MarketplaceReview(models.Model):
     comment = models.TextField()
 
     is_approved = models.BooleanField(
-        default=False
+        default=True
+)
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+def __str__(self):
+    seller_name = (
+        self.seller.username
+        if self.seller
+        else 'Unknown Seller'
+    )
+
+    reviewer_name = (
+        self.reviewer.username
+        if self.reviewer
+        else 'Unknown Reviewer'
+    )
+
+    return (
+        f"{reviewer_name} → "
+        f"{seller_name} "
+        f"({self.rating} Stars)"
+    )
+# =========================================================
+# MARKETPLACE LISTING VIEW
+# =========================================================
+
+class MarketplaceListingView(models.Model):
+
+    listing = models.ForeignKey(
+        MarketplaceListing,
+        on_delete=models.CASCADE,
+        related_name='view_records'
+    )
+
+    viewer = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='marketplace_listing_views'
     )
 
     created_at = models.DateTimeField(
         auto_now_add=True
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'listing',
+                    'viewer'
+                ],
+                name='unique_listing_view_per_user'
+            )
+        ]
+
     def __str__(self):
         return (
-            f"{self.listing.title} - "
-            f"{self.rating} Stars"
+            f"{self.viewer.username} viewed "
+            f"{self.listing.title}"
         )

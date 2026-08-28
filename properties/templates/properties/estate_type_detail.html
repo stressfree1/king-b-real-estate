@@ -1,4 +1,5 @@
 {% extends 'properties/base.html' %}
+{% load humanize %}
 {% load static %}
 
 {% block title %}
@@ -13,7 +14,7 @@
 /* =========================================================
    KING B REAL ESTATE
    PREMIUM ESTATE TYPE EXPERIENCE
-   ========================================================= */
+========================================================= */
 
 .estate-type-page {
 
@@ -45,7 +46,7 @@
 
 /* =========================================================
    RESET
-   ========================================================= */
+========================================================= */
 
 .estate-type-page *,
 .estate-type-page *::before,
@@ -57,7 +58,7 @@
 
 /* =========================================================
    SHARED WIDTHS
-   ========================================================= */
+========================================================= */
 
 .kb-shell {
 
@@ -69,7 +70,7 @@
 
 /* =========================================================
    TOP NAVIGATION
-   ========================================================= */
+========================================================= */
 
 .kb-topbar {
 
@@ -106,7 +107,7 @@
 
 /* =========================================================
    HERO
-   ========================================================= */
+========================================================= */
 
 .kb-hero {
 
@@ -140,7 +141,7 @@
 
 /* =========================================================
    HERO IMAGE
-   ========================================================= */
+========================================================= */
 
 .kb-hero-image {
 
@@ -210,7 +211,7 @@
 
 /* =========================================================
    HERO CONTENT
-   ========================================================= */
+========================================================= */
 
 .kb-hero-content {
 
@@ -289,7 +290,7 @@
 
 /* =========================================================
    HERO TEXT
-   ========================================================= */
+========================================================= */
 
 .kb-eyebrow {
 
@@ -381,7 +382,7 @@
 
 /* =========================================================
    HERO SPECIFICATIONS
-   ========================================================= */
+========================================================= */
 
 .kb-specs {
 
@@ -468,7 +469,7 @@
 
 /* =========================================================
    HERO DOCUMENTS
-   ========================================================= */
+========================================================= */
 
 .kb-documents {
 
@@ -551,7 +552,7 @@
 
 /* =========================================================
    PACKAGE SECTION
-   ========================================================= */
+========================================================= */
 
 .kb-package {
 
@@ -619,7 +620,7 @@
 
 /* =========================================================
    PACKAGE LIST
-   ========================================================= */
+========================================================= */
 
 .kb-package-list {
 
@@ -705,19 +706,20 @@
 
 /* =========================================================
    DIGITAL LAYOUT SECTION
-   ========================================================= */
+   HIDDEN UNTIL OPENED
+========================================================= */
 
 .kb-layout-section {
 
-    width: min(1480px, 94%);
+    width: min(1260px, 88%);
 
-    margin: 125px auto 0;
+    margin: 100px auto 0;
 }
 
 
 /* =========================================================
-   LAYOUT HEADER
-   ========================================================= */
+   DIGITAL LAYOUT HEADER
+========================================================= */
 
 .kb-layout-heading {
 
@@ -727,15 +729,21 @@
 
     justify-content: space-between;
 
-    gap: 40px;
+    gap: 30px;
 
-    margin-bottom: 31px;
+    margin-bottom: 25px;
 }
 
 
 .kb-layout-heading-content {
 
-    max-width: 800px;
+    max-width: 820px;
+}
+
+
+.kb-layout-heading-content .kb-label {
+
+    margin-bottom: 11px;
 }
 
 
@@ -746,20 +754,20 @@
     color: var(--kb-green);
 
     font-size: clamp(
-        42px,
-        4.8vw,
-        61px
+        34px,
+        4vw,
+        48px
     );
 
-    line-height: 1.02;
+    line-height: 1.08;
 
-    letter-spacing: -1.8px;
+    letter-spacing: -1px;
 }
 
 
 .kb-layout-heading-content p {
 
-    max-width: 735px;
+    max-width: 760px;
 
     margin: 0;
 
@@ -767,7 +775,7 @@
 
     font-size: 15px;
 
-    line-height: 1.85;
+    line-height: 1.8;
 }
 
 
@@ -775,7 +783,7 @@
 
     flex-shrink: 0;
 
-    padding: 10px 14px;
+    padding: 9px 13px;
 
     background: #f6f0e4;
 
@@ -785,7 +793,7 @@
 
     color: #806329;
 
-    font-size: 10px;
+    font-size: 9px;
 
     font-weight: 800;
 
@@ -796,16 +804,237 @@
 
 
 /* =========================================================
-   MASTERPLAN VIEWER
-   ========================================================= */
+   DIGITAL LAYOUT TOGGLE
+========================================================= */
+
+.kb-layout-toggle {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px 17px;
+
+    background: var(--kb-white);
+
+    border: 1px solid var(--kb-border);
+
+    border-radius: 12px;
+
+    color: var(--kb-green);
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-align: left;
+
+    box-shadow:
+        0 8px 24px rgba(
+            8,
+            39,
+            30,
+            .045
+        );
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.kb-layout-toggle:hover {
+
+    background: #f8faf9;
+
+    border-color: #cedbd4;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 28px rgba(
+            8,
+            39,
+            30,
+            .065
+        );
+}
+
+
+.kb-layout-toggle-left {
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.kb-layout-toggle-icon {
+
+    width: 36px;
+
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #f3f0e8;
+
+    color: var(--kb-gold);
+
+    font-size: 17px;
+}
+
+
+.kb-layout-toggle-text {
+
+    min-width: 0;
+}
+
+
+.kb-layout-toggle-title {
+
+    display: block;
+
+    color: var(--kb-green);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+}
+
+
+.kb-layout-toggle-subtitle {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--kb-muted);
+
+    font-size: 9px;
+
+    font-weight: 500;
+
+    line-height: 1.35;
+}
+
+
+.kb-layout-toggle-arrow {
+
+    width: 29px;
+
+    height: 29px;
+
+    flex: 0 0 29px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--kb-green);
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    transition:
+        transform .25s ease,
+        background .2s ease;
+}
+
+
+.kb-layout-toggle.active
+.kb-layout-toggle-arrow {
+
+    transform: rotate(180deg);
+
+    background: var(--kb-gold);
+}
+
+
+/* =========================================================
+   HIDDEN LAYOUT CONTENT
+========================================================= */
+
+.kb-layout-content {
+
+    display: none;
+
+    margin-top: 14px;
+
+    animation:
+        kbLayoutOpen .25s ease;
+}
+
+
+.kb-layout-content.active {
+
+    display: block;
+}
+
+
+@keyframes kbLayoutOpen {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-7px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   DIGITAL LAYOUT CARD
+========================================================= */
 
 .kb-layout-card {
 
     width: 100%;
 
-    height: 820px;
+    min-height: 650px;
 
-    padding: 14px;
+    padding: 12px;
 
     background: var(--kb-white);
 
@@ -813,25 +1042,29 @@
         1px solid
         var(--kb-border);
 
-    border-radius: 24px;
+    border-radius: 22px;
 
     box-shadow:
-        0 30px 80px rgba(
+        0 22px 60px rgba(
             8,
             39,
             30,
-            .10
+            .08
         );
 
     overflow: hidden;
 }
 
 
+/* =========================================================
+   DIGITAL LAYOUT FRAME
+========================================================= */
+
 .kb-layout-frame {
 
     width: 100%;
 
-    height: 100%;
+    min-height: 625px;
 
     display: flex;
 
@@ -841,53 +1074,55 @@
 
     overflow: hidden;
 
-    border-radius: 15px;
+    border-radius: 14px;
 
-    background: #ecefeb;
+    background: #eef1ee;
 }
 
 
 /* =========================================================
-   LAYOUT IMAGE
-   ========================================================= */
+   DIGITAL LAYOUT IMAGE
+========================================================= */
 
 .kb-layout-frame img {
-
-    display: block;
 
     width: 100%;
 
     height: 100%;
+
+    min-height: 625px;
+
+    display: block;
 
     object-fit: contain;
 
     object-position: center;
 
-    background: var(--kb-white);
+    background: #ffffff;
 }
 
 
 /* =========================================================
-   LAYOUT PDF
-   ========================================================= */
+   DIGITAL LAYOUT PDF
+========================================================= */
 
 .kb-layout-frame iframe {
 
-    display: block;
-
     width: 100%;
 
-    height: 100%;
+    height: 625px;
+
+    display: block;
 
     border: none;
 
-    background: var(--kb-white);
+    background: #ffffff;
 }
 
 
 /* =========================================================
-   LAYOUT ACTION
-   ========================================================= */
+   FULL LAYOUT BUTTON
+========================================================= */
 
 .kb-layout-action {
 
@@ -895,7 +1130,7 @@
 
     justify-content: center;
 
-    margin-top: 20px;
+    margin-top: 17px;
 }
 
 
@@ -905,11 +1140,17 @@
 
     align-items: center;
 
-    gap: 8px;
+    justify-content: center;
 
-    padding: 13px 21px;
+    gap: 9px;
+
+    min-width: 185px;
+
+    padding: 12px 17px;
 
     background: var(--kb-green);
+
+    border: 1px solid var(--kb-green);
 
     border-radius: 9px;
 
@@ -917,13 +1158,15 @@
 
     text-decoration: none;
 
-    font-size: 13px;
+    font-size: 11px;
 
     font-weight: 750;
 
     transition:
         background .2s ease,
-        transform .2s ease;
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
 }
 
 
@@ -931,15 +1174,53 @@
 
     background: var(--kb-gold);
 
+    border-color: var(--kb-gold);
+
     color: var(--kb-white);
 
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 18px
+        rgba(
+            181,
+            139,
+            59,
+            .15
+        );
+}
+
+
+.kb-layout-button-arrow {
+
+    width: 25px;
+
+    height: 25px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .25
+        );
+
+    border-radius: 50%;
+
+    font-size: 12px;
 }
 
 
 /* =========================================================
    AVAILABLE PLOTS
-   ========================================================= */
+========================================================= */
 
 .kb-plots {
 
@@ -951,7 +1232,7 @@
 
 /* =========================================================
    PLOT HEADER
-   ========================================================= */
+========================================================= */
 
 .kb-plots-heading {
 
@@ -999,7 +1280,7 @@
 
 /* =========================================================
    AVAILABILITY
-   ========================================================= */
+========================================================= */
 
 .kb-availability {
 
@@ -1057,7 +1338,7 @@
 
 /* =========================================================
    PLOT GRID
-   ========================================================= */
+========================================================= */
 
 .kb-plot-grid {
 
@@ -1075,7 +1356,7 @@
 
 /* =========================================================
    PLOT CARD
-   ========================================================= */
+========================================================= */
 
 .kb-plot-card {
 
@@ -1123,7 +1404,7 @@
 
 /* =========================================================
    PLOT IMAGE
-   ========================================================= */
+========================================================= */
 
 .kb-plot-image {
 
@@ -1200,7 +1481,7 @@
 
 /* =========================================================
    PLOT CONTENT
-   ========================================================= */
+========================================================= */
 
 .kb-plot-content {
 
@@ -1254,7 +1535,7 @@
 
 /* =========================================================
    PLOT DETAILS
-   ========================================================= */
+========================================================= */
 
 .kb-plot-details {
 
@@ -1314,7 +1595,7 @@
 
 /* =========================================================
    PLOT PRICE
-   ========================================================= */
+========================================================= */
 
 .kb-price {
 
@@ -1332,7 +1613,7 @@
 
 /* =========================================================
    PLOT BUTTON
-   ========================================================= */
+========================================================= */
 
 .kb-plot-button {
 
@@ -1374,7 +1655,7 @@
 
 /* =========================================================
    EMPTY STATE
-   ========================================================= */
+========================================================= */
 
 .kb-empty {
 
@@ -1440,7 +1721,7 @@
 
 /* =========================================================
    TABLET
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 1050px) {
 
@@ -1486,7 +1767,7 @@
 
 /* =========================================================
    MOBILE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 760px) {
 
@@ -1569,23 +1850,55 @@
 
         width: 94%;
 
-        margin-top: 90px;
+        margin-top: 80px;
 
     }
 
 
     .kb-layout-heading-content h2 {
 
-        font-size: 40px;
+        font-size: 37px;
 
-        letter-spacing: -.9px;
+        letter-spacing: -.8px;
+
+    }
+
+
+    .kb-layout-toggle {
+
+        padding: 13px 13px;
+
+    }
+
+
+    .kb-layout-toggle-icon {
+
+        width: 33px;
+
+        height: 33px;
+
+        flex-basis: 33px;
+
+    }
+
+
+    .kb-layout-toggle-title {
+
+        font-size: 11px;
+
+    }
+
+
+    .kb-layout-toggle-subtitle {
+
+        font-size: 8px;
 
     }
 
 
     .kb-layout-card {
 
-        height: 620px;
+        min-height: 480px;
 
         padding: 8px;
 
@@ -1596,7 +1909,7 @@
 
     .kb-layout-frame {
 
-        height: 604px;
+        min-height: 464px;
 
         overflow: auto;
 
@@ -1609,15 +1922,9 @@
 
     .kb-layout-frame img {
 
-        width: 100%;
-
-        min-width: 100%;
+        min-height: 464px;
 
         height: auto;
-
-        min-height: 100%;
-
-        object-fit: contain;
 
         object-position: top center;
 
@@ -1626,7 +1933,16 @@
 
     .kb-layout-frame iframe {
 
-        height: 604px;
+        height: 464px;
+
+    }
+
+
+    .kb-layout-button {
+
+        width: 100%;
+
+        box-sizing: border-box;
 
     }
 
@@ -1660,7 +1976,7 @@
 
 /* =========================================================
    SMALL MOBILE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 500px) {
 
@@ -1688,6 +2004,23 @@
     .kb-price {
 
         font-size: 25px;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        transition: none !important;
 
     }
 
@@ -1819,7 +2152,7 @@
                         </span>
 
                         <span class="kb-spec-value">
-                            ₦{{ estate_type.price|floatformat:0 }}
+                            ₦{{ estate_type.price|floatformat:0|intcomma }}
                         </span>
 
                     </div>
@@ -2004,12 +2337,17 @@
 
     <!-- =====================================================
          04. DIGITAL LAYOUT
+         HIDDEN UNTIL USER OPENS IT
     ====================================================== -->
 
     {% if estate_type.digital_layout %}
 
         <section class="kb-layout-section">
 
+
+            <!-- =================================================
+                 LAYOUT HEADER
+            ================================================== -->
 
             <div class="kb-layout-heading">
 
@@ -2018,7 +2356,7 @@
 
 
                     <p class="kb-label">
-                        DEVELOPMENT PLAN
+                        ESTATE DEVELOPMENT PLAN
                     </p>
 
 
@@ -2030,11 +2368,9 @@
 
                     <p>
 
-                        Explore the official development layout
-                        for the {{ estate_type.name }} section
-                        of {{ estate.name }}. Review the plot
-                        arrangement, access routes, boundaries
-                        and overall development structure.
+                        View the official digital layout for
+                        the {{ estate_type.name }} section of
+                        {{ estate.name }}.
 
                     </p>
 
@@ -2053,64 +2389,134 @@
 
 
             <!-- =================================================
-                 FIXED MASTERPLAN VIEWER
+                 COLLAPSED DIGITAL LAYOUT BUTTON
             ================================================== -->
 
-            <div class="kb-layout-card">
+            <button
+                type="button"
+                class="kb-layout-toggle"
+                id="kbLayoutToggle"
+                aria-expanded="false"
+                aria-controls="kbLayoutContent"
+            >
 
 
-                <div class="kb-layout-frame">
+                <span class="kb-layout-toggle-left">
 
 
-                    {% with layout_url=estate_type.digital_layout.url %}
+                    <span class="kb-layout-toggle-icon">
+                        🗺️
+                    </span>
 
 
-                        {% if ".pdf" in layout_url|lower %}
-
-                            <iframe
-                                src="{{ layout_url }}"
-                                title="{{ estate.name }} {{ estate_type.name }} Digital Layout"
-                            ></iframe>
+                    <span class="kb-layout-toggle-text">
 
 
-                        {% else %}
+                        <span class="kb-layout-toggle-title">
 
-                            <img
-                                src="{{ layout_url }}"
-                                alt="{{ estate.name }} {{ estate_type.name }} Digital Layout"
-                            >
+                            View Digital Layout
 
-                        {% endif %}
+                        </span>
 
 
-                    {% endwith %}
+                        <span class="kb-layout-toggle-subtitle">
+
+                            Click to open the development layout
+
+                        </span>
+
+
+                    </span>
+
+
+                </span>
+
+
+                <span
+                    class="kb-layout-toggle-arrow"
+                    aria-hidden="true"
+                >
+                    ↓
+                </span>
+
+
+            </button>
+
+
+            <!-- =================================================
+                 HIDDEN LAYOUT CONTENT
+            ================================================== -->
+
+            <div
+                class="kb-layout-content"
+                id="kbLayoutContent"
+            >
+
+
+                <div class="kb-layout-card">
+
+
+                    <div class="kb-layout-frame">
+
+
+                        {% with layout_url=estate_type.digital_layout.url %}
+
+
+                            {% if ".pdf" in layout_url|lower %}
+
+                                <iframe
+                                    src="{{ layout_url }}"
+                                    title="{{ estate.name }} {{ estate_type.name }} Digital Layout"
+                                ></iframe>
+
+
+                            {% else %}
+
+                                <img
+                                    src="{{ layout_url }}"
+                                    alt="{{ estate.name }} {{ estate_type.name }} Digital Layout"
+                                >
+
+
+                            {% endif %}
+
+
+                        {% endwith %}
+
+
+                    </div>
 
 
                 </div>
 
 
-            </div>
+                <!-- =============================================
+                     OPEN FULL LAYOUT
+                ============================================== -->
+
+                <div class="kb-layout-action">
 
 
-            <div class="kb-layout-action">
+                    <a
+                        href="{{ estate_type.digital_layout.url }}"
+                        target="_blank"
+                        rel="noopener"
+                        class="kb-layout-button"
+                    >
+
+                        <span>
+                            Open Full Layout
+                        </span>
 
 
-                <a
-                    href="{{ estate_type.digital_layout.url }}"
-                    target="_blank"
-                    rel="noopener"
-                    class="kb-layout-button"
-                >
+                        <span class="kb-layout-button-arrow">
+                            ↗
+                        </span>
 
-                    <span>
-                        Open Full Layout
-                    </span>
+                    </a>
 
-                    <span>
-                        ↗
-                    </span>
 
-                </a>
+                </div>
 
 
             </div>
@@ -2120,6 +2526,12 @@
 
     {% endif %}
 
+
+    <!-- =====================================================
+         05. AVAILABLE PLOTS
+    ====================================================== -->
+
+    <section class="kb-plots">
 
 
         <!-- =================================================
@@ -2292,7 +2704,7 @@
 
                             <p class="kb-price">
 
-                                ₦{{ property.price|floatformat:0 }}
+                                ₦{{ property.price|floatformat|intcomma }}
 
                             </p>
 
@@ -2328,6 +2740,10 @@
         {% else %}
 
 
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
             <div class="kb-empty">
 
 
@@ -2361,5 +2777,95 @@
 
 
 </main>
+
+
+<!-- =========================================================
+     DIGITAL LAYOUT JAVASCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const toggle =
+            document.getElementById(
+                "kbLayoutToggle"
+            );
+
+
+        const content =
+            document.getElementById(
+                "kbLayoutContent"
+            );
+
+
+        if (
+            !toggle ||
+            !content
+        ) {
+
+            return;
+
+        }
+
+
+        toggle.addEventListener(
+            "click",
+            function () {
+
+
+                const isOpen =
+                    toggle.getAttribute(
+                        "aria-expanded"
+                    ) === "true";
+
+
+                if (isOpen) {
+
+                    toggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    toggle.classList.remove(
+                        "active"
+                    );
+
+
+                    content.classList.remove(
+                        "active"
+                    );
+
+
+                } else {
+
+                    toggle.setAttribute(
+                        "aria-expanded",
+                        "true"
+                    );
+
+
+                    toggle.classList.add(
+                        "active"
+                    );
+
+
+                    content.classList.add(
+                        "active"
+                    );
+
+                }
+
+
+            }
+        );
+
+    }
+);
+
+</script>
 
 {% endblock %}

@@ -1,379 +1,2916 @@
 {% extends "properties/base.html" %}
+{% load humanize %}
 {% load static %}
 
 {% block title %}
-KING B REAL ESTATE & CONSTRUCTION LTD
+    KING B REAL ESTATE & CONSTRUCTION LTD
 {% endblock %}
 
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   KING B REAL ESTATE
+   PREMIUM MODERN HOMEPAGE
+========================================================= */
+
+.home-page {
+
+    --kb-green: #123c2f;
+    --kb-dark: #062119;
+    --kb-dark-2: #0b2d23;
+
+    --kb-gold: #b58b3b;
+    --kb-gold-light: #d4af63;
+
+    --kb-cream: #f5f7f4;
+    --kb-white: #ffffff;
+
+    --kb-text: #17231e;
+    --kb-muted: #69746f;
+
+    --kb-border: #e2e8e4;
+
+    background: var(--kb-cream);
+
+    color: var(--kb-text);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+.home-page *,
+.home-page *::before,
+.home-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SHARED CONTAINER
+========================================================= */
+
+.home-container {
+
+    width: min(1240px, 90%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.home-hero {
+
+    position: relative;
+
+    min-height: 760px;
+
+    display: flex;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            115deg,
+            rgba(6,33,25,.96) 0%,
+            rgba(18,60,47,.88) 48%,
+            rgba(18,60,47,.60) 100%
+        ),
+        url("{% static 'properties/images/about-home.jpg' %}")
+        center / cover no-repeat;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   HERO DECOR
+========================================================= */
+
+.home-hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 620px;
+
+    height: 620px;
+
+    right: -240px;
+
+    top: -260px;
+
+    border:
+        1px solid
+        rgba(
+            212,
+            175,
+            99,
+            .16
+        );
+
+    border-radius: 50%;
+}
+
+
+.home-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 340px;
+
+    height: 340px;
+
+    left: -190px;
+
+    bottom: -200px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+    border-radius: 50%;
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.home-hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: min(1240px, 90%);
+
+    margin: 0 auto;
+
+    padding:
+        105px 0 95px;
+}
+
+
+.home-hero-eyebrow {
+
+    margin: 0 0 17px;
+
+    color: var(--kb-gold-light);
+
+    font-size: 11px;
+
+    font-weight: 850;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+.home-hero h1 {
+
+    max-width: 850px;
+
+    margin: 0 0 23px;
+
+    color: #ffffff;
+
+    font-size:
+        clamp(
+            52px,
+            7vw,
+            92px
+        );
+
+    line-height: .95;
+
+    letter-spacing: -4px;
+
+    font-weight: 760;
+}
+
+
+.home-hero-description {
+
+    max-width: 620px;
+
+    margin: 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .76
+        );
+
+    font-size: 16px;
+
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   HERO BUTTONS
+========================================================= */
+
+.home-hero-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 11px;
+
+    margin-top: 32px;
+}
+
+
+.home-hero-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    min-height: 49px;
+
+    padding:
+        0 20px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+    transition:
+        transform .22s ease,
+        background .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+
+.home-button-primary {
+
+    background: var(--kb-gold);
+
+    border:
+        1px solid
+        var(--kb-gold);
+
+    color: #ffffff;
+
+    box-shadow:
+        0 12px 28px
+        rgba(
+            181,
+            139,
+            59,
+            .18
+        );
+}
+
+
+.home-button-primary:hover {
+
+    background: #c49a4e;
+
+    border-color: #c49a4e;
+
+    color: #ffffff;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 16px 34px
+        rgba(
+            181,
+            139,
+            59,
+            .26
+        );
+}
+
+
+.home-button-secondary {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .06
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .18
+        );
+
+    color: #ffffff;
+
+    backdrop-filter: blur(10px);
+}
+
+
+.home-button-secondary:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .12
+        );
+
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            .30
+        );
+
+    color: #ffffff;
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================================================
+   HERO TRUST BAR
+========================================================= */
+
+.home-hero-trust {
+
+    margin-top: 55px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+
+.home-trust-item {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 36px;
+
+    padding:
+        0 12px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .055
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+
+    border-radius: 999px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .68
+        );
+
+    font-size: 9px;
+
+    font-weight: 750;
+
+    letter-spacing: .05em;
+}
+
+
+.home-trust-dot {
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        var(--kb-gold-light);
+}
+
+
+/* =========================================================
+   SEARCH SECTION
+========================================================= */
+
+.home-search-section {
+
+    position: relative;
+
+    z-index: 5;
+
+    margin-top: -52px;
+}
+
+
+.home-search-card {
+
+    width: min(1120px, 90%);
+
+    margin: 0 auto;
+
+    padding: 20px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 24px 60px
+        rgba(
+            18,
+            60,
+            47,
+            .12
+        );
+}
+
+
+.home-search-heading {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 15px;
+}
+
+
+.home-search-heading h2 {
+
+    margin: 0;
+
+    color: var(--kb-green);
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.home-search-heading p {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 11px;
+}
+
+
+.home-search-form {
+
+    display: grid;
+
+    grid-template-columns:
+        1.4fr
+        1fr
+        1.1fr
+        auto;
+
+    gap: 9px;
+}
+
+
+.home-search-input,
+.home-search-select {
+
+    width: 100%;
+
+    min-height: 47px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        #dce4df;
+
+    border-radius: 9px;
+
+    background: #f8faf8;
+
+    color: var(--kb-text);
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.home-search-input:focus,
+.home-search-select:focus {
+
+    background: #ffffff;
+
+    border-color: var(--kb-gold);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            181,
+            139,
+            59,
+            .10
+        );
+}
+
+
+.home-search-button {
+
+    min-height: 47px;
+
+    padding:
+        0 19px;
+
+    border:
+        1px solid
+        var(--kb-green);
+
+    border-radius: 9px;
+
+    background: var(--kb-green);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+
+.home-search-button:hover {
+
+    background: var(--kb-gold);
+
+    border-color: var(--kb-gold);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.home-section-header {
+
+    max-width: 780px;
+
+    margin-bottom: 34px;
+}
+
+
+.home-section-label {
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+    color: var(--kb-gold);
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    letter-spacing: 2.4px;
+
+    text-transform: uppercase;
+}
+
+
+.home-section-header h2 {
+
+    margin: 0 0 12px;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            34px,
+            4.2vw,
+            52px
+        );
+
+    line-height: 1.04;
+
+    letter-spacing: -1.5px;
+
+    font-weight: 760;
+}
+
+
+.home-section-header p {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   FEATURED PROPERTIES
+========================================================= */
+
+.home-properties {
+
+    padding:
+        105px 0 0;
+}
+
+
+.home-property-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   PROPERTY CARD
+========================================================= */
+
+.home-property-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background:
+        var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 9px 30px
+        rgba(
+            8,
+            39,
+            30,
+            .045
+        );
+
+    transition:
+        transform .28s ease,
+        box-shadow .28s ease,
+        border-color .28s ease;
+}
+
+
+.home-property-card:hover {
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        #d5dfd9;
+
+    box-shadow:
+        0 22px 46px
+        rgba(
+            8,
+            39,
+            30,
+            .10
+        );
+}
+
+
+/* =========================================================
+   PROPERTY IMAGE
+========================================================= */
+
+.home-property-image {
+
+    position: relative;
+
+    height: 280px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b2d23,
+            #123c2f
+        );
+}
+
+
+.home-property-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform .45s ease;
+}
+
+
+.home-property-card:hover
+.home-property-image img {
+
+    transform:
+        scale(1.045);
+}
+
+
+.home-property-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color:
+        var(--kb-gold-light);
+
+    font-size: 42px;
+}
+
+
+/* =========================================================
+   PROPERTY TYPE PILL
+========================================================= */
+
+.home-property-type {
+
+    position: absolute;
+
+    top: 13px;
+
+    left: 13px;
+
+    padding:
+        7px 9px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            6,
+            33,
+            25,
+            .82
+        );
+
+    color: #ffffff;
+
+    font-size: 8px;
+
+    font-weight: 850;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* =========================================================
+   PROPERTY CONTENT
+========================================================= */
+
+.home-property-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    padding:
+        22px;
+}
+
+
+.home-property-location {
+
+    margin: 0 0 8px;
+
+    color: var(--kb-muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.home-property-content h3 {
+
+    margin: 0 0 12px;
+
+    color: var(--kb-green);
+
+    font-size: 21px;
+
+    line-height: 1.2;
+
+    font-weight: 760;
+}
+
+
+.home-property-price {
+
+    margin: 0;
+
+    color: var(--kb-gold);
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    font-weight: 900;
+}
+
+
+.home-property-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+    padding-top: 15px;
+
+    border-top:
+        1px solid
+        #edf1ee;
+}
+
+
+.home-property-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--kb-green);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 850;
+}
+
+
+.home-property-link span {
+
+    transition:
+        transform .2s ease;
+}
+
+
+.home-property-link:hover {
+
+    color: var(--kb-gold);
+}
+
+
+.home-property-link:hover span {
+
+    transform:
+        translateX(4px);
+}
+
+
+/* =========================================================
+   EMPTY PROPERTIES
+========================================================= */
+
+.home-empty {
+
+    grid-column: 1 / -1;
+
+    padding:
+        70px 25px;
+
+    background:
+        var(--kb-white);
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius: 17px;
+
+    text-align: center;
+}
+
+
+.home-empty h3 {
+
+    margin: 0 0 8px;
+
+    color: var(--kb-green);
+
+    font-size: 21px;
+}
+
+
+.home-empty p {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   ABOUT SECTION
+========================================================= */
+
+.home-about {
+
+    padding:
+        120px 0 0;
+}
+
+
+.home-about-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 75px;
+
+    align-items: center;
+}
+
+
+/* =========================================================
+   ABOUT IMAGE
+========================================================= */
+
+.home-about-visual {
+
+    position: relative;
+}
+
+
+.home-about-image {
+
+    width: 100%;
+
+    height: 570px;
+
+    overflow: hidden;
+
+    border-radius:
+        20px;
+
+    background:
+        #dfe8e3;
+
+    box-shadow:
+        0 24px 60px
+        rgba(
+            8,
+            39,
+            30,
+            .09
+        );
+}
+
+
+.home-about-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   ABOUT BADGE
+========================================================= */
+
+.home-about-badge {
+
+    position: absolute;
+
+    right: -18px;
+
+    bottom: 35px;
+
+    width: 190px;
+
+    padding:
+        20px;
+
+    background:
+        var(--kb-green);
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+
+    border-radius:
+        15px;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 18px 40px
+        rgba(
+            8,
+            39,
+            30,
+            .18
+        );
+}
+
+
+.home-about-badge strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        var(--kb-gold-light);
+
+    font-size: 31px;
+
+    line-height: 1;
+
+    font-weight: 900;
+}
+
+
+.home-about-badge span {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .65
+        );
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    text-transform: uppercase;
+
+    letter-spacing: .07em;
+}
+
+
+/* =========================================================
+   ABOUT CONTENT
+========================================================= */
+
+.home-about-content {
+
+    max-width: 620px;
+}
+
+
+.home-about-content h2 {
+
+    margin: 0 0 17px;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            36px,
+            4.2vw,
+            55px
+        );
+
+    line-height: 1.03;
+
+    letter-spacing: -1.7px;
+
+    font-weight: 760;
+}
+
+
+.home-about-content h2 em {
+
+    color: var(--kb-gold);
+
+    font-style: normal;
+}
+
+
+.home-about-divider {
+
+    width: 45px;
+
+    height: 2px;
+
+    margin:
+        21px 0 23px;
+
+    background:
+        var(--kb-gold);
+}
+
+
+.home-about-lead {
+
+    margin: 0 0 16px;
+
+    color: var(--kb-text);
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+    font-weight: 550;
+}
+
+
+.home-about-content p:not(.home-about-lead) {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 14px;
+
+    line-height: 1.85;
+}
+
+
+.home-about-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 28px;
+
+    color: var(--kb-green);
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 850;
+}
+
+
+.home-about-link span {
+
+    transition:
+        transform .2s ease;
+}
+
+
+.home-about-link:hover {
+
+    color: var(--kb-gold);
+}
+
+
+.home-about-link:hover span {
+
+    transform:
+        translateX(5px);
+}
+
+
+/* =========================================================
+   VALUES SECTION
+========================================================= */
+
+.home-values {
+
+    margin-top:
+        125px;
+
+    padding:
+        95px 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef4f0,
+            #f6f8f6
+        );
+
+    border-top:
+        1px solid
+        #e5ebe7;
+
+    border-bottom:
+        1px solid
+        #e5ebe7;
+}
+
+
+.home-values-header {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, .85fr)
+        minmax(0, 1.15fr);
+
+    gap: 55px;
+
+    align-items: end;
+
+    margin-bottom: 38px;
+}
+
+
+.home-values-header h2 {
+
+    margin: 0;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            35px,
+            4.2vw,
+            53px
+        );
+
+    line-height: 1.04;
+
+    letter-spacing: -1.5px;
+}
+
+
+.home-values-header p {
+
+    max-width: 590px;
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   VALUES GRID
+========================================================= */
+
+.home-values-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 14px;
+}
+
+
+.home-value-card {
+
+    position: relative;
+
+    padding:
+        26px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius:
+        15px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(
+            8,
+            39,
+            30,
+            .035
+        );
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+.home-value-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    border-color:
+        #d2ddd6;
+
+    box-shadow:
+        0 15px 32px
+        rgba(
+            8,
+            39,
+            30,
+            .07
+        );
+}
+
+
+.home-value-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    margin-bottom: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        #eff5f1;
+
+    border:
+        1px solid
+        #dce8e1;
+
+    font-size: 21px;
+}
+
+
+.home-value-card h3 {
+
+    margin: 0 0 10px;
+
+    color: var(--kb-green);
+
+    font-size: 19px;
+
+    font-weight: 760;
+}
+
+
+.home-value-card p {
+
+    margin: 0;
+
+    color: var(--kb-muted);
+
+    font-size: 12px;
+
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   CTA SECTION
+========================================================= */
+
+.home-cta {
+
+    padding:
+        120px 0;
+}
+
+
+.home-cta-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding:
+        57px 62px;
+
+    border-radius:
+        22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0a2f23,
+            #123c2f
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 28px 70px
+        rgba(
+            8,
+            39,
+            30,
+            .14
+        );
+}
+
+
+.home-cta-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+
+    height: 300px;
+
+    right: -120px;
+
+    top: -170px;
+
+    border:
+        1px solid
+        rgba(
+            212,
+            175,
+            99,
+            .15
+        );
+
+    border-radius: 50%;
+}
+
+
+.home-cta-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+
+    height: 220px;
+
+    left: -120px;
+
+    bottom: -150px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .07
+        );
+
+    border-radius: 50%;
+}
+
+
+.home-cta-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 40px;
+}
+
+
+.home-cta-copy {
+
+    max-width: 720px;
+}
+
+
+.home-cta-copy .home-section-label {
+
+    color:
+        var(--kb-gold-light);
+}
+
+
+.home-cta-copy h2 {
+
+    margin: 0 0 12px;
+
+    color: #ffffff;
+
+    font-size:
+        clamp(
+            34px,
+            4.5vw,
+            56px
+        );
+
+    line-height: 1.02;
+
+    letter-spacing: -1.8px;
+}
+
+
+.home-cta-copy p {
+
+    margin: 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .68
+        );
+
+    font-size: 13px;
+
+    line-height: 1.8;
+}
+
+
+.home-cta-button {
+
+    flex-shrink: 0;
+
+    min-width:
+        165px;
+
+    min-height:
+        49px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    padding:
+        0 18px;
+
+    border-radius:
+        10px;
+
+    background:
+        var(--kb-gold);
+
+    border:
+        1px solid
+        var(--kb-gold);
+
+    color:
+        #ffffff;
+
+    text-decoration:
+        none;
+
+    font-size:
+        12px;
+
+    font-weight:
+        850;
+
+    transition:
+        transform .22s ease,
+        background .22s ease,
+        box-shadow .22s ease;
+}
+
+
+.home-cta-button:hover {
+
+    background:
+        #c49a4e;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 12px 27px
+        rgba(
+            181,
+            139,
+            59,
+            .24
+        );
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .home-search-form {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .home-search-button {
+
+        width: 100%;
+
+    }
+
+
+    .home-property-grid {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
+
+    }
+
+
+    .home-about-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 45px;
+
+    }
+
+
+    .home-about-content {
+
+        max-width:
+            760px;
+
+    }
+
+
+    .home-about-image {
+
+        height:
+            520px;
+
+    }
+
+
+    .home-values-header {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 18px;
+
+    }
+
+
+    .home-values-grid {
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
+
+    }
+
+
+    .home-cta-content {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .home-hero {
+
+        min-height:
+            680px;
+
+    }
+
+
+    .home-hero-content {
+
+        width:
+            90%;
+
+    }
+
+
+    .home-hero h1 {
+
+        font-size:
+            48px;
+
+        letter-spacing:
+            -2.3px;
+
+    }
+
+
+    .home-hero-description {
+
+        font-size:
+            14px;
+
+    }
+
+
+    .home-hero-actions {
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+    }
+
+
+    .home-hero-button {
+
+        width:
+            100%;
+
+    }
+
+
+    .home-search-section {
+
+        margin-top:
+            -28px;
+
+    }
+
+
+    .home-search-card {
+
+        padding:
+            15px;
+
+    }
+
+
+    .home-search-heading {
+
+        display:
+            block;
+
+    }
+
+
+    .home-search-heading p {
+
+        margin-top:
+            5px;
+
+    }
+
+
+    .home-search-form {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .home-properties {
+
+        padding-top:
+            75px;
+
+    }
+
+
+    .home-property-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .home-property-image {
+
+        height:
+            255px;
+
+    }
+
+
+    .home-about {
+
+        padding-top:
+            85px;
+
+    }
+
+
+    .home-about-image {
+
+        height:
+            390px;
+
+    }
+
+
+    .home-about-badge {
+
+        right:
+            14px;
+
+        bottom:
+            20px;
+
+        width:
+            165px;
+
+    }
+
+
+    .home-about-content h2 {
+
+        font-size:
+            35px;
+
+    }
+
+
+    .home-values {
+
+        margin-top:
+            90px;
+
+        padding:
+            75px 0;
+
+    }
+
+
+    .home-values-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .home-cta {
+
+        padding:
+            85px 0;
+
+    }
+
+
+    .home-cta-card {
+
+        padding:
+            40px 24px;
+
+    }
+
+
+    .home-cta-button {
+
+        width:
+            100%;
+
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .home-hero h1 {
+
+        font-size:
+            42px;
+
+    }
+
+
+    .home-hero-trust {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .home-about-image {
+
+        height:
+            330px;
+
+    }
+
+
+    .home-about-badge {
+
+        width:
+            145px;
+
+        padding:
+            15px;
+
+    }
+
+
+    .home-about-badge strong {
+
+        font-size:
+            25px;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
 {% block content %}
-    <!-- Hero Section -->
-    <main>
 
-        <section class="home-hero">
+<div class="home-page">
 
-            <div>
-                <p>WELCOME TO KING B REAL ESTATE & CONSTRUCTION</p>
 
-                <h1>
-                    Find a Place
-                    <br>
-                    You'll Be Proud to Call Home.
-                </h1>
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
 
-                <p>
-                    Discover quality land and properties
-                    in carefully selected locations.
-                    We're here to help you make the right
-                    property investment.
-                </p>
+    <section class="home-hero">
 
-                <div>
-                    <a href="/properties/">View Properties</a>
 
-                    <a href="/contact/">Contact Us</a>
-                </div>
+        <div class="home-hero-content">
+
+
+            <p class="home-hero-eyebrow">
+
+                KING B REAL ESTATE & CONSTRUCTION
+
+            </p>
+
+
+            <h1>
+
+                Find a Place
+                You’ll Be Proud
+                to Call Home.
+
+            </h1>
+
+
+            <p class="home-hero-description">
+
+                Discover quality land and properties in
+                carefully selected locations. Whether you are
+                buying your first property, expanding your
+                investment portfolio or planning your next
+                development, King B is here to help.
+
+            </p>
+
+
+            <div class="home-hero-actions">
+
+
+                <a
+                    href="{% url 'property_list' %}"
+                    class="home-hero-button home-button-primary"
+                >
+
+                    Explore Properties
+
+                    <span>
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="{% url 'contact' %}"
+                    class="home-hero-button home-button-secondary"
+                >
+
+                    Speak With Us
+
+                    <span>
+                        ↗
+                    </span>
+
+                </a>
+
+
             </div>
 
-        </section>
+
+            <div class="home-hero-trust">
 
 
-        <!-- Property Search -->
-        <section>
+                <div class="home-trust-item">
 
-            <h2>Find Your Property</h2>
+                    <span class="home-trust-dot"></span>
 
-            <form>
+                    Quality Property Opportunities
+
+                </div>
+
+
+                <div class="home-trust-item">
+
+                    <span class="home-trust-dot"></span>
+
+                    Professional Guidance
+
+                </div>
+
+
+                <div class="home-trust-item">
+
+                    <span class="home-trust-dot"></span>
+
+                    Client-Focused Service
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROPERTY SEARCH
+    ====================================================== -->
+
+    <section class="home-search-section">
+
+
+        <div class="home-search-card">
+
+
+            <div class="home-search-heading">
+
+                <h2>
+                    Find Your Property
+                </h2>
+
+                <p>
+                    Search by property, type or location
+                </p>
+
+            </div>
+
+
+            <form
+                class="home-search-form"
+                method="GET"
+                action="{% url 'property_list' %}"
+            >
+
 
                 <input
                     type="text"
+                    name="search"
+                    class="home-search-input"
                     placeholder="Search property..."
                 >
 
-                <select>
-                    <option value="">Property Type</option>
-                    <option value="land">Land</option>
-                    <option value="house">House</option>
-                    <option value="apartment">Apartment</option>
-                    <option value="commercial">Commercial</option>
+
+                <select
+                    name="property_type"
+                    class="home-search-select"
+                >
+
+                    <option value="">
+                        Property Type
+                    </option>
+
+                    <option value="land">
+                        Land
+                    </option>
+
+                    <option value="house">
+                        House
+                    </option>
+
+                    <option value="apartment">
+                        Apartment
+                    </option>
+
+                    <option value="commercial">
+                        Commercial
+                    </option>
+
                 </select>
+
 
                 <input
                     type="text"
+                    name="location"
+                    class="home-search-input"
                     placeholder="Location"
                 >
 
-                <button type="submit">
+
+                <button
+                    type="submit"
+                    class="home-search-button"
+                >
+
                     Search
+
                 </button>
+
 
             </form>
 
-        </section>
 
-<!-- Featured Properties -->
-<section>
-
-    <div>
-        <p>EXPLORE OUR PROPERTIES</p>
-
-        <h2>Featured Properties</h2>
-
-        <p>
-            Explore some of our available properties
-            and find the right opportunity for you.
-        </p>
-    </div>
-
-
-    <div>
-
-        {% for property in properties %}
-
-        <article>
-
-            <div class="property-image">
-
-    {% if property.image %}
-        <img src="{{ property.image.url }}" alt="{{ property.title }}">
-    {% else %}
-        <div>
-            PROPERTY IMAGE
         </div>
-    {% endif %}
 
-</div>
-
-            <div>
-
-                <p>{{ property.get_property_type_display|upper }}</p>
-
-                <h3>
-                    {{ property.title }}
-                </h3>
-
-                <p>
-                    {{ property.location }}
-                </p>
-
-                <strong>
-                    ₦{{ property.price|floatformat:0 }}
-                </strong>
-
-                <br><br>
-
-                <a href="{% url 'property_detail' property.id %}">
-                 View Property
-                </a>
-            </div>
-
-        </article>
-
-        {% empty %}
-
-        <p>
-            No properties are currently available.
-        </p>
-
-        {% endfor %}
-
-    </div>
-
-</section>
-
-<!-- =========================================================
-     ABOUT KING B REAL ESTATE & CONSTRUCTION
-     ========================================================= -->
-
-<section class="pro-about">
+    </section>
 
 
-<div class="container">
+    <!-- =====================================================
+         FEATURED PROPERTIES
+    ====================================================== -->
 
-    <div class="pro-about-grid">
+    <section class="home-properties">
 
-        <div class="pro-about-image">
 
-            <div class="pro-about-image-frame">
+        <div class="home-container">
 
-                <img
-                    src="{% static 'properties/images/about-home.jpg' %}"
-                    alt="KING B REAL ESTATE & CONSTRUCTION"
-                >
 
-            </div>
+            <div class="home-section-header">
 
-            <div class="pro-about-stat">
 
-                <strong>01</strong>
-
-                <span>
-                    Professional<br>
-                    Real Estate
+                <span class="home-section-label">
+                    EXPLORE OUR PROPERTIES
                 </span>
 
+
+                <h2>
+                    Opportunities worth discovering.
+                </h2>
+
+
+                <p>
+
+                    Explore selected land and property
+                    opportunities available through King B
+                    Real Estate & Construction.
+
+                </p>
+
+
             </div>
 
+
+            <div class="home-property-grid">
+
+
+                {% for property in properties %}
+
+
+                    <article class="home-property-card">
+
+
+                        <!-- IMAGE -->
+
+                        <div class="home-property-image">
+
+
+                            {% if property.image %}
+
+                                <img
+                                    src="{{ property.image.url }}"
+                                    alt="{{ property.title }}"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="home-property-placeholder">
+
+                                    🏡
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <span class="home-property-type">
+
+                                {{ property.get_property_type_display }}
+
+                            </span>
+
+
+                        </div>
+
+
+                        <!-- CONTENT -->
+
+                        <div class="home-property-content">
+
+
+                            <p class="home-property-location">
+
+                                📍 {{ property.location }}
+
+                            </p>
+
+
+                            <h3>
+
+                                {{ property.title }}
+
+                            </h3>
+
+
+                            <p class="home-property-price">
+
+                                ₦{{ property.price|floatformat:0|intcomma }}
+
+                            </p>
+
+
+                            <div class="home-property-footer">
+
+
+                                <a
+                                    href="{% url 'property_detail' property.id %}"
+                                    class="home-property-link"
+                                >
+
+                                    View Property
+
+                                    <span>
+                                        →
+                                    </span>
+
+                                </a>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </article>
+
+
+                {% empty %}
+
+
+                    <div class="home-empty">
+
+                        <h3>
+                            No Properties Currently Available
+                        </h3>
+
+                        <p>
+                            Please check back soon for new
+                            property opportunities.
+                        </p>
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
         </div>
 
 
-        <div class="pro-about-content">
+    </section>
 
-            <span class="pro-label">
-                WHO WE ARE
-            </span>
 
-            <h2>
-                Building trust through
-                <em>real estate.</em>
-            </h2>
+    <!-- =====================================================
+         ABOUT KING B
+    ====================================================== -->
 
-            <div class="pro-divider"></div>
+    <section class="home-about">
 
-            <p class="pro-lead">
-                KING B REAL ESTATE & CONSTRUCTION is committed to providing
-                quality properties and professional real estate
-                services to individuals, families and investors.
-            </p>
 
-            <p>
-                We believe that finding the right property is
-                more than a transaction. It is about creating
-                opportunities, protecting investments and
-                building lasting relationships with our clients.
-            </p>
+        <div class="home-container">
 
-            <a href="/about/" class="pro-text-link">
-                <span>Discover KING B REAL ESTATE & CONSTRUCTION</span>
-                <strong>→</strong>
-            </a>
+
+            <div class="home-about-grid">
+
+
+                <div class="home-about-visual">
+
+
+                    <div class="home-about-image">
+
+                        <img
+                            src="{% static 'properties/images/about-home.jpg' %}"
+                            alt="King B Real Estate & Construction"
+                            loading="lazy"
+                        >
+
+                    </div>
+
+
+                    <div class="home-about-badge">
+
+                        <strong>
+                            King B
+                        </strong>
+
+                        <span>
+                            Real Estate
+                            & Construction
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="home-about-content">
+
+
+                    <span class="home-section-label">
+                        WHO WE ARE
+                    </span>
+
+
+                    <h2>
+
+                        Building trust
+                        through
+                        <em>real estate.</em>
+
+                    </h2>
+
+
+                    <div class="home-about-divider"></div>
+
+
+                    <p class="home-about-lead">
+
+                        King B Real Estate & Construction is
+                        committed to providing quality properties
+                        and professional real estate services to
+                        individuals, families and investors.
+
+                    </p>
+
+
+                    <p>
+
+                        We believe that finding the right property
+                        is more than a transaction. It is about
+                        creating opportunities, protecting
+                        investments and building lasting
+                        relationships with our clients.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'about' %}"
+                        class="home-about-link"
+                    >
+
+                        Discover King B
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
 
         </div>
 
-    </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         WHY KING B
+    ====================================================== -->
+
+    <section class="home-values">
+
+
+        <div class="home-container">
+
+
+            <div class="home-values-header">
+
+
+                <div>
+
+                    <span class="home-section-label">
+                        WHY KING B
+                    </span>
+
+
+                    <h2>
+
+                        A better standard
+                        of real estate.
+
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    We combine property expertise,
+                    professional service and a genuine
+                    commitment to our clients to create
+                    a better real estate experience.
+
+                </p>
+
+
+            </div>
+
+
+            <div class="home-values-grid">
+
+
+                <!-- QUALITY -->
+
+                <article class="home-value-card">
+
+
+                    <div class="home-value-icon">
+                        ◆
+                    </div>
+
+
+                    <h3>
+                        Quality Properties
+                    </h3>
+
+
+                    <p>
+
+                        Carefully selected properties and
+                        land opportunities designed to offer
+                        genuine value to our clients.
+
+                    </p>
+
+
+                </article>
+
+
+                <!-- TRUST -->
+
+                <article class="home-value-card">
+
+
+                    <div class="home-value-icon">
+                        ✓
+                    </div>
+
+
+                    <h3>
+                        Trusted Service
+                    </h3>
+
+
+                    <p>
+
+                        Transparency, integrity and
+                        professionalism guide every client
+                        relationship.
+
+                    </p>
+
+
+                </article>
+
+
+                <!-- GUIDANCE -->
+
+                <article class="home-value-card">
+
+
+                    <div class="home-value-icon">
+                        ◎
+                    </div>
+
+
+                    <h3>
+                        Expert Guidance
+                    </h3>
+
+
+                    <p>
+
+                        We help individuals, families and
+                        investors make confident property
+                        decisions.
+
+                    </p>
+
+
+                </article>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         FINAL CTA
+    ====================================================== -->
+
+    <section class="home-cta">
+
+
+        <div class="home-container">
+
+
+            <div class="home-cta-card">
+
+
+                <div class="home-cta-content">
+
+
+                    <div class="home-cta-copy">
+
+
+                        <span class="home-section-label">
+
+                            YOUR NEXT OPPORTUNITY
+
+                        </span>
+
+
+                        <h2>
+
+                            Find a property
+                            worth investing in.
+
+                        </h2>
+
+
+                        <p>
+
+                            Explore our available properties
+                            or speak with the King B team about
+                            your next real estate opportunity.
+
+                        </p>
+
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'property_list' %}"
+                        class="home-cta-button"
+                    >
+
+                        Explore Properties
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
 
 </div>
 
-
-</section>
 
 <!-- =========================================================
-     WHY CHOOSE KING B
-     ========================================================= -->
+     HOMEPAGE INTERACTIONS
+========================================================= -->
 
-<section class="pro-why">
+<script>
 
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-<div class="container">
-
-    <div class="pro-why-header">
-
-        <div>
-
-            <span class="pro-label">
-                WHY KING B REAL ESTATE & CONSTRUCTION
-            </span>
-
-            <h2>
-                A better standard<br>
-                of <em>real estate.</em>
-            </h2>
-
-        </div>
-
-        <p>
-            We combine property expertise, professional
-            service and a commitment to our clients to
-            create a better real estate experience.
-        </p>
-
-    </div>
+        const cards =
+            document.querySelectorAll(
+                ".home-property-card, .home-value-card"
+            );
 
 
-    <div class="pro-values">
+        if (
+            "IntersectionObserver"
+            in window
+        ) {
 
-        <div class="pro-value">
+            const observer =
+                new IntersectionObserver(
+                    function (
+                        entries,
+                        observer
+                    ) {
 
-            <span class="pro-value-number">
-                01
-            </span>
+                        entries.forEach(
+                            function (entry) {
 
-            <div>
+                                if (
+                                    entry.isIntersecting
+                                ) {
 
-                <h3>
-                    Quality Properties
-                </h3>
+                                    entry.target.classList.add(
+                                        "home-visible"
+                                    );
 
-                <p>
-                    Carefully selected properties and
-                    land opportunities that offer genuine
-                    value to our clients.
-                </p>
+                                    observer.unobserve(
+                                        entry.target
+                                    );
 
-            </div>
+                                }
 
-        </div>
+                            }
+                        );
 
-
-        <div class="pro-value">
-
-            <span class="pro-value-number">
-                02
-            </span>
-
-            <div>
-
-                <h3>
-                    Trusted Service
-                </h3>
-
-                <p>
-                    Transparency, integrity and
-                    professionalism guide every
-                    client relationship.
-                </p>
-
-            </div>
-
-        </div>
+                    },
+                    {
+                        threshold: 0.12
+                    }
+                );
 
 
-        <div class="pro-value">
+            cards.forEach(
+                function (card) {
 
-            <span class="pro-value-number">
-                03
-            </span>
+                    card.classList.add(
+                        "home-reveal"
+                    );
 
-            <div>
+                    observer.observe(
+                        card
+                    );
 
-                <h3>
-                    Expert Guidance
-                </h3>
+                }
+            );
 
-                <p>
-                    Helping individuals, families and
-                    investors make confident property
-                    decisions.
-                </p>
+        }
 
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+    }
+);
 
 
-</section>
+/* =========================================================
+   REVEAL STYLES
+========================================================= */
 
-<!-- =========================================================
-     PROPERTY CTA
-     ========================================================= -->
-
-<section class="pro-cta">
-
-
-<div class="pro-cta-line"></div>
-
-<div class="container">
-
-    <div class="pro-cta-inner">
-
-        <div>
-
-            <span class="pro-label">
-                YOUR NEXT OPPORTUNITY
-            </span>
-
-            <h2>
-                Find a property<br>
-                worth <em>investing in.</em>
-            </h2>
-
-        </div>
+const homeRevealStyle =
+document.createElement("style");
 
 
-        <div class="pro-cta-action">
+homeRevealStyle.textContent = `
 
-            <p>
-                Explore our available properties and
-                discover your next opportunity with
-                KING B REAL ESTATE & CONSTRUCTION.
-            </p>
+    .home-reveal {
 
-            <a href="/properties/" class="pro-gold-button">
-                Explore Properties
-                <span>→</span>
-            </a>
+        opacity: 0;
 
-        </div>
+        transform:
+            translateY(18px);
 
-    </div>
+        transition:
+            opacity .55s ease,
+            transform .55s ease;
+    }
 
-</div>
+    .home-reveal.home-visible {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
+`;
 
 
-</section>
+document.head.appendChild(
+    homeRevealStyle
+);
+
+</script>
 
 {% endblock %}
-

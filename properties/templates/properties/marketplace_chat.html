@@ -1,0 +1,2492 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}
+    Chat | {{ listing.title }} | King B Marketplace
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   KING B MARKETPLACE — PREMIUM CHAT
+========================================================= */
+
+.chat-page {
+    --chat-green: #123c2f;
+    --chat-green-dark: #09271f;
+    --chat-green-soft: #edf5f1;
+    --chat-green-border: #dce9e2;
+
+    --chat-gold: #b58b3b;
+    --chat-gold-light: #d4af63;
+
+    --chat-text: #1b2822;
+    --chat-muted: #7a867f;
+    --chat-border: #e4eae6;
+    --chat-surface: #ffffff;
+    --chat-bg: #f4f7f5;
+
+    min-height: calc(100vh - 70px);
+
+    padding:
+        24px 16px 40px;
+
+    background:
+        radial-gradient(
+            circle at 12% 0%,
+            rgba(18,60,47,.055),
+            transparent 27%
+        ),
+        linear-gradient(
+            180deg,
+            #f7f9f8 0%,
+            #f1f5f3 100%
+        );
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN SHELL
+========================================================= */
+
+.chat-shell {
+
+    width:
+        min(980px, 100%);
+
+    height:
+        min(
+            calc(100vh - 110px),
+            820px
+        );
+
+    min-height:
+        560px;
+
+    margin:
+        0 auto;
+
+    display:
+        grid;
+
+    grid-template-rows:
+        auto auto minmax(0, 1fr) auto;
+
+    background:
+        var(--chat-surface);
+
+    border:
+        1px solid var(--chat-border);
+
+    border-radius:
+        20px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 20px 65px rgba(18,60,47,.10);
+
+}
+
+
+/* =========================================================
+   TOP NAVIGATION
+========================================================= */
+
+.chat-nav {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        15px;
+
+    min-height:
+        44px;
+
+    padding:
+        7px 14px;
+
+    background:
+        #ffffff;
+
+    border-bottom:
+        1px solid #eef2ef;
+
+    box-sizing:
+        border-box;
+}
+
+
+.chat-back {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    min-height:
+        28px;
+
+    padding:
+        5px 9px;
+
+    border-radius:
+        8px;
+
+    color:
+        var(--chat-green);
+
+    text-decoration:
+        none;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    transition:
+        background .18s ease,
+        transform .18s ease,
+        color .18s ease;
+}
+
+
+.chat-back:hover {
+
+    background:
+        var(--chat-green-soft);
+
+    color:
+        var(--chat-green);
+
+    transform:
+        translateX(-2px);
+}
+
+
+.chat-back-icon {
+
+    width:
+        21px;
+
+    height:
+        21px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--chat-green-soft);
+
+    font-size:
+        13px;
+
+    line-height:
+        1;
+}
+
+
+.chat-nav-right {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+}
+
+
+.chat-nav-pill {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        5px;
+
+    padding:
+        5px 8px;
+
+    border-radius:
+        999px;
+
+    background:
+        #f5f8f6;
+
+    border:
+        1px solid #e7ece9;
+
+    color:
+        var(--chat-muted);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .06em;
+}
+
+
+/* =========================================================
+   CHAT HEADER
+========================================================= */
+
+.chat-header {
+
+    padding:
+        13px 17px;
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--chat-green),
+            var(--chat-green-dark)
+        );
+
+    box-sizing:
+        border-box;
+}
+
+
+.chat-header-inner {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        18px;
+
+}
+
+
+/* =========================================================
+   HEADER LEFT
+========================================================= */
+
+.chat-header-left {
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+}
+
+
+/* =========================================================
+   PRODUCT THUMBNAIL
+========================================================= */
+
+.chat-product-link {
+
+    position:
+        relative;
+
+    width:
+        50px;
+
+    height:
+        50px;
+
+    flex:
+        0 0 50px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--chat-gold),
+            var(--chat-gold-light)
+        );
+
+    border:
+        2px solid rgba(255,255,255,.16);
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,.18);
+
+    text-decoration:
+        none;
+}
+
+
+.chat-product-link img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    display:
+        block;
+
+    object-fit:
+        cover;
+
+    transition:
+        transform .25s ease;
+}
+
+
+.chat-product-link:hover img {
+
+    transform:
+        scale(1.05);
+}
+
+
+.chat-product-placeholder {
+
+    color:
+        #ffffff;
+
+    font-size:
+        19px;
+
+    line-height:
+        1;
+}
+
+
+/* =========================================================
+   HEADER CONTENT
+========================================================= */
+
+.chat-header-copy {
+
+    min-width:
+        0;
+}
+
+
+.chat-eyebrow {
+
+    margin-bottom:
+        2px;
+
+    color:
+        rgba(255,255,255,.46);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .1em;
+}
+
+
+.chat-title-row {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    min-width:
+        0;
+}
+
+
+.chat-title {
+
+    margin:
+        0;
+
+    min-width:
+        0;
+
+    color:
+        #ffffff;
+
+    font-size:
+        15px;
+
+    font-weight:
+        900;
+
+    line-height:
+        1.25;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+}
+
+
+.chat-person-row {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    margin-top:
+        4px;
+
+    min-width:
+        0;
+
+    color:
+        rgba(255,255,255,.75);
+
+    font-size:
+        10px;
+
+    line-height:
+        1.3;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+}
+
+
+.chat-person-dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    flex:
+        0 0 6px;
+
+    border-radius:
+        50%;
+
+    background:
+        #68cf87;
+
+    box-shadow:
+        0 0 0 3px rgba(104,207,135,.12);
+}
+
+
+.chat-listing-link {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        4px;
+
+    margin-top:
+        3px;
+
+    color:
+        rgba(255,255,255,.54);
+
+    text-decoration:
+        none;
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    transition:
+        color .18s ease;
+}
+
+
+.chat-listing-link:hover {
+
+    color:
+        var(--chat-gold-light);
+}
+
+
+/* =========================================================
+   HEADER STATUS
+========================================================= */
+
+.chat-status {
+
+    flex:
+        0 0 auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+}
+
+
+.chat-status-badge {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    padding:
+        7px 10px;
+
+    border-radius:
+        999px;
+
+    font-size:
+        8px;
+
+    line-height:
+        1;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .06em;
+
+    text-transform:
+        uppercase;
+
+    white-space:
+        nowrap;
+}
+
+
+.chat-status-badge.review {
+
+    background:
+        #fff3cd;
+
+    color:
+        #745700;
+
+    border:
+        1px solid #efd98a;
+}
+
+
+.chat-status-badge.approved {
+
+    background:
+        #e4f6eb;
+
+    color:
+        #176b43;
+
+    border:
+        1px solid #cbe7d6;
+}
+
+
+.chat-status-dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        #c89527;
+}
+
+
+.chat-status-check {
+
+    width:
+        14px;
+
+    height:
+        14px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        #176b43;
+
+    color:
+        #ffffff;
+
+    font-size:
+        8px;
+}
+
+
+/* =========================================================
+   CHAT BODY
+========================================================= */
+
+.chat-body {
+
+    position:
+        relative;
+
+    min-height:
+        0;
+
+    overflow-y:
+        auto;
+
+    padding:
+        20px 16px 24px;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(18,60,47,.03),
+            transparent 32%
+        ),
+        #f6f8f7;
+
+    box-sizing:
+        border-box;
+
+    scroll-behavior:
+        smooth;
+}
+
+
+.chat-body::-webkit-scrollbar {
+
+    width:
+        6px;
+}
+
+
+.chat-body::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+}
+
+
+.chat-body::-webkit-scrollbar-thumb {
+
+    background:
+        #ccd5cf;
+
+    border-radius:
+        999px;
+}
+
+
+.chat-body::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #aebbb4;
+}
+
+
+/* =========================================================
+   DATE / CONVERSATION DIVIDER
+========================================================= */
+
+.chat-day-divider {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    margin:
+        3px 0 15px;
+}
+
+
+.chat-day-divider span {
+
+    padding:
+        5px 9px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255,255,255,.86);
+
+    border:
+        1px solid #e4eae6;
+
+    color:
+        #87918b;
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    box-shadow:
+        0 2px 7px rgba(18,60,47,.03);
+}
+
+
+/* =========================================================
+   MESSAGE ROW
+========================================================= */
+
+.message-row {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    margin-bottom:
+        4px;
+
+    box-sizing:
+        border-box;
+}
+
+
+.message-row.mine {
+
+    justify-content:
+        flex-end;
+}
+
+
+.message-row:not(.mine) {
+
+    justify-content:
+        flex-start;
+}
+
+
+/* =========================================================
+   MESSAGE BUBBLE
+========================================================= */
+
+.message {
+
+    display:
+        inline-flex;
+
+    flex-direction:
+        column;
+
+    width:
+        fit-content;
+
+    max-width:
+        min(
+            70%,
+            560px
+        );
+
+    padding:
+        7px 10px 5px;
+
+    border-radius:
+        16px;
+
+    box-sizing:
+        border-box;
+
+    word-break:
+        break-word;
+
+    overflow-wrap:
+        anywhere;
+
+    box-shadow:
+        0 1px 2px rgba(0,0,0,.035);
+}
+
+
+/* =========================================================
+   RECEIVED MESSAGE
+========================================================= */
+
+.message-row:not(.mine) .message {
+
+    background:
+        #edf5f1;
+
+    color:
+        #24342c;
+
+    border:
+        1px solid #dfeae4;
+
+    border-bottom-left-radius:
+        5px;
+}
+
+
+/* =========================================================
+   SENT MESSAGE
+========================================================= */
+
+.message-row.mine .message {
+
+    background:
+        #123c2f;
+
+    color:
+        #ffffff;
+
+    border:
+        1px solid #123c2f;
+
+    border-bottom-right-radius:
+        5px;
+}
+
+
+/* =========================================================
+   MESSAGE TEXT
+========================================================= */
+
+.message-text {
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.4;
+
+    white-space:
+        pre-wrap;
+
+    word-break:
+        break-word;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   MESSAGE TIME
+========================================================= */
+
+.message-time {
+
+    align-self:
+        flex-end;
+
+    margin-top:
+        3px;
+
+    font-size:
+        8px;
+
+    line-height:
+        1;
+
+    opacity:
+        .55;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   EMPTY CONVERSATION
+========================================================= */
+
+.chat-empty {
+
+    min-height:
+        100%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        40px 20px;
+
+    text-align:
+        center;
+
+    box-sizing:
+        border-box;
+}
+
+
+.chat-empty-card {
+
+    width:
+        min(
+            340px,
+            100%
+        );
+
+    padding:
+        26px 20px;
+
+    border-radius:
+        18px;
+
+    background:
+        rgba(255,255,255,.75);
+
+    border:
+        1px solid #e5ebe7;
+
+    box-shadow:
+        0 10px 30px rgba(18,60,47,.05);
+}
+
+
+.chat-empty-icon {
+
+    width:
+        54px;
+
+    height:
+        54px;
+
+    margin:
+        0 auto 12px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        #edf5f1;
+
+    color:
+        #123c2f;
+
+    font-size:
+        23px;
+}
+
+
+.chat-empty-title {
+
+    margin-bottom:
+        5px;
+
+    color:
+        #123c2f;
+
+    font-size:
+        15px;
+
+    font-weight:
+        900;
+}
+
+
+.chat-empty-text {
+
+    margin:
+        0;
+
+    color:
+        #7a867f;
+
+    font-size:
+        11px;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   COMPOSER
+========================================================= */
+
+.chat-composer {
+
+    flex:
+        0 0 auto;
+
+    padding:
+        10px 12px;
+
+    background:
+        #ffffff;
+
+    border-top:
+        1px solid #e3e9e5;
+
+    box-sizing:
+        border-box;
+}
+
+
+.chat-form {
+
+    display:
+        flex;
+
+    align-items:
+        flex-end;
+
+    gap:
+        8px;
+
+    width:
+        100%;
+}
+
+
+/* =========================================================
+   INPUT WRAPPER
+========================================================= */
+
+.chat-input-wrapper {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    background:
+        #f3f6f4;
+
+    border:
+        1px solid #dbe3de;
+
+    border-radius:
+        20px;
+
+    padding:
+        0 13px;
+
+    box-sizing:
+        border-box;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+
+.chat-input-wrapper:focus-within {
+
+    background:
+        #ffffff;
+
+    border-color:
+        #b58b3b;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(181,139,59,.09);
+}
+
+
+/* =========================================================
+   TEXT INPUT
+========================================================= */
+
+.chat-input {
+
+    width:
+        100%;
+
+    min-height:
+        38px;
+
+    max-height:
+        110px;
+
+    padding:
+        9px 0;
+
+    border:
+        none;
+
+    outline:
+        none;
+
+    resize:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        #24342c;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.4;
+
+    box-sizing:
+        border-box;
+}
+
+
+.chat-input::placeholder {
+
+    color:
+        #8b968f;
+}
+
+
+/* =========================================================
+   SEND BUTTON
+========================================================= */
+
+.chat-send {
+
+    width:
+        40px;
+
+    height:
+        40px;
+
+    flex:
+        0 0 40px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        none;
+
+    border-radius:
+        50%;
+
+    background:
+        #123c2f;
+
+    color:
+        #ffffff;
+
+    font-size:
+        14px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .18s ease,
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+
+.chat-send:hover {
+
+    background:
+        #b58b3b;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 6px 16px
+        rgba(181,139,59,.20);
+}
+
+
+/* =========================================================
+   LOCKED COMPOSER
+========================================================= */
+
+.chat-locked {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    padding:
+        10px 12px;
+
+    border:
+        1px solid #eedb9f;
+
+    border-radius:
+        12px;
+
+    background:
+        #fff8e7;
+
+    box-sizing:
+        border-box;
+}
+
+
+.chat-locked-icon {
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    flex:
+        0 0 34px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        #fff0c2;
+
+    font-size:
+        15px;
+}
+
+
+.chat-locked-content {
+
+    min-width:
+        0;
+}
+
+
+.chat-locked-content strong {
+
+    display:
+        block;
+
+    margin-bottom:
+        2px;
+
+    color:
+        #6f5400;
+
+    font-size:
+        11px;
+
+    font-weight:
+        900;
+}
+
+
+.chat-locked-content p {
+
+    margin:
+        0;
+
+    color:
+        #826d38;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.45;
+}
+
+
+/* =========================================================
+   REJECTED COMPOSER
+========================================================= */
+
+.chat-rejected {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    padding:
+        10px 12px;
+
+    border:
+        1px solid #efc8c8;
+
+    border-radius:
+        12px;
+
+    background:
+        #fff0f0;
+
+    box-sizing:
+        border-box;
+}
+
+
+.chat-rejected-icon {
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    flex:
+        0 0 34px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        #f9dada;
+
+    font-size:
+        15px;
+}
+
+
+.chat-rejected-content {
+
+    min-width:
+        0;
+}
+
+
+.chat-rejected-content strong {
+
+    display:
+        block;
+
+    margin-bottom:
+        2px;
+
+    color:
+        #8f2d2d;
+
+    font-size:
+        11px;
+
+    font-weight:
+        900;
+}
+
+
+.chat-rejected-content p {
+
+    margin:
+        0;
+
+    color:
+        #8b5c5c;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.45;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 760px) {
+
+    .chat-page {
+
+        min-height:
+            100vh;
+
+        padding:
+            0;
+
+        background:
+            #ffffff;
+    }
+
+
+    .chat-shell {
+
+        width:
+            100%;
+
+        height:
+            100vh;
+
+        min-height:
+            0;
+
+        border:
+            none;
+
+        border-radius:
+            0;
+
+        box-shadow:
+            none;
+    }
+
+
+    .chat-nav {
+
+        padding:
+            7px 11px;
+    }
+
+
+    .chat-header {
+
+        padding:
+            11px 12px;
+    }
+
+
+    .chat-header-inner {
+
+        gap:
+            10px;
+    }
+
+
+    .chat-product-link {
+
+        width:
+            43px;
+
+        height:
+            43px;
+
+        flex-basis:
+            43px;
+
+        border-radius:
+            9px;
+    }
+
+
+    .chat-product-label {
+
+        font-size:
+            7px;
+    }
+
+
+    .chat-title {
+
+        font-size:
+            13px;
+    }
+
+
+    .chat-person-row {
+
+        font-size:
+            9px;
+    }
+
+
+    .chat-listing-link {
+
+        font-size:
+            8px;
+    }
+
+
+    .chat-status-badge {
+
+        padding:
+            6px 8px;
+
+        font-size:
+            7px;
+    }
+
+
+    .chat-body {
+
+        padding:
+            14px 10px 18px;
+    }
+
+
+    .message {
+
+        max-width:
+            82%;
+
+        padding:
+            6px 9px 5px;
+
+        border-radius:
+            14px;
+    }
+
+
+    .message-text {
+
+        font-size:
+            12px;
+
+        line-height:
+            1.38;
+    }
+
+
+    .message-time {
+
+        font-size:
+            7px;
+    }
+
+
+    .chat-composer {
+
+        padding:
+            8px 9px;
+
+        padding-bottom:
+            max(
+                8px,
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    .chat-input-wrapper {
+
+        padding:
+            0 11px;
+    }
+
+
+    .chat-input {
+
+        min-height:
+            36px;
+
+        font-size:
+            12px;
+    }
+
+
+    .chat-send {
+
+        width:
+            38px;
+
+        height:
+            38px;
+
+        flex-basis:
+            38px;
+
+        font-size:
+            13px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .chat-nav-right {
+
+        display:
+            none;
+    }
+
+
+    .chat-header-status {
+
+        display:
+            none;
+    }
+
+
+    .chat-title {
+
+        max-width:
+            215px;
+    }
+
+
+    .message {
+
+        max-width:
+            86%;
+    }
+
+}
+
+
+@media (max-width: 370px) {
+
+    .chat-product-link {
+
+        width:
+            39px;
+
+        height:
+            39px;
+
+        flex-basis:
+            39px;
+    }
+
+
+    .chat-title {
+
+        max-width:
+            180px;
+
+        font-size:
+            12px;
+    }
+
+
+    .chat-person-row {
+
+        font-size:
+            8px;
+    }
+
+
+    .message {
+
+        max-width:
+            89%;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        transition:
+            none !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+
+}
+
+</style>
+
+
+<section class="chat-page">
+
+<div class="chat-shell">
+
+
+    <!-- =====================================================
+         TOP NAVIGATION
+    ====================================================== -->
+
+    <div class="chat-nav">
+
+        {% if request.user == listing.seller %}
+
+            <a
+                href="{% url 'marketplace_messages' %}"
+                class="chat-back"
+            >
+
+                <span class="chat-back-icon">
+                    ←
+                </span>
+
+                <span>
+                    Messages
+                </span>
+
+            </a>
+
+        {% else %}
+
+            <a
+                href="{% url 'marketplace_detail' listing.id %}"
+                class="chat-back"
+            >
+
+                <span class="chat-back-icon">
+                    ←
+                </span>
+
+                <span>
+                    Advertisement
+                </span>
+
+            </a>
+
+        {% endif %}
+
+
+        <div class="chat-nav-right">
+
+            <span class="chat-nav-pill">
+                King B Marketplace
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CHAT HEADER
+    ====================================================== -->
+
+    <header class="chat-header">
+
+        <div class="chat-header-inner">
+
+
+            <!-- =================================================
+                 HEADER LEFT
+            ================================================== -->
+
+            <div class="chat-header-left">
+
+
+                <!-- PRODUCT IMAGE -->
+
+                <a
+                    href="{% url 'marketplace_detail' listing.id %}"
+                    class="chat-product-link"
+                    aria-label="View advertisement"
+                >
+
+                    {% if listing.image %}
+
+                        <img
+                            src="{{ listing.image.url }}"
+                            alt="{{ listing.title }}"
+                        >
+
+                    {% elif listing.gallery_images.all %}
+
+                        {% with listing.gallery_images.first as image %}
+
+                            <img
+                                src="{{ image.image.url }}"
+                                alt="{{ listing.title }}"
+                            >
+
+                        {% endwith %}
+
+                    {% else %}
+
+                        <span class="chat-product-placeholder">
+                            📦
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- HEADER INFORMATION -->
+
+                <div class="chat-header-copy">
+
+
+                    <div class="chat-eyebrow">
+
+                        Marketplace Conversation
+
+                    </div>
+
+
+                    <div class="chat-title-row">
+
+                        <h1 class="chat-title">
+
+                            {{ listing.title }}
+
+                        </h1>
+
+                    </div>
+
+
+                    <div class="chat-person-row">
+
+                        <span class="chat-person-dot"></span>
+
+
+                        <span>
+
+                            {% if request.user == listing.seller %}
+
+                                {{ other_user.get_full_name|default:other_user.username }}
+
+                            {% else %}
+
+                                {{ listing.seller.get_full_name|default:listing.seller.username }}
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'marketplace_detail' listing.id %}"
+                        class="chat-listing-link"
+                    >
+
+                        View Advertisement →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATUS
+            ================================================== -->
+
+            <div class="chat-status">
+
+
+                {% if is_under_review %}
+
+                    <span class="chat-status-badge review">
+
+                        <span class="chat-status-dot"></span>
+
+                        Under Review
+
+                    </span>
+
+
+                {% elif listing.approval_status == 'approved' %}
+
+                    <span class="chat-status-badge approved">
+
+                        <span class="chat-status-check">
+                            ✓
+                        </span>
+
+                        Approved
+
+                    </span>
+
+
+                {% elif listing.approval_status == 'rejected' %}
+
+                    <span class="chat-status-badge review">
+
+                        <span class="chat-status-dot"></span>
+
+                        Not Approved
+
+                    </span>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         CONVERSATION BODY
+    ====================================================== -->
+
+    <div
+        class="chat-body"
+        id="chatBox"
+    >
+
+
+        {% if conversation %}
+
+
+            <!-- =================================================
+                 CONVERSATION DATE LABEL
+            ================================================== -->
+
+            <div class="chat-day-divider">
+
+                <span>
+                    Conversation
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 MESSAGES
+            ================================================== -->
+
+            {% for chat_message in conversation %}
+
+                <div
+                    class="
+                        message-row
+                        {% if chat_message.sender_id == request.user.id %}
+                            mine
+                        {% endif %}
+                    "
+                >
+
+                    <div class="message">
+
+
+                        <div class="message-text">
+
+                            {{ chat_message.message }}
+
+                        </div>
+
+
+                        <div class="message-time">
+
+                            {{ chat_message.created_at|date:"g:i A" }}
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <!-- =================================================
+                 EMPTY CHAT
+            ================================================== -->
+
+            <div class="chat-empty">
+
+                <div class="chat-empty-card">
+
+
+                    <div class="chat-empty-icon">
+
+                        💬
+
+                    </div>
+
+
+                    <div class="chat-empty-title">
+
+                        Start a conversation
+
+                    </div>
+
+
+                    <p class="chat-empty-text">
+
+                        {% if is_under_review %}
+
+                            This advertisement is currently under
+                            review. You can view this conversation,
+                            but messaging will become available
+                            after approval.
+
+                        {% elif listing.approval_status == 'rejected' %}
+
+                            This advertisement was not approved.
+                            Messaging is unavailable.
+
+                        {% else %}
+
+                            Send a message to begin the conversation.
+
+                        {% endif %}
+
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- =====================================================
+         MESSAGE COMPOSER
+    ====================================================== -->
+
+    <div class="chat-composer">
+
+
+        {% if can_chat %}
+
+
+            <!-- =================================================
+                 APPROVED — MESSAGE ENABLED
+            ================================================== -->
+
+            <form
+                method="POST"
+                class="chat-form"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="chat-input-wrapper">
+
+                    <textarea
+                        name="message"
+                        id="chatInput"
+                        class="chat-input"
+                        placeholder="Write a message..."
+                        rows="1"
+                        maxlength="2000"
+                        autocomplete="off"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="chat-send"
+                    aria-label="Send message"
+                    title="Send message"
+                >
+
+                    ➤
+
+                </button>
+
+            </form>
+
+
+        {% elif is_under_review %}
+
+
+            <!-- =================================================
+                 UNDER REVIEW — LOCKED
+            ================================================== -->
+
+            <div class="chat-locked">
+
+                <div class="chat-locked-icon">
+
+                    🔒
+
+                </div>
+
+
+                <div class="chat-locked-content">
+
+                    <strong>
+
+                        Messaging is temporarily unavailable
+
+                    </strong>
+
+
+                    <p>
+
+                        This advertisement is under review.
+                        You can view the conversation, but you
+                        cannot send new messages until it is approved.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        {% elif listing.approval_status == 'rejected' %}
+
+
+            <!-- =================================================
+                 REJECTED — LOCKED
+            ================================================== -->
+
+            <div class="chat-rejected">
+
+                <div class="chat-rejected-icon">
+
+                    🚫
+
+                </div>
+
+
+                <div class="chat-rejected-content">
+
+                    <strong>
+
+                        Messaging unavailable
+
+                    </strong>
+
+
+                    <p>
+
+                        This advertisement was not approved,
+                        so new messages cannot be sent.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- =================================================
+                 FALLBACK
+            ================================================== -->
+
+            <div class="chat-locked">
+
+                <div class="chat-locked-icon">
+
+                    🔒
+
+                </div>
+
+
+                <div class="chat-locked-content">
+
+                    <strong>
+
+                        Messaging unavailable
+
+                    </strong>
+
+
+                    <p>
+
+                        Messaging is currently unavailable
+                        for this advertisement.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     CHAT JAVASCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           SCROLL TO LATEST MESSAGE
+        ===================================================== */
+
+        const chatBox =
+            document.getElementById(
+                "chatBox"
+            );
+
+
+        if (chatBox) {
+
+            requestAnimationFrame(
+                function () {
+
+                    chatBox.scrollTop =
+                        chatBox.scrollHeight;
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           AUTO-GROW MESSAGE INPUT
+        ===================================================== */
+
+        const chatInput =
+            document.getElementById(
+                "chatInput"
+            );
+
+
+        if (!chatInput) {
+
+            return;
+
+        }
+
+
+        function resizeInput() {
+
+            chatInput.style.height =
+                "auto";
+
+
+            chatInput.style.height =
+                Math.min(
+                    chatInput.scrollHeight,
+                    110
+                ) + "px";
+
+        }
+
+
+        chatInput.addEventListener(
+            "input",
+            resizeInput
+        );
+
+
+        resizeInput();
+
+
+        /* =====================================================
+           ENTER TO SEND
+           
+           SHIFT + ENTER = NEW LINE
+        ===================================================== */
+
+        chatInput.addEventListener(
+            "keydown",
+            function (event) {
+
+
+                if (
+                    event.key === "Enter"
+                    &&
+                    !event.shiftKey
+                    &&
+                    window.innerWidth > 600
+                ) {
+
+                    event.preventDefault();
+
+
+                    const form =
+                        chatInput.closest(
+                            "form"
+                        );
+
+
+                    if (form) {
+
+                        form.requestSubmit();
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

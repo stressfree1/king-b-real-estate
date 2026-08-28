@@ -10,25 +10,38 @@
 <style>
 
 /* =========================================================
-   KING B MARKETPLACE — PREMIUM LISTING DETAIL
+   KING B MARKETPLACE — PRODUCT DETAIL
 ========================================================= */
 
-.marketplace-detail-page {
-    --kb-green: #123c2f;
-    --kb-green-dark: #0b2b22;
-    --kb-green-light: #edf5f1;
-    --kb-gold: #b58b3b;
-    --kb-gold-light: #d4af63;
-    --kb-text: #17231e;
-    --kb-muted: #6d7973;
-    --kb-border: #e4e9e6;
-    --kb-bg: #f7f8f6;
-    --kb-white: #ffffff;
+.kb-detail {
 
-    width: 100%;
-    background: var(--kb-bg);
-    padding: 48px 24px 90px;
-    box-sizing: border-box;
+    --green: #123c2f;
+    --green-dark: #09271f;
+    --green-mid: #1c5945;
+    --green-soft: #edf5f1;
+
+    --gold: #b58b3b;
+    --gold-light: #d4af63;
+
+    --text: #17231e;
+    --muted: #718078;
+    --border: #e5ebe7;
+    --background: #f5f7f5;
+    --white: #ffffff;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(18,60,47,.06),
+            transparent 30%
+        ),
+        var(--background);
+
+    padding: 30px 24px 100px;
+
+    color: var(--text);
 }
 
 
@@ -36,66 +49,137 @@
    CONTAINER
 ========================================================= */
 
-.marketplace-detail-container {
-    width: min(1240px, 100%);
+.kb-detail-container {
+
+    width: min(1280px, 100%);
+
     margin: 0 auto;
-
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(390px, .85fr);
-
-    background: var(--kb-white);
-
-    border: 1px solid var(--kb-border);
-
-    border-radius: 24px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 20px 60px rgba(18, 60, 47, .08);
 }
 
 
 /* =========================================================
-   IMAGE AREA
+   TOP BAR
 ========================================================= */
 
-.marketplace-detail-image {
+.kb-detail-topbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+
+.kb-back-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    color: var(--green);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    transition: .2s ease;
+}
+
+
+.kb-back-link:hover {
+
+    transform: translateX(-3px);
+
+}
+
+
+.kb-breadcrumb {
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   MAIN PRODUCT LAYOUT
+========================================================= */
+
+.kb-product-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.25fr)
+        minmax(380px, .75fr);
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   GALLERY CARD
+========================================================= */
+
+.kb-gallery-card {
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 22px;
+
+    padding: 14px;
+
+    box-shadow:
+        0 18px 50px rgba(18,60,47,.07);
+}
+
+
+/* =========================================================
+   MAIN IMAGE
+========================================================= */
+
+.kb-main-image {
+
     position: relative;
 
-    min-height: 620px;
+    width: 100%;
+
+    aspect-ratio: 1.12 / 1;
 
     background:
         linear-gradient(
-            145deg,
-            #dfe7e2,
-            #f5f7f5
+            135deg,
+            #e7eeea,
+            #f7f9f8
         );
+
+    border-radius: 16px;
 
     overflow: hidden;
 }
 
 
-.marketplace-detail-image::after {
-    content: "";
+.kb-main-image img {
 
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            180deg,
-            transparent 65%,
-            rgba(0, 0, 0, .18)
-        );
-
-    pointer-events: none;
-}
-
-
-.marketplace-detail-image img {
     width: 100%;
+
     height: 100%;
 
     display: block;
@@ -103,12 +187,14 @@
     object-fit: cover;
 
     transition:
-        transform .6s ease;
+        opacity .2s ease,
+        transform .45s ease;
 }
 
 
-.marketplace-detail-image:hover img {
-    transform: scale(1.025);
+.kb-main-image:hover img {
+
+    transform: scale(1.015);
 }
 
 
@@ -116,39 +202,229 @@
    NO IMAGE
 ========================================================= */
 
-.detail-no-image {
+.kb-no-image {
+
     width: 100%;
+
     height: 100%;
-    min-height: 620px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    color: #7b8781;
+    flex-direction: column;
 
-    font-size: 15px;
+    gap: 10px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
     font-weight: 700;
+}
 
-    letter-spacing: .04em;
+
+.kb-no-image-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    font-size: 23px;
 }
 
 
 /* =========================================================
-   INFORMATION PANEL
+   IMAGE COUNTER
 ========================================================= */
 
-.marketplace-detail-info {
+.kb-image-counter {
+
+    position: absolute;
+
+    left: 16px;
+
+    bottom: 16px;
+
+    z-index: 4;
+
+    padding: 8px 12px;
+
+    border-radius: 999px;
+
+    background: rgba(9,39,31,.82);
+
+    color: white;
+
+    backdrop-filter: blur(8px);
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   IMAGE NAVIGATION
+========================================================= */
+
+.kb-image-nav {
+
+    position: absolute;
+
+    inset: 0;
+
     display: flex;
 
-    flex-direction: column;
+    align-items: center;
 
-    padding: 54px 48px;
+    justify-content: space-between;
 
-    box-sizing: border-box;
+    padding: 0 14px;
 
-    background: #ffffff;
+    pointer-events: none;
+
+    z-index: 5;
+}
+
+
+.kb-image-nav button {
+
+    width: 42px;
+
+    height: 42px;
+
+    border: 1px solid rgba(255,255,255,.35);
+
+    border-radius: 50%;
+
+    background: rgba(9,39,31,.72);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    backdrop-filter: blur(8px);
+
+    transition: .2s ease;
+}
+
+
+.kb-image-nav button:hover {
+
+    background: var(--green);
+
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   THUMBNAILS
+========================================================= */
+
+.kb-thumbnails {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+    gap: 9px;
+
+    margin-top: 12px;
+}
+
+
+.kb-thumbnail {
+
+    position: relative;
+
+    aspect-ratio: 1;
+
+    padding: 0;
+
+    border: 2px solid transparent;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #eef3f0;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.kb-thumbnail img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+.kb-thumbnail:hover {
+
+    border-color: var(--gold);
+}
+
+
+.kb-thumbnail.active {
+
+    border-color: var(--green);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(18,60,47,.12);
+}
+
+
+/* =========================================================
+   PRODUCT INFO CARD
+========================================================= */
+
+.kb-info-card {
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 22px;
+
+    padding: 34px;
+
+    box-shadow:
+        0 18px 50px rgba(18,60,47,.07);
 }
 
 
@@ -156,32 +432,43 @@
    CATEGORY
 ========================================================= */
 
-.marketplace-category {
-    width: fit-content;
+.kb-category {
 
     display: inline-flex;
 
     align-items: center;
 
-    padding: 8px 13px;
+    gap: 7px;
 
-    background: var(--kb-green-light);
-
-    color: var(--kb-green);
-
-    border: 1px solid #dcebe3;
+    padding: 8px 12px;
 
     border-radius: 999px;
 
-    font-size: 11px;
+    background: var(--green-soft);
 
-    font-weight: 800;
+    color: var(--green);
+
+    border: 1px solid #dcebe3;
+
+    font-size: 10px;
+
+    font-weight: 900;
 
     text-transform: uppercase;
 
     letter-spacing: .12em;
+}
 
-    margin-bottom: 18px;
+
+.kb-category-dot {
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--gold);
 }
 
 
@@ -189,18 +476,24 @@
    TITLE
 ========================================================= */
 
-.marketplace-detail-info h1 {
-    margin: 0;
+.kb-product-title {
 
-    color: var(--kb-green-dark);
+    margin: 20px 0 0;
 
-    font-size: clamp(30px, 3.1vw, 46px);
+    color: var(--green-dark);
 
-    line-height: 1.08;
+    font-size:
+        clamp(
+            30px,
+            3.3vw,
+            45px
+        );
 
-    font-weight: 800;
+    line-height: 1.06;
 
-    letter-spacing: -.035em;
+    letter-spacing: -.04em;
+
+    font-weight: 850;
 }
 
 
@@ -208,75 +501,152 @@
    PRICE
 ========================================================= */
 
-.detail-price {
+.kb-price {
+
     margin-top: 24px;
 
-    color: var(--kb-gold);
+    color: var(--gold);
 
-    font-size: clamp(28px, 3vw, 40px);
+    font-size:
+        clamp(
+            30px,
+            3.2vw,
+            42px
+        );
 
     line-height: 1;
 
-    font-weight: 850;
+    font-weight: 900;
 
-    letter-spacing: -.025em;
+    letter-spacing: -.035em;
 }
 
 
 /* =========================================================
-   LOCATION
+   PRICE TYPE
 ========================================================= */
 
-.detail-location {
+.kb-price-type {
+
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   META
+========================================================= */
+
+.kb-meta-row {
+
     display: flex;
+
+    flex-wrap: wrap;
 
     align-items: center;
 
-    gap: 7px;
+    gap: 14px;
 
-    margin: 15px 0 0;
+    margin-top: 18px;
 
-    color: var(--kb-muted);
+    color: var(--muted);
 
-    font-size: 14px;
+    font-size: 12px;
 
-    font-weight: 600;
+    font-weight: 700;
+}
+
+
+.kb-meta-item {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+.kb-meta-divider {
+
+    width: 4px;
+
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: #b8c2bd;
 }
 
 
 /* =========================================================
-   DIVIDERS
+   NEGOTIABLE BADGE
 ========================================================= */
 
-.marketplace-detail-info hr {
+.kb-negotiable {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    background: #fff8e8;
+
+    color: #85631e;
+
+    border: 1px solid #eedcae;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.kb-divider {
+
     width: 100%;
 
     height: 1px;
 
     border: 0;
 
-    background: var(--kb-border);
+    background: var(--border);
 
-    margin: 30px 0;
+    margin: 28px 0;
 }
 
 
 /* =========================================================
-   SECTION HEADINGS
+   SECTION LABEL
 ========================================================= */
 
-.marketplace-detail-info h3 {
-    margin: 0 0 13px;
+.kb-section-label {
 
-    color: var(--kb-green-dark);
+    margin: 0 0 11px;
 
-    font-size: 14px;
+    color: var(--green-dark);
 
-    font-weight: 800;
+    font-size: 12px;
 
     text-transform: uppercase;
 
-    letter-spacing: .09em;
+    letter-spacing: .1em;
+
+    font-weight: 900;
 }
 
 
@@ -284,67 +654,282 @@
    DESCRIPTION
 ========================================================= */
 
-.detail-description {
-    color: #53605a;
+.kb-description {
 
-    font-size: 15px;
+    color: #59665f;
+
+    font-size: 14px;
 
     line-height: 1.85;
 }
 
 
-.detail-description p {
-    margin: 0 0 12px;
+.kb-description p {
+
+    margin: 0 0 10px;
 }
 
 
-.detail-description p:last-child {
+.kb-description p:last-child {
+
     margin-bottom: 0;
 }
 
 
 /* =========================================================
-   SELLER SECTION
+   DETAILS GRID
 ========================================================= */
 
-.seller-section {
-    padding: 20px;
+.kb-details-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 9px;
+
+    margin-top: 15px;
+}
+
+
+.kb-detail-item {
+
+    padding: 13px;
+
+    background: #fafcfb;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+}
+
+
+.kb-detail-item span {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+
+    font-weight: 800;
+}
+
+
+.kb-detail-item strong {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--green);
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   SELLER CARD
+========================================================= */
+
+.kb-seller-card {
+
+    padding: 18px;
+
+    border-radius: 15px;
 
     background:
         linear-gradient(
             135deg,
-            #f5f8f6,
+            #f4f8f5,
             #ffffff
         );
 
-    border: 1px solid var(--kb-border);
-
-    border-radius: 15px;
+    border: 1px solid var(--border);
 }
 
 
-.seller-section h3 {
-    margin-bottom: 14px;
+.kb-seller-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
 }
 
 
-.seller-section p {
-    margin: 5px 0;
+.kb-seller-avatar {
 
-    color: var(--kb-muted);
+    flex: 0 0 46px;
 
-    font-size: 13px;
+    width: 46px;
 
-    line-height: 1.6;
-}
+    height: 46px;
 
+    border-radius: 14px;
 
-.seller-section p strong {
-    color: var(--kb-green);
+    background: var(--green);
+
+    color: var(--gold-light);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     font-size: 16px;
 
-    font-weight: 800;
+    font-weight: 900;
+}
+
+
+.kb-seller-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--green-dark);
+
+    font-size: 14px;
+
+    font-weight: 900;
+}
+
+
+.kb-seller-name a {
+
+    color: inherit;
+
+    text-decoration: none;
+}
+
+
+.kb-seller-name a:hover {
+
+    text-decoration: underline;
+}
+
+
+.kb-verified {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 17px;
+
+    height: 17px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    color: white;
+
+    font-size: 9px;
+
+    font-weight: 900;
+}
+
+
+.kb-seller-label {
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.kb-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 17px;
+}
+
+
+.kb-action {
+
+    min-height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 12px 15px;
+
+    border-radius: 11px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    transition: .2s ease;
+
+    box-sizing: border-box;
+}
+
+
+.kb-chat {
+
+    background: var(--green);
+
+    color: white;
+
+    border: 1px solid var(--green);
+}
+
+
+.kb-chat:hover {
+
+    color: white;
+
+    background: var(--green-dark);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   CONTACT SELLER
+========================================================= */
+
+.kb-contact-wrapper {
+
+    width: 100%;
 }
 
 
@@ -352,126 +937,683 @@
    CONTACT BUTTON
 ========================================================= */
 
-.seller-actions {
-    margin-top: 22px;
-}
+.kb-contact-button {
 
-
-.marketplace-contact-button {
     width: 100%;
 
-    min-height: 54px;
+    min-height: 52px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    box-sizing: border-box;
+    gap: 9px;
 
-    padding: 14px 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--kb-green),
-            #1c5945
-        );
-
-    color: #ffffff;
-
-    border: 1px solid var(--kb-green);
+    padding: 12px 16px;
 
     border-radius: 11px;
 
-    text-decoration: none;
+    border: 1px solid #cfdad4;
 
-    font-size: 14px;
+    background: #ffffff;
 
-    font-weight: 800;
+    color: var(--green);
 
-    letter-spacing: .01em;
+    font-family: inherit;
 
-    box-shadow:
-        0 10px 25px rgba(18, 60, 47, .16);
+    font-size: 12px;
 
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        background .2s ease;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .2s ease;
 }
 
 
-.marketplace-contact-button:hover {
-    color: #ffffff;
+.kb-contact-button:hover {
+
+    background: var(--green-soft);
+
+    border-color: var(--green);
 
     transform: translateY(-2px);
 
-    background:
-        linear-gradient(
-            135deg,
-            #0e3228,
-            #174936
-        );
-
     box-shadow:
-        0 15px 30px rgba(18, 60, 47, .22);
+        0 8px 20px rgba(18,60,47,.08);
+}
+
+
+.kb-contact-button.active {
+
+    background: var(--green-soft);
+
+    border-color: var(--green);
+}
+
+
+.kb-contact-button-icon {
+
+    width: 28px;
+
+    height: 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    font-size: 14px;
+}
+
+
+.kb-contact-button-text {
+
+    flex: 1;
+
+    text-align: left;
+}
+
+
+.kb-contact-arrow {
+
+    width: 25px;
+
+    height: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f0f4f2;
+
+    color: var(--green);
+
+    font-size: 17px;
+
+    transition: transform .25s ease;
+}
+
+
+.kb-contact-button.active .kb-contact-arrow {
+
+    transform: rotate(45deg);
+
+    background: var(--green);
+
+    color: white;
 }
 
 
 /* =========================================================
-   GALLERY
+   CONTACT PANEL
 ========================================================= */
 
-.marketplace-gallery {
-    width: min(1240px, 100%);
+.kb-contact-panel {
 
-    margin: 48px auto 0;
+    margin-top: 10px;
+
+    padding: 15px;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5f9f7,
+            #ffffff
+        );
+
+    border: 1px solid var(--border);
+
+    animation:
+        kbContactOpen .22s ease;
 }
 
 
-.marketplace-gallery h2 {
-    margin: 0 0 22px;
+@keyframes kbContactOpen {
 
-    color: var(--kb-green-dark);
+    from {
 
-    font-size: 25px;
+        opacity: 0;
+
+        transform: translateY(-5px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   CONTACT PHONE
+========================================================= */
+
+.kb-contact-phone {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px;
+
+    border-radius: 11px;
+
+    background: white;
+
+    border: 1px solid var(--border);
+}
+
+
+.kb-contact-phone-icon {
+
+    width: 39px;
+
+    height: 39px;
+
+    flex: 0 0 39px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: var(--green);
+
+    color: white;
+
+    font-size: 17px;
+}
+
+
+.kb-contact-small-label {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 9px;
 
     font-weight: 800;
 
-    letter-spacing: -.025em;
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
 }
 
 
-.gallery-grid {
+.kb-contact-number {
+
+    margin-top: 3px;
+
+    color: var(--green-dark);
+
+    font-size: 16px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   CONTACT OPTIONS
+========================================================= */
+
+.kb-contact-options {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 7px;
+
+    margin-top: 10px;
+}
+
+
+.kb-contact-option {
+
+    min-height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 9px 7px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    transition: .2s ease;
+}
+
+
+.kb-contact-option:hover {
+
+    transform: translateY(-2px);
+}
+
+
+.kb-call-option {
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    border: 1px solid #dcebe3;
+}
+
+
+.kb-call-option:hover {
+
+    background: var(--green);
+
+    color: white;
+}
+
+
+.kb-whatsapp-option {
+
+    background: #f2f8f4;
+
+    color: #176b43;
+
+    border: 1px solid #d9ebdf;
+}
+
+
+.kb-whatsapp-option:hover {
+
+    background: #176b43;
+
+    color: white;
+}
+
+
+.kb-sms-option {
+
+    background: #f6f5fa;
+
+    color: #4d456d;
+
+    border: 1px solid #e4e0ed;
+}
+
+
+.kb-sms-option:hover {
+
+    background: #4d456d;
+
+    color: white;
+}
+
+
+.kb-contact-note {
+
+    margin-top: 9px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MISSING PHONE
+========================================================= */
+
+.kb-contact-missing {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 11px;
+}
+
+
+.kb-contact-missing-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #fff6df;
+
+    color: #8a6a2b;
+
+    font-size: 16px;
+}
+
+
+.kb-contact-missing-content {
+
+    min-width: 0;
+}
+
+
+.kb-contact-missing-content strong {
+
+    display: block;
+
+    color: var(--green-dark);
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+.kb-contact-missing-content p {
+
+    margin: 4px 0 10px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+.kb-add-phone-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 36px;
+
+    padding: 8px 12px;
+
+    border-radius: 9px;
+
+    background: var(--green);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 900;
+}
+
+
+.kb-add-phone-button:hover {
+
+    background: var(--green-dark);
+
+    color: white;
+}
+
+
+.kb-contact-unavailable {
+
+    display: inline-block;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   REVIEW SELLER BUTTON
+========================================================= */
+
+.kb-review-seller {
+
+    grid-column: 1 / -1;
+
+    width: 100%;
+
+    background: var(--gold);
+
+    color: white;
+
+    border: 1px solid var(--gold);
+
+    text-align: center;
+}
+
+
+.kb-review-seller:hover {
+
+    background: var(--green);
+
+    color: white;
+
+    border-color: var(--green);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   LISTING STATUS / INFO
+========================================================= */
+
+.kb-listing-info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 9px;
+
+    margin-top: 17px;
+}
+
+
+.kb-info-item {
+
+    padding: 12px;
+
+    background: #fafcfb;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+}
+
+
+.kb-info-item span {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+
+    font-weight: 800;
+}
+
+
+.kb-info-item strong {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--green);
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   SAFETY
+========================================================= */
+
+.kb-safety {
+
+    margin-top: 15px;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background: #fffaf0;
+
+    border: 1px solid #f0dfb8;
+
+    color: #806b3f;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+.kb-safety strong {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #6d5422;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   MORE PHOTOS
+========================================================= */
+
+.kb-gallery-section {
+
+    margin-top: 25px;
+}
+
+
+.kb-gallery-header {
+
+    display: flex;
+
+    align-items: end;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+
+.kb-gallery-header h2 {
+
+    margin: 0;
+
+    color: var(--green-dark);
+
+    font-size: 23px;
+
+    letter-spacing: -.03em;
+}
+
+
+.kb-gallery-header span {
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.kb-gallery-grid {
+
     display: grid;
 
     grid-template-columns:
         repeat(4, minmax(0, 1fr));
 
-    gap: 16px;
+    gap: 12px;
 }
 
 
-.gallery-item {
-    position: relative;
+.kb-gallery-image {
 
     aspect-ratio: 4 / 3;
 
     overflow: hidden;
 
-    background: #e8eeeb;
+    border-radius: 13px;
 
-    border-radius: 15px;
+    border: 1px solid var(--border);
 
-    border: 1px solid var(--kb-border);
+    background: #eaf0ed;
 
     cursor: pointer;
 }
 
 
-.gallery-item img {
+.kb-gallery-image img {
+
     width: 100%;
+
     height: 100%;
 
     display: block;
@@ -479,234 +1621,197 @@
     object-fit: cover;
 
     transition:
-        transform .45s ease;
+        transform .4s ease;
 }
 
 
-.gallery-item::after {
-    content: "";
+.kb-gallery-image:hover img {
 
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            180deg,
-            transparent 55%,
-            rgba(0, 0, 0, .20)
-        );
-
-    opacity: 0;
-
-    transition:
-        opacity .3s ease;
-}
-
-
-.gallery-item:hover img {
-    transform: scale(1.06);
-}
-
-
-.gallery-item:hover::after {
-    opacity: 1;
+    transform: scale(1.07);
 }
 
 
 /* =========================================================
-   TABLET
+   RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 1050px) {
 
-    .marketplace-detail-page {
-        padding: 35px 18px 70px;
-    }
+    .kb-product-layout {
 
-
-    .marketplace-detail-container {
         grid-template-columns: 1fr;
+
     }
 
 
-    .marketplace-detail-image {
-        min-height: 520px;
+    .kb-main-image {
 
-        max-height: 620px;
+        aspect-ratio: 1.5 / 1;
+
     }
 
 
-    .detail-no-image {
-        min-height: 520px;
-    }
+    .kb-info-card {
 
+        padding: 30px;
 
-    .marketplace-detail-info {
-        padding: 42px;
-    }
-
-
-    .gallery-grid {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
     }
 
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+@media (max-width: 700px) {
 
-@media (max-width: 650px) {
+    .kb-detail {
 
-    .marketplace-detail-page {
-        padding: 20px 12px 55px;
+        padding:
+            18px
+            12px
+            60px;
+
     }
 
 
-    .marketplace-detail-container {
-        border-radius: 18px;
+    .kb-detail-topbar {
+
+        margin-bottom: 14px;
+
     }
 
 
-    .marketplace-detail-image {
-        min-height: 360px;
+    .kb-breadcrumb {
 
-        max-height: 430px;
+        display: none;
+
     }
 
 
-    .detail-no-image {
-        min-height: 360px;
+    .kb-gallery-card,
+    .kb-info-card {
+
+        border-radius: 17px;
+
     }
 
 
-    .marketplace-detail-info {
-        padding: 30px 22px 32px;
+    .kb-gallery-card {
+
+        padding: 9px;
+
     }
 
 
-    .marketplace-category {
-        margin-bottom: 15px;
+    .kb-main-image {
 
-        padding: 7px 11px;
+        aspect-ratio: 1 / 1;
 
-        font-size: 10px;
+        border-radius: 12px;
+
     }
 
 
-    .marketplace-detail-info h1 {
+    .kb-image-nav button {
+
+        width: 37px;
+
+        height: 37px;
+
+    }
+
+
+    .kb-thumbnails {
+
+        grid-template-columns:
+            repeat(5, minmax(0, 1fr));
+
+        gap: 6px;
+
+    }
+
+
+    .kb-info-card {
+
+        padding: 24px 20px;
+
+    }
+
+
+    .kb-product-title {
+
         font-size: 31px;
 
-        line-height: 1.1;
     }
 
 
-    .detail-price {
-        margin-top: 20px;
+    .kb-price {
 
-        font-size: 30px;
+        font-size: 31px;
+
     }
 
 
-    .detail-location {
-        font-size: 13px;
+    .kb-actions {
+
+        grid-template-columns: 1fr;
+
     }
 
 
-    .marketplace-detail-info hr {
-        margin: 25px 0;
+    .kb-review-seller {
+
+        grid-column: auto;
+
     }
 
 
-    .detail-description {
-        font-size: 14px;
+    .kb-details-grid {
 
-        line-height: 1.75;
+        grid-template-columns: 1fr;
+
     }
 
 
-    .seller-section {
-        padding: 17px;
-    }
+    .kb-gallery-grid {
 
-
-    .marketplace-gallery {
-        margin-top: 35px;
-    }
-
-
-    .marketplace-gallery h2 {
-        font-size: 22px;
-
-        margin-bottom: 16px;
-    }
-
-
-    .gallery-grid {
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
 
-        gap: 10px;
-    }
+        gap: 8px;
 
-
-    .gallery-item {
-        border-radius: 11px;
     }
 
 }
 
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
 
 @media (max-width: 400px) {
 
-    .marketplace-detail-page {
-        padding-left: 9px;
-        padding-right: 9px;
-    }
+    .kb-product-title {
 
-
-    .marketplace-detail-info {
-        padding: 26px 18px 28px;
-    }
-
-
-    .marketplace-detail-info h1 {
         font-size: 27px;
+
     }
 
 
-    .detail-price {
-        font-size: 27px;
+    .kb-price {
+
+        font-size: 28px;
+
     }
 
 
-    .gallery-grid {
-        gap: 8px;
+    .kb-info-card {
+
+        padding: 21px 17px;
+
     }
 
-}
 
+    .kb-listing-info {
 
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
+        grid-template-columns: 1fr;
 
-.marketplace-contact-button:focus-visible {
-    outline: 3px solid rgba(181, 139, 59, .45);
+    }
 
-    outline-offset: 3px;
-}
-
-
-.gallery-item:focus-within {
-    outline: 3px solid rgba(181, 139, 59, .45);
 }
 
 
@@ -716,10 +1821,14 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-    .marketplace-detail-image img,
-    .gallery-item img,
-    .marketplace-contact-button {
-        transition: none;
+    *,
+    *::before,
+    *::after {
+
+        scroll-behavior: auto !important;
+
+        transition: none !important;
+
     }
 
 }
@@ -727,137 +1836,117 @@
 </style>
 
 
-<section class="marketplace-detail-page">
+<section class="kb-detail">
 
-    <!-- =====================================================
-         MAIN LISTING
-    ====================================================== -->
-
-    <div class="marketplace-detail-container">
+<div class="kb-detail-container">
 
 
-        <!-- =================================================
-             MAIN IMAGE
-        ================================================== -->
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
 
-        <div class="marketplace-detail-image">
+<div class="kb-detail-topbar">
 
-            {% if listing.image %}
+    <a
+        href="{% url 'marketplace' %}"
+        class="kb-back-link"
+    >
+        ← Marketplace
+    </a>
+
+
+    <div class="kb-breadcrumb">
+
+        Marketplace
+        /
+        {{ listing.get_category_display }}
+        /
+        {{ listing.title }}
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN PRODUCT
+========================================================= -->
+
+<div class="kb-product-layout">
+
+
+<!-- =========================================================
+     LEFT — IMAGE GALLERY
+========================================================= -->
+
+<div class="kb-gallery-card">
+
+    <div
+        class="kb-main-image"
+        id="kbMainImage"
+    >
+
+        {% if listing.image %}
+
+            <img
+                id="kbMainImageElement"
+                src="{{ listing.image.url }}"
+                alt="{{ listing.title }}"
+            >
+
+        {% elif listing.gallery_images.all %}
+
+            {% with listing.gallery_images.first as first_image %}
 
                 <img
-                    src="{{ listing.image.url }}"
+                    id="kbMainImageElement"
+                    src="{{ first_image.image.url }}"
                     alt="{{ listing.title }}"
                 >
 
-            {% else %}
+            {% endwith %}
 
-                <div class="detail-no-image">
-                    No Image Available
+        {% else %}
+
+            <div class="kb-no-image">
+
+                <div class="kb-no-image-icon">
+                    📷
                 </div>
 
-            {% endif %}
+                No image available
 
+            </div>
+
+        {% endif %}
+
+
+        <div
+            class="kb-image-counter"
+            id="kbImageCounter"
+        >
+            1 / 1
         </div>
 
 
-        <!-- =================================================
-             LISTING INFORMATION
-        ================================================== -->
+        <div class="kb-image-nav">
 
-        <div class="marketplace-detail-info">
-
-
-            <!-- CATEGORY -->
-
-            <span class="marketplace-category">
-                {{ listing.get_category_display }}
-            </span>
+            <button
+                type="button"
+                id="kbPrevious"
+                aria-label="Previous image"
+            >
+                ‹
+            </button>
 
 
-            <!-- TITLE -->
-
-            <h1>
-                {{ listing.title }}
-            </h1>
-
-
-            <!-- PRICE -->
-
-            <div class="detail-price">
-                ₦{{ listing.price|floatformat:0 }}
-            </div>
-
-
-            <!-- LOCATION -->
-
-            <p class="detail-location">
-                <span>📍</span>
-                <span>{{ listing.location }}</span>
-            </p>
-
-
-            <hr>
-
-
-            <!-- DESCRIPTION -->
-
-            <h3>
-                Description
-            </h3>
-
-            <div class="detail-description">
-                {{ listing.description|linebreaks }}
-            </div>
-
-
-            <hr>
-
-
-            <!-- =================================================
-                 SELLER
-            ================================================== -->
-
-            <div class="seller-section">
-
-                <h3>
-                    Seller
-                </h3>
-
-                <p>
-                    <strong>
-                        {{ listing.seller.get_full_name|default:listing.seller.username }}
-                    </strong>
-                </p>
-
-                {% if listing.seller.email %}
-
-                    <p>
-                        {{ listing.seller.email }}
-                    </p>
-
-                {% endif %}
-
-            </div>
-
-
-            <!-- =================================================
-                 CONTACT SELLER
-            ================================================== -->
-
-            {% if listing.seller.email %}
-
-                <div class="seller-actions">
-
-                    <a
-                        href="mailto:{{ listing.seller.email }}"
-                        class="marketplace-contact-button"
-                    >
-                        Contact Seller
-                    </a>
-
-                </div>
-
-            {% endif %}
+            <button
+                type="button"
+                id="kbNext"
+                aria-label="Next image"
+            >
+                ›
+            </button>
 
         </div>
 
@@ -865,40 +1954,1310 @@
 
 
     <!-- =====================================================
-         PHOTO GALLERY
+         THUMBNAILS
     ====================================================== -->
 
-    {% if listing.gallery_images.all %}
+    <div
+        class="kb-thumbnails"
+        id="kbThumbnails"
+    >
 
-        <div class="marketplace-gallery">
+        {% if listing.image %}
 
-            <h2>
-                More Photos
-            </h2>
+            <button
+                type="button"
+                class="kb-thumbnail active"
+                data-image="{{ listing.image.url }}"
+                data-index="0"
+            >
+
+                <img
+                    src="{{ listing.image.url }}"
+                    alt="{{ listing.title }}"
+                >
+
+            </button>
+
+        {% endif %}
 
 
-            <div class="gallery-grid">
+        {% for image in listing.gallery_images.all %}
 
-                {% for image in listing.gallery_images.all %}
+            <button
+                type="button"
+                class="kb-thumbnail
+                {% if not listing.image and forloop.first %}active{% endif %}"
+                data-image="{{ image.image.url }}"
+                data-index="
+                    {% if listing.image %}
+                        {{ forloop.counter }}
+                    {% else %}
+                        {{ forloop.counter0 }}
+                    {% endif %}
+                "
+            >
 
-                    <div class="gallery-item">
+                <img
+                    src="{{ image.image.url }}"
+                    alt="{{ listing.title }} photo {{ forloop.counter }}"
+                    loading="lazy"
+                >
 
-                        <img
-                            src="{{ image.image.url }}"
-                            alt="{{ listing.title }} — Photo {{ forloop.counter }}"
-                            loading="lazy"
-                        >
+            </button>
 
-                    </div>
+        {% endfor %}
 
-                {% endfor %}
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     RIGHT — PRODUCT INFORMATION
+========================================================= -->
+
+<div class="kb-info-card">
+
+
+<!-- =====================================================
+     CATEGORY
+====================================================== -->
+
+<span class="kb-category">
+
+    <span class="kb-category-dot"></span>
+
+    {{ listing.get_category_display }}
+
+</span>
+
+
+<!-- =====================================================
+     TITLE
+====================================================== -->
+
+<h1 class="kb-product-title">
+
+    {{ listing.title }}
+
+</h1>
+
+
+<!-- =====================================================
+     PRICE
+====================================================== -->
+
+<div class="kb-price">
+
+    ₦{{ listing.price|floatformat:0 }}
+
+</div>
+
+
+{% if listing.price_type %}
+
+<div class="kb-price-type">
+
+    {{ listing.get_price_type_display }}
+
+</div>
+
+{% endif %}
+
+
+<!-- =====================================================
+     META
+====================================================== -->
+
+<div class="kb-meta-row">
+
+    {% if listing.city or listing.state %}
+
+        <span class="kb-meta-item">
+
+            📍
+
+            {% if listing.city %}
+                {{ listing.city }}
+            {% endif %}
+
+            {% if listing.city and listing.state %}
+                ,
+            {% endif %}
+
+            {% if listing.state %}
+                {{ listing.state }}
+            {% endif %}
+
+        </span>
+
+    {% elif listing.location %}
+
+        <span class="kb-meta-item">
+
+            📍 {{ listing.location }}
+
+        </span>
+
+    {% endif %}
+
+
+    <span class="kb-meta-divider"></span>
+
+
+    <span class="kb-meta-item">
+
+        👁 {{ listing.views }} views
+
+    </span>
+
+
+    {% if listing.negotiable %}
+
+        <span class="kb-negotiable">
+
+            Negotiable
+
+        </span>
+
+    {% endif %}
+
+</div>
+
+
+<div class="kb-divider"></div>
+
+
+<!-- =====================================================
+     ITEM DESCRIPTION
+====================================================== -->
+
+<h3 class="kb-section-label">
+
+    About this item
+
+</h3>
+
+
+<div class="kb-description">
+
+    {{ listing.description|linebreaks }}
+
+</div>
+
+
+<!-- =====================================================
+     ITEM DETAILS
+====================================================== -->
+
+<div class="kb-divider"></div>
+
+
+<h3 class="kb-section-label">
+
+    Item Details
+
+</h3>
+
+
+<div class="kb-details-grid">
+
+
+    <!-- CATEGORY -->
+
+    <div class="kb-detail-item">
+
+        <span>
+            Category
+        </span>
+
+        <strong>
+            {{ listing.get_category_display|default:"Not specified" }}
+        </strong>
+
+    </div>
+
+
+    <!-- SUBCATEGORY -->
+
+    {% if listing.subcategory %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Subcategory
+        </span>
+
+        <strong>
+            {{ listing.subcategory }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- CONDITION -->
+
+    {% if listing.condition %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Condition
+        </span>
+
+        <strong>
+            {{ listing.get_condition_display }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- PRICE TYPE -->
+
+    {% if listing.price_type %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Price Type
+        </span>
+
+        <strong>
+            {{ listing.get_price_type_display }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- BRAND -->
+
+    {% if listing.brand %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Brand
+        </span>
+
+        <strong>
+            {{ listing.brand }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- MODEL -->
+
+    {% if listing.model %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Model
+        </span>
+
+        <strong>
+            {{ listing.model }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- YEAR -->
+
+    {% if listing.year %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Year
+        </span>
+
+        <strong>
+            {{ listing.year }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- COLOR -->
+
+    {% if listing.color %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Color
+        </span>
+
+        <strong>
+            {{ listing.color }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- QUANTITY -->
+
+    {% if listing.quantity %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Quantity Available
+        </span>
+
+        <strong>
+            {{ listing.quantity }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- STATE -->
+
+    {% if listing.state %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            State
+        </span>
+
+        <strong>
+            {{ listing.state }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- CITY -->
+
+    {% if listing.city %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            City
+        </span>
+
+        <strong>
+            {{ listing.city }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- SPECIFIC LOCATION -->
+
+    {% if listing.specific_location %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Specific Location
+        </span>
+
+        <strong>
+            {{ listing.specific_location }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- OLD LOCATION FALLBACK -->
+
+    {% if listing.location and not listing.city and not listing.state %}
+
+    <div class="kb-detail-item">
+
+        <span>
+            Location
+        </span>
+
+        <strong>
+            {{ listing.location }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+
+<div class="kb-divider"></div>
+
+
+<!-- =====================================================
+     SELLER
+====================================================== -->
+
+<h3 class="kb-section-label">
+
+    Seller
+
+</h3>
+
+
+<div class="kb-seller-card">
+
+
+    <div class="kb-seller-top">
+
+
+        <div class="kb-seller-avatar">
+
+            {% if listing.seller.first_name %}
+
+                {{ listing.seller.first_name|first|upper }}
+
+            {% else %}
+
+                {{ listing.seller.username|first|upper }}
+
+            {% endif %}
+
+        </div>
+
+
+        <div>
+
+            <div class="kb-seller-name">
+
+                <a
+                    href="{% url 'marketplace_seller_profile' listing.seller.id %}"
+                >
+
+                    {{ listing.seller.get_full_name|default:listing.seller.username }}
+
+                </a>
+
+
+                <span
+                    class="kb-verified"
+                    title="King B Marketplace seller"
+                >
+                    ✓
+                </span>
+
+            </div>
+
+
+            <div class="kb-seller-label">
+
+                King B Marketplace Seller
 
             </div>
 
         </div>
 
+    </div>
+
+
+    <!-- =================================================
+         ACTIONS
+    ================================================== -->
+
+    <div class="kb-actions">
+
+
+        <!-- =================================================
+             CHAT SELLER
+        ================================================== -->
+
+        {% if request.user.is_authenticated and request.user != listing.seller %}
+
+            <a
+                href="{% url 'marketplace_chat' listing.id %}"
+                class="kb-action kb-chat"
+            >
+
+                💬
+
+                Chat Seller
+
+            </a>
+
+        {% else %}
+
+            <a
+                href="{% url 'site_login' %}"
+                class="kb-action kb-chat"
+            >
+
+                💬
+
+                Login to Chat
+
+            </a>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             CONTACT SELLER
+        ================================================== -->
+
+        <div class="kb-contact-wrapper">
+
+
+            <button
+                type="button"
+                class="kb-contact-button"
+                id="kbContactButton"
+                aria-expanded="false"
+            >
+
+                <span class="kb-contact-button-icon">
+                    ☎
+                </span>
+
+
+                <span class="kb-contact-button-text">
+                    Contact Seller
+                </span>
+
+
+                <span
+                    class="kb-contact-arrow"
+                    id="kbContactArrow"
+                >
+                    +
+                </span>
+
+            </button>
+
+
+            <!-- CONTACT PANEL -->
+
+            <div
+                class="kb-contact-panel"
+                id="kbContactPanel"
+                hidden
+            >
+
+                {% if seller_phone %}
+
+
+                    <div class="kb-contact-phone">
+
+                        <div class="kb-contact-phone-icon">
+                            ☎
+                        </div>
+
+
+                        <div>
+
+                            <span class="kb-contact-small-label">
+                                Seller phone
+                            </span>
+
+
+                            <div class="kb-contact-number">
+
+                                {{ seller_phone }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="kb-contact-options">
+
+
+                        <!-- CALL -->
+
+                        <a
+                            href="tel:{{ seller_phone }}"
+                            class="kb-contact-option kb-call-option"
+                        >
+
+                            <span>
+                                ☎
+                            </span>
+
+                            <span>
+                                Call
+                            </span>
+
+                        </a>
+
+
+                        <!-- WHATSAPP -->
+
+                        <a
+                            href="https://wa.me/{{ seller_phone }}"
+                            target="_blank"
+                            rel="noopener"
+                            class="kb-contact-option kb-whatsapp-option"
+                        >
+
+                            <span>
+                                💬
+                            </span>
+
+                            <span>
+                                WhatsApp
+                            </span>
+
+                        </a>
+
+
+                        <!-- SMS -->
+
+                        <a
+                            href="sms:{{ seller_phone }}"
+                            class="kb-contact-option kb-sms-option"
+                        >
+
+                            <span>
+                                ✉
+                            </span>
+
+                            <span>
+                                Text
+                            </span>
+
+                        </a>
+
+
+                    </div>
+
+
+                    <div class="kb-contact-note">
+
+                        Choose how you would like to contact the seller.
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <div class="kb-contact-missing">
+
+
+                        <div class="kb-contact-missing-icon">
+                            ☎
+                        </div>
+
+
+                        <div class="kb-contact-missing-content">
+
+                            <strong>
+                                Phone number not added
+                            </strong>
+
+
+                            <p>
+                                This seller hasn't added a phone number yet.
+                            </p>
+
+
+                            {% if request.user == listing.seller %}
+
+                                <a
+                                    href="{% url 'account_settings' %}"
+                                    class="kb-add-phone-button"
+                                >
+                                    Add Phone Number
+                                </a>
+
+                            {% else %}
+
+                                <span class="kb-contact-unavailable">
+                                    Phone contact unavailable
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             REVIEW SELLER
+        ================================================== -->
+
+        {% if request.user.is_authenticated and request.user != listing.seller %}
+
+            <a
+                href="{% url 'marketplace_review_seller' listing.id %}"
+                class="kb-action kb-review-seller"
+            >
+
+                ⭐
+
+                Review Seller
+
+            </a>
+
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- =================================================
+         LISTING INFORMATION
+    ================================================== -->
+
+    <div class="kb-listing-info">
+
+
+        <div class="kb-info-item">
+
+            <span>
+                Status
+            </span>
+
+            <strong>
+
+                {% if listing.status == 'available' %}
+                    Available
+                {% elif listing.status == 'sold' %}
+                    Sold
+                {% elif listing.status == 'reserved' %}
+                    Reserved
+                {% else %}
+                    {{ listing.get_status_display|default:listing.status }}
+                {% endif %}
+
+            </strong>
+
+        </div>
+
+
+        <div class="kb-info-item">
+
+            <span>
+                Category
+            </span>
+
+            <strong>
+                {{ listing.get_category_display }}
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         DELIVERY
+    ================================================== -->
+
+    {% if listing.delivery_available %}
+
+        <div class="kb-info-item" style="margin-top:9px;">
+
+            <span>
+                Delivery
+            </span>
+
+            <strong>
+                Delivery Available
+            </strong>
+
+        </div>
+
     {% endif %}
 
+
+    <!-- =================================================
+         WHATSAPP
+    ================================================== -->
+
+    {% if listing.whatsapp_available %}
+
+        <div class="kb-info-item" style="margin-top:9px;">
+
+            <span>
+                WhatsApp
+            </span>
+
+            <strong>
+                Seller available on WhatsApp
+            </strong>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =================================================
+         SAFETY
+    ================================================== -->
+
+    <div class="kb-safety">
+
+        <strong>
+            🛡 Seller safety
+        </strong>
+
+        Never send passwords, banking details
+        or sensitive information to another user.
+        Meet in a safe location and inspect the
+        product before making payment.
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+<!-- =========================================================
+     MORE PHOTOS
+========================================================= -->
+
+{% if listing.gallery_images.all %}
+
+<section class="kb-gallery-section">
+
+
+    <div class="kb-gallery-header">
+
+        <h2>
+            More photos
+        </h2>
+
+
+        <span>
+
+            {{ listing.gallery_images.count }} photos
+
+        </span>
+
+    </div>
+
+
+    <div class="kb-gallery-grid">
+
+
+        {% for image in listing.gallery_images.all %}
+
+            <div
+                class="kb-gallery-image"
+                onclick="kbSelectGalleryImage('{{ image.image.url }}')"
+            >
+
+                <img
+                    src="{{ image.image.url }}"
+                    alt="{{ listing.title }} — Photo {{ forloop.counter }}"
+                    loading="lazy"
+                >
+
+            </div>
+
+        {% endfor %}
+
+
+    </div>
+
+
 </section>
+
+{% endif %}
+
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     GALLERY JAVASCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const mainImage =
+            document.getElementById(
+                "kbMainImageElement"
+            );
+
+
+        const thumbnails =
+            Array.from(
+                document.querySelectorAll(
+                    ".kb-thumbnail"
+                )
+            );
+
+
+        const counter =
+            document.getElementById(
+                "kbImageCounter"
+            );
+
+
+        const previous =
+            document.getElementById(
+                "kbPrevious"
+            );
+
+
+        const next =
+            document.getElementById(
+                "kbNext"
+            );
+
+
+        if (
+            !mainImage ||
+            !thumbnails.length
+        ) {
+
+            return;
+
+        }
+
+
+        let currentIndex = 0;
+
+
+        function showImage(index) {
+
+
+            if (index < 0) {
+
+                index =
+                    thumbnails.length - 1;
+
+            }
+
+
+            if (
+                index >= thumbnails.length
+            ) {
+
+                index = 0;
+
+            }
+
+
+            currentIndex = index;
+
+
+            const thumbnail =
+                thumbnails[index];
+
+
+            const imageUrl =
+                thumbnail.dataset.image;
+
+
+            mainImage.style.opacity = "0";
+
+
+            setTimeout(
+                function () {
+
+                    mainImage.src =
+                        imageUrl;
+
+                    mainImage.style.opacity =
+                        "1";
+
+                },
+                120
+            );
+
+
+            thumbnails.forEach(
+                function (item) {
+
+                    item.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+            thumbnail.classList.add(
+                "active"
+            );
+
+
+            if (counter) {
+
+                counter.textContent =
+                    (
+                        index + 1
+                    )
+                    + " / "
+                    + thumbnails.length;
+
+            }
+
+        }
+
+
+        thumbnails.forEach(
+            function (thumbnail, index) {
+
+                thumbnail.addEventListener(
+                    "click",
+                    function () {
+
+                        showImage(index);
+
+                    }
+                );
+
+            }
+        );
+
+
+        if (previous) {
+
+            previous.addEventListener(
+                "click",
+                function () {
+
+                    showImage(
+                        currentIndex - 1
+                    );
+
+                }
+            );
+
+        }
+
+
+        if (next) {
+
+            next.addEventListener(
+                "click",
+                function () {
+
+                    showImage(
+                        currentIndex + 1
+                    );
+
+                }
+            );
+
+        }
+
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "ArrowLeft"
+                ) {
+
+                    showImage(
+                        currentIndex - 1
+                    );
+
+                }
+
+
+                if (
+                    event.key === "ArrowRight"
+                ) {
+
+                    showImage(
+                        currentIndex + 1
+                    );
+
+                }
+
+            }
+        );
+
+
+        showImage(0);
+
+    }
+);
+
+
+/* =========================================================
+   GALLERY IMAGE CLICK
+========================================================= */
+
+function kbSelectGalleryImage(
+    imageUrl
+) {
+
+
+    const thumbnails =
+        Array.from(
+            document.querySelectorAll(
+                ".kb-thumbnail"
+            )
+        );
+
+
+    const index =
+        thumbnails.findIndex(
+            function (thumbnail) {
+
+                return (
+                    thumbnail.dataset.image
+                    === imageUrl
+                );
+
+            }
+        );
+
+
+    if (index !== -1) {
+
+        thumbnails[index].click();
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+}
+
+</script>
+
+
+<!-- =========================================================
+     CONTACT SELLER JAVASCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const contactButton =
+            document.getElementById(
+                "kbContactButton"
+            );
+
+
+        const contactPanel =
+            document.getElementById(
+                "kbContactPanel"
+            );
+
+
+        if (
+            !contactButton ||
+            !contactPanel
+        ) {
+
+            return;
+
+        }
+
+
+        contactButton.addEventListener(
+            "click",
+            function () {
+
+
+                const isOpen =
+                    contactButton.getAttribute(
+                        "aria-expanded"
+                    ) === "true";
+
+
+                if (isOpen) {
+
+
+                    contactPanel.hidden =
+                        true;
+
+
+                    contactButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    contactButton.classList.remove(
+                        "active"
+                    );
+
+
+                } else {
+
+
+                    contactPanel.hidden =
+                        false;
+
+
+                    contactButton.setAttribute(
+                        "aria-expanded",
+                        "true"
+                    );
+
+
+                    contactButton.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+);
+
+</script>
 
 {% endblock %}

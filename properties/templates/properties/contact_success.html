@@ -1,0 +1,662 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}
+    Message Sent | King B Real Estate
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   CONTACT SUCCESS PAGE
+========================================================= */
+
+.contact-success-page {
+
+    min-height: 80vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 70px 20px;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(18,60,47,.06),
+            transparent 30%
+        ),
+        #f5f7f5;
+}
+
+
+/* =========================================================
+   SUCCESS CARD
+========================================================= */
+
+.contact-success-card {
+
+    width: min(650px, 100%);
+
+    padding: 55px 40px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8e4;
+
+    border-radius: 22px;
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 70px rgba(18,60,47,.10);
+}
+
+
+/* =========================================================
+   SUCCESS ICON
+========================================================= */
+
+.contact-success-icon {
+
+    width: 75px;
+
+    height: 75px;
+
+    margin: 0 auto 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e7f4ed;
+
+    color: #123c2f;
+
+    font-size: 32px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.contact-success-card h1 {
+
+    margin: 0 0 14px;
+
+    color: #123c2f;
+
+    font-size:
+        clamp(
+            30px,
+            5vw,
+            44px
+        );
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+    line-height: 1.1;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.contact-success-card > p {
+
+    max-width: 520px;
+
+    margin: 0 auto;
+
+    color: #69746f;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   WHATSAPP BOX
+========================================================= */
+
+.contact-whatsapp-box {
+
+    margin-top: 28px;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        #d8e8de;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f2faf5,
+            #ffffff
+        );
+
+    text-align: left;
+}
+
+
+/* =========================================================
+   WHATSAPP HEADER
+========================================================= */
+
+.contact-whatsapp-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 11px;
+}
+
+
+.contact-whatsapp-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #25D366;
+
+    color: #ffffff;
+
+    font-size: 21px;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 7px 18px
+        rgba(
+            37,
+            211,
+            102,
+            .18
+        );
+}
+
+
+.contact-whatsapp-title {
+
+    color: #123c2f;
+
+    font-size: 13px;
+
+    font-weight: 900;
+}
+
+
+.contact-whatsapp-subtitle {
+
+    margin-top: 2px;
+
+    color: #718078;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   WHATSAPP DESCRIPTION
+========================================================= */
+
+.contact-whatsapp-text {
+
+    margin: 0 0 14px;
+
+    color: #59665f;
+
+    font-size: 11px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.contact-success-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 28px;
+}
+
+
+.contact-success-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 46px;
+
+    padding: 0 18px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+/* =========================================================
+   BACK HOME
+========================================================= */
+
+.contact-success-primary {
+
+    background: #123c2f;
+
+    color: #ffffff;
+
+    border:
+        1px solid
+        #123c2f;
+}
+
+
+.contact-success-primary:hover {
+
+    background: #09271f;
+
+    border-color: #09271f;
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(
+            18,
+            60,
+            47,
+            .15
+        );
+}
+
+
+/* =========================================================
+   PROPERTIES
+========================================================= */
+
+.contact-success-secondary {
+
+    background: #f3f0e8;
+
+    color: #123c2f;
+
+    border:
+        1px solid
+        #e6dfcf;
+}
+
+
+.contact-success-secondary:hover {
+
+    background: #ebe5d7;
+
+    color: #123c2f;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   WHATSAPP BUTTON
+========================================================= */
+
+.contact-whatsapp-button {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    padding: 0 18px;
+
+    border-radius: 10px;
+
+    background: #25D366;
+
+    border:
+        1px solid
+        #25D366;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.contact-whatsapp-button:hover {
+
+    background: #1ebe5d;
+
+    border-color: #1ebe5d;
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 22px
+        rgba(
+            37,
+            211,
+            102,
+            .22
+        );
+}
+
+
+.contact-whatsapp-button-icon {
+
+    font-size: 16px;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   SMALL NOTE
+========================================================= */
+
+.contact-success-note {
+
+    margin-top: 18px;
+
+    color: #8a958f;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .contact-success-page {
+
+        min-height: 85vh;
+
+        padding:
+            45px 15px;
+    }
+
+
+    .contact-success-card {
+
+        padding:
+            42px 22px;
+
+        border-radius:
+            18px;
+    }
+
+
+    .contact-success-actions {
+
+        flex-direction:
+            column;
+    }
+
+
+    .contact-success-button {
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+
+    .contact-whatsapp-box {
+
+        padding: 15px;
+    }
+
+}
+
+</style>
+
+
+<section class="contact-success-page">
+
+
+    <div class="contact-success-card">
+
+
+        <!-- =================================================
+             SUCCESS ICON
+        ================================================== -->
+
+        <div class="contact-success-icon">
+
+            ✓
+
+        </div>
+
+
+        <!-- =================================================
+             TITLE
+        ================================================== -->
+
+        <h1>
+
+            Message Sent Successfully
+
+        </h1>
+
+
+        <!-- =================================================
+             MAIN MESSAGE
+        ================================================== -->
+
+        <p>
+
+            Thank you for contacting King B Real Estate.
+            Your message has been received by our team and
+            we will get back to you as soon as possible.
+
+        </p>
+
+
+        <!-- =================================================
+             WHATSAPP SECTION
+        ================================================== -->
+
+        {% if whatsapp_url %}
+
+            <div class="contact-whatsapp-box">
+
+
+                <div class="contact-whatsapp-header">
+
+
+                    <div class="contact-whatsapp-icon">
+
+                        ☎
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="contact-whatsapp-title">
+
+                            Continue on WhatsApp
+
+                        </div>
+
+
+                        <div class="contact-whatsapp-subtitle">
+
+                            Speak directly with our team
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <p class="contact-whatsapp-text">
+
+                    Your enquiry is already prepared for you.
+                    Click below to open WhatsApp and continue
+                    the conversation with a King B representative For Faster Response.
+
+                </p>
+
+
+                <a
+                    href="{{ whatsapp_url }}"
+                    target="_blank"
+                    rel="noopener"
+                    class="contact-whatsapp-button"
+                >
+
+                    <span class="contact-whatsapp-button-icon">
+                        💬
+                    </span>
+
+                    <span>
+                        Continue on WhatsApp
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             OTHER ACTIONS
+        ================================================== -->
+
+        <div class="contact-success-actions">
+
+
+            <a
+                href="{% url 'home' %}"
+                class="contact-success-button contact-success-primary"
+            >
+
+                ← Back Home
+
+            </a>
+
+
+            <a
+                href="{% url 'property_list' %}"
+                class="contact-success-button contact-success-secondary"
+            >
+
+                Explore Properties →
+
+            </a>
+
+
+        </div>
+
+
+        <!-- =================================================
+             NOTE
+        ================================================== -->
+
+        <div class="contact-success-note">
+
+            Your enquiry has also been saved securely in
+            the King B Real Estate system.
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+{% endblock %}

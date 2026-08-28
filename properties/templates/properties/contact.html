@@ -5,9 +5,843 @@
 KING B REAL ESTATE & CONSTRUCTION LTD
 {% endblock %}
 
-{% block content %}
-<main>
 
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   KING B — PREMIUM CONTACT PAGE
+   STRUCTURE UNCHANGED
+========================================================= */
+
+.contact-page {
+
+    --kb-green: #123c2f;
+    --kb-dark: #062119;
+    --kb-gold: #b58b3b;
+    --kb-gold-light: #d4af63;
+
+    --kb-cream: #f6f7f4;
+    --kb-white: #ffffff;
+
+    --kb-text: #17231e;
+    --kb-muted: #69746f;
+
+    --kb-border: #e1e7e3;
+
+    min-height: 100vh;
+
+    padding: 90px 20px 120px;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(181,139,59,.07),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(18,60,47,.06),
+            transparent 30%
+        ),
+        var(--kb-cream);
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+.contact-page *,
+.contact-page *::before,
+.contact-page *::after {
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.contact-heading {
+
+    max-width: 820px;
+
+    margin: 0 auto 65px;
+
+    text-align: center;
+}
+
+
+.contact-heading > p:first-child {
+
+    margin: 0 0 13px;
+
+    color: var(--kb-gold);
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+.contact-heading h1 {
+
+    margin: 0 0 18px;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            40px,
+            6vw,
+            68px
+        );
+
+    line-height: 1.02;
+
+    letter-spacing: -2.5px;
+
+    font-weight: 800;
+}
+
+
+.contact-heading > p:last-child {
+
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    color: var(--kb-muted);
+
+    font-size: 15px;
+
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.contact-layout {
+
+    width: min(1180px, 100%);
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        .9fr
+        1.1fr;
+
+    gap: 25px;
+
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   CONTACT INFORMATION
+========================================================= */
+
+.contact-information {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 40px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #123c2f 0%,
+            #09271f 100%
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 28px 70px
+        rgba(
+            8,
+            39,
+            30,
+            .16
+        );
+}
+
+
+.contact-information::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 340px;
+
+    height: 340px;
+
+    right: -180px;
+
+    top: -180px;
+
+    border:
+        1px solid
+        rgba(
+            212,
+            175,
+            99,
+            .15
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+.contact-information::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+
+    height: 190px;
+
+    left: -110px;
+
+    bottom: -100px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .07
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+.contact-information > * {
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.contact-information > span {
+
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: var(--kb-gold-light);
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+}
+
+
+.contact-information h2 {
+
+    margin: 0 0 16px;
+
+    color: #ffffff;
+
+    font-size:
+        clamp(
+            28px,
+            3.2vw,
+            42px
+        );
+
+    line-height: 1.05;
+
+    letter-spacing: -1px;
+
+    font-weight: 800;
+}
+
+
+.contact-information > p {
+
+    margin: 0 0 30px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .70
+        );
+
+    font-size: 13px;
+
+    line-height: 1.85;
+}
+
+
+/* =========================================================
+   CONTACT ITEM
+========================================================= */
+
+.contact-item {
+
+    padding: 18px 0;
+
+    border-top:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+}
+
+
+.contact-item:last-child {
+
+    border-bottom:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .10
+        );
+}
+
+
+.contact-item strong {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .45
+        );
+
+    font-size: 9px;
+
+    font-weight: 850;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+}
+
+
+.contact-item p {
+
+    margin: 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .84
+        );
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+.contact-item a {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .88
+        );
+
+    text-decoration: none;
+
+    transition:
+        color .2s ease;
+}
+
+
+.contact-item a:hover {
+
+    color:
+        var(--kb-gold-light);
+
+}
+
+
+/* =========================================================
+   GOOGLE MAPS ADDRESS
+========================================================= */
+
+.kb-address-link {
+
+    transition:
+        color .2s ease;
+}
+
+
+.kb-address-link:hover {
+
+    color:
+        var(--kb-gold-light) !important;
+
+}
+
+
+/* =========================================================
+   FORM CONTAINER
+========================================================= */
+
+.contact-form-container {
+
+    padding: 40px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .96
+        );
+
+    border:
+        1px solid
+        var(--kb-border);
+
+    border-radius:
+        22px;
+
+    box-shadow:
+        0 24px 65px
+        rgba(
+            8,
+            39,
+            30,
+            .08
+        );
+
+    backdrop-filter:
+        blur(8px);
+}
+
+
+/* =========================================================
+   FORM HEADER
+========================================================= */
+
+.contact-form-header {
+
+    margin-bottom: 26px;
+}
+
+
+.contact-form-header span {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: var(--kb-gold);
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 2.4px;
+
+    text-transform: uppercase;
+}
+
+
+.contact-form-header h2 {
+
+    margin: 0;
+
+    color: var(--kb-green);
+
+    font-size:
+        clamp(
+            28px,
+            3.2vw,
+            40px
+        );
+
+    line-height: 1.05;
+
+    letter-spacing: -1px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   DJANGO FORM
+========================================================= */
+
+.contact-form-container form {
+
+    width: 100%;
+}
+
+
+.contact-form-container form p {
+
+    margin:
+        0 0 17px;
+}
+
+
+.contact-form-container form label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #34443d;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: .2px;
+}
+
+
+/* =========================================================
+   FORM FIELDS
+========================================================= */
+
+.contact-form-container form input,
+.contact-form-container form textarea,
+.contact-form-container form select {
+
+    width: 100%;
+
+    padding:
+        13px 14px;
+
+    border:
+        1px solid
+        #dbe3de;
+
+    border-radius:
+        10px;
+
+    background:
+        #f8faf8;
+
+    color:
+        var(--kb-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    outline:
+        none;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.contact-form-container form input {
+
+    min-height:
+        48px;
+}
+
+
+.contact-form-container form textarea {
+
+    min-height:
+        140px;
+
+    resize:
+        vertical;
+
+    line-height:
+        1.6;
+}
+
+
+.contact-form-container form input:focus,
+.contact-form-container form textarea:focus,
+.contact-form-container form select:focus {
+
+    background:
+        #ffffff;
+
+    border-color:
+        var(--kb-gold);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            181,
+            139,
+            59,
+            .09
+        );
+}
+
+
+/* =========================================================
+   FORM ERRORS
+========================================================= */
+
+.contact-form-container .errorlist {
+
+    margin:
+        0 0 7px;
+
+    padding:
+        0;
+
+    list-style:
+        none;
+
+    color:
+        #a33a3a;
+
+    font-size:
+        10px;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.contact-form-container form button {
+
+    width: 100%;
+
+    min-height: 50px;
+
+    margin-top: 3px;
+
+    border:
+        1px solid
+        var(--kb-green);
+
+    border-radius:
+        10px;
+
+    background:
+        var(--kb-green);
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .22s ease,
+        border-color .22s ease,
+        transform .22s ease,
+        box-shadow .22s ease;
+}
+
+
+.contact-form-container form button:hover {
+
+    background:
+        var(--kb-gold);
+
+    border-color:
+        var(--kb-gold);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(
+            181,
+            139,
+            59,
+            .18
+        );
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .contact-layout {
+
+        grid-template-columns:
+            1fr;
+
+        width: min(720px, 92%);
+
+    }
+
+
+    .contact-information,
+    .contact-form-container {
+
+        padding:
+            30px;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .contact-page {
+
+        padding:
+            55px 15px 80px;
+
+    }
+
+
+    .contact-heading {
+
+        margin-bottom:
+            42px;
+
+    }
+
+
+    .contact-heading h1 {
+
+        font-size:
+            39px;
+
+        letter-spacing:
+            -1.5px;
+
+    }
+
+
+    .contact-heading > p:last-child {
+
+        font-size:
+            13px;
+
+    }
+
+
+    .contact-layout {
+
+        width:
+            100%;
+
+        gap:
+            15px;
+
+    }
+
+
+    .contact-information,
+    .contact-form-container {
+
+        padding:
+            25px 20px;
+
+        border-radius:
+            17px;
+
+    }
+
+
+    .contact-information h2 {
+
+        font-size:
+            29px;
+
+    }
+
+
+    .contact-form-header h2 {
+
+        font-size:
+            29px;
+
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    * {
+
+        transition:
+            none !important;
+
+        animation:
+            none !important;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main>
 
 <section class="contact-page">
 
@@ -49,7 +883,22 @@ KING B REAL ESTATE & CONSTRUCTION LTD
                 <strong>Location</strong>
 
                 <p>
-                    Port Harcourt, Rivers State
+
+                    <a
+                        href="https://www.google.com/maps/search/?api=1&query=Plot+122C+General+Diriya+Lane,+Tombia+Extension,+GRA+Phase+2,+Port+Harcourt,+Rivers+State"
+                        target="_blank"
+                        rel="noopener"
+                        class="kb-address-link"
+                    >
+
+                        Plot 122C General Diriya Lane
+                        Tombia Extension
+                        GRA Phase 2
+                        Port Harcourt
+                        Rivers State
+
+                    </a>
+
                 </p>
 
             </div>
@@ -60,7 +909,13 @@ KING B REAL ESTATE & CONSTRUCTION LTD
                 <strong>Email</strong>
 
                 <p>
-                    info@kingbrealestate.com
+
+                    <a href="mailto:hello@kingbrealestate.com">
+
+                        hello@kingbrealestate.com
+
+                    </a>
+
                 </p>
 
             </div>
@@ -71,7 +926,17 @@ KING B REAL ESTATE & CONSTRUCTION LTD
                 <strong>Phone</strong>
 
                 <p>
-                    +234 XXX XXX XXXX
+
+                    <a
+                        href="https://wa.me/2349134312508?text=Hello%20King%20B%20Real%20Estate,%20I%20would%20like%20to%20make%20an%20enquiry."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+
+                        +234 913 431 2508
+
+                    </a>
+
                 </p>
 
             </div>
@@ -110,6 +975,6 @@ KING B REAL ESTATE & CONSTRUCTION LTD
 
 </section>
 
+</main>
 
 {% endblock %}
-

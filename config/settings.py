@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    "django.contrib.humanize",
     "properties",
 ]
 
@@ -132,6 +132,7 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 if DATABASE_URL:
+
     import dj_database_url
 
     DATABASES = {
@@ -143,6 +144,7 @@ if DATABASE_URL:
     }
 
 else:
+
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -221,22 +223,58 @@ CSRF_COOKIE_SECURE = False
 
 SESSION_COOKIE_SECURE = False
 
-
 # =========================================================
-# EMAIL - LOCAL DEVELOPMENT
+# EMAIL - CPANEL SMTP
 # =========================================================
 
 EMAIL_BACKEND = (
-    "django.core.mail.backends.console.EmailBackend"
+    "properties.email_backend.CustomSMTPEmailBackend"
 )
 
-DEFAULT_FROM_EMAIL = (
-    "King B Real Estate <noreply@kingbrealestate.com>"
+EMAIL_HOST = os.environ.get(
+    "EMAIL_HOST",
+    "mail.kingbrealestate.com"
 )
 
+EMAIL_PORT = int(
+    os.environ.get(
+        "EMAIL_PORT",
+        "465"
+    )
+)
 
-# =========================================================
-# DEFAULT PRIMARY KEY
-# =========================================================
+EMAIL_USE_SSL = (
+    os.environ.get(
+        "EMAIL_USE_SSL",
+        "True"
+    ).lower() == "true"
+)
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+EMAIL_USE_TLS = (
+    os.environ.get(
+        "EMAIL_USE_TLS",
+        "False"
+    ).lower() == "true"
+)
+
+EMAIL_HOST_USER = os.environ.get(
+    "EMAIL_HOST_USER",
+    "hello@kingbrealestate.com"
+)
+
+EMAIL_HOST_PASSWORD = os.environ.get(
+    "EMAIL_HOST_PASSWORD",
+    ""
+)
+
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL",
+    "King B Real Estate <hello@kingbrealestate.com>"
+)
+
+PASSWORD_RESET_TIMEOUT = int(
+    os.environ.get(
+        "PASSWORD_RESET_TIMEOUT",
+        "259200"
+    )
+)

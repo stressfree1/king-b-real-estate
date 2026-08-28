@@ -1,0 +1,739 @@
+{% extends "properties/base.html" %}
+
+{% block title %}
+    Marketplace Messages | KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+{% block customer_nav_account %}
+    true
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   MARKETPLACE MESSAGES
+========================================================= */
+
+.messages-page {
+    min-height: 80vh;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(18, 60, 47, 0.05),
+            transparent 35%
+        ),
+        #f5f7f5;
+
+    padding: 50px 5% 80px;
+}
+
+
+.messages-container {
+    width: min(1050px, 100%);
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.messages-header {
+    background:
+        linear-gradient(
+            135deg,
+            #123c2f,
+            #09271f
+        );
+
+    color: white;
+
+    padding: 34px;
+
+    border-radius: 20px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 12px 35px rgba(18, 60, 47, 0.12);
+}
+
+
+.messages-header h1 {
+    margin: 0 0 8px;
+
+    font-size: 31px;
+
+    letter-spacing: -.03em;
+}
+
+
+.messages-header p {
+    margin: 0;
+
+    opacity: .82;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.message-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 25px;
+}
+
+
+.message-stat {
+    background: white;
+
+    border:
+        1px solid #e3e8e5;
+
+    border-radius: 15px;
+
+    padding: 21px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.04);
+}
+
+
+.message-stat-label {
+    color: #76817b;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .04em;
+}
+
+
+.message-stat-number {
+    margin-top: 5px;
+
+    color: #123c2f;
+
+    font-size: 29px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   INBOX
+========================================================= */
+
+.inbox-card {
+    background: white;
+
+    border:
+        1px solid #e2e8e4;
+
+    border-radius: 19px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.05);
+}
+
+
+.inbox-title {
+    padding: 25px;
+
+    border-bottom:
+        1px solid #edf0ee;
+}
+
+
+.inbox-title h2 {
+    margin: 0;
+
+    color: #123c2f;
+
+    font-size: 21px;
+}
+
+
+/* =========================================================
+   CONVERSATION
+========================================================= */
+
+.conversation {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 20px 25px;
+
+    border-bottom:
+        1px solid #edf0ee;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+
+.conversation:last-child {
+    border-bottom: none;
+}
+
+
+.conversation:hover {
+    background: #f8faf9;
+
+    transform: translateX(2px);
+}
+
+
+.conversation-unread {
+    background: #f0f7f3;
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.conversation-avatar {
+    width: 52px;
+
+    height: 52px;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123c2f,
+            #1c5945
+        );
+
+    color: #d4af63;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 5px 15px rgba(18,60,47,.15);
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.conversation-content {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.conversation-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+
+.other-user-name {
+    color: #123c2f;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.message-time {
+    color: #87918c;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+}
+
+
+.listing-name {
+    margin-top: 5px;
+
+    color: #b58b3b;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.latest-message {
+    margin-top: 5px;
+
+    color: #6d7872;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   UNREAD
+========================================================= */
+
+.unread-badge {
+    min-width: 24px;
+
+    height: 24px;
+
+    padding:
+        0 7px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #b58b3b;
+
+    color: white;
+
+    border-radius: 50px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-state {
+    text-align: center;
+
+    padding: 80px 25px;
+
+    color: #78847d;
+}
+
+
+.empty-icon {
+    width: 70px;
+
+    height: 70px;
+
+    margin:
+        0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #f5ead3;
+
+    font-size: 32px;
+}
+
+
+.empty-state h3 {
+    margin:
+        0 0 8px;
+
+    color: #123c2f;
+
+    font-size: 20px;
+}
+
+
+.empty-state p {
+    max-width: 550px;
+
+    margin:
+        0 auto;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .messages-page {
+        padding:
+            30px 4% 60px;
+    }
+
+
+    .message-stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .messages-header {
+        padding: 25px;
+    }
+
+
+    .messages-header h1 {
+        font-size: 25px;
+    }
+
+
+    .conversation {
+        padding:
+            17px;
+    }
+
+
+    .conversation-top {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 3px;
+    }
+
+
+    .message-time {
+        font-size: 9px;
+    }
+
+
+    .conversation-avatar {
+        width: 46px;
+
+        height: 46px;
+
+        border-radius: 13px;
+    }
+
+}
+
+</style>
+
+
+<section class="messages-page">
+
+<div class="messages-container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="messages-header">
+
+        <h1>
+            Marketplace Messages
+        </h1>
+
+        <p>
+            View and continue your conversations with
+            buyers and sellers on the King B marketplace.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="message-stats">
+
+
+        <!-- CONVERSATIONS -->
+
+        <div class="message-stat">
+
+            <div class="message-stat-label">
+                Conversations
+            </div>
+
+            <div class="message-stat-number">
+
+                {{ total_conversations|default:"0" }}
+
+            </div>
+
+        </div>
+
+
+        <!-- UNREAD -->
+
+        <div class="message-stat">
+
+            <div class="message-stat-label">
+                Unread Messages
+            </div>
+
+            <div class="message-stat-number">
+
+                {{ unread_messages|default:"0" }}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         INBOX
+    ====================================================== -->
+
+    <div class="inbox-card">
+
+
+        <div class="inbox-title">
+
+            <h2>
+                My Conversations
+            </h2>
+
+        </div>
+
+
+        {% if conversations %}
+
+
+            {% for conversation in conversations %}
+
+
+                <!-- =================================================
+                     CONVERSATION
+                ================================================== -->
+
+                <a
+                    href="{{ conversation.chat_url }}"
+                    class="
+                        conversation
+                        {% if conversation.unread_count %}
+                            conversation-unread
+                        {% endif %}
+                    "
+                >
+
+
+                    <!-- =============================================
+                         AVATAR
+                    ============================================== -->
+
+                    <div class="conversation-avatar">
+
+                        {% if conversation.other_user.first_name %}
+
+                            {{ conversation.other_user.first_name|first|upper }}
+
+                        {% else %}
+
+                            {{ conversation.other_user.username|first|upper }}
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =============================================
+                         CONTENT
+                    ============================================== -->
+
+                    <div class="conversation-content">
+
+
+                        <div class="conversation-top">
+
+
+                            <!-- OTHER USER -->
+
+                            <div class="other-user-name">
+
+                                {% if conversation.other_user.get_full_name %}
+
+                                    {{ conversation.other_user.get_full_name }}
+
+                                {% else %}
+
+                                    {{ conversation.other_user.username }}
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- TIME -->
+
+                            <div class="message-time">
+
+                                {{ conversation.latest_message.created_at|date:"M d · g:i A" }}
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- =========================================
+                             ADVERTISEMENT
+                        ========================================== -->
+
+                        <div class="listing-name">
+
+                            {{ conversation.listing.title }}
+
+                        </div>
+
+
+                        <!-- =========================================
+                             LAST MESSAGE
+                        ========================================== -->
+
+                        <div class="latest-message">
+
+                            {% if conversation.latest_message.sender_id == request.user.id %}
+
+                                You:
+                                {{ conversation.latest_message.message }}
+
+                            {% else %}
+
+                                {{ conversation.latest_message.message }}
+
+                            {% endif %}
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =============================================
+                         UNREAD COUNT
+                    ============================================== -->
+
+                    {% if conversation.unread_count %}
+
+                        <div class="unread-badge">
+
+                            {{ conversation.unread_count }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                </a>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="empty-state">
+
+
+                <div class="empty-icon">
+                    💬
+                </div>
+
+
+                <h3>
+                    No conversations yet
+                </h3>
+
+
+                <p>
+                    Your marketplace conversations will appear
+                    here when you contact a seller or a buyer
+                    contacts you about an advertisement.
+                </p>
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,246 @@
+{% extends "properties/base.html" %}
+
+{% block title %}
+    Review Seller | KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.review-page {
+    padding: 60px 5%;
+    background: #f6f7f5;
+    min-height: 80vh;
+}
+
+.review-container {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.review-card {
+    background: white;
+    padding: 35px;
+    border-radius: 18px;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+.review-header {
+    background: linear-gradient(
+        135deg,
+        #123c2f,
+        #0d2e24
+    );
+
+    color: white;
+    padding: 28px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+
+.review-header h1 {
+    margin: 0 0 8px;
+}
+
+.review-header p {
+    margin: 0;
+    opacity: 0.85;
+}
+
+.seller-name {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #b58b3b;
+}
+
+.listing-name {
+    margin-top: 5px;
+    color: #eee;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #123c2f;
+}
+
+.review-input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.review-input:focus {
+    outline: none;
+    border-color: #b58b3b;
+    box-shadow: 0 0 0 3px rgba(181,139,59,0.12);
+}
+
+.review-button {
+    display: inline-block;
+    width: 100%;
+    padding: 14px 20px;
+
+    background: #123c2f;
+    color: white;
+
+    border: none;
+    border-radius: 9px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.review-button:hover {
+    background: #b58b3b;
+}
+
+.cancel-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #123c2f;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.error-list {
+    color: #a52a2a;
+    margin-top: 6px;
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="review-page">
+
+    <div class="review-container">
+
+
+        <div class="review-header">
+
+            <h1>
+                Review Seller
+            </h1>
+
+            <p>
+                Share your experience with this seller
+                to help other marketplace users.
+            </p>
+
+            <div class="seller-name">
+
+                {{ seller.get_full_name|default:seller.username }}
+
+            </div>
+
+            <div class="listing-name">
+
+                Advertisement:
+                {{ listing.title }}
+
+            </div>
+
+        </div>
+
+
+        <div class="review-card">
+
+            <form
+                method="POST"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- RATING -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.rating.id_for_label }}">
+                        Your Rating
+                    </label>
+
+                    {{ form.rating }}
+
+                    {% if form.rating.errors %}
+
+                        <div class="error-list">
+
+                            {{ form.rating.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- COMMENT -->
+
+                <div class="form-group">
+
+                    <label for="{{ form.comment.id_for_label }}">
+                        Your Review
+                    </label>
+
+                    {{ form.comment }}
+
+                    {% if form.comment.errors %}
+
+                        <div class="error-list">
+
+                            {{ form.comment.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="review-button"
+                >
+
+                    Submit Review
+
+                </button>
+
+
+                <a
+                    href="{% url 'marketplace_detail' listing.id %}"
+                    class="cancel-link"
+                >
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

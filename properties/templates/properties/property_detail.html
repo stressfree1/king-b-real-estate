@@ -184,7 +184,9 @@
 
                 <div class="property-detail-price">
 
-                    ₦{{ property.price|floatformat:0 }}
+                    {% load humanize %}
+
+                ₦{{ property.price|floatformat:0|intcomma }}
 
                 </div>
 

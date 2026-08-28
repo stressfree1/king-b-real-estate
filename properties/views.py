@@ -3,9 +3,14 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
+from django.db.models import Avg
 from django.utils import timezone
-from django.db.models import Q
+from django.urls import reverse, reverse_lazy
+
+from django.db.models import Q, F
 from django.contrib.auth.views import (
     PasswordResetView,
     PasswordResetDoneView,
@@ -13,7 +18,6 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView,
     PasswordChangeView,
 )
-from django.urls import reverse_lazy
 
 from .forms import (
     AccountRegistrationForm,
@@ -23,6 +27,8 @@ from .forms import (
     CustomerForm,
     SkilledWorkerPasswordResetForm,
     AccountSettingsForm,
+    MarketplaceListingForm,
+    MarketplaceSellerReviewForm,
 )
 
 from .models import (
@@ -37,6 +43,11 @@ from .models import (
     CustomerReview,
     AccountSettings,
     MarketplaceListing,
+    MarketplaceListingView,
+    MarketplaceMessage,
+    MarketplaceReview,
+    MarketplaceListingImage,
+    
 )
 
 
@@ -128,7 +139,6 @@ def estate_list(request):
 # =========================================================
 # ESTATE DETAIL
 # =========================================================
-
 def estate_detail(
     request,
     estate_id
@@ -136,19 +146,42 @@ def estate_detail(
 
     estate = get_object_or_404(
         Estate.objects.prefetch_related(
-            'estate_types',
-            'properties'
+            'estate_types__properties',
+            'properties',
         ),
         id=estate_id,
     )
 
+    # =====================================================
+    # ESTATE TYPES
+    # =====================================================
+
     estate_types = (
         estate.estate_types
         .all()
+        .order_by('name')
+    )
+
+    # =====================================================
+    # DIRECT PROPERTIES
+    #
+    # These are properties that belong to the estate
+    # but do NOT belong to an Estate Type.
+    # =====================================================
+
+    direct_properties = (
+        estate.properties
+        .filter(
+            estate_type__isnull=True
+        )
         .order_by(
-            'name'
+            'title'
         )
     )
+
+    # =====================================================
+    # TOTAL ESTATE PROPERTY COUNTS
+    # =====================================================
 
     total_plots = (
         estate.properties.count()
@@ -177,6 +210,10 @@ def estate_detail(
         )
         .count()
     )
+
+    # =====================================================
+    # ESTATE TYPE COUNTS
+    # =====================================================
 
     for estate_type in estate_types:
 
@@ -208,6 +245,10 @@ def estate_detail(
             estate_type.properties.count()
         )
 
+    # =====================================================
+    # DEVELOPMENT FEATURES
+    # =====================================================
+
     development_features = [
         feature.strip()
         for feature in (
@@ -216,15 +257,27 @@ def estate_detail(
         if feature.strip()
     ]
 
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
     context = {
+
         'estate': estate,
+
+        # Estate types
         'estate_types': estate_types,
 
+        # Direct estate properties
+        'direct_properties': direct_properties,
+
+        # Estate totals
         'total_plots': total_plots,
         'available_plots': available_plots,
         'reserved_plots': reserved_plots,
         'sold_plots': sold_plots,
 
+        # Development
         'development_features': development_features,
     }
 
@@ -233,7 +286,6 @@ def estate_detail(
         'properties/estate_detail.html',
         context
     )
-
 
 # =========================================================
 # ESTATE TYPE DETAIL
@@ -436,6 +488,16 @@ def about(request):
         'properties/about.html'
     )
 
+# =========================================================
+# OUR SERVICES
+# =========================================================
+
+def our_services(request):
+
+    return render(
+        request,
+        'properties/our_services.html'
+    )
 
 # =========================================================
 # JOBS
@@ -540,6 +602,9 @@ def job_apply(
 # =========================================================
 # CONTACT
 # =========================================================
+# =========================================================
+# CONTACT
+# =========================================================
 
 def contact(request):
 
@@ -551,16 +616,79 @@ def contact(request):
 
         if form.is_valid():
 
-            form.save()
+            # =================================================
+            # SAVE CONTACT MESSAGE TO DATABASE
+            # =================================================
+
+            contact_message = form.save()
+
+
+            # =================================================
+            # KING B WHATSAPP NUMBER
+            #
+            # IMPORTANT:
+            # Replace this with your actual WhatsApp number.
+            #
+            # Nigerian format:
+            # 2348012345678
+            #
+            # Do NOT use:
+            # +234...
+            # 080...
+            # spaces
+            # =================================================
+
+            whatsapp_number = '2348035780632'
+
+
+            # =================================================
+            # BUILD WHATSAPP MESSAGE
+            # =================================================
+
+            whatsapp_message = (
+                "Hello King B Real Estate,\n\n"
+                "I recently submitted an enquiry "
+                "through your website.\n\n"
+                f"Name: {contact_message.name}\n"
+                f"Phone: {contact_message.phone}\n"
+                f"Email: {contact_message.email}\n"
+                f"Subject: {contact_message.subject}\n\n"
+                f"Message:\n{contact_message.message}\n\n"
+                "Thank you."
+            )
+
+
+            # =================================================
+            # URL ENCODE WHATSAPP MESSAGE
+            # =================================================
+
+            from urllib.parse import quote
+
+            whatsapp_url = (
+                f"https://wa.me/"
+                f"{whatsapp_number}"
+                f"?text={quote(whatsapp_message)}"
+            )
+
+
+            # =================================================
+            # SUCCESS PAGE
+            # =================================================
 
             return render(
                 request,
-                'properties/contact_success.html'
+                'properties/contact_success.html',
+                {
+                    'contact_message': contact_message,
+                    'whatsapp_url': whatsapp_url,
+                }
             )
+
 
     else:
 
         form = ContactMessageForm()
+
 
     return render(
         request,
@@ -569,8 +697,6 @@ def contact(request):
             'form': form,
         }
     )
-
-
 # =========================================================
 # PUBLIC SKILLED WORKERS
 # =========================================================
@@ -705,7 +831,7 @@ def marketplace(request):
         MarketplaceListing.objects
         .filter(
             status='available',
-            is_approved=True
+            approval_status='approved'
         )
         .select_related(
             'seller'
@@ -766,8 +892,239 @@ def marketplace(request):
         }
     )
 
+
 # =========================================================
-# MARKETPLACE LISTING DETAIL
+# CREATE MARKETPLACE LISTING
+# =========================================================
+@login_required(login_url='site_login')
+def marketplace_create(request):
+
+    if request.method == 'POST':
+
+        form = MarketplaceListingForm(
+            request.POST,
+            request.FILES,
+        )
+
+        if form.is_valid():
+
+            listing = form.save(
+                commit=False
+            )
+
+            listing.seller = request.user
+
+            listing.approval_status = 'under_review'
+
+            listing.status = 'available'
+
+            images = form.cleaned_data.get(
+                'images'
+            )
+
+            if images:
+
+                listing.image = images[0]
+
+            listing.save()
+
+            # =========================================
+            # SAVE ADDITIONAL GALLERY IMAGES
+            # =========================================
+
+            if images:
+
+                for image in images[1:]:
+
+                    MarketplaceListingImage.objects.create(
+                        listing=listing,
+                        image=image,
+                    )
+
+            messages.success(
+                request,
+                'Your listing has been submitted successfully. '
+                'It is currently under review.'
+            )
+
+            return redirect(
+                'my_listing_detail',
+                listing_id=listing.id
+            )
+
+    else:
+
+        form = MarketplaceListingForm()
+
+    return render(
+        request,
+        'properties/marketplace_create.html',
+        {
+            'form': form,
+        }
+    )
+    
+# =========================================================
+# EDIT MARKETPLACE ADVERTISEMENT
+# =========================================================
+@login_required
+def marketplace_edit(request, listing_id):
+
+    # =========================================================
+    # GET THE SELLER'S LISTING
+    # =========================================================
+
+    listing = get_object_or_404(
+        MarketplaceListing,
+        id=listing_id,
+        seller=request.user,
+    )
+
+
+    # =========================================================
+    # GET ALL GALLERY PHOTOS
+    # =========================================================
+
+    gallery_images = MarketplaceListingImage.objects.filter(
+        listing=listing
+    ).order_by('id')
+
+
+    # =========================================================
+    # EDIT LISTING
+    # =========================================================
+
+    if request.method == 'POST':
+
+        form = MarketplaceListingForm(
+            request.POST,
+            request.FILES,
+            instance=listing,
+        )
+
+        if form.is_valid():
+
+            listing = form.save(commit=False)
+
+            # -------------------------------------------------
+            # IMPORTANT
+            # -------------------------------------------------
+            # Editing an advertisement sends it back for review.
+            # Remove this block if you do NOT want that behavior.
+            # -------------------------------------------------
+
+            if listing.approval_status == 'approved':
+                listing.approval_status = 'under_review'
+
+            listing.save()
+
+
+            # =================================================
+            # ADD NEW GALLERY PHOTOS
+            # =================================================
+
+            uploaded_images = request.FILES.getlist('images')
+
+            for image in uploaded_images:
+
+                MarketplaceListingImage.objects.create(
+                    listing=listing,
+                    image=image,
+                )
+
+
+            messages.success(
+                request,
+                'Your advertisement has been updated successfully.'
+            )
+
+            return redirect(
+                'my_listing_detail',
+                listing_id=listing.id
+            )
+
+    else:
+
+        form = MarketplaceListingForm(
+            instance=listing
+        )
+
+
+    # =========================================================
+    # REFRESH GALLERY AFTER SAVE
+    # =========================================================
+
+    gallery_images = MarketplaceListingImage.objects.filter(
+        listing=listing
+    ).order_by('id')
+
+
+    # =========================================================
+    # PAGE
+    # =========================================================
+
+    return render(
+        request,
+        'properties/marketplace_edit.html',
+        {
+            'form': form,
+            'listing': listing,
+            'gallery_images': gallery_images,
+        }
+    )
+
+# =========================================================
+# DELETE PRIMARY MARKETPLACE IMAGE
+# =========================================================
+
+@login_required
+def marketplace_delete_primary_image(request, listing_id):
+
+    listing = get_object_or_404(
+        MarketplaceListing,
+        id=listing_id,
+        seller=request.user,
+    )
+
+    if request.method != 'POST':
+        return redirect(
+            'marketplace_edit',
+            listing_id=listing.id
+        )
+
+    # -----------------------------------------------------
+    # DELETE PRIMARY IMAGE
+    # -----------------------------------------------------
+
+    if listing.image:
+
+        listing.image.delete(save=False)
+
+        listing.image = None
+
+        listing.save(
+            update_fields=['image']
+        )
+
+        messages.success(
+            request,
+            'Primary photo deleted successfully.'
+        )
+
+    else:
+
+        messages.info(
+            request,
+            'There is no primary photo to delete.'
+        )
+
+    return redirect(
+        'marketplace_edit',
+        listing_id=listing.id
+    )
+    
+# =========================================================
+# PUBLIC MARKETPLACE LISTING DETAIL
 # =========================================================
 
 def marketplace_detail(
@@ -785,14 +1142,185 @@ def marketplace_detail(
         ),
         id=listing_id,
         status='available',
-        is_approved=True,
+        approval_status='approved',
     )
+
+   # =========================================================
+# PUBLIC MARKETPLACE LISTING DETAIL
+# =========================================================
+
+def marketplace_detail(
+    request,
+    listing_id
+):
+
+    listing = get_object_or_404(
+        MarketplaceListing.objects
+        .select_related(
+            'seller'
+        )
+        .prefetch_related(
+            'gallery_images'
+        ),
+        id=listing_id,
+        status='available',
+        approval_status='approved',
+    )
+
+    # =====================================================
+    # UNIQUE VIEW COUNT
+    # =====================================================
+
+    if (
+        request.user.is_authenticated
+        and request.user != listing.seller
+    ):
+
+        view_record, created = (
+            MarketplaceListingView.objects.get_or_create(
+                listing=listing,
+                viewer=request.user
+            )
+        )
+
+        if created:
+
+            MarketplaceListing.objects.filter(
+                id=listing.id
+            ).update(
+                views=F('views') + 1
+            )
+
+            listing.refresh_from_db(
+                fields=['views']
+            )
+
+    # =====================================================
+    # SELLER PHONE NUMBER
+    # =====================================================
+    #
+    # AccountSettings is connected to User through:
+    #
+    #     related_name='account_settings'
+    #
+    # The actual phone field is:
+    #
+    #     phone
+    #
+    # NOT phone_number.
+    #
+    # If the seller does not have AccountSettings,
+    # seller_phone becomes None.
+    #
+    # =====================================================
+
+    seller_phone = None
+
+    try:
+
+        seller_phone = (
+            listing.seller
+            .account_settings
+            .phone
+        )
+
+        # Treat an empty phone field as no phone number.
+
+        if not seller_phone:
+            seller_phone = None
+
+    except AccountSettings.DoesNotExist:
+
+        seller_phone = None
+
+    # =====================================================
+    # RENDER PAGE
+    # =====================================================
 
     return render(
         request,
         'properties/marketplace_detail.html',
         {
             'listing': listing,
+
+            'seller_phone': seller_phone,
+        }
+    )
+
+# =========================================================
+# MY MARKETPLACE LISTING DETAIL
+# =========================================================
+
+@login_required(login_url='site_login')
+def my_listing_detail(
+    request,
+    listing_id
+):
+
+    listing = get_object_or_404(
+        MarketplaceListing.objects
+        .select_related(
+            'seller'
+        )
+        .prefetch_related(
+            'gallery_images'
+        ),
+        id=listing_id,
+        seller=request.user,
+    )
+
+    # =====================================================
+    # UNIQUE PEOPLE WHO CHATTED
+    # =====================================================
+
+    chatters_count = (
+        MarketplaceMessage.objects
+        .filter(
+            listing=listing
+        )
+        .exclude(
+            sender=listing.seller
+        )
+        .values(
+            'sender'
+        )
+        .distinct()
+        .count()
+    )
+
+    # =====================================================
+    # SYNCHRONIZE STORED CHAT COUNT
+    # =====================================================
+
+    if listing.chats_count != chatters_count:
+
+        listing.chats_count = chatters_count
+
+        listing.save(
+            update_fields=[
+                'chats_count'
+            ]
+        )
+
+    # =====================================================
+    # TOTAL MESSAGES
+    # =====================================================
+
+    messages_count = (
+        MarketplaceMessage.objects
+        .filter(
+            listing=listing
+        )
+        .count()
+    )
+
+    return render(
+        request,
+        'properties/my_listing_detail.html',
+        {
+            'listing': listing,
+            'chatters_count': chatters_count,
+            'messages_count': messages_count,
         }
     )
 
@@ -1128,6 +1656,10 @@ def marketplace_dashboard(request):
         and not worker.is_approved
     )
 
+    # =====================================================
+    # CUSTOMER HIRES
+    # =====================================================
+
     customer_hires = WorkerHire.objects.none()
 
     total_hires = 0
@@ -1176,6 +1708,10 @@ def marketplace_dashboard(request):
             .count()
         )
 
+    # =====================================================
+    # WORKER HIRES
+    # =====================================================
+
     worker_hires = WorkerHire.objects.none()
 
     worker_pending_requests = 0
@@ -1221,6 +1757,74 @@ def marketplace_dashboard(request):
             .count()
         )
 
+    # =====================================================
+    # CUSTOMER'S MARKETPLACE LISTINGS
+    # =====================================================
+
+    marketplace_listings = (
+        MarketplaceListing.objects
+        .filter(
+            seller=user
+        )
+        .prefetch_related(
+            'gallery_images'
+        )
+        .order_by(
+            '-created_at'
+        )
+    )
+
+    # =====================================================
+    # LISTING STATISTICS
+    # =====================================================
+
+    listing_count = marketplace_listings.count()
+
+    approved_listings_count = (
+        marketplace_listings
+        .filter(
+            approval_status='approved'
+        )
+        .count()
+    )
+
+    under_review_listings_count = (
+        marketplace_listings
+        .filter(
+            approval_status='under_review'
+        )
+        .count()
+    )
+
+    rejected_listings_count = (
+        marketplace_listings
+        .filter(
+            approval_status='rejected'
+        )
+        .count()
+    )
+
+    total_listing_views = 0
+
+    for listing in marketplace_listings:
+
+        total_listing_views += (
+            listing.views or 0
+        )
+
+    # =====================================================
+    # UNREAD MARKETPLACE MESSAGES
+    # =====================================================
+    unread_marketplace_messages = (
+        MarketplaceMessage.objects
+        .filter(
+            receiver=request.user,
+            is_read=False
+        )
+        .values('listing_id')
+        .distinct()
+        .count()
+    )
     context = {
 
         'user': user,
@@ -1247,12 +1851,25 @@ def marketplace_dashboard(request):
         'worker_pending_requests': worker_pending_requests,
         'worker_active_jobs': worker_active_jobs,
         'worker_completed_jobs': worker_completed_jobs,
+
+        'marketplace_listings': marketplace_listings,
+
+        'listing_count': listing_count,
+        'approved_listings_count': approved_listings_count,
+        'under_review_listings_count': under_review_listings_count,
+        'rejected_listings_count': rejected_listings_count,
+
+        'total_listing_views': total_listing_views,
+
+        'unread_marketplace_messages': unread_marketplace_messages,
     }
 
     return render(
         request,
         'properties/marketplace_dashboard.html',
         context
+
+    
     )
 
 
@@ -1962,18 +2579,42 @@ def customer_profile(
 # =========================================================
 # HIRE SKILLED WORKER
 # =========================================================
-
 @login_required(login_url='site_login')
 def worker_hire(
     request,
     worker_id
 ):
 
+    # =====================================================
+    # GET SKILLED WORKER
+    # =====================================================
+
     worker = get_object_or_404(
         SkilledWorker,
         id=worker_id,
         is_approved=True
     )
+
+
+    # =====================================================
+    # PREVENT SKILLED WORKER FROM HIRING THEMSELVES
+    # =====================================================
+
+    if worker.user_id == request.user.id:
+
+        messages.warning(
+            request,
+            'You cannot hire yourself as a skilled worker.'
+        )
+
+        return redirect(
+            'skilled_worker_profile',
+            worker_id=worker.id
+        )
+
+    # =====================================================
+    # GET CUSTOMER PROFILE
+    # =====================================================
 
     try:
 
@@ -1991,6 +2632,11 @@ def worker_hire(
             'marketplace_dashboard'
         )
 
+
+    # =====================================================
+    # CUSTOMER VERIFICATION
+    # =====================================================
+
     if not customer.is_verified:
 
         messages.warning(
@@ -2005,6 +2651,11 @@ def worker_hire(
             'marketplace_dashboard'
         )
 
+
+    # =====================================================
+    # WORKER AVAILABILITY
+    # =====================================================
+
     if worker.availability != 'available':
 
         messages.warning(
@@ -2016,6 +2667,11 @@ def worker_hire(
             'skilled_worker_profile',
             worker_id=worker.id
         )
+
+
+    # =====================================================
+    # CHECK EXISTING HIRE
+    # =====================================================
 
     existing_hire = (
         WorkerHire.objects
@@ -2030,6 +2686,7 @@ def worker_hire(
         .first()
     )
 
+
     if existing_hire:
 
         messages.info(
@@ -2042,6 +2699,11 @@ def worker_hire(
             'marketplace_dashboard'
         )
 
+
+    # =====================================================
+    # HANDLE POST
+    # =====================================================
+
     if request.method == 'POST':
 
         service = request.POST.get(
@@ -2053,6 +2715,11 @@ def worker_hire(
             'notes',
             ''
         ).strip()
+
+
+        # =================================================
+        # SERVICE REQUIRED
+        # =================================================
 
         if not service:
 
@@ -2067,6 +2734,11 @@ def worker_hire(
                 worker_id=worker.id
             )
 
+
+        # =================================================
+        # CREATE HIRE REQUEST
+        # =================================================
+
         WorkerHire.objects.create(
             customer=customer,
             worker=worker,
@@ -2075,15 +2747,26 @@ def worker_hire(
             status='requested'
         )
 
+
+        # =================================================
+        # SUCCESS MESSAGE
+        # =================================================
+
         messages.success(
             request,
             f'Your request to hire {worker.full_name} '
             'has been submitted successfully.'
         )
 
+
         return redirect(
             'marketplace_dashboard'
         )
+
+
+    # =====================================================
+    # DISPLAY HIRE PAGE
+    # =====================================================
 
     return render(
         request,
@@ -2093,7 +2776,6 @@ def worker_hire(
             'customer': customer,
         }
     )
-
 
 # =========================================================
 # CANCEL WORKER HIRE
@@ -2883,4 +3565,1425 @@ def account_settings(request):
             'account_settings': account_settings_obj,
             'user': request.user,
         }
+    )
+
+
+# =========================================================
+# MARKETPLACE SELLER DASHBOARD
+# =========================================================
+
+@login_required(login_url='site_login')
+def marketplace_seller_dashboard(request):
+
+    user = request.user
+
+    # =====================================================
+    # SELLER LISTINGS
+    # =====================================================
+
+    listings = (
+        MarketplaceListing.objects
+        .filter(
+            seller=user
+        )
+        .prefetch_related(
+            'gallery_images',
+            'favourites',
+        )
+        .order_by(
+            '-created_at'
+        )
+    )
+
+    # =====================================================
+    # LISTING COUNTS
+    # =====================================================
+
+    total_listings = listings.count()
+
+    approved_listings = (
+        listings
+        .filter(
+            approval_status='approved'
+        )
+        .count()
+    )
+
+    under_review_listings = (
+        listings
+        .filter(
+            approval_status='under_review'
+        )
+        .count()
+    )
+
+    rejected_listings = (
+        listings
+        .filter(
+            approval_status='rejected'
+        )
+        .count()
+    )
+
+    # =====================================================
+    # ADVERTISEMENT STATUS
+    # =====================================================
+
+    available_listings = (
+        listings
+        .filter(
+            status='available'
+        )
+        .count()
+    )
+
+    reserved_listings = (
+        listings
+        .filter(
+            status='reserved'
+        )
+        .count()
+    )
+
+    sold_listings = (
+        listings
+        .filter(
+            status='sold'
+        )
+        .count()
+    )
+
+    # =====================================================
+    # VIEWS
+    # =====================================================
+
+    total_views = sum(
+        listing.views or 0
+        for listing in listings
+    )
+
+    # =====================================================
+    # UNIQUE PEOPLE WHO CHATTED
+    #
+    # One buyer chatting multiple times about the same
+    # advertisement counts as ONE interested person.
+    # =====================================================
+
+    total_chats = 0
+
+    for listing in listings:
+
+        chatters_count = (
+            MarketplaceMessage.objects
+            .filter(
+                listing=listing
+            )
+            .exclude(
+                sender=user
+            )
+            .values(
+                'sender_id'
+            )
+            .distinct()
+            .count()
+        )
+
+        # Store this value so the template can use it.
+        listing.unique_chatters_count = chatters_count
+
+        total_chats += chatters_count
+
+    # =====================================================
+    # FAVOURITES
+    # =====================================================
+
+    total_favourites = 0
+
+    for listing in listings:
+
+        favourite_count = (
+            listing.favourites
+            .count()
+        )
+
+        listing.favourite_count = favourite_count
+
+        total_favourites += favourite_count
+
+    # =====================================================
+    # MARKETPLACE REVIEWS
+    #
+    # We query MarketplaceReview directly instead of using
+    # listing.reviews / listing.seller_reviews so this view
+    # does not depend on the related_name.
+    # =====================================================
+
+    approved_reviews = (
+        MarketplaceReview.objects
+        .filter(
+            seller=user,
+            is_approved=True
+        )
+    )
+
+    total_reviews = approved_reviews.count()
+
+    # =====================================================
+    # ADD REVIEW COUNT TO EACH LISTING
+    # =====================================================
+
+    for listing in listings:
+
+        listing.review_count = (
+            approved_reviews
+            .filter(
+                listing_id=listing.id
+            )
+            .count()
+        )
+
+    # =====================================================
+    # PERFORMANCE RATING
+    # =====================================================
+
+    average_rating = (
+        approved_reviews
+        .aggregate(
+            average=Avg('rating')
+        )['average']
+    )
+
+    if average_rating:
+
+        average_rating = round(
+            float(average_rating),
+            1
+        )
+
+    else:
+
+        average_rating = 0
+
+    # =====================================================
+    # RATING BREAKDOWN
+    # =====================================================
+
+    five_star_reviews = (
+        approved_reviews
+        .filter(
+            rating=5
+        )
+        .count()
+    )
+
+    four_star_reviews = (
+        approved_reviews
+        .filter(
+            rating=4
+        )
+        .count()
+    )
+
+    three_star_reviews = (
+        approved_reviews
+        .filter(
+            rating=3
+        )
+        .count()
+    )
+
+    two_star_reviews = (
+        approved_reviews
+        .filter(
+            rating=2
+        )
+        .count()
+    )
+
+    one_star_reviews = (
+        approved_reviews
+        .filter(
+            rating=1
+        )
+        .count()
+    )
+
+    # =====================================================
+    # LISTING VALUES
+    #
+    # These are kept because your existing dashboard may
+    # still use them.
+    # =====================================================
+
+    sold_value = sum(
+        listing.price or 0
+        for listing in listings
+        if listing.status == 'sold'
+    )
+
+    available_value = sum(
+        listing.price or 0
+        for listing in listings
+        if listing.status == 'available'
+    )
+
+    reserved_value = sum(
+        listing.price or 0
+        for listing in listings
+        if listing.status == 'reserved'
+    )
+
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
+    context = {
+
+        'user': user,
+
+        # Listings
+        'listings': listings,
+        'total_listings': total_listings,
+        'approved_listings': approved_listings,
+        'under_review_listings': under_review_listings,
+        'rejected_listings': rejected_listings,
+
+        # Advertisement status
+        'available_listings': available_listings,
+        'reserved_listings': reserved_listings,
+        'sold_listings': sold_listings,
+
+        # Performance
+        'total_views': total_views,
+        'total_chats': total_chats,
+        'total_favourites': total_favourites,
+
+        # Reviews
+        'total_reviews': total_reviews,
+        'average_rating': average_rating,
+
+        # Rating breakdown
+        'five_star_reviews': five_star_reviews,
+        'four_star_reviews': four_star_reviews,
+        'three_star_reviews': three_star_reviews,
+        'two_star_reviews': two_star_reviews,
+        'one_star_reviews': one_star_reviews,
+
+        # Values
+        'sold_value': sold_value,
+        'available_value': available_value,
+        'reserved_value': reserved_value,
+    }
+
+    return render(
+        request,
+        'properties/marketplace_seller_dashboard.html',
+        context
+    )
+
+# =========================================================
+# REVIEW MARKETPLACE SELLER
+# =========================================================
+
+@login_required(login_url='site_login')
+def marketplace_review_seller(
+    request,
+    listing_id
+):
+
+    listing = get_object_or_404(
+        MarketplaceListing.objects
+        .select_related(
+            'seller'
+        ),
+        id=listing_id,
+        approval_status='approved',
+    )
+
+    seller = listing.seller
+
+    # =====================================================
+    # SELLER CANNOT REVIEW THEMSELVES
+    # =====================================================
+
+    if request.user == seller:
+
+        messages.error(
+            request,
+            'You cannot review your own advertisement.'
+        )
+
+        return redirect(
+            'marketplace_detail',
+            listing_id=listing.id
+        )
+
+    # =====================================================
+    # CHECK EXISTING REVIEW
+    # =====================================================
+
+    existing_review = (
+        MarketplaceReview.objects
+        .filter(
+            listing=listing,
+            reviewer=request.user,
+        )
+        .first()
+    )
+
+    if existing_review:
+
+        messages.info(
+            request,
+            'You have already reviewed this advertisement.'
+        )
+
+        return redirect(
+            'marketplace_detail',
+            listing_id=listing.id
+        )
+
+    # =====================================================
+    # SUBMIT REVIEW
+    # =====================================================
+
+    if request.method == 'POST':
+
+        form = MarketplaceSellerReviewForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            review = form.save(
+                commit=False
+            )
+
+            review.listing = listing
+            review.reviewer = request.user
+            review.seller = listing.seller
+
+            # Automatically approved
+            review.is_approved = True
+
+            review.save()
+
+            messages.success(
+                request,
+                'Thank you. Your review has been submitted '
+                'successfully.'
+            )
+
+            return redirect(
+                'marketplace_detail',
+                listing_id=listing.id
+            )
+
+    else:
+
+        form = MarketplaceSellerReviewForm()
+
+    return render(
+        request,
+        'properties/marketplace_review_seller.html',
+        {
+            'form': form,
+            'listing': listing,
+            'seller': seller,
+        }
+    )
+
+
+# =========================================================
+# MARKETPLACE SELLER PROFILE
+# =========================================================
+
+@login_required(login_url='site_login')
+def marketplace_seller_profile(
+    request,
+    seller_id
+):
+
+    seller = get_object_or_404(
+        User,
+        id=seller_id
+    )
+
+    # =====================================================
+    # SELLER APPROVED ADVERTISEMENTS
+    # =====================================================
+
+    listings = (
+        MarketplaceListing.objects
+        .filter(
+            seller=seller,
+            approval_status='approved',
+        )
+        .prefetch_related(
+            'gallery_images'
+        )
+        .order_by(
+            '-created_at'
+        )
+    )
+
+    # =====================================================
+    # SELLER REVIEWS
+    # =====================================================
+
+    reviews = (
+        MarketplaceReview.objects
+        .filter(
+            seller=seller,
+            is_approved=True,
+        )
+        .select_related(
+            'reviewer',
+            'listing',
+        )
+        .order_by(
+            '-created_at'
+        )
+    )
+
+    total_reviews = reviews.count()
+
+    # =====================================================
+    # AVERAGE RATING
+    # =====================================================
+
+    average_rating = (
+        reviews.aggregate(
+            average=Avg('rating')
+        )['average']
+    )
+
+    if average_rating:
+
+        average_rating = round(
+            float(average_rating),
+            1
+        )
+
+    else:
+
+        average_rating = 0
+
+    # =====================================================
+    # RATING BREAKDOWN
+    # =====================================================
+
+    five_star_reviews = reviews.filter(
+        rating=5
+    ).count()
+
+    four_star_reviews = reviews.filter(
+        rating=4
+    ).count()
+
+    three_star_reviews = reviews.filter(
+        rating=3
+    ).count()
+
+    two_star_reviews = reviews.filter(
+        rating=2
+    ).count()
+
+    one_star_reviews = reviews.filter(
+        rating=1
+    ).count()
+
+    # =====================================================
+    # TOTAL SELLER LISTINGS
+    # =====================================================
+
+    total_listings = listings.count()
+
+    # =====================================================
+    # TOTAL VIEWS
+    # =====================================================
+
+    total_views = sum(
+        listing.views or 0
+        for listing in listings
+    )
+
+    return render(
+        request,
+        'properties/marketplace_seller_profile.html',
+        {
+            'seller': seller,
+            'listings': listings,
+
+            'reviews': reviews,
+            'total_reviews': total_reviews,
+            'average_rating': average_rating,
+
+            'five_star_reviews': five_star_reviews,
+            'four_star_reviews': four_star_reviews,
+            'three_star_reviews': three_star_reviews,
+            'two_star_reviews': two_star_reviews,
+            'one_star_reviews': one_star_reviews,
+
+            'total_listings': total_listings,
+            'total_views': total_views,
+        }
+    )
+
+
+# =========================================================
+# MARKETPLACE CHAT
+# BUYER + SELLER TWO-WAY CHAT
+# =========================================================
+# =========================================================
+# MARKETPLACE CHAT
+# BUYER + SELLER TWO-WAY CHAT
+#
+# UNDER REVIEW:
+# - Chat page can be opened
+# - Existing messages can be viewed
+# - New messages cannot be sent
+#
+# APPROVED:
+# - Chat page can be opened
+# - New messages can be sent
+# =========================================================
+
+@login_required(login_url='site_login')
+def marketplace_chat(
+    request,
+    listing_id,
+    buyer_id=None
+):
+
+    # =====================================================
+    # GET LISTING
+    #
+    # IMPORTANT:
+    # Do not filter approval_status here.
+    # This allows under-review listings to open the chat.
+    # =====================================================
+
+    listing = get_object_or_404(
+        MarketplaceListing.objects
+        .select_related(
+            'seller'
+        )
+        .prefetch_related(
+            'gallery_images'
+        ),
+        id=listing_id,
+    )
+
+    current_user = request.user
+
+    # =====================================================
+    # CHAT PERMISSION
+    # =====================================================
+
+    can_chat = (
+        listing.approval_status == 'approved'
+    )
+
+    is_under_review = (
+        listing.approval_status == 'under_review'
+    )
+
+    is_rejected = (
+        listing.approval_status == 'rejected'
+    )
+
+    # =====================================================
+    # DETERMINE OTHER USER
+    # =====================================================
+
+    if current_user != listing.seller:
+
+        # -------------------------------------------------
+        # BUYER
+        # -------------------------------------------------
+
+        other_user = listing.seller
+
+    else:
+
+        # -------------------------------------------------
+        # SELLER
+        # -------------------------------------------------
+
+        if buyer_id is None:
+
+            messages.info(
+                request,
+                'Please select a buyer conversation.'
+            )
+
+            return redirect(
+                'marketplace_messages'
+            )
+
+        # =================================================
+        # PREVENT SELLER FROM CHATTING WITH THEMSELVES
+        # =================================================
+
+        if buyer_id == current_user.id:
+
+            messages.error(
+                request,
+                'You cannot chat with yourself.'
+            )
+
+            return redirect(
+                'marketplace_messages'
+            )
+
+        other_user = get_object_or_404(
+            User,
+            id=buyer_id
+        )
+
+        # =================================================
+        # SELLER CAN ONLY OPEN EXISTING CONVERSATION
+        # =================================================
+
+        conversation_exists = (
+            MarketplaceMessage.objects
+            .filter(
+                listing=listing
+            )
+            .filter(
+                Q(
+                    sender=current_user,
+                    receiver=other_user
+                )
+                |
+                Q(
+                    sender=other_user,
+                    receiver=current_user
+                )
+            )
+            .exists()
+        )
+
+        if not conversation_exists:
+
+            messages.error(
+                request,
+                'This conversation does not exist.'
+            )
+
+            return redirect(
+                'marketplace_messages'
+            )
+
+    # =====================================================
+    # LOAD CONVERSATION
+    # =====================================================
+
+    conversation = (
+        MarketplaceMessage.objects
+        .filter(
+            listing=listing
+        )
+        .filter(
+            Q(
+                sender=current_user,
+                receiver=other_user
+            )
+            |
+            Q(
+                sender=other_user,
+                receiver=current_user
+            )
+        )
+        .select_related(
+            'sender',
+            'receiver'
+        )
+        .order_by(
+            'created_at'
+        )
+    )
+
+    # =====================================================
+    # MARK RECEIVED MESSAGES AS READ
+    # =====================================================
+
+    MarketplaceMessage.objects.filter(
+        listing=listing,
+        sender=other_user,
+        receiver=current_user,
+        is_read=False
+    ).update(
+        is_read=True
+    )
+
+    # =====================================================
+    # SEND MESSAGE
+    # =====================================================
+
+    if request.method == 'POST':
+
+        # =================================================
+        # BLOCK MESSAGING UNTIL APPROVED
+        # =================================================
+
+        if not can_chat:
+
+            if is_under_review:
+
+                messages.warning(
+                    request,
+                    'This advertisement is still under review. '
+                    'You can view the conversation, but you '
+                    'cannot send messages until the advertisement '
+                    'has been approved.'
+                )
+
+            elif is_rejected:
+
+                messages.warning(
+                    request,
+                    'This advertisement was not approved. '
+                    'Messaging is unavailable.'
+                )
+
+            else:
+
+                messages.warning(
+                    request,
+                    'Messaging is currently unavailable '
+                    'for this advertisement.'
+                )
+
+            # -------------------------------------------------
+            # RETURN TO CORRECT CHAT
+            # -------------------------------------------------
+
+            if current_user == listing.seller:
+
+                return redirect(
+                    'marketplace_chat_with_buyer',
+                    listing_id=listing.id,
+                    buyer_id=other_user.id
+                )
+
+            return redirect(
+                'marketplace_chat',
+                listing_id=listing.id
+            )
+
+        # =================================================
+        # GET MESSAGE TEXT
+        # =================================================
+
+        message_text = (
+            request.POST.get(
+                'message',
+                ''
+            )
+            .strip()
+        )
+
+        # =================================================
+        # MESSAGE REQUIRED
+        # =================================================
+
+        if not message_text:
+
+            messages.error(
+                request,
+                'Please enter a message.'
+            )
+
+            if current_user == listing.seller:
+
+                return redirect(
+                    'marketplace_chat_with_buyer',
+                    listing_id=listing.id,
+                    buyer_id=other_user.id
+                )
+
+            return redirect(
+                'marketplace_chat',
+                listing_id=listing.id
+            )
+
+        # =================================================
+        # CREATE MESSAGE
+        # =================================================
+
+        MarketplaceMessage.objects.create(
+            listing=listing,
+            sender=current_user,
+            receiver=other_user,
+            message=message_text,
+        )
+
+        # =================================================
+        # UPDATE UNIQUE CHATTERS
+        #
+        # One buyer sending many messages = one chatter.
+        # Seller's own messages are excluded.
+        # =================================================
+
+        unique_chatters = (
+            MarketplaceMessage.objects
+            .filter(
+                listing=listing
+            )
+            .exclude(
+                sender=listing.seller
+            )
+            .values(
+                'sender'
+            )
+            .distinct()
+            .count()
+        )
+
+        listing.chats_count = unique_chatters
+
+        listing.save(
+            update_fields=[
+                'chats_count'
+            ]
+        )
+
+        # =================================================
+        # SELLER REDIRECT
+        # =================================================
+
+        if current_user == listing.seller:
+
+            return redirect(
+                'marketplace_chat_with_buyer',
+                listing_id=listing.id,
+                buyer_id=other_user.id
+            )
+
+        # =================================================
+        # BUYER REDIRECT
+        # =================================================
+
+        return redirect(
+            'marketplace_chat',
+            listing_id=listing.id
+        )
+
+    # =====================================================
+    # RENDER CHAT PAGE
+    #
+    # IMPORTANT:
+    # This MUST be outside the POST block.
+    # =====================================================
+
+    return render(
+        request,
+        'properties/marketplace_chat.html',
+        {
+            'listing': listing,
+            'conversation': conversation,
+            'other_user': other_user,
+
+            'can_chat': can_chat,
+
+            'is_under_review': is_under_review,
+
+            'is_rejected': is_rejected,
+        }
+    )
+
+# =========================================================
+# MARKETPLACE MESSAGES
+# UNIFIED BUYER + SELLER INBOX
+# =========================================================
+
+@login_required(login_url='site_login')
+def marketplace_messages(request):
+
+    user = request.user
+
+    # =====================================================
+    # GET ALL MESSAGES INVOLVING CURRENT USER
+    # =====================================================
+
+    messages_queryset = (
+        MarketplaceMessage.objects
+        .filter(
+            Q(sender=user) |
+            Q(receiver=user)
+        )
+        .select_related(
+            'sender',
+            'receiver',
+            'listing',
+            'listing__seller',
+        )
+        .order_by('-created_at')
+    )
+
+    # =====================================================
+    # BUILD UNIQUE CONVERSATIONS
+    # =====================================================
+
+    conversations = {}
+
+    for message in messages_queryset:
+
+        listing = message.listing
+
+        if not listing:
+            continue
+
+        # =================================================
+        # SAFETY:
+        # SELLER MUST NOT CHAT WITH THEMSELVES
+        # =================================================
+
+        if (
+            message.sender_id == listing.seller_id
+            and
+            message.receiver_id == listing.seller_id
+        ):
+            continue
+
+        # =================================================
+        # DETERMINE OTHER USER
+        # =================================================
+
+        if message.sender_id == user.id:
+            other_user = message.receiver
+        else:
+            other_user = message.sender
+
+        if not other_user:
+            continue
+
+        # =================================================
+        # PREVENT SELF CONVERSATION
+        # =================================================
+
+        if other_user.id == user.id:
+            continue
+
+        # =================================================
+        # CONVERSATION KEY
+        #
+        # One conversation per:
+        # LISTING + OTHER USER
+        # =================================================
+
+        key = (
+            listing.id,
+            other_user.id
+        )
+
+        # =================================================
+        # CREATE CONVERSATION
+        # =================================================
+
+        if key not in conversations:
+
+            conversations[key] = {
+                'listing': listing,
+                'other_user': other_user,
+                'latest_message': message,
+                'unread_count': 0,
+            }
+
+        # =================================================
+        # UPDATE LATEST MESSAGE
+        # =================================================
+
+        elif (
+            message.created_at >
+            conversations[key]['latest_message'].created_at
+        ):
+
+            conversations[key]['latest_message'] = message
+
+        # =================================================
+        # COUNT UNREAD
+        # =================================================
+
+        if (
+            message.receiver_id == user.id
+            and not message.is_read
+        ):
+
+            conversations[key]['unread_count'] += 1
+
+    # =====================================================
+    # BUILD CHAT URLS
+    # =====================================================
+
+    conversation_list = []
+
+    for conversation in conversations.values():
+
+        listing = conversation['listing']
+        other_user = conversation['other_user']
+
+        # =================================================
+        # SELLER
+        # =================================================
+
+        if listing.seller_id == user.id:
+
+            conversation['chat_url'] = reverse(
+                'marketplace_chat_with_buyer',
+                kwargs={
+                    'listing_id': listing.id,
+                    'buyer_id': other_user.id,
+                }
+            )
+
+        # =================================================
+        # BUYER
+        # =================================================
+
+        else:
+
+            conversation['chat_url'] = reverse(
+                'marketplace_chat',
+                kwargs={
+                    'listing_id': listing.id,
+                }
+            )
+
+        conversation_list.append(conversation)
+
+    # =====================================================
+    # SORT BY MOST RECENT MESSAGE
+    # =====================================================
+
+    conversation_list.sort(
+        key=lambda conversation: (
+            conversation['latest_message'].created_at
+        ),
+        reverse=True
+    )
+
+    # =====================================================
+    # TOTAL UNREAD
+    # =====================================================
+
+    unread_messages = (
+        MarketplaceMessage.objects
+        .filter(
+            receiver=user,
+            is_read=False
+        )
+        .count()
+    )
+
+    # =====================================================
+    # TOTAL CONVERSATIONS
+    # =====================================================
+
+    total_conversations = len(
+        conversation_list
+    )
+
+    # =====================================================
+    # RENDER
+    # =====================================================
+
+    return render(
+        request,
+        'properties/marketplace_messages.html',
+        {
+            'conversations': conversation_list,
+            'unread_messages': unread_messages,
+            'total_conversations': total_conversations,
+        }
+    )
+# =========================================================
+    # DELETE PHOTOS
+# =========================================================
+@login_required(login_url='site_login')
+@require_POST
+def marketplace_delete_photo(request, listing_id, photo_id):
+
+    # =========================================================
+    # GET THE SELLER'S LISTING
+    # =========================================================
+
+    listing = get_object_or_404(
+        MarketplaceListing,
+        id=listing_id,
+        seller=request.user
+    )
+
+    # =========================================================
+    # FIND PHOTO
+    # =========================================================
+
+    photo = MarketplaceListingImage.objects.filter(
+        id=photo_id,
+        listing=listing
+    ).first()
+
+    # =========================================================
+    # PHOTO DOES NOT EXIST
+    # =========================================================
+
+    if not photo:
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+            return JsonResponse(
+                {
+                    'success': False,
+                    'message': (
+                        'This photo could not be found. '
+                        'It may have already been deleted.'
+                    ),
+                },
+                status=404
+            )
+
+        messages.warning(
+            request,
+            'This photo could not be found. '
+            'It may have already been deleted.'
+        )
+
+        return redirect(
+            'marketplace_edit',
+            listing_id=listing.id
+        )
+
+    # =========================================================
+    # DELETE PHYSICAL IMAGE FILE
+    # =========================================================
+
+    if photo.image:
+
+        try:
+
+            photo.image.delete(
+                save=False
+            )
+
+        except Exception:
+
+            pass
+
+    # =========================================================
+    # DELETE DATABASE RECORD
+    # =========================================================
+
+    photo.delete()
+
+    # =========================================================
+    # AJAX RESPONSE
+    # =========================================================
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+        return JsonResponse(
+            {
+                'success': True,
+                'message': 'Photo deleted successfully.',
+                'photo_id': photo_id,
+            }
+        )
+
+    # =========================================================
+    # NORMAL FALLBACK
+    # =========================================================
+
+    messages.success(
+        request,
+        'Photo deleted successfully.'
+    )
+
+    return redirect(
+        'marketplace_edit',
+        listing_id=listing.id
+    )
+
+@login_required
+@require_POST
+def marketplace_delete_main_photo(request, listing_id):
+
+    listing = get_object_or_404(
+        MarketplaceListing,
+        id=listing_id,
+        seller=request.user
+    )
+
+    # =========================================================
+    # SAVE CURRENT PRIMARY IMAGE
+    # =========================================================
+
+    old_image = listing.image
+
+    # =========================================================
+    # FIND NEXT GALLERY PHOTO
+    # =========================================================
+
+    next_gallery_image = (
+        listing.gallery_images
+        .exclude(image__isnull=True)
+        .exclude(image="")
+        .order_by("id")
+        .first()
+    )
+
+    # =========================================================
+    # PROMOTE NEXT GALLERY PHOTO
+    # =========================================================
+
+    if next_gallery_image:
+
+        listing.image = next_gallery_image.image
+
+        listing.save(
+            update_fields=[
+                "image"
+            ]
+        )
+
+        # The image has now become the primary image,
+        # so remove its gallery record.
+        next_gallery_image.delete()
+
+    else:
+
+        listing.image = None
+
+        listing.save(
+            update_fields=[
+                "image"
+            ]
+        )
+
+    # =========================================================
+    # DELETE OLD PRIMARY IMAGE FILE
+    # =========================================================
+
+    if old_image:
+
+        try:
+
+            old_image.delete(
+                save=False
+            )
+
+        except Exception:
+
+            pass
+
+    # =========================================================
+    # AJAX RESPONSE
+    # =========================================================
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+        return JsonResponse(
+            {
+                'success': True,
+                'message': (
+                    'Primary photo deleted successfully.'
+                ),
+                'has_new_primary': bool(
+                    next_gallery_image
+                ),
+                'new_primary_url': (
+                    next_gallery_image.image.url
+                    if next_gallery_image
+                    and next_gallery_image.image
+                    else None
+                ),
+            }
+        )
+
+    # =========================================================
+    # NORMAL FALLBACK
+    # =========================================================
+
+    messages.success(
+        request,
+        "Primary photo deleted successfully."
+        + (
+            " The next advertisement photo is now "
+            "your primary photo."
+            if next_gallery_image
+            else ""
+        )
+    )
+
+    return redirect(
+        "marketplace_edit",
+        listing_id=listing.id
+    )
+
+# =========================================================
+# GENERAL ACCOUNT PASSWORD RESET
+# =========================================================
+
+class AccountPasswordResetView(
+    PasswordResetView
+):
+
+    template_name = (
+        'properties/account_password_reset.html'
+    )
+
+    email_template_name = (
+        'properties/account_password_reset_email.html'
+    )
+
+    subject_template_name = (
+        'properties/account_password_reset_subject.txt'
+    )
+
+    success_url = reverse_lazy(
+        'account_password_reset_done'
+    )
+
+
+# =========================================================
+# PASSWORD RESET EMAIL SENT
+# =========================================================
+
+class AccountPasswordResetDoneView(
+    PasswordResetDoneView
+):
+
+    template_name = (
+        'properties/account_password_reset_done.html'
+    )
+
+
+# =========================================================
+# PASSWORD RESET CONFIRM
+# =========================================================
+
+class AccountPasswordResetConfirmView(
+    PasswordResetConfirmView
+):
+
+    template_name = (
+        'properties/account_password_reset_confirm.html'
+    )
+
+    success_url = reverse_lazy(
+        'account_password_reset_complete'
+    )
+
+
+# =========================================================
+# PASSWORD RESET COMPLETE
+# =========================================================
+
+class AccountPasswordResetCompleteView(
+    PasswordResetCompleteView
+):
+
+    template_name = (
+        'properties/account_password_reset_complete.html'
     )

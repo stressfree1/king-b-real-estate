@@ -9,6 +9,7 @@ from .models import (
     SkilledWorker,
     Customer,
     MarketplaceListing,
+    MarketplaceReview,
 )
 
 
@@ -83,9 +84,7 @@ class AccountRegistrationForm(forms.Form):
 
     def clean_email(self):
 
-        email = self.cleaned_data.get(
-            'email'
-        )
+        email = self.cleaned_data.get('email')
 
         if email:
 
@@ -104,9 +103,7 @@ class AccountRegistrationForm(forms.Form):
 
     def clean_password(self):
 
-        password = self.cleaned_data.get(
-            'password'
-        )
+        password = self.cleaned_data.get('password')
 
         if password and len(password) < 8:
 
@@ -120,13 +117,8 @@ class AccountRegistrationForm(forms.Form):
 
         cleaned_data = super().clean()
 
-        password = cleaned_data.get(
-            'password'
-        )
-
-        confirm_password = cleaned_data.get(
-            'confirm_password'
-        )
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
 
         if (
             password
@@ -146,50 +138,38 @@ class AccountRegistrationForm(forms.Form):
 # MULTIPLE IMAGE UPLOAD
 # =========================================================
 
-class MultipleFileInput(
-    forms.ClearableFileInput
-):
+class MultipleFileInput(forms.ClearableFileInput):
 
     allow_multiple_selected = True
 
 
-class MultipleFileField(
-    forms.FileField
-):
+class MultipleFileField(forms.FileField):
 
     widget = MultipleFileInput
 
-    def clean(
-        self,
-        data,
-        initial=None
-    ):
-
-        single_file_clean = super().clean
+    def clean(self, data, initial=None):
 
         if not data:
-
             return []
 
-        if isinstance(
-            data,
-            (list, tuple)
-        ):
+        if not isinstance(data, (list, tuple)):
 
-            return [
-                single_file_clean(
-                    file,
-                    initial
-                )
-                for file in data
-            ]
+            data = [data]
 
-        return [
-            single_file_clean(
-                data,
+        cleaned_files = []
+
+        for file in data:
+
+            cleaned_file = super().clean(
+                file,
                 initial
             )
-        ]
+
+            cleaned_files.append(
+                cleaned_file
+            )
+
+        return cleaned_files
 
 
 # =========================================================
@@ -314,9 +294,7 @@ class ContactMessageForm(forms.ModelForm):
 # SKILLED WORKER PROFILE
 # =========================================================
 
-class SkilledWorkerRegistrationForm(
-    forms.ModelForm
-):
+class SkilledWorkerRegistrationForm(forms.ModelForm):
 
     class Meta:
 
@@ -343,27 +321,21 @@ class SkilledWorkerRegistrationForm(
 
             'full_name': forms.TextInput(
                 attrs={
-                    'placeholder': (
-                        'Enter your full name'
-                    ),
+                    'placeholder': 'Enter your full name',
                     'class': 'customer-input',
                 }
             ),
 
             'phone': forms.TextInput(
                 attrs={
-                    'placeholder': (
-                        'Enter your phone number'
-                    ),
+                    'placeholder': 'Enter your phone number',
                     'class': 'customer-input',
                 }
             ),
 
             'email': forms.EmailInput(
                 attrs={
-                    'placeholder': (
-                        'Enter your email address'
-                    ),
+                    'placeholder': 'Enter your email address',
                     'class': 'customer-input',
                 }
             ),
@@ -380,9 +352,7 @@ class SkilledWorkerRegistrationForm(
             'years_of_experience': forms.NumberInput(
                 attrs={
                     'min': 0,
-                    'placeholder': (
-                        'Years of experience'
-                    ),
+                    'placeholder': 'Years of experience',
                     'class': 'customer-input',
                 }
             ),
@@ -431,9 +401,7 @@ class SkilledWorkerRegistrationForm(
 
             'id_number': forms.TextInput(
                 attrs={
-                    'placeholder': (
-                        'Enter your ID number'
-                    ),
+                    'placeholder': 'Enter your ID number',
                     'class': 'customer-input',
                 }
             ),
@@ -441,27 +409,21 @@ class SkilledWorkerRegistrationForm(
             'id_document': forms.ClearableFileInput(
                 attrs={
                     'class': 'customer-file',
-                    'accept': (
-                        '.jpg,.jpeg,.png,.pdf'
-                    ),
+                    'accept': '.jpg,.jpeg,.png,.pdf',
                 }
             ),
 
             'profile_image': forms.ClearableFileInput(
                 attrs={
                     'class': 'customer-file',
-                    'accept': (
-                        '.jpg,.jpeg,.png'
-                    ),
+                    'accept': '.jpg,.jpeg,.png',
                 }
             ),
 
             'cv': forms.ClearableFileInput(
                 attrs={
                     'class': 'customer-file',
-                    'accept': (
-                        '.pdf,.doc,.docx'
-                    ),
+                    'accept': '.pdf,.doc,.docx',
                 }
             ),
         }
@@ -488,12 +450,9 @@ class SkilledWorkerRegistrationForm(
 
     def clean_email(self):
 
-        email = self.cleaned_data.get(
-            'email'
-        )
+        email = self.cleaned_data.get('email')
 
         if not email:
-
             return email
 
         email = email.strip().lower()
@@ -518,9 +477,7 @@ class SkilledWorkerRegistrationForm(
 
     def clean_id_type(self):
 
-        id_type = self.cleaned_data.get(
-            'id_type'
-        )
+        id_type = self.cleaned_data.get('id_type')
 
         if not id_type:
 
@@ -532,9 +489,7 @@ class SkilledWorkerRegistrationForm(
 
     def clean_id_number(self):
 
-        id_number = self.cleaned_data.get(
-            'id_number'
-        )
+        id_number = self.cleaned_data.get('id_number')
 
         if not id_number:
 
@@ -546,9 +501,7 @@ class SkilledWorkerRegistrationForm(
 
     def clean_id_document(self):
 
-        id_document = self.cleaned_data.get(
-            'id_document'
-        )
+        id_document = self.cleaned_data.get('id_document')
 
         if (
             not id_document
@@ -629,18 +582,12 @@ class CustomerForm(forms.ModelForm):
             'id_document': forms.ClearableFileInput(
                 attrs={
                     'class': 'customer-file',
-                    'accept': (
-                        '.jpg,.jpeg,.png,.pdf'
-                    ),
+                    'accept': '.jpg,.jpeg,.png,.pdf',
                 }
             ),
         }
 
-    def __init__(
-        self,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
 
         super().__init__(
             *args,
@@ -655,14 +602,11 @@ class CustomerForm(forms.ModelForm):
 
     def clean_id_type(self):
 
-        id_type = self.cleaned_data.get(
-            'id_type'
-        )
+        id_type = self.cleaned_data.get('id_type')
 
         if not id_type:
 
             if self.instance and self.instance.pk:
-
                 return self.instance.id_type
 
             raise forms.ValidationError(
@@ -673,14 +617,11 @@ class CustomerForm(forms.ModelForm):
 
     def clean_id_number(self):
 
-        id_number = self.cleaned_data.get(
-            'id_number'
-        )
+        id_number = self.cleaned_data.get('id_number')
 
         if not id_number:
 
             if self.instance and self.instance.pk:
-
                 return self.instance.id_number
 
             raise forms.ValidationError(
@@ -691,9 +632,7 @@ class CustomerForm(forms.ModelForm):
 
     def clean_id_document(self):
 
-        id_document = self.cleaned_data.get(
-            'id_document'
-        )
+        id_document = self.cleaned_data.get('id_document')
 
         if (
             not id_document
@@ -721,10 +660,7 @@ class SkilledWorkerPasswordResetForm(
     PasswordResetForm
 ):
 
-    def get_users(
-        self,
-        email
-    ):
+    def get_users(self, email):
 
         email = email.strip().lower()
 
@@ -744,21 +680,18 @@ class SkilledWorkerPasswordResetForm(
 # =========================================================
 # MARKETPLACE LISTING
 # =========================================================
+class MarketplaceListingForm(forms.ModelForm):
 
-class MarketplaceListingForm(
-    forms.ModelForm
-):
+    # -----------------------------------------------------
+    # MULTIPLE PHOTOS
+    # -----------------------------------------------------
 
     images = MultipleFileField(
-        required=True,
+        required=False,
         widget=MultipleFileInput(
             attrs={
                 'class': 'marketplace-file-input',
-                'accept': (
-                    'image/jpeg,'
-                    'image/png,'
-                    'image/webp'
-                ),
+                'accept': 'image/jpeg,image/png,image/webp',
                 'multiple': True,
             }
         ),
@@ -770,21 +703,48 @@ class MarketplaceListingForm(
         model = MarketplaceListing
 
         fields = [
+            # Basic information
             'title',
             'category',
+            'subcategory',
+            'condition',
+
+            # Pricing
             'price',
-            'location',
+            'price_type',
+            'negotiable',
+
+            # Location
+            'state',
+            'city',
+            'specific_location',
+
+            # Product information
+            'brand',
+            'model',
+            'year',
+            'color',
+            'quantity',
+
+            # Description
             'description',
+
+            # Seller preferences
+            'contact_phone',
+            'whatsapp_available',
+            'delivery_available',
         ]
 
         widgets = {
 
+            # =================================================
+            # BASIC INFORMATION
+            # =================================================
+
             'title': forms.TextInput(
                 attrs={
                     'class': 'form-control',
-                    'placeholder': (
-                        'What are you selling?'
-                    ),
+                    'placeholder': 'What are you selling?',
                     'autocomplete': 'off',
                 }
             ),
@@ -795,6 +755,23 @@ class MarketplaceListingForm(
                 }
             ),
 
+            'subcategory': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Enter a subcategory',
+                }
+            ),
+
+            'condition': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+
+            # =================================================
+            # PRICING
+            # =================================================
+
             'price': forms.NumberInput(
                 attrs={
                     'class': 'form-control',
@@ -804,51 +781,173 @@ class MarketplaceListingForm(
                 }
             ),
 
-            'location': forms.TextInput(
+            'price_type': forms.Select(
                 attrs={
                     'class': 'form-control',
-                    'placeholder': (
-                        'Where is the item located?'
-                    ),
                 }
             ),
+
+            'negotiable': forms.CheckboxInput(
+                attrs={
+                    'class': 'form-check-input',
+                }
+            ),
+
+            # =================================================
+            # LOCATION
+            # =================================================
+
+            'state': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'e.g. Rivers State',
+                }
+            ),
+
+            'city': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'e.g. Port Harcourt',
+                }
+            ),
+
+            'specific_location': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Estate, street, area or landmark',
+                }
+            ),
+
+            # =================================================
+            # PRODUCT INFORMATION
+            # =================================================
+
+            'brand': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'e.g. Samsung, Toyota, LG',
+                }
+            ),
+
+            'model': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Enter model',
+                }
+            ),
+
+            'year': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'e.g. 2024',
+                    'min': '1900',
+                    'max': '2100',
+                }
+            ),
+
+            'color': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'e.g. Black',
+                }
+            ),
+
+            'quantity': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Quantity available',
+                    'min': '1',
+                }
+            ),
+
+            # =================================================
+            # DESCRIPTION
+            # =================================================
 
             'description': forms.Textarea(
                 attrs={
                     'class': 'form-control',
                     'placeholder': (
-                        'Describe the item, its condition, '
-                        'features and other important information.'
+                        'Describe your item in detail. Include its '
+                        'condition, features, specifications, '
+                        'age, defects and anything buyers should know.'
                     ),
-                    'rows': 7,
+                    'rows': 8,
+                }
+            ),
+
+            # =================================================
+            # SELLER PREFERENCES
+            # =================================================
+
+            'contact_phone': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Phone number buyers can contact',
+                    'autocomplete': 'tel',
+                }
+            ),
+
+            'whatsapp_available': forms.CheckboxInput(
+                attrs={
+                    'class': 'form-check-input',
+                }
+            ),
+
+            'delivery_available': forms.CheckboxInput(
+                attrs={
+                    'class': 'form-check-input',
                 }
             ),
         }
 
+    # =====================================================
+    # IMAGE VALIDATION
+    # =====================================================
+
     def clean_images(self):
 
-        images = self.cleaned_data.get(
-            'images'
-        )
+        images = self.cleaned_data.get('images')
 
-        if not images:
+        # -------------------------------------------------
+        # EDITING EXISTING LISTING
+        # -------------------------------------------------
 
-            raise forms.ValidationError(
-                'Please upload at least 4 photos of your item.'
-            )
+        if self.instance and self.instance.pk:
 
-        if len(images) < 4:
+            if not images:
+                return []
 
-            raise forms.ValidationError(
-                f'Please upload at least 4 photos. '
-                f'You currently selected {len(images)}.'
-            )
+            if len(images) > 10:
+                raise forms.ValidationError(
+                    'You can upload a maximum of 10 photos at a time.'
+                )
 
-        if len(images) > 10:
+        # -------------------------------------------------
+        # NEW LISTING
+        # -------------------------------------------------
 
-            raise forms.ValidationError(
-                'You can upload a maximum of 10 photos.'
-            )
+        else:
+
+            if not images:
+                raise forms.ValidationError(
+                    'Please upload at least 4 photos of your item.'
+                )
+
+            if len(images) < 4:
+                raise forms.ValidationError(
+                    f'Please upload at least 4 photos. '
+                    f'You currently selected {len(images)}.'
+                )
+
+            if len(images) > 10:
+                raise forms.ValidationError(
+                    'You can upload a maximum of 10 photos.'
+                )
+
+        # -------------------------------------------------
+        # VALIDATE EACH IMAGE
+        # -------------------------------------------------
 
         allowed_types = {
             'image/jpeg',
@@ -859,14 +958,12 @@ class MarketplaceListingForm(
         for image in images:
 
             if image.content_type not in allowed_types:
-
                 raise forms.ValidationError(
                     f'{image.name} is not a supported '
                     'image format. Please use JPG, PNG or WEBP.'
                 )
 
             if image.size > 5 * 1024 * 1024:
-
                 raise forms.ValidationError(
                     f'{image.name} is too large. '
                     'Each image must be less than 5MB.'
@@ -877,35 +974,6 @@ class MarketplaceListingForm(
 
 # =========================================================
 # UNIFIED ACCOUNT SETTINGS
-# =========================================================
-#
-# One settings form for the shared King B account.
-#
-# Updates:
-#
-# 1. Django User
-#    - Full name
-#    - Email
-#    - Username
-#
-# 2. AccountSettings
-#    - Phone
-#    - Address
-#    - Profile image
-#    - Notification preferences
-#    - Profile visibility
-#
-# 3. Customer profile, when present
-#    - Full name
-#    - Email
-#    - Phone
-#    - Address
-#
-# 4. Skilled Worker profile, when present
-#    - Full name
-#    - Email
-#    - Phone
-#
 # =========================================================
 
 class AccountSettingsForm(forms.ModelForm):
@@ -968,14 +1036,6 @@ class AccountSettingsForm(forms.ModelForm):
 
         widgets = {
 
-            'phone': forms.TextInput(
-                attrs={
-                    'placeholder': 'Enter your phone number',
-                    'autocomplete': 'tel',
-                    'class': 'account-settings-input',
-                }
-            ),
-
             'address': forms.TextInput(
                 attrs={
                     'placeholder': 'Enter your address',
@@ -990,7 +1050,6 @@ class AccountSettingsForm(forms.ModelForm):
                     'class': 'account-settings-file',
                 }
             ),
-
         }
 
     def __init__(
@@ -1013,10 +1072,6 @@ class AccountSettingsForm(forms.ModelForm):
                 'AccountSettingsForm requires a logged-in user.'
             )
 
-        # -----------------------------------------------------
-        # LOAD CURRENT USER DATA
-        # -----------------------------------------------------
-
         self.fields[
             'full_name'
         ].initial = (
@@ -1027,13 +1082,7 @@ class AccountSettingsForm(forms.ModelForm):
 
         self.fields[
             'email'
-        ].initial = (
-            self.user.email or ''
-        )
-
-        # -----------------------------------------------------
-        # GET PHONE FROM ACCOUNT SETTINGS FIRST
-        # -----------------------------------------------------
+        ].initial = self.user.email or ''
 
         current_phone = ''
 
@@ -1042,10 +1091,6 @@ class AccountSettingsForm(forms.ModelForm):
             current_phone = (
                 self.instance.phone or ''
             )
-
-        # -----------------------------------------------------
-        # IF EMPTY, CHECK CUSTOMER PROFILE
-        # -----------------------------------------------------
 
         if not current_phone:
 
@@ -1059,10 +1104,6 @@ class AccountSettingsForm(forms.ModelForm):
             except Customer.DoesNotExist:
 
                 pass
-
-        # -----------------------------------------------------
-        # IF STILL EMPTY, CHECK WORKER PROFILE
-        # -----------------------------------------------------
 
         if not current_phone:
 
@@ -1081,16 +1122,14 @@ class AccountSettingsForm(forms.ModelForm):
             'phone'
         ].initial = current_phone
 
-    # =========================================================
-    # EMAIL VALIDATION
-    # =========================================================
+    # =====================================================
+    # EMAIL
+    # =====================================================
 
     def clean_email(self):
 
         email = (
-            self.cleaned_data[
-                'email'
-            ]
+            self.cleaned_data['email']
             .strip()
             .lower()
         )
@@ -1101,11 +1140,7 @@ class AccountSettingsForm(forms.ModelForm):
                 'Email address is required.'
             )
 
-        # -----------------------------------------------------
-        # CHECK USERNAME
-        # -----------------------------------------------------
-
-        username_exists = (
+        if (
             User.objects
             .filter(
                 username__iexact=email
@@ -1114,20 +1149,14 @@ class AccountSettingsForm(forms.ModelForm):
                 pk=self.user.pk
             )
             .exists()
-        )
-
-        if username_exists:
+        ):
 
             raise forms.ValidationError(
                 'This email address is already '
                 'being used by another account.'
             )
 
-        # -----------------------------------------------------
-        # CHECK EMAIL
-        # -----------------------------------------------------
-
-        email_exists = (
+        if (
             User.objects
             .filter(
                 email__iexact=email
@@ -1136,9 +1165,7 @@ class AccountSettingsForm(forms.ModelForm):
                 pk=self.user.pk
             )
             .exists()
-        )
-
-        if email_exists:
+        ):
 
             raise forms.ValidationError(
                 'This email address is already '
@@ -1147,16 +1174,14 @@ class AccountSettingsForm(forms.ModelForm):
 
         return email
 
-    # =========================================================
+    # =====================================================
     # FULL NAME
-    # =========================================================
+    # =====================================================
 
     def clean_full_name(self):
 
         full_name = (
-            self.cleaned_data[
-                'full_name'
-            ]
+            self.cleaned_data['full_name']
             .strip()
         )
 
@@ -1168,16 +1193,14 @@ class AccountSettingsForm(forms.ModelForm):
 
         return full_name
 
-    # =========================================================
+    # =====================================================
     # PHONE
-    # =========================================================
+    # =====================================================
 
     def clean_phone(self):
 
         phone = (
-            self.cleaned_data[
-                'phone'
-            ]
+            self.cleaned_data['phone']
             .strip()
         )
 
@@ -1189,74 +1212,52 @@ class AccountSettingsForm(forms.ModelForm):
 
         return phone
 
-    # =========================================================
-    # SAVE EVERYTHING
-    # =========================================================
+    # =====================================================
+    # SAVE
+    # =====================================================
 
-    def save(
-        self,
-        commit=True
-    ):
+    def save(self, commit=True):
 
         settings = super().save(
             commit=False
         )
 
         full_name = (
-            self.cleaned_data[
-                'full_name'
-            ]
+            self.cleaned_data['full_name']
             .strip()
         )
 
         email = (
-            self.cleaned_data[
-                'email'
-            ]
+            self.cleaned_data['email']
             .strip()
             .lower()
         )
 
         phone = (
-            self.cleaned_data[
-                'phone'
-            ]
+            self.cleaned_data['phone']
             .strip()
         )
 
-        # -----------------------------------------------------
-        # ACCOUNT SETTINGS
-        # -----------------------------------------------------
-
         settings.phone = phone
 
-        # -----------------------------------------------------
-        # MAIN DJANGO USER
-        # -----------------------------------------------------
+        # -------------------------------------------------
+        # MAIN USER
+        # -------------------------------------------------
 
         self.user.first_name = full_name
-
         self.user.email = email
-
-        # IMPORTANT:
-        # Your unified login authenticates using the email
-        # as the username.
         self.user.username = email
 
-        # -----------------------------------------------------
-        # CUSTOMER PROFILE
-        # -----------------------------------------------------
+        # -------------------------------------------------
+        # CUSTOMER
+        # -------------------------------------------------
 
         try:
 
-            customer = (
-                self.user.customer_profile
-            )
+            customer = self.user.customer_profile
 
             customer.full_name = full_name
-
             customer.email = email
-
             customer.phone = phone
 
             if settings.address:
@@ -1271,20 +1272,16 @@ class AccountSettingsForm(forms.ModelForm):
 
             pass
 
-        # -----------------------------------------------------
-        # SKILLED WORKER PROFILE
-        # -----------------------------------------------------
+        # -------------------------------------------------
+        # SKILLED WORKER
+        # -------------------------------------------------
 
         try:
 
-            worker = (
-                self.user.skilled_worker_profile
-            )
+            worker = self.user.skilled_worker_profile
 
             worker.full_name = full_name
-
             worker.email = email
-
             worker.phone = phone
 
             if commit:
@@ -1295,9 +1292,9 @@ class AccountSettingsForm(forms.ModelForm):
 
             pass
 
-        # -----------------------------------------------------
-        # SAVE MAIN USER
-        # -----------------------------------------------------
+        # -------------------------------------------------
+        # SAVE EVERYTHING
+        # -------------------------------------------------
 
         if commit:
 
@@ -1312,3 +1309,59 @@ class AccountSettingsForm(forms.ModelForm):
             settings.save()
 
         return settings
+
+
+# =========================================================
+# MARKETPLACE SELLER REVIEW
+# =========================================================
+
+class MarketplaceSellerReviewForm(forms.ModelForm):
+
+    class Meta:
+
+        model = MarketplaceReview
+
+        fields = [
+            'rating',
+            'comment',
+        ]
+
+        widgets = {
+
+            'rating': forms.Select(
+                choices=[
+                    (5, '★★★★★ - Excellent'),
+                    (4, '★★★★☆ - Very Good'),
+                    (3, '★★★☆☆ - Good'),
+                    (2, '★★☆☆☆ - Fair'),
+                    (1, '★☆☆☆☆ - Poor'),
+                ],
+                attrs={
+                    'class': 'review-input',
+                }
+            ),
+
+            'comment': forms.Textarea(
+                attrs={
+                    'class': 'review-input',
+                    'placeholder': (
+                        'Share your experience with this seller...'
+                    ),
+                    'rows': 6,
+                }
+            ),
+        }
+
+    def clean_comment(self):
+
+        comment = self.cleaned_data.get(
+            'comment'
+        )
+
+        if not comment or not comment.strip():
+
+            raise forms.ValidationError(
+                'Please write a review.'
+            )
+
+        return comment.strip()

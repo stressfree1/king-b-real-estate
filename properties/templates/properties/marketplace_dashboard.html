@@ -8,7 +8,34 @@
 {% block content %}
 
 <style>
+    .dashboard-messages-link{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    }
 
+    .dashboard-message-badge {
+        min-width: 20px;
+        height: 20px;
+
+        padding: 0 6px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 999px;
+
+        background: #e3262e;
+        color: #ffffff;
+
+        font-size: 10px;
+        font-weight: 900;
+
+        line-height: 1;
+    }
+    
     .dashboard-wrapper {
         max-width: 1200px;
         margin: 0 auto;
@@ -190,6 +217,370 @@
         padding: 15px 0;
     }
 
+
+    /* =====================================================
+       MARKETPLACE SELLER CARD
+    ===================================================== */
+
+    .marketplace-seller-card {
+        overflow: hidden;
+    }
+
+
+    /* =====================================================
+       MARKETPLACE HEADER
+    ===================================================== */
+
+    .marketplace-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .marketplace-card-header h2 {
+        margin: 0 0 8px;
+        color: #123c2f;
+        font-size: 25px;
+    }
+
+    .marketplace-card-header p {
+        margin: 0;
+        color: #777;
+        line-height: 1.6;
+    }
+
+    .marketplace-card-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: #f5ead3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        margin-bottom: 14px;
+    }
+
+
+    /* =====================================================
+       MARKETPLACE HEADER ACTIONS
+    ===================================================== */
+
+    .marketplace-header-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .marketplace-header-actions .dashboard-btn {
+        margin-top: 0;
+    }
+
+
+    /* =====================================================
+       MARKETPLACE LISTINGS
+    ===================================================== */
+
+    .marketplace-listings {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+
+    /* =====================================================
+       LISTING CARD
+    ===================================================== */
+
+    .marketplace-listing-card {
+        display: grid;
+        grid-template-columns: 90px 1fr auto auto auto;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        border: 1px solid #e7e7e7;
+        border-radius: 16px;
+        background: #ffffff;
+        transition: all 0.25s ease;
+    }
+
+    .marketplace-listing-card:hover {
+        border-color: #d4af63;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        transform: translateY(-2px);
+    }
+
+
+    /* =====================================================
+       MARKETPLACE IMAGE
+    ===================================================== */
+
+    .marketplace-product-image {
+        width: 90px;
+        height: 90px;
+        border-radius: 13px;
+        overflow: hidden;
+        background: #f4f4f4;
+    }
+
+    .marketplace-product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .marketplace-no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+    }
+
+
+    /* =====================================================
+       PRODUCT INFORMATION
+    ===================================================== */
+
+    .marketplace-product-info {
+        min-width: 180px;
+    }
+
+    .marketplace-product-info h3 {
+        margin: 0 0 7px;
+        color: #123c2f;
+        font-size: 18px;
+    }
+
+    .marketplace-price {
+        color: #b58b3b;
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .marketplace-location {
+        color: #666;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .marketplace-date {
+        color: #999;
+        font-size: 12px;
+    }
+
+
+    /* =====================================================
+       MARKETPLACE STATUS
+    ===================================================== */
+
+    .marketplace-status {
+        min-width: 120px;
+    }
+
+    .marketplace-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 13px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .marketplace-status-badge.approved {
+        background: #e8f7ef;
+        color: #176b45;
+    }
+
+    .marketplace-status-badge.pending {
+        background: #fff4df;
+        color: #a86400;
+    }
+
+    .marketplace-status-badge.rejected {
+        background: #fdeaea;
+        color: #b42318;
+    }
+
+
+    /* =====================================================
+       MARKETPLACE STATISTICS
+    ===================================================== */
+
+    .marketplace-stats {
+        display: flex;
+        gap: 15px;
+    }
+
+    .marketplace-stat {
+        min-width: 75px;
+        text-align: center;
+        padding: 10px 8px;
+        border-radius: 10px;
+        background: #f8f8f8;
+    }
+
+    .marketplace-stat-icon {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 3px;
+    }
+
+    .marketplace-stat strong {
+        display: block;
+        color: #123c2f;
+        font-size: 17px;
+    }
+
+    .marketplace-stat small {
+        display: block;
+        color: #888;
+        font-size: 11px;
+        margin-top: 2px;
+    }
+
+
+    /* =====================================================
+       MARKETPLACE ACTION
+    ===================================================== */
+
+    .marketplace-product-action {
+        min-width: 125px;
+    }
+
+    .marketplace-view-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 16px;
+        border-radius: 9px;
+        background: #123c2f;
+        color: white;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        transition: 0.2s ease;
+    }
+
+    .marketplace-view-button:hover {
+        background: #b58b3b;
+        color: white;
+    }
+
+    .marketplace-action-disabled {
+        display: inline-block;
+        color: #999;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    /* =====================================================
+       MARKETPLACE FOOTER
+    ===================================================== */
+
+    .marketplace-card-footer {
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #eeeeee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .marketplace-dashboard-link {
+        color: #123c2f;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .marketplace-dashboard-link:hover {
+        color: #b58b3b;
+    }
+
+
+    /* =====================================================
+       MARKETPLACE EMPTY STATE
+    ===================================================== */
+
+    .marketplace-empty {
+        text-align: center;
+        padding: 50px 30px;
+        border: 1px dashed #d8d8d8;
+        border-radius: 16px;
+        background: #fafafa;
+    }
+
+    .marketplace-empty-icon {
+        width: 65px;
+        height: 65px;
+        margin: 0 auto 18px;
+        border-radius: 18px;
+        background: #f5ead3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+    }
+
+    .marketplace-empty h3 {
+        margin: 0 0 8px;
+        color: #123c2f;
+        font-size: 20px;
+    }
+
+    .marketplace-empty p {
+        max-width: 550px;
+        margin: 0 auto 20px;
+        color: #777;
+        line-height: 1.7;
+    }
+
+
+    /* =====================================================
+       TABLET
+    ===================================================== */
+
+    @media (max-width: 1000px) {
+
+        .marketplace-listing-card {
+            grid-template-columns: 90px 1fr auto;
+        }
+
+        .marketplace-status {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .marketplace-stats {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        .marketplace-product-action {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+    }
+
+
+    /* =====================================================
+       MAIN DASHBOARD TABLET
+    ===================================================== */
+
     @media (max-width: 800px) {
 
         .dashboard-grid {
@@ -207,7 +598,78 @@
         .dashboard-header h1 {
             font-size: 28px;
         }
+
     }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 650px) {
+
+        .marketplace-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .marketplace-header-actions {
+            width: 100%;
+            justify-content: stretch;
+        }
+
+        .marketplace-header-actions .dashboard-btn {
+            flex: 1;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .marketplace-listing-card {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            text-align: left;
+        }
+
+        .marketplace-product-image {
+            width: 100%;
+            height: 190px;
+        }
+
+        .marketplace-status {
+            min-width: 0;
+        }
+
+        .marketplace-stats {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .marketplace-stat {
+            min-width: 0;
+        }
+
+        .marketplace-product-action {
+            width: 100%;
+        }
+
+        .marketplace-view-button {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .marketplace-card-footer {
+            flex-direction: column;
+            text-align: center;
+        }
+
+    }
+
+
+    /* =====================================================
+       SMALL MOBILE
+    ===================================================== */
 
     @media (max-width: 500px) {
 
@@ -228,12 +690,27 @@
             align-items: flex-start;
             gap: 5px;
         }
+
+        .marketplace-empty {
+            padding: 40px 20px;
+        }
+
+        .marketplace-header-actions {
+            flex-direction: column;
+        }
+
+        .marketplace-header-actions .dashboard-btn {
+            width: 100%;
+            flex: none;
+        }
+
     }
 
 </style>
 
 
 <div class="dashboard-wrapper">
+
 
     <!-- =====================================================
          HEADER
@@ -242,12 +719,15 @@
     <div class="dashboard-header">
 
         <h1>
+
             Welcome,
+
             {% if user.first_name %}
                 {{ user.first_name }}
             {% else %}
                 {{ user.username }}
             {% endif %}
+
         </h1>
 
         <p>
@@ -319,10 +799,13 @@
                     </p>
 
                     <div class="status-box">
+
                         Status:
+
                         <span class="status-approved">
                             Approved
                         </span>
+
                     </div>
 
                     <a
@@ -341,10 +824,13 @@
                     </p>
 
                     <div class="status-box">
+
                         Status:
+
                         <span class="status-pending">
                             Waiting for Approval
                         </span>
+
                     </div>
 
                 {% endif %}
@@ -401,7 +887,7 @@
             <div class="stat-card">
 
                 <span class="stat-number">
-                    {{ active_hires }}
+                    {{ customer_active_hires }}
                 </span>
 
                 <span class="stat-label">
@@ -414,7 +900,7 @@
             <div class="stat-card">
 
                 <span class="stat-number">
-                    {{ pending_hires }}
+                    {{ customer_pending_hires }}
                 </span>
 
                 <span class="stat-label">
@@ -427,7 +913,7 @@
             <div class="stat-card">
 
                 <span class="stat-number">
-                    {{ completed_hires }}
+                    {{ customer_completed_hires }}
                 </span>
 
                 <span class="stat-label">
@@ -511,11 +997,13 @@
             <div class="stat-card">
 
                 <span class="stat-number">
+
                     {% if worker %}
                         Approved
                     {% else %}
                         -
                     {% endif %}
+
                 </span>
 
                 <span class="stat-label">
@@ -536,12 +1024,357 @@
                 Open Worker Dashboard
             </a>
 
-            
         </div>
 
     </div>
 
     {% endif %}
+
+
+    <!-- =====================================================
+         MARKETPLACE SELLER ACTIVITY
+    ====================================================== -->
+
+    <div class="stats-section">
+
+        <div class="dashboard-card marketplace-seller-card">
+
+
+            <!-- =================================================
+                 MARKETPLACE HEADER
+            ================================================== -->
+
+            <div class="marketplace-card-header">
+
+                <div>
+
+                    <div class="marketplace-card-icon">
+                        🛍️
+                    </div>
+
+                    <h2>
+                        My Marketplace Listings
+                    </h2>
+
+                    <p>
+                        Manage your products, monitor performance,
+                        and communicate with potential buyers.
+                    </p>
+
+                </div>
+
+
+                <div class="marketplace-header-actions">
+
+
+                    <!-- =================================================
+                         MARKETPLACE MESSAGES
+                    ================================================== -->
+
+                    <a
+                        href="{% url 'marketplace_messages' %}"
+                        class="dashboard-btn"
+                    >
+                        <span> 💬 Messages</span>
+
+                        {% if unread_marketplace_messages > 0 %}
+
+                            <span class="dashboard-message-badge">
+                                {{ unread_marketplace_messages }}
+                            </span>
+
+                        {% endif %}
+                    </a>
+
+
+                    <!-- =================================================
+                         CREATE LISTING
+                    ================================================== -->
+
+                    <a
+                        href="{% url 'marketplace_create' %}"
+                        class="dashboard-btn secondary"
+                    >
+                        + Sell an Item
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 LISTINGS
+            ================================================== -->
+
+            <div class="marketplace-listings">
+
+
+                {% if marketplace_listings %}
+
+
+                    {% for listing in marketplace_listings %}
+
+                    <div class="marketplace-listing-card">
+
+
+                        <!-- =====================================
+                             PRODUCT IMAGE
+                        ====================================== -->
+
+                        <div class="marketplace-product-image">
+
+                            {% if listing.image %}
+
+                                <img
+                                    src="{{ listing.image.url }}"
+                                    alt="{{ listing.title }}"
+                                >
+
+                            {% else %}
+
+                                <div class="marketplace-no-image">
+                                    📦
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =====================================
+                             PRODUCT INFORMATION
+                        ====================================== -->
+
+                        <div class="marketplace-product-info">
+
+                            <h3>
+                                {{ listing.title }}
+                            </h3>
+
+                            <div class="marketplace-price">
+
+                                ₦{{ listing.price|floatformat:0 }}
+
+                            </div>
+
+                            <div class="marketplace-location">
+
+                                📍 {{ listing.location }}
+
+                            </div>
+
+                            <div class="marketplace-date">
+
+                                Listed
+                                {{ listing.created_at|date:"M d, Y" }}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             APPROVAL STATUS
+                        ====================================== -->
+
+                        <div class="marketplace-status">
+
+                            {% if listing.approval_status == 'approved' %}
+
+                                <span class="marketplace-status-badge approved">
+                                    ✓ Approved
+                                </span>
+
+                            {% elif listing.approval_status == 'rejected' %}
+
+                                <span class="marketplace-status-badge rejected">
+                                    ✕ Rejected
+                                </span>
+
+                            {% else %}
+
+                                <span class="marketplace-status-badge pending">
+                                    ⏳ Under Review
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =====================================
+                             STATISTICS
+                        ====================================== -->
+
+                        <div class="marketplace-stats">
+
+
+                            <!-- VISITORS -->
+
+                            <div class="marketplace-stat">
+
+                                <span class="marketplace-stat-icon">
+                                    👁️
+                                </span>
+
+                                <div>
+
+                                    <strong>
+
+                                        {% if listing.approval_status == 'approved' %}
+                                            {{ listing.views|default:"0" }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+
+                                    </strong>
+
+                                    <small>
+                                        Visitors
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- CHATS -->
+
+                            <div class="marketplace-stat">
+
+                                <span class="marketplace-stat-icon">
+                                    💬
+                                </span>
+
+                                <div>
+
+                                    <strong>
+
+                                        {% if listing.approval_status == 'approved' %}
+                                            {{ listing.chats_count|default:"0" }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+
+                                    </strong>
+
+                                    <small>
+                                        Chats
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             VIEW PRODUCT
+                        ====================================== -->
+
+                        <div class="marketplace-product-action">
+
+                            {% if listing.approval_status == 'approved' %}
+
+                                <a
+                                    href="{% url 'marketplace_detail' listing.id %}"
+                                    class="marketplace-view-button"
+                                >
+                                    View Product
+                                    <span>→</span>
+                                </a>
+
+                            {% elif listing.approval_status == 'rejected' %}
+
+                                <span class="marketplace-action-disabled">
+                                    Listing Rejected
+                                </span>
+
+                            {% else %}
+
+                                <span class="marketplace-action-disabled">
+                                    Awaiting Approval
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                    </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <!-- =====================================
+                         EMPTY MARKETPLACE STATE
+                    ====================================== -->
+
+                    <div class="marketplace-empty">
+
+                        <div class="marketplace-empty-icon">
+                            🛍️
+                        </div>
+
+                        <h3>
+                            You have no marketplace listings yet
+                        </h3>
+
+                        <p>
+                            Sell products, building materials,
+                            equipment, services, land or other
+                            items through the King B marketplace.
+                        </p>
+
+                        <a
+                            href="{% url 'marketplace_create' %}"
+                            class="dashboard-btn secondary"
+                        >
+                            + Create Your First Listing
+                        </a>
+
+                    </div>
+
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =================================================
+                 SELLER DASHBOARD FOOTER
+            ================================================== -->
+
+            <div class="marketplace-card-footer">
+
+                <a
+                    href="{% url 'seller_dashboard' %}"
+                    class="marketplace-dashboard-link"
+                >
+                    Open Seller Dashboard
+                    <span>→</span>
+                </a>
+
+
+                <a
+                    href="{% url 'marketplace_messages' %}"
+                    class="marketplace-dashboard-link"
+                >
+                    Open Messages
+                    <span>→</span>
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
 
 
     <!-- =====================================================
@@ -638,6 +1471,7 @@
         </a>
 
     </div>
+
 
 </div>
 
