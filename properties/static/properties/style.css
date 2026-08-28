@@ -8830,7 +8830,7 @@ header nav {
             rgba(7, 39, 28, 0.88) 45%,
             rgba(7, 39, 28, 0.60) 100%
         ),
-        url("/static/properties/Image/skilled-workers.jpg")
+        
         center / cover no-repeat;
 }
 
