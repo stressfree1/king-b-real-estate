@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.urls import reverse
 
 from .models import (
     Estate,
@@ -24,6 +25,8 @@ from .models import (
     AccountSettings,
     MarketplaceListingImage,
 )
+
+from .notification_utils import create_notification
 
 
 # =========================================================
@@ -809,7 +812,6 @@ class MarketplaceListingImageInline(admin.TabularInline):
 # =========================================================
 # MARKETPLACE LISTING
 # =========================================================
-
 @admin.register(MarketplaceListing)
 class MarketplaceListingAdmin(admin.ModelAdmin):
 
@@ -901,6 +903,100 @@ class MarketplaceListingAdmin(admin.ModelAdmin):
             }
         ),
     )
+
+    # =========================================================
+    # MARKETPLACE LISTING APPROVAL NOTIFICATIONS
+    # =========================================================
+
+    def save_model(self, request, obj, form, change):
+
+        old_approval_status = None
+
+        # -----------------------------------------------------
+        # Get the previous approval status when editing
+        # -----------------------------------------------------
+
+        if change:
+
+            try:
+
+                old_obj = MarketplaceListing.objects.get(
+                    pk=obj.pk
+                )
+
+                old_approval_status = (
+                    old_obj.approval_status
+                )
+
+            except MarketplaceListing.DoesNotExist:
+
+                pass
+
+        # -----------------------------------------------------
+        # Save the listing first
+        # -----------------------------------------------------
+
+        super().save_model(
+            request,
+            obj,
+            form,
+            change
+        )
+
+        # -----------------------------------------------------
+        # Only notify when approval status actually changes
+        # -----------------------------------------------------
+
+        if (
+            change
+            and old_approval_status != obj.approval_status
+        ):
+
+            # ================================================
+            # LISTING APPROVED
+            # ================================================
+
+            if obj.approval_status == 'approved':
+
+                create_notification(
+                    recipient=obj.seller,
+                    notification_type='listing_approved',
+                    title='Marketplace Listing Approved',
+                    message=(
+                        f'Your marketplace listing '
+                        f'"{obj.title}" has been approved '
+                        f'and is now visible to buyers.'
+                    ),
+                    link=reverse(
+                        'my_listing_detail',
+                        kwargs={
+                            'listing_id': obj.id
+                        }
+                    )
+                )
+
+            # ================================================
+            # LISTING REJECTED
+            # ================================================
+
+            elif obj.approval_status == 'rejected':
+
+                create_notification(
+                    recipient=obj.seller,
+                    notification_type='listing_rejected',
+                    title='Marketplace Listing Rejected',
+                    message=(
+                        f'Your marketplace listing '
+                        f'"{obj.title}" was not approved. '
+                        f'Please review and update your listing.'
+                    ),
+                    link=reverse(
+                        'marketplace_edit',
+                        kwargs={
+                            'listing_id': obj.id
+                        }
+                    )
+                )
 # =========================================================
 # MARKETPLACE MESSAGE
 # =========================================================
@@ -1080,3 +1176,118 @@ class AccountSettingsAdmin(admin.ModelAdmin):
         'created_at',
         'updated_at',
     )
+
+# =========================================================
+# PREMIUM KING B ADMIN DASHBOARD
+# =========================================================
+
+_original_admin_index = admin.site.index
+
+
+def kingb_admin_index(request, extra_context=None):
+    from .models import (
+        Estate,
+        Property,
+        Customer,
+        SkilledWorker,
+        MarketplaceListing,
+        Inquiry,
+        JobApplicant,
+    )
+
+    from django.utils import timezone
+
+    extra_context = extra_context or {}
+
+    # =====================================================
+    # BASIC STATISTICS
+    # =====================================================
+
+    extra_context["property_count"] = Property.objects.count()
+
+    extra_context["estate_count"] = Estate.objects.count()
+
+    extra_context["customer_count"] = Customer.objects.count()
+
+    extra_context["worker_count"] = SkilledWorker.objects.count()
+
+    extra_context["marketplace_count"] = (
+        MarketplaceListing.objects.count()
+    )
+
+    extra_context["inquiry_count"] = Inquiry.objects.count()
+
+    extra_context["job_application_count"] = (
+        JobApplicant.objects.count()
+    )
+
+    # =====================================================
+    # PROPERTY STATUS
+    # =====================================================
+
+    extra_context["available_property_count"] = (
+        Property.objects.filter(
+            status__iexact="available"
+        ).count()
+    )
+
+    extra_context["sold_property_count"] = (
+        Property.objects.filter(
+            status__iexact="sold"
+        ).count()
+    )
+
+    extra_context["reserved_property_count"] = (
+        Property.objects.filter(
+            status__iexact="reserved"
+        ).count()
+    )
+
+    # =====================================================
+    # MARKETPLACE APPROVALS
+    # =====================================================
+
+    extra_context["pending_marketplace_count"] = (
+        MarketplaceListing.objects.filter(
+            approval_status="under_review"
+        ).count()
+    )
+
+    extra_context["pending_count"] = (
+        MarketplaceListing.objects.filter(
+            approval_status="under_review"
+        ).count()
+    )
+
+    # =====================================================
+    # PROPERTY PERCENTAGE
+    # =====================================================
+
+    total_properties = Property.objects.count()
+
+    available_properties = (
+        Property.objects.filter(
+            status__iexact="available"
+        ).count()
+    )
+
+    if total_properties:
+        extra_context["available_percentage"] = round(
+            (available_properties / total_properties) * 100
+        )
+    else:
+        extra_context["available_percentage"] = 0
+
+    # =====================================================
+    # CURRENT DATE
+    # =====================================================
+
+    extra_context["now"] = timezone.now()
+
+    return _original_admin_index(
+        request,
+        extra_context=extra_context,
+    )
+
+
+admin.site.index = kingb_admin_index

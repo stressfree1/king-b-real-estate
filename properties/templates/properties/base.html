@@ -12,12 +12,16 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="theme-color"
+        content="#0b2119"
+    >
+
     <title>
         {% block title %}
             KING B REAL ESTATE & CONSTRUCTION LTD
         {% endblock %}
     </title>
-
 
     <link
         rel="icon"
@@ -25,12 +29,34 @@
         href="{% static 'properties/Image/kingb-logo.png' %}"
     >
 
+    <!-- =====================================================
+         PREMIUM TYPOGRAPHY
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =====================================================
+         MAIN SITE CSS
+    ====================================================== -->
 
     <link
         rel="stylesheet"
         href="{% static 'properties/style.css' %}"
     >
-
 
     {% block extra_css %}{% endblock %}
 
@@ -40,71 +66,92 @@
 <body>
 
 
-<!-- =====================================================
+<!-- =========================================================
+     PAGE LOADER
+========================================================= -->
+
+<div
+    class="kb-page-loader"
+    id="kbPageLoader"
+    aria-hidden="true"
+>
+
+    <div class="kb-loader-inner">
+
+        <img
+            src="{% static 'properties/Image/kingb-logo.png' %}"
+            alt=""
+        >
+
+        <span></span>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
      NAVIGATION
-===================================================== -->
+========================================================= -->
 
-<header class="site-header">
+<header
+    class="kb-header"
+    id="kbHeader"
+>
 
-    <nav class="main-navbar">
+    <nav
+        class="kb-navbar"
+        aria-label="Main navigation"
+    >
 
 
         <!-- =================================================
-             LOGO / BRAND
+             BRAND
         ================================================== -->
 
-        <div class="nav-brand">
+        <a
+            href="{% url 'home' %}"
+            class="kb-brand"
+            aria-label="King B Real Estate & Construction Ltd"
+        >
 
-            <a href="{% url 'home' %}">
+            <span class="kb-brand-logo">
 
                 <img
                     src="{% static 'properties/Image/kingb-logo.png' %}"
-                    alt="King B Logo"
+                    alt="King B"
                 >
 
-                <span>
-                    KING B REAL ESTATE & CONSTRUCTION LTD
-                </span>
-
-            </a>
-
-        </div>
+            </span>
 
 
-        <!-- =================================================
-             MOBILE MENU BUTTON
-        ================================================== -->
+            <span class="kb-brand-text">
 
-        <button
-            class="menu-toggle"
-            type="button"
-            onclick="toggleMenu()"
-            aria-label="Open navigation menu"
-            aria-expanded="false"
-        >
+                <strong>
+                    KING B
+                </strong>
 
-            <span></span>
-            <span></span>
-            <span></span>
+                <small>
+                    REAL ESTATE & CONSTRUCTION
+                </small>
 
-        </button>
+            </span>
+
+        </a>
 
 
         <!-- =================================================
-             NAVIGATION
+             DESKTOP NAVIGATION
         ================================================== -->
 
         <div
-            class="nav-links"
-            id="navLinks"
+            class="kb-desktop-nav"
+            id="kbDesktopNav"
         >
-
-
-            <!-- PUBLIC WEBSITE -->
 
             <a
                 href="{% url 'home' %}"
-                class="nav-link"
+                class="kb-nav-link"
             >
                 Home
             </a>
@@ -112,77 +159,257 @@
 
             <a
                 href="{% url 'property_list' %}"
-                class="nav-link"
+                class="kb-nav-link"
             >
                 Properties
             </a>
 
 
-            <a
-                href="{% url 'jobs' %}"
-                class="nav-link"
-            >
-                Jobs
-            </a>
+            <!-- =============================================
+                 EXPLORE
+            ============================================== -->
 
+            <div class="kb-nav-dropdown">
 
-            <a
-                href="{% url 'skilled_workers' %}"
-                class="nav-link"
-            >
-                Skilled Workers
-            </a>
-
-
-            <a
-                href="{% url 'marketplace' %}"
-                class="nav-link"
-            >
-                Marketplace
-            </a>
-
-
-            {% if not request.user.is_authenticated %}
-
-                <a
-                    href="{% url 'our_services' %}"
-                    class="nav-link"
+                <button
+                    type="button"
+                    class="kb-nav-link kb-dropdown-trigger"
+                    aria-expanded="false"
                 >
-                    Our Services
-                </a>
 
-            {% endif %}
+                    Explore
+
+                    <span class="kb-chevron">
+                        ↓
+                    </span>
+
+                </button>
+
+
+                <div class="kb-mega-menu">
+
+                    <div class="kb-mega-intro">
+
+                        <span class="kb-eyebrow">
+                            DISCOVER KING B
+                        </span>
+
+                        <h3>
+                            Find your next
+                            <em>opportunity.</em>
+                        </h3>
+
+                        <p>
+                            Explore properties, services,
+                            professionals and opportunities
+                            across the King B platform.
+                        </p>
+
+                    </div>
+
+
+                    <div class="kb-mega-links">
+
+                        <a
+                            href="{% url 'marketplace' %}"
+                            class="kb-mega-item"
+                        >
+
+                            <span class="kb-mega-icon">
+                                ◇
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    Marketplace
+                                </strong>
+
+                                <small>
+                                    Buy, sell & discover
+                                </small>
+
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="{% url 'skilled_workers' %}"
+                            class="kb-mega-item"
+                        >
+
+                            <span class="kb-mega-icon">
+                                ◌
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    Skilled Workers
+                                </strong>
+
+                                <small>
+                                    Find trusted professionals
+                                </small>
+
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="{% url 'jobs' %}"
+                            class="kb-mega-item"
+                        >
+
+                            <span class="kb-mega-icon">
+                                +
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    Careers
+                                </strong>
+
+                                <small>
+                                    Join the King B team
+                                </small>
+
+                            </span>
+
+                        </a>
+
+
+                        {% if not request.user.is_authenticated %}
+
+                        <a
+                            href="{% url 'our_services' %}"
+                            class="kb-mega-item"
+                        >
+
+                            <span class="kb-mega-icon">
+                                ✦
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    Our Services
+                                </strong>
+
+                                <small>
+                                    Property & construction
+                                </small>
+
+                            </span>
+
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
 
 
             <a
                 href="{% url 'contact' %}"
-                class="nav-link"
+                class="kb-nav-link"
             >
                 Contact
             </a>
 
+        </div>
 
-            <!-- =================================================
-                 AUTHENTICATED USER
-            ================================================== -->
+
+        <!-- =================================================
+             RIGHT SIDE ACTIONS
+        ================================================== -->
+
+        <div class="kb-nav-actions">
+
 
             {% if request.user.is_authenticated %}
 
+
+                <!-- =========================================
+                     NOTIFICATIONS
+                ========================================== -->
+
+                <div class="kb-notification-wrapper">
+
+                    <a
+                        href="{% url 'notifications' %}"
+                        class="kb-notification-button"
+                        aria-label="Notifications"
+                        title="Notifications"
+                    >
+
+                        <span class="kb-notification-bell">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+
+                                <path
+                                    d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+                                />
+
+                                <path
+                                    d="M10 21h4"
+                                />
+
+                            </svg>
+
+                        </span>
+
+
+                        {% if unread_notification_count > 0 %}
+
+                            <span
+                                class="kb-notification-badge"
+                                aria-label="{{ unread_notification_count }} unread notifications"
+                            >
+
+                                {% if unread_notification_count > 9 %}
+                                    9+
+                                {% else %}
+                                    {{ unread_notification_count }}
+                                {% endif %}
+
+                            </span>
+
+                        {% endif %}
+
+                    </a>
+
+                </div>
+
+
+                <!-- =========================================
+                     ACCOUNT
+                ========================================== -->
+
                 <div
-                    class="profile-menu"
-                    id="profileMenu"
+                    class="kb-account"
+                    id="kbAccount"
                 >
 
                     <button
                         type="button"
-                        class="profile-button"
-                        id="profileButton"
-                        onclick="toggleProfileMenu(event)"
-                        aria-label="Open account menu"
+                        class="kb-account-button"
+                        id="kbAccountButton"
+                        onclick="toggleKBAccount(event)"
                         aria-expanded="false"
+                        aria-haspopup="true"
                     >
 
-                        <span class="profile-avatar">
+                        <span class="kb-account-avatar">
 
                             {% if request.user.account_settings.profile_image %}
 
@@ -193,10 +420,8 @@
 
                             {% else %}
 
-                                <span class="profile-avatar-letter">
-
+                                <span>
                                     {{ request.user.first_name|default:request.user.username|first|upper }}
-
                                 </span>
 
                             {% endif %}
@@ -204,36 +429,32 @@
                         </span>
 
 
-                        <span class="profile-user-name">
+                        <span class="kb-account-name">
 
                             {{ request.user.first_name|default:request.user.username }}
 
                         </span>
 
 
-                        <span
-                            class="profile-arrow"
-                            aria-hidden="true"
-                        >
-                            ▾
+                        <span class="kb-account-chevron">
+                            ↓
                         </span>
 
                     </button>
 
 
-                    <!-- PROFILE DROPDOWN -->
+                    <!-- =====================================
+                         ACCOUNT DROPDOWN
+                    ====================================== -->
 
                     <div
-                        class="profile-dropdown"
-                        id="profileDropdown"
+                        class="kb-account-dropdown"
+                        id="kbAccountDropdown"
                     >
 
+                        <div class="kb-account-header">
 
-                        <!-- PROFILE HEADER -->
-
-                        <div class="profile-dropdown-header">
-
-                            <div class="profile-dropdown-avatar">
+                            <div class="kb-account-large-avatar">
 
                                 {% if request.user.account_settings.profile_image %}
 
@@ -245,9 +466,7 @@
                                 {% else %}
 
                                     <span>
-
                                         {{ request.user.first_name|default:request.user.username|first|upper }}
-
                                     </span>
 
                                 {% endif %}
@@ -255,95 +474,122 @@
                             </div>
 
 
-                            <div class="profile-dropdown-user">
+                            <div class="kb-account-details">
+
+                                <span class="kb-account-label">
+                                    ACCOUNT
+                                </span>
 
                                 <strong>
-
                                     {{ request.user.get_full_name|default:request.user.username }}
-
                                 </strong>
 
-                                <span>
-
+                                <small>
                                     {{ request.user.email }}
-
-                                </span>
+                                </small>
 
                             </div>
 
                         </div>
 
 
-                        <!-- ACCOUNT LINKS -->
-
-                        <div class="profile-dropdown-links">
+                        <div class="kb-account-menu">
 
                             <a
                                 href="{% url 'marketplace_dashboard' %}"
-                                class="profile-dropdown-link"
                             >
 
-                                <span class="dropdown-icon">
+                                <span class="kb-menu-icon">
                                     ◉
                                 </span>
 
                                 <span>
-                                    My Account
+
+                                    <strong>
+                                        My Account
+                                    </strong>
+
+                                    <small>
+                                        Dashboard & activity
+                                    </small>
+
                                 </span>
+
+                                <b>
+                                    →
+                                </b>
 
                             </a>
 
 
                             <a
                                 href="{% url 'account_settings' %}"
-                                class="profile-dropdown-link"
                             >
 
-                                <span class="dropdown-icon">
+                                <span class="kb-menu-icon">
                                     ⚙
                                 </span>
 
                                 <span>
-                                    Account Settings
+
+                                    <strong>
+                                        Account Settings
+                                    </strong>
+
+                                    <small>
+                                        Profile & preferences
+                                    </small>
+
                                 </span>
+
+                                <b>
+                                    →
+                                </b>
 
                             </a>
 
 
                             <a
                                 href="{% url 'property_list' %}"
-                                class="profile-dropdown-link"
                             >
 
-                                <span class="dropdown-icon">
+                                <span class="kb-menu-icon">
                                     ◇
                                 </span>
 
                                 <span>
-                                    Browse Properties
+
+                                    <strong>
+                                        Browse Properties
+                                    </strong>
+
+                                    <small>
+                                        Explore available property
+                                    </small>
+
                                 </span>
+
+                                <b>
+                                    →
+                                </b>
 
                             </a>
 
                         </div>
 
 
-                        <!-- LOGOUT -->
-
-                        <div class="profile-dropdown-footer">
+                        <div class="kb-account-footer">
 
                             <a
                                 href="{% url 'site_logout' %}"
-                                class="profile-dropdown-logout"
+                                class="kb-logout"
                             >
 
-                                <span class="dropdown-icon">
-                                    ↪
+                                <span>
+                                    ↗
                                 </span>
 
-                                <span>
-                                    Logout
-                                </span>
+                                Logout
 
                             </a>
 
@@ -357,72 +603,247 @@
             {% else %}
 
 
-                <!-- LOGGED OUT -->
+                <!-- =========================================
+                     LOGIN / REGISTER
+                ========================================== -->
 
-                <div class="nav-auth-actions">
+                <a
+                    href="{% url 'site_login' %}"
+                    class="kb-login"
+                >
+                    Login
+                </a>
 
-                    <a
-                        href="{% url 'site_login' %}"
-                        class="nav-login"
-                    >
-                        Login
-                    </a>
 
-                </div>
+                <a
+                    href="{% url 'site_register' %}"
+                    class="kb-nav-cta"
+                >
+
+                    <span>
+                        Get Started
+                    </span>
+
+                    <b>
+                        →
+                    </b>
+
+                </a>
 
             {% endif %}
 
+
+            <!-- =============================================
+                 MOBILE MENU
+            ============================================== -->
+
+            <button
+                type="button"
+                class="kb-menu-button"
+                id="kbMenuButton"
+                onclick="toggleKBMobileMenu()"
+                aria-label="Open navigation"
+                aria-expanded="false"
+            >
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
 
         </div>
 
     </nav>
 
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+    ====================================================== -->
+
+    <div
+        class="kb-mobile-panel"
+        id="kbMobilePanel"
+    >
+
+        <div class="kb-mobile-inner">
+
+
+            <div class="kb-mobile-heading">
+
+                <span class="kb-eyebrow">
+                    KING B
+                </span>
+
+                <h2>
+                    Explore.
+                </h2>
+
+            </div>
+
+
+            <div class="kb-mobile-links">
+
+                <a href="{% url 'home' %}">
+                    <span>01</span>
+                    Home
+                    <b>→</b>
+                </a>
+
+
+                <a href="{% url 'property_list' %}">
+                    <span>02</span>
+                    Properties
+                    <b>→</b>
+                </a>
+
+
+                <a href="{% url 'marketplace' %}">
+                    <span>03</span>
+                    Marketplace
+                    <b>→</b>
+                </a>
+
+
+                <a href="{% url 'skilled_workers' %}">
+                    <span>04</span>
+                    Skilled Workers
+                    <b>→</b>
+                </a>
+
+
+                <a href="{% url 'jobs' %}">
+                    <span>05</span>
+                    Careers
+                    <b>→</b>
+                </a>
+
+
+                {% if not request.user.is_authenticated %}
+
+                <a href="{% url 'our_services' %}">
+                    <span>06</span>
+                    Our Services
+                    <b>→</b>
+                </a>
+
+                {% endif %}
+
+
+                <a href="{% url 'contact' %}">
+                    <span>07</span>
+                    Contact
+                    <b>→</b>
+                </a>
+
+            </div>
+
+
+            <div class="kb-mobile-bottom">
+
+                {% if request.user.is_authenticated %}
+
+                    <a
+                        href="{% url 'notifications' %}"
+                        class="kb-mobile-account"
+                    >
+                        Notifications
+                        {% if unread_notification_count > 0 %}
+                            ({{ unread_notification_count }})
+                        {% endif %}
+                    </a>
+
+                    <a
+                        href="{% url 'marketplace_dashboard' %}"
+                        class="kb-mobile-account"
+                    >
+                        My Account
+                    </a>
+
+                    <a
+                        href="{% url 'site_logout' %}"
+                        class="kb-mobile-logout"
+                    >
+                        Logout
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{% url 'site_login' %}"
+                        class="kb-mobile-login"
+                    >
+                        Login
+                    </a>
+
+                    <a
+                        href="{% url 'site_register' %}"
+                        class="kb-mobile-register"
+                    >
+                        Create Account
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
 </header>
 
 
-<!-- =====================================================
+<!-- =========================================================
      MAIN CONTENT
-===================================================== -->
+========================================================= -->
 
-<main>
+<main class="kb-main">
 
 
-    <!-- SITE MESSAGES -->
+    <!-- =====================================================
+         SITE MESSAGES
+    ====================================================== -->
 
     {% if messages %}
 
-        <div class="site-messages">
+        <div class="kb-messages">
 
             {% for message in messages %}
 
-                <div class="site-message site-message-{{ message.tags }}">
+                <div
+                    class="kb-message kb-message-{{ message.tags }}"
+                    role="alert"
+                >
 
-                    <span class="message-icon">
+                    <span class="kb-message-icon">
 
                         {% if message.tags == "success" %}
-
                             ✓
-
                         {% elif message.tags == "error" %}
-
                             !
-
                         {% elif message.tags == "warning" %}
-
                             ⚠
-
                         {% else %}
-
-                            ℹ
-
+                            i
                         {% endif %}
 
                     </span>
 
 
-                    <span>
+                    <span class="kb-message-text">
                         {{ message }}
                     </span>
+
+
+                    <button
+                        type="button"
+                        class="kb-message-close"
+                        onclick="this.parentElement.remove()"
+                        aria-label="Close message"
+                    >
+                        ×
+                    </button>
 
                 </div>
 
@@ -441,30 +862,46 @@
 </main>
 
 
-<footer class="modern-footer">
+<!-- =========================================================
+     FOOTER
+========================================================= -->
 
-    <div class="footer-top-accent"></div>
+<footer class="kb-footer">
 
-    <div class="footer-container">
 
-        <div class="footer-brand">
+    <div class="kb-footer-top-line"></div>
 
-            <a href="{% url 'home' %}" class="footer-logo">
+
+    <div class="kb-footer-container">
+
+
+        <!-- =================================================
+             BRAND
+        ================================================== -->
+
+        <div class="kb-footer-brand">
+
+            <a
+                href="{% url 'home' %}"
+                class="kb-footer-logo"
+            >
 
                 <img
                     src="{% static 'properties/Image/kingb-logo.png' %}"
-                    alt="King B Real Estate & Construction Ltd"
+                    alt="King B Real Estate"
                 >
 
-                <div>
+                <span>
 
-                    <strong>KING B</strong>
+                    <strong>
+                        KING B
+                    </strong>
 
-                    <span>
+                    <small>
                         REAL ESTATE & CONSTRUCTION LTD
-                    </span>
+                    </small>
 
-                </div>
+                </span>
 
             </a>
 
@@ -476,110 +913,46 @@
             </p>
 
 
-            <div class="footer-socials">
+            <div class="kb-footer-socials">
 
-
-                <!-- FACEBOOK -->
 
                 <a
                     href="https://www.facebook.com/kingbrealestate/"
-                    aria-label="Facebook"
-                    class="footer-social-icon"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="Facebook"
                 >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                        focusable="false"
-                    >
-
-                        <path
-                            fill="currentColor"
-                            d="M13.5 21v-8h2.75l.4-3h-3.15V8.08c0-.87.24-1.46 1.5-1.46h1.8V3.94c-.31-.04-1.37-.14-2.61-.14-2.58 0-4.35 1.57-4.35 4.46V10H7v3h2.84v8h3.66z"
-                        />
-
-                    </svg>
-
+                    f
                 </a>
 
-
-                <!-- X / TWITTER -->
 
                 <a
                     href="https://x.com/kingbrealestate"
-                    aria-label="X"
-                    class="footer-social-icon"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="X"
                 >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                        focusable="false"
-                    >
-
-                        <path
-                            fill="currentColor"
-                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817-5.965 6.817H1.682l7.73-8.835L1.254 2.25h6.826l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"
-                        />
-
-                    </svg>
-
+                    𝕏
                 </a>
 
-
-                <!-- INSTAGRAM -->
 
                 <a
                     href="https://www.instagram.com/kingbrealestate/"
-                    aria-label="Instagram"
-                    class="footer-social-icon"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="Instagram"
                 >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                        focusable="false"
-                    >
-
-                        <path
-                            fill="currentColor"
-                            d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5A3.75 3.75 0 0 0 20 16.25v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5zm8.75 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0-3-3z"
-                        />
-
-                    </svg>
-
+                    ◎
                 </a>
 
 
-                <!-- WHATSAPP -->
-
                 <a
                     href="https://wa.me/2349134312508?text=Hello%20King%20B%20Real%20Estate,%20I%20would%20like%20to%20make%20an%20enquiry."
-                    aria-label="WhatsApp"
-                    class="footer-social-icon"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="WhatsApp"
                 >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                        focusable="false"
-                    >
-
-                        <path
-                            fill="currentColor"
-                            d="M20.52 3.48A11.82 11.82 0 0 0 12.08 0C5.55 0 .24 5.3.24 11.84c0 2.09.55 4.13 1.59 5.93L.14 24l6.39-1.67a11.86 11.86 0 0 0 5.55 1.41h.01c6.53 0 11.84-5.31 11.84-11.84 0-3.16-1.23-6.13-3.41-8.42zM12.09 21.74h-.01a9.84 9.84 0 0 1-5.01-1.37l-.36-.21-3.79.99 1.01-3.69-.23-.38a9.83 9.83 0 0 1-1.5-5.24C2.2 6.4 6.63 1.98 12.09 1.98c2.65 0 5.14 1.03 7.01 2.91a9.86 9.86 0 0 1 2.9 7.01c0 5.46-4.44 9.9-9.91 9.9zm5.43-7.42c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.66.15-.2.3-.76.97-.93 1.17-.17.2-.34.22-.63.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.34.44-.51.15-.17.2-.29.3-.49.1-.2.05-.37-.02-.52-.07-.15-.66-1.59-.9-2.18-.24-.58-.48-.5-.66-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.03 1.01-1.03 2.46s1.06 2.85 1.21 3.05c.15.2 2.08 3.18 5.03 4.45.7.3 1.25.48 1.68.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.69.25-1.29.17-1.42-.07-.12-.27-.2-.56-.34z"
-                        />
-
-                    </svg>
-
+                    ◉
                 </a>
 
             </div>
@@ -587,11 +960,15 @@
         </div>
 
 
-        <div class="footer-links">
+        <!-- =================================================
+             EXPLORE
+        ================================================== -->
 
-            <h4>
+        <div class="kb-footer-column">
+
+            <span class="kb-footer-heading">
                 Explore
-            </h4>
+            </span>
 
             <a href="{% url 'home' %}">
                 Home
@@ -612,11 +989,15 @@
         </div>
 
 
-        <div class="footer-links">
+        <!-- =================================================
+             COMPANY
+        ================================================== -->
 
-            <h4>
+        <div class="kb-footer-column">
+
+            <span class="kb-footer-heading">
                 Company
-            </h4>
+            </span>
 
             <a href="{% url 'about' %}">
                 About Us
@@ -647,20 +1028,24 @@
         </div>
 
 
-        <div class="footer-contact">
+        <!-- =================================================
+             CONTACT
+        ================================================== -->
 
-            <h4>
-                Get in touch
-            </h4>
+        <div class="kb-footer-contact">
+
+            <span class="kb-footer-heading">
+                Visit & connect
+            </span>
 
 
             <a
-                href="tel:+234XXXXXXXXXX"
-                class="footer-contact-row"
+                href="tel:+2349134312508"
+                class="kb-contact-item"
             >
 
-                <span class="footer-contact-icon">
-                    ☎
+                <span class="kb-contact-symbol">
+                    +
                 </span>
 
                 <span>
@@ -671,24 +1056,12 @@
 
 
             <a
-                href="tel:+234XXXXXXXXXX"
-                class="footer-contact-row"
+                href="mailto:hello@kingbrealestate.com"
+                class="kb-contact-item"
             >
 
-                <span>
-                    +234 913 431 2508
-                </span>
-
-            </a>
-
-
-            <a
-                href="mailto:info@kingbrealestate.com"
-                class="footer-contact-row"
-            >
-
-                <span class="footer-contact-icon">
-                    ✉
+                <span class="kb-contact-symbol">
+                    @
                 </span>
 
                 <span>
@@ -698,41 +1071,47 @@
             </a>
 
 
-            <div class="footer-contact-row">
+            <a
+                href="https://www.google.com/maps/search/?api=1&query=Ewoma+House,+Plot+122A+General+Diriyai+Lane,+GRA+PHASE+3,+Port+Harcourt+500271,+Rivers"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="kb-contact-item kb-address"
+            >
 
-                <span class="footer-contact-icon">
-                    📍
+                <span class="kb-contact-symbol">
+                    +
                 </span>
 
-                <a
-                    href="https://www.google.com/maps/search/?api=1&query=Plot+122C+General+Diriya+Lane,+Tombia+Extension,+GRA+Phase+2,+Port+Harcourt,+Rivers+State"
-                    target="_blank"
-                    rel="noopener"
-                    class="kb-address-link"
-                >
+                <span>
+                    Ewoma House, Plot 122A General Diriyai Lane,
+                    GRA Phase 3, Port Harcourt 500271, Rivers
+                </span>
 
-                    <span>
-                        Plot 122C General Diriya Lane Tombia Extension GRA phase 2 Port Harcourt Rivers State
-                    </span>
-
-                </a>
-
-            </div>
+            </a>
 
         </div>
 
     </div>
 
 
-    <div class="footer-bottom">
+    <!-- =====================================================
+         FOOTER BOTTOM
+    ====================================================== -->
 
-        <div class="footer-bottom-inner">
+    <div class="kb-footer-bottom">
+
+        <div class="kb-footer-bottom-inner">
 
             <span>
-                © {% now "Y" %} King B Real Estate & Construction Ltd. All rights reserved.
+                © {% now "Y" %}
+                King B Real Estate & Construction Ltd.
             </span>
 
-            <span class="footer-tagline">
+            <span>
+                All rights reserved.
+            </span>
+
+            <span class="kb-footer-tagline">
                 Excellence in Property & Construction
             </span>
 
@@ -743,1067 +1122,3148 @@
 </footer>
 
 
+<!-- =========================================================
+     WORLD-CLASS BASE CSS
+========================================================= -->
 
 <style>
 
-/* =====================================================
-   NAVIGATION / PROFILE CSS
-===================================================== */
+/* =========================================================
+   DESIGN SYSTEM
+========================================================= */
+
+:root {
+
+    --kb-green:
+        #0b2119;
+
+    --kb-green-2:
+        #123c2f;
+
+    --kb-green-3:
+        #194d3b;
+
+    --kb-gold:
+        #c7a15a;
+
+    --kb-gold-light:
+        #dfc486;
+
+    --kb-cream:
+        #f7f5ef;
+
+    --kb-white:
+        #ffffff;
+
+    --kb-text:
+        #17231e;
+
+    --kb-muted:
+        #748079;
+
+    --kb-border:
+        rgba(18, 60, 47, .11);
+
+    --kb-shadow:
+        0 20px 70px rgba(7, 30, 22, .13);
+
+    --kb-serif:
+        "Playfair Display",
+        Georgia,
+        serif;
+
+    --kb-sans:
+        "Manrope",
+        "DM Sans",
+        Arial,
+        sans-serif;
+
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+html {
+
+    scroll-behavior:
+        smooth;
+
+}
+
+
+body {
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    font-family:
+        var(--kb-sans);
+
+    color:
+        var(--kb-text);
+
+    background:
+        #ffffff;
+
+    overflow-x:
+        hidden;
+
+}
+
+
+*,
+*::before,
+*::after {
+
+    box-sizing:
+        border-box;
+
+}
+
+
+button,
+a {
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+a {
+
+    color:
+        inherit;
+
+}
+
+
+/* =========================================================
+   PAGE LOADER
+========================================================= */
+
+.kb-page-loader {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        999999;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        var(--kb-green);
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    transition:
+        opacity .45s ease,
+        visibility .45s ease;
+
+}
+
+
+.kb-page-loader.loaded {
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
+
+}
+
+
+.kb-loader-inner {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    gap:
+        18px;
+
+}
+
+
+.kb-loader-inner img {
+
+    width:
+        62px;
+
+    height:
+        62px;
+
+    object-fit:
+        contain;
+
+    animation:
+        kbLoaderLogo 1.4s ease-in-out infinite;
+
+}
+
+
+.kb-loader-inner span {
+
+    width:
+        55px;
+
+    height:
+        1px;
+
+    background:
+        var(--kb-gold);
+
+    transform-origin:
+        left;
+
+    animation:
+        kbLoaderLine 1.2s ease-in-out infinite;
+
+}
+
+
+@keyframes kbLoaderLogo {
+
+    0%,
+    100% {
+
+        transform:
+            scale(.96);
+
+        opacity:
+            .75;
+
+    }
+
+    50% {
+
+        transform:
+            scale(1);
+
+        opacity:
+            1;
+
+    }
+
+}
+
+
+@keyframes kbLoaderLine {
+
+    0% {
+
+        transform:
+            scaleX(.2);
+
+        opacity:
+            .3;
+
+    }
+
+    50% {
+
+        transform:
+            scaleX(1);
+
+        opacity:
+            1;
+
+    }
+
+    100% {
+
+        transform:
+            scaleX(.2);
+
+        opacity:
+            .3;
+
+    }
+
+}
 
 
 /* =========================================================
    HEADER
 ========================================================= */
 
-.site-header {
-    position: fixed !important;
+.kb-header {
 
-    top: 0 !important;
+    position:
+        fixed;
 
-    left: 0 !important;
+    top:
+        0;
 
-    right: 0 !important;
+    left:
+        0;
 
-    width: 100% !important;
+    width:
+        100%;
 
-    z-index: 99999 !important;
+    z-index:
+        99990;
+
+    transition:
+        background .35s ease,
+        box-shadow .35s ease,
+        backdrop-filter .35s ease;
+
 }
 
 
-.main-navbar {
-    position: relative;
+.kb-header.scrolled {
 
-    display: flex;
+    background:
+        rgba(255,255,255,.94);
 
-    align-items: center;
+    backdrop-filter:
+        blur(18px);
 
-    justify-content: space-between;
+    -webkit-backdrop-filter:
+        blur(18px);
 
-    gap: 30px;
+    box-shadow:
+        0 8px 35px
+        rgba(8,34,25,.08);
+
 }
 
 
-.nav-links {
-    display: flex;
+/* =========================================================
+   NAVBAR
+========================================================= */
 
-    align-items: center;
+.kb-navbar {
 
-    gap: 24px;
+    width:
+        100%;
+
+    max-width:
+        1440px;
+
+    height:
+        88px;
+
+    margin:
+        0 auto;
+
+    padding:
+        0 42px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        35px;
+
+    transition:
+        height .35s ease;
+
 }
 
 
-.nav-link {
-    position: relative;
+.kb-header.scrolled
+.kb-navbar {
 
-    color: inherit;
+    height:
+        72px;
 
-    text-decoration: none;
-
-    white-space: nowrap;
 }
 
 
-.nav-link::after {
-    content: "";
+/* =========================================================
+   BRAND
+========================================================= */
 
-    position: absolute;
+.kb-brand {
 
-    left: 0;
-    right: 0;
+    display:
+        inline-flex;
 
-    bottom: -7px;
+    align-items:
+        center;
 
-    height: 2px;
+    gap:
+        12px;
 
-    background: #b58b3b;
+    flex-shrink:
+        0;
 
-    transform: scaleX(0);
+    text-decoration:
+        none;
 
-    transform-origin: center;
+}
+
+
+.kb-brand-logo {
+
+    width:
+        48px;
+
+    height:
+        48px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+}
+
+
+.kb-brand-logo img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        contain;
+
+}
+
+
+.kb-brand-text {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2px;
+
+}
+
+.kb-brand-text strong {
+
+    color:
+        #c7a15a;
+
+    font-family:
+        var(--kb-serif);
+
+    font-size:
+        22px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        1.5px;
+
+    line-height:
+        1;
+}
+
+
+
+.kb-brand-text small {
+
+    color:
+        #c7a15a;
+
+
+    font-family:
+        var(--kb-sans);
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.5px;
+
+    line-height:
+        1;
+
+}
+
+
+/* =========================================================
+   DESKTOP NAV
+========================================================= */
+
+.kb-desktop-nav {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        30px;
+
+    margin-left:
+        auto;
+
+}
+
+
+.kb-nav-link {
+
+    position:
+        relative;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    padding:
+        10px 0;
+
+    border:
+        0;
+
+    background:
+        transparent;
+
+    color:
+         #ffffff;
+
+    font-family:
+        var(--kb-sans);
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        .2px;
+
+    text-decoration:
+        none;
+
+    cursor:
+        pointer;
+
+    transition:
+        color .25s ease;
+
+}
+
+
+.kb-nav-link::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    bottom:
+        2px;
+
+    width:
+        100%;
+
+    height:
+        1px;
+
+    background:
+        var(--kb-gold);
+
+    transform:
+        scaleX(0);
+
+    transform-origin:
+        right;
+
+    transition:
+        transform .3s ease;
+
+}
+
+
+.kb-nav-link:hover {
+
+    color:
+        #c7a15a;
+}
+
+
+.kb-nav-link:hover::after {
+
+    transform:
+        scaleX(1);
+
+    transform-origin:
+        left;
+
+}
+
+
+/* =========================================================
+   DROPDOWN
+========================================================= */
+
+.kb-nav-dropdown {
+
+    position:
+        relative;
+
+}
+
+
+.kb-chevron {
+
+    font-size:
+        10px;
 
     transition:
         transform .25s ease;
+
 }
 
 
-.nav-link:hover::after {
-    transform: scaleX(1);
+.kb-nav-dropdown.open
+.kb-chevron {
+
+    transform:
+        rotate(180deg);
+
 }
 
 
-/* =========================================================
-   AUTH
-========================================================= */
+.kb-mega-menu {
 
-.nav-auth-actions {
-    display: flex;
+    position:
+        absolute;
 
-    align-items: center;
+    top:
+        calc(100% + 22px);
 
-    gap: 10px;
-}
+    left:
+        50%;
 
+    width:
+        650px;
 
-.nav-login:hover {
-    color: #ffffff;
+    transform:
+        translateX(-50%)
+        translateY(-10px);
 
-    background: #123c2f;
-}
+    display:
+        grid;
 
+    grid-template-columns:
+        1fr 1.25fr;
 
-/* =========================================================
-   PROFILE
-========================================================= */
+    background:
+        rgba(255,255,255,.98);
 
-.profile-menu {
-    position: relative;
+    border:
+        1px solid
+        rgba(18,60,47,.10);
 
-    z-index: 99999;
-}
+    border-radius:
+        18px;
 
-
-.profile-button {
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    padding: 5px 10px 5px 5px;
-
-    background: #ffffff;
-
-    border: 1px solid #dfe5e1;
-
-    border-radius: 999px;
-
-    color: #123c2f;
-
-    cursor: pointer;
-
-    font-family: inherit;
-
-    font-size: 13px;
-
-    font-weight: 700;
-
-    transition:
-        box-shadow .2s ease,
-        border-color .2s ease,
-        background .2s ease;
-}
-
-
-.profile-button:hover,
-.profile-button.active {
-    border-color: #cdd8d2;
-
-    background: #f8faf8;
+    overflow:
+        hidden;
 
     box-shadow:
-        0 7px 22px
-        rgba(8, 39, 30, .08);
+        0 30px 80px
+        rgba(8,35,25,.18);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease,
+        visibility .25s ease;
+
 }
 
 
-.profile-avatar {
-    width: 34px;
+.kb-nav-dropdown:hover
+.kb-mega-menu,
+.kb-nav-dropdown.open
+.kb-mega-menu {
 
-    height: 34px;
+    opacity:
+        1;
 
-    flex: 0 0 34px;
+    visibility:
+        visible;
 
-    display: flex;
+    pointer-events:
+        auto;
 
-    align-items: center;
+    transform:
+        translateX(-50%)
+        translateY(0);
 
-    justify-content: center;
+}
 
-    overflow: hidden;
 
-    border-radius: 50%;
+.kb-mega-intro {
+
+    padding:
+        34px;
+
+    background:
+        var(--kb-green);
+
+    color:
+        #ffffff;
+
+}
+
+
+.kb-eyebrow {
+
+    display:
+        block;
+
+    margin-bottom:
+        10px;
+
+    color:
+        var(--kb-gold);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.kb-mega-intro h3 {
+
+    margin:
+        0 0 15px;
+
+    font-family:
+        var(--kb-serif);
+
+    font-size:
+        25px;
+
+    font-weight:
+        500;
+
+    line-height:
+        1.15;
+
+}
+
+
+.kb-mega-intro h3 em {
+
+    color:
+        var(--kb-gold-light);
+
+    font-style:
+        normal;
+
+}
+
+
+.kb-mega-intro p {
+
+    margin:
+        0;
+
+    color:
+        rgba(255,255,255,.62);
+
+    font-size:
+        11px;
+
+    line-height:
+        1.8;
+
+}
+
+
+.kb-mega-links {
+
+    padding:
+        17px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        3px;
+
+}
+
+
+.kb-mega-item {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        13px;
+
+    padding:
+        12px;
+
+    border-radius:
+        10px;
+
+    text-decoration:
+        none;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
+}
+
+
+.kb-mega-item:hover {
+
+    background:
+        #f4f7f4;
+
+    transform:
+        translateX(3px);
+
+}
+
+
+.kb-mega-icon {
+
+    width:
+        37px;
+
+    height:
+        37px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        10px;
+
+    background:
+        #eef4f0;
+
+    color:
+        var(--kb-green-3);
+
+    font-size:
+        15px;
+
+}
+
+
+.kb-mega-item > span:last-child {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        3px;
+
+}
+
+
+.kb-mega-item strong {
+
+    color:
+        var(--kb-green);
+
+    font-size:
+        12px;
+
+}
+
+
+.kb-mega-item small {
+
+    color:
+        var(--kb-muted);
+
+    font-size:
+        10px;
+
+}
+
+
+/* =========================================================
+   NAV ACTIONS
+========================================================= */
+
+.kb-nav-actions {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        13px;
+
+    flex-shrink:
+        0;
+
+}
+
+
+/* =========================================================
+   NOTIFICATION BUTTON
+========================================================= */
+
+.kb-notification-wrapper {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+}
+
+
+.kb-notification-button {
+
+    position:
+        relative;
+
+    width:
+        42px;
+
+    height:
+        42px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        rgba(18,60,47,.12);
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255,255,255,.72);
+
+    color:
+        var(--kb-green);
+
+    text-decoration:
+        none;
+
+    transition:
+        background .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+
+}
+
+
+.kb-notification-button:hover {
+
+    background:
+        #ffffff;
+
+    border-color:
+        rgba(199,161,90,.45);
+
+    box-shadow:
+        0 9px 25px
+        rgba(8,35,25,.10);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.kb-notification-bell {
+
+    width:
+        20px;
+
+    height:
+        20px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+}
+
+
+.kb-notification-bell svg {
+
+    width:
+        19px;
+
+    height:
+        19px;
+
+    fill:
+        none;
+
+    stroke:
+        currentColor;
+
+    stroke-width:
+        1.7;
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+
+}
+
+
+/* =========================================================
+   NOTIFICATION BADGE
+========================================================= */
+
+.kb-notification-badge {
+
+    position:
+        absolute;
+
+    top:
+        -3px;
+
+    right:
+        -3px;
+
+    min-width:
+        17px;
+
+    height:
+        17px;
+
+    padding:
+        0 4px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        2px solid
+        #ffffff;
+
+    border-radius:
+        999px;
+
+    background:
+        #b34b4b;
+
+    color:
+        #ffffff;
+
+    font-family:
+        var(--kb-sans);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+
+    box-shadow:
+        0 3px 9px
+        rgba(179,75,75,.25);
+
+}
+
+
+/* =========================================================
+   NOTIFICATION ANIMATION
+========================================================= */
+
+.kb-notification-button:has(
+    .kb-notification-badge
+) .kb-notification-bell {
+
+    animation:
+        kbNotificationBell 2.8s ease-in-out infinite;
+
+}
+
+
+@keyframes kbNotificationBell {
+
+    0%,
+    82%,
+    100% {
+
+        transform:
+            rotate(0);
+
+    }
+
+    86% {
+
+        transform:
+            rotate(8deg);
+
+    }
+
+    89% {
+
+        transform:
+            rotate(-8deg);
+
+    }
+
+    92% {
+
+        transform:
+            rotate(5deg);
+
+    }
+
+    95% {
+
+        transform:
+            rotate(-3deg);
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.kb-login {
+
+    color:
+        var(--kb-green);
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    text-decoration:
+        none;
+
+    transition:
+        color .2s ease;
+
+}
+
+
+.kb-login:hover {
+
+    color:
+        var(--kb-gold);
+
+}
+
+
+/* =========================================================
+   GET STARTED
+========================================================= */
+
+.kb-nav-cta {
+
+    min-height:
+        42px;
+
+    padding:
+        0 17px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        11px;
+
+    background:
+        var(--kb-green);
+
+    color:
+        #ffffff;
+
+    border-radius:
+        999px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .4px;
+
+    text-decoration:
+        none;
+
+    box-shadow:
+        0 10px 25px
+        rgba(11,33,25,.16);
+
+    transition:
+        background .25s ease,
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.kb-nav-cta b {
+
+    color:
+        var(--kb-gold-light);
+
+    font-size:
+        14px;
+
+    font-weight:
+        500;
+
+}
+
+
+.kb-nav-cta:hover {
+
+    background:
+        var(--kb-green-3);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 15px 30px
+        rgba(11,33,25,.21);
+
+}
+
+
+/* =========================================================
+   ACCOUNT BUTTON
+========================================================= */
+
+.kb-account {
+
+    position:
+        relative;
+
+}
+
+
+.kb-account-button {
+
+    min-height:
+        46px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    padding:
+        4px 8px 4px 5px;
+
+    border:
+        1px solid
+        rgba(18,60,47,.12);
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255,255,255,.75);
+
+    color:
+        var(--kb-green);
+
+    cursor:
+        pointer;
+
+    font-family:
+        inherit;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+
+}
+
+
+.kb-account-button:hover,
+.kb-account-button.active {
+
+    border-color:
+        rgba(199,161,90,.45);
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 10px 30px
+        rgba(8,35,25,.10);
+
+}
+
+
+.kb-account-avatar {
+
+    width:
+        35px;
+
+    height:
+        35px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        50%;
 
     background:
         linear-gradient(
             135deg,
-            #123c2f,
-            #1c5b46
+            var(--kb-green),
+            var(--kb-green-3)
         );
 
-    color: #ffffff;
+    color:
+        #ffffff;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
 }
 
 
-.profile-avatar img {
-    width: 100%;
+.kb-account-avatar img {
 
-    height: 100%;
+    width:
+        100%;
 
-    display: block;
+    height:
+        100%;
 
-    object-fit: cover;
+    object-fit:
+        cover;
+
 }
 
 
-.profile-avatar-letter {
-    color: #ffffff;
+.kb-account-name {
 
-    font-size: 13px;
+    max-width:
+        105px;
 
-    font-weight: 800;
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
 }
 
 
-.profile-user-name {
-    max-width: 120px;
+.kb-account-chevron {
 
-    overflow: hidden;
+    color:
+        var(--kb-muted);
 
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-
-.profile-arrow {
-    font-size: 13px;
+    font-size:
+        10px;
 
     transition:
-        transform .2s ease;
+        transform .25s ease;
+
 }
 
 
-.profile-button.active .profile-arrow {
-    transform: rotate(180deg);
+.kb-account-button.active
+.kb-account-chevron {
+
+    transform:
+        rotate(180deg);
+
 }
 
 
 /* =========================================================
-   PROFILE DROPDOWN
+   ACCOUNT DROPDOWN
 ========================================================= */
 
-.profile-dropdown {
-    position: absolute;
+.kb-account-dropdown {
 
-    top: calc(100% + 14px);
+    position:
+        absolute;
 
-    right: 0;
+    top:
+        calc(100% + 15px);
 
-    width: 320px;
+    right:
+        0;
 
-    display: block;
+    width:
+        340px;
 
-    padding: 0;
+    background:
+        #ffffff;
 
-    margin: 0;
+    border:
+        1px solid
+        rgba(18,60,47,.10);
 
-    box-sizing: border-box;
+    border-radius:
+        18px;
 
-    background: #ffffff;
-
-    color: #18231f;
-
-    border: 1px solid #d9e1dc;
-
-    border-radius: 16px;
-
-    overflow: hidden;
+    overflow:
+        hidden;
 
     box-shadow:
-        0 20px 55px
-        rgba(8, 39, 30, .20);
+        0 30px 75px
+        rgba(8,35,25,.20);
 
-    opacity: 0;
+    opacity:
+        0;
 
-    visibility: hidden;
+    visibility:
+        hidden;
 
-    pointer-events: none;
+    pointer-events:
+        none;
 
-    transform: translateY(-8px);
+    transform:
+        translateY(-8px)
+        scale(.98);
 
-    transform-origin: top right;
+    transform-origin:
+        top right;
 
     transition:
         opacity .2s ease,
         visibility .2s ease,
         transform .2s ease;
 
-    z-index: 999999;
 }
 
 
-.profile-dropdown.open {
-    opacity: 1;
+.kb-account-dropdown.open {
 
-    visibility: visible;
+    opacity:
+        1;
 
-    pointer-events: auto;
+    visibility:
+        visible;
 
-    transform: translateY(0);
+    pointer-events:
+        auto;
+
+    transform:
+        translateY(0)
+        scale(1);
+
 }
 
 
-/* =========================================================
-   DROPDOWN HEADER
-========================================================= */
+.kb-account-header {
 
-.profile-dropdown-header {
-    display: flex;
+    display:
+        flex;
 
-    align-items: center;
+    align-items:
+        center;
 
-    gap: 13px;
+    gap:
+        14px;
 
-    width: 100%;
-
-    padding: 18px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    color: #18231f;
-
-    border-bottom: 1px solid #edf0ee;
-}
-
-
-.profile-dropdown-avatar {
-    width: 48px;
-
-    height: 48px;
-
-    min-width: 48px;
-
-    flex: 0 0 48px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    overflow: hidden;
-
-    border-radius: 50%;
+    padding:
+        21px;
 
     background:
         linear-gradient(
             135deg,
-            #123c2f,
-            #1d604c
+            #f8faf8,
+            #ffffff
         );
 
-    color: #ffffff;
+    border-bottom:
+        1px solid
+        #edf0ee;
 
-    font-size: 16px;
-
-    font-weight: 800;
 }
 
 
-.profile-dropdown-avatar img {
-    width: 100%;
+.kb-account-large-avatar {
 
-    height: 100%;
+    width:
+        52px;
 
-    display: block;
+    height:
+        52px;
 
-    object-fit: cover;
-}
+    min-width:
+        52px;
 
+    display:
+        flex;
 
-.profile-dropdown-user {
-    min-width: 0;
+    align-items:
+        center;
 
-    flex: 1;
+    justify-content:
+        center;
 
-    display: flex;
+    overflow:
+        hidden;
 
-    flex-direction: column;
-
-    gap: 5px;
-
-    overflow: hidden;
-}
-
-
-.profile-dropdown-user strong {
-    display: block;
-
-    margin: 0;
-
-    padding: 0;
-
-    color: #123c2f;
-
-    font-size: 14px;
-
-    font-weight: 800;
-
-    line-height: 1.3;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-
-.profile-dropdown-user span {
-    display: block;
-
-    margin: 0;
-
-    padding: 0;
-
-    color: #68736e;
-
-    font-size: 11px;
-
-    font-weight: 500;
-
-    line-height: 1.4;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   DROPDOWN LINKS
-========================================================= */
-
-.profile-dropdown-links {
-    width: 100%;
-
-    padding: 8px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-}
-
-
-.profile-dropdown-link {
-    width: 100%;
-
-    min-height: 48px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    box-sizing: border-box;
-
-    margin: 0;
-
-    padding: 9px 11px;
-
-    background: #ffffff;
-
-    color: #263731;
-
-    border-radius: 9px;
-
-    text-decoration: none;
-
-    font-size: 13px;
-
-    font-weight: 650;
-
-    line-height: 1.3;
-
-    transition:
-        background .18s ease,
-        color .18s ease;
-}
-
-
-.profile-dropdown-link:hover {
-    background: #f2f6f3;
-
-    color: #123c2f;
-}
-
-
-.dropdown-icon {
-    width: 30px;
-
-    height: 30px;
-
-    min-width: 30px;
-
-    flex: 0 0 30px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    box-sizing: border-box;
-
-    border-radius: 8px;
-
-    background: #edf5f0;
-
-    color: #26734d;
-
-    font-size: 13px;
-
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-.profile-dropdown-footer {
-    width: 100%;
-
-    padding: 8px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    border-top: 1px solid #edf0ee;
-}
-
-
-.profile-dropdown-logout {
-    width: 100%;
-
-    min-height: 48px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    box-sizing: border-box;
-
-    margin: 0;
-
-    padding: 9px 11px;
-
-    background: #ffffff;
-
-    color: #a33a3a;
-
-    border-radius: 9px;
-
-    text-decoration: none;
-
-    font-size: 13px;
-
-    font-weight: 700;
-}
-
-
-.profile-dropdown-logout:hover {
-    background: #fff3f3;
-}
-
-
-.profile-dropdown-logout .dropdown-icon {
-    background: #f9eaea;
-
-    color: #a33a3a;
-}
-
-
-/* =========================================================
-   MODERN FOOTER
-========================================================= */
-
-.modern-footer {
-    position: relative;
-
-    margin-top: 75px;
+    border-radius:
+        50%;
 
     background:
         linear-gradient(
-            145deg,
-            #091c16,
-            #0d291f
+            135deg,
+            var(--kb-green),
+            var(--kb-green-3)
         );
 
-    color: #ffffff;
+    color:
+        #ffffff;
+
+    font-size:
+        17px;
+
+    font-weight:
+        800;
+
 }
 
 
-.footer-top-accent {
-    height: 3px;
+.kb-account-large-avatar img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+}
+
+
+.kb-account-details {
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        4px;
+
+}
+
+
+.kb-account-label {
+
+    color:
+        var(--kb-gold);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.7px;
+
+}
+
+
+.kb-account-details strong {
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    color:
+        var(--kb-green);
+
+    font-family:
+        var(--kb-serif);
+
+    font-size:
+        16px;
+
+    font-weight:
+        600;
+
+}
+
+
+.kb-account-details small {
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    color:
+        var(--kb-muted);
+
+    font-size:
+        10px;
+
+}
+
+
+/* =========================================================
+   ACCOUNT MENU
+========================================================= */
+
+.kb-account-menu {
+
+    padding:
+        9px;
+
+}
+
+
+.kb-account-menu a {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        11px;
+
+    padding:
+        10px;
+
+    border-radius:
+        10px;
+
+    text-decoration:
+        none;
+
+    transition:
+        background .2s ease;
+
+}
+
+
+.kb-account-menu a:hover {
+
+    background:
+        #f4f7f4;
+
+}
+
+
+.kb-menu-icon {
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        9px;
+
+    background:
+        #eef4f0;
+
+    color:
+        var(--kb-green-3);
+
+    font-size:
+        13px;
+
+}
+
+
+.kb-account-menu a > span:nth-child(2) {
+
+    min-width:
+        0;
+
+    flex:
+        1;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        3px;
+
+}
+
+
+.kb-account-menu strong {
+
+    color:
+        #263731;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+}
+
+
+.kb-account-menu small {
+
+    color:
+        var(--kb-muted);
+
+    font-size:
+        9px;
+
+}
+
+
+.kb-account-menu b {
+
+    color:
+        #9aa69f;
+
+    font-size:
+        13px;
+
+    font-weight:
+        500;
+
+}
+
+
+.kb-account-footer {
+
+    padding:
+        9px;
+
+    border-top:
+        1px solid
+        #edf0ee;
+
+}
+
+
+.kb-logout {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    padding:
+        11px;
+
+    border-radius:
+        9px;
+
+    color:
+        #a64040;
+
+    background:
+       #123c2f;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    text-decoration:
+        none;
+
+    transition:
+        background .2s ease;
+
+}
+
+
+.kb-logout:hover {
+
+    background:
+        #fff4f4;
+
+}
+
+
+/* =========================================================
+   MOBILE BUTTON
+========================================================= */
+
+.kb-menu-button {
+
+    display:
+        none;
+
+    width:
+        43px;
+
+    height:
+        43px;
+
+    border:
+        1px solid
+        rgba(18,60,47,.15);
+
+    border-radius:
+        11px;
+
+    background:
+        #ffffff;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-direction:
+        column;
+
+    gap:
+        5px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.kb-menu-button span {
+
+    width:
+        19px;
+
+    height:
+        1.5px;
+
+    border-radius:
+        10px;
+
+    background:
+        var(--kb-green);
+
+    transition:
+        transform .25s ease,
+        opacity .25s ease;
+
+}
+
+
+.kb-menu-button.active
+span:nth-child(1) {
+
+    transform:
+        translateY(6.5px)
+        rotate(45deg);
+
+}
+
+
+.kb-menu-button.active
+span:nth-child(2) {
+
+    opacity:
+        0;
+
+}
+
+
+.kb-menu-button.active
+span:nth-child(3) {
+
+    transform:
+        translateY(-6.5px)
+        rotate(-45deg);
+
+}
+
+
+/* =========================================================
+   MOBILE PANEL
+========================================================= */
+
+.kb-mobile-panel {
+
+    position:
+        fixed;
+
+    top:
+        0;
+
+    left:
+        0;
+
+    width:
+        100%;
+
+    height:
+        100vh;
+
+    height:
+        100dvh;
+
+    background:
+        var(--kb-green);
+
+    z-index:
+        -1;
+
+    overflow-y:
+        auto;
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    transform:
+        translateY(-15px);
+
+    transition:
+        opacity .3s ease,
+        visibility .3s ease,
+        transform .3s ease;
+
+}
+
+
+.kb-mobile-panel.open {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    transform:
+        translateY(0);
+
+}
+
+
+.kb-mobile-inner {
+
+    min-height:
+        100%;
+
+    padding:
+        115px 25px 35px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+.kb-mobile-heading {
+
+    margin-bottom:
+        32px;
+
+}
+
+
+.kb-mobile-heading h2 {
+
+    margin:
+        0;
+
+    color:
+        #ffffff;
+
+    font-family:
+        var(--kb-serif);
+
+    font-size:
+        42px;
+
+    font-weight:
+        500;
+
+}
+
+
+.kb-mobile-links {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+.kb-mobile-links a {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        38px 1fr 25px;
+
+    align-items:
+        center;
+
+    min-height:
+        57px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.10);
+
+    color:
+        #ffffff;
+
+    text-decoration:
+        none;
+
+    font-family:
+        var(--kb-serif);
+
+    font-size:
+        22px;
+
+    transition:
+        color .2s ease,
+        padding-left .2s ease;
+
+}
+
+
+.kb-mobile-links a span {
+
+    color:
+        var(--kb-gold);
+
+    font-family:
+        var(--kb-sans);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.kb-mobile-links a b {
+
+    color:
+        rgba(255,255,255,.45);
+
+    font-family:
+        var(--kb-sans);
+
+    font-size:
+        14px;
+
+    font-weight:
+        400;
+
+}
+
+
+.kb-mobile-links a:hover {
+
+    color:
+        var(--kb-gold-light);
+
+    padding-left:
+        5px;
+
+}
+
+
+.kb-mobile-bottom {
+
+    margin-top:
+        auto;
+
+    padding-top:
+        35px;
+
+    display:
+        flex;
+
+    gap:
+        10px;
+
+}
+
+
+.kb-mobile-bottom a {
+
+    min-height:
+        48px;
+
+    flex:
+        1;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        999px;
+
+    text-decoration:
+        none;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    text-align:
+        center;
+
+}
+
+
+.kb-mobile-login,
+.kb-mobile-account {
+
+    border:
+        1px solid
+        rgba(255,255,255,.20);
+
+    color:
+        #ffffff;
+
+}
+
+
+.kb-mobile-register {
+
+    background:
+        var(--kb-gold);
+
+    color:
+        var(--kb-green);
+
+}
+
+
+.kb-mobile-logout {
+
+    background:
+        rgba(255,255,255,.08);
+
+    color:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.kb-main {
+
+    min-height:
+        50vh;
+
+    padding-top:
+        88px;
+
+}
+
+
+.kb-header.scrolled
+~ .kb-main {
+
+    padding-top:
+        72px;
+
+}
+
+
+/* =========================================================
+   SITE MESSAGES
+========================================================= */
+
+.kb-messages {
+
+    position:
+        fixed;
+
+    top:
+        105px;
+
+    right:
+        25px;
+
+    z-index:
+        99980;
+
+    width:
+        min(390px, calc(100vw - 30px));
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        10px;
+
+}
+
+
+.kb-message {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        11px;
+
+    padding:
+        13px 14px;
+
+    background:
+        rgba(255,255,255,.97);
+
+    border:
+        1px solid
+        rgba(18,60,47,.10);
+
+    border-radius:
+        12px;
+
+    box-shadow:
+        0 18px 45px
+        rgba(8,35,25,.14);
+
+    animation:
+        kbMessageIn .35s ease;
+
+}
+
+
+.kb-message-icon {
+
+    width:
+        29px;
+
+    height:
+        29px;
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        #edf5f0;
+
+    color:
+        var(--kb-green-3);
+
+    font-size:
+        12px;
+
+    font-weight:
+        900;
+
+}
+
+
+.kb-message-text {
+
+    flex:
+        1;
+
+    color:
+        #34433c;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.5;
+
+}
+
+
+.kb-message-close {
+
+    border:
+        0;
+
+    background:
+        transparent;
+
+    color:
+        #9aa69f;
+
+    font-size:
+        19px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.kb-message-success {
+
+    border-left:
+        3px solid
+        #3c8c63;
+
+}
+
+
+.kb-message-error {
+
+    border-left:
+        3px solid
+        #b34b4b;
+
+}
+
+
+.kb-message-warning {
+
+    border-left:
+        3px solid
+        #c49a42;
+
+}
+
+
+.kb-message-error
+.kb-message-icon {
+
+    background:
+        #fff0f0;
+
+    color:
+        #a64040;
+
+}
+
+
+@keyframes kbMessageIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(-10px)
+            translateX(10px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0)
+            translateX(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.kb-footer {
+
+    position:
+        relative;
+
+    margin-top:
+        90px;
+
+    background:
+        #071912;
+
+    color:
+        #ffffff;
+
+}
+
+
+.kb-footer-top-line {
+
+    height:
+        2px;
 
     background:
         linear-gradient(
             90deg,
-            transparent,
-            #d4af63,
-            transparent
+            transparent 0%,
+            var(--kb-gold) 50%,
+            transparent 100%
         );
+
 }
 
 
-.footer-container {
-    width: 100%;
+.kb-footer-container {
 
-    max-width: 1200px;
+    width:
+        100%;
 
-    margin: 0 auto;
+    max-width:
+        1280px;
+
+    margin:
+        0 auto;
 
     padding:
-        60px 30px 46px;
+        70px 35px 60px;
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
-        2fr 1fr 1fr 1.25fr;
+        2fr .8fr .8fr 1.25fr;
 
-    gap: 50px;
+    gap:
+        65px;
 
-    box-sizing: border-box;
 }
 
 
-.footer-brand {
-    max-width: 390px;
+.kb-footer-brand {
+
+    max-width:
+        410px;
+
 }
 
 
-.footer-logo {
-    display: inline-flex;
+.kb-footer-logo {
 
-    align-items: center;
+    display:
+        inline-flex;
 
-    gap: 13px;
+    align-items:
+        center;
 
-    margin-bottom: 18px;
+    gap:
+        13px;
 
-    color: #ffffff;
+    margin-bottom:
+        20px;
 
-    text-decoration: none;
+    text-decoration:
+        none;
+
 }
 
 
-.footer-logo img {
-    width: 50px;
+.kb-footer-logo img {
 
-    height: 50px;
+    width:
+        53px;
 
-    display: block;
+    height:
+        53px;
 
-    object-fit: contain;
+    object-fit:
+        contain;
+
 }
 
 
-.footer-logo div {
-    display: flex;
+.kb-footer-logo > span {
 
-    flex-direction: column;
+    display:
+        flex;
 
-    gap: 3px;
+    flex-direction:
+        column;
+
+    gap:
+        4px;
+
 }
 
 
-.footer-social-icon svg {
-    width: 15px;
+.kb-footer-logo strong {
 
-    height: 15px;
+    color:
+        var(--kb-gold-light);
 
-    display: block;
+    font-family:
+        var(--kb-serif);
 
-    fill: currentColor;
+    font-size:
+        20px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        1.8px;
+
 }
 
 
-.footer-logo strong {
-    color: #d4af63;
+.kb-footer-logo small {
 
-    font-size: 19px;
+    color:
+        rgba(255,255,255,.52);
 
-    font-weight: 800;
+    font-size:
+        7px;
 
-    letter-spacing: 1.6px;
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.4px;
+
 }
 
 
-.footer-logo span {
-    color: #ffffff;
+.kb-footer-brand p {
 
-    font-size: 8px;
+    max-width:
+        390px;
 
-    font-weight: 600;
+    margin:
+        0 0 24px;
 
-    letter-spacing: 1.1px;
+    color:
+        rgba(255,255,255,.48);
+
+    font-size:
+        11px;
+
+    line-height:
+        1.9;
+
 }
 
 
-.footer-brand p {
-    margin: 0 0 22px;
+.kb-footer-socials {
 
-    max-width: 370px;
+    display:
+        flex;
 
-    color: #9fb0a8;
+    gap:
+        8px;
 
-    font-size: 12.5px;
-
-    line-height: 1.8;
 }
 
 
-.footer-socials {
-    display: flex;
+.kb-footer-socials a {
 
-    gap: 10px;
-}
+    width:
+        35px;
 
+    height:
+        35px;
 
-.footer-social-icon {
-    width: 34px;
+    display:
+        flex;
 
-    height: 34px;
+    align-items:
+        center;
 
-    display: flex;
+    justify-content:
+        center;
 
-    align-items: center;
+    border:
+        1px solid
+        rgba(255,255,255,.13);
 
-    justify-content: center;
+    border-radius:
+        50%;
 
-    border: 1px solid
-        rgba(255, 255, 255, .14);
+    color:
+        var(--kb-gold);
 
-    border-radius: 50%;
+    font-size:
+        12px;
 
-    color: #d4af63;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    text-decoration: none;
-
-    text-transform: uppercase;
+    text-decoration:
+        none;
 
     transition:
         border-color .2s ease,
         background .2s ease,
         transform .2s ease;
+
 }
 
 
-.footer-social-icon:hover {
-    border-color: #d4af63;
+.kb-footer-socials a:hover {
+
+    border-color:
+        var(--kb-gold);
 
     background:
-        rgba(212, 175, 99, .08);
+        rgba(199,161,90,.08);
 
-    transform: translateY(-2px);
+    transform:
+        translateY(-2px);
+
 }
 
 
-.modern-footer h4 {
-    margin: 3px 0 18px;
+/* =========================================================
+   FOOTER COLUMNS
+========================================================= */
 
-    color: #ffffff;
+.kb-footer-column {
 
-    font-size: 12px;
+    display:
+        flex;
 
-    font-weight: 800;
+    flex-direction:
+        column;
 
-    letter-spacing: .8px;
+    align-items:
+        flex-start;
 
-    text-transform: uppercase;
+    gap:
+        12px;
+
 }
 
 
-.modern-footer h4::after {
-    content: "";
+.kb-footer-heading {
 
-    display: block;
+    position:
+        relative;
 
-    width: 25px;
+    display:
+        inline-block;
 
-    height: 2px;
+    margin-bottom:
+        8px;
 
-    margin-top: 8px;
+    color:
+        #ffffff;
 
-    background: #d4af63;
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.6px;
+
+    text-transform:
+        uppercase;
+
 }
 
 
-.footer-links {
-    display: flex;
+.kb-footer-heading::after {
 
-    flex-direction: column;
+    content:
+        "";
 
-    align-items: flex-start;
+    display:
+        block;
 
-    gap: 11px;
+    width:
+        24px;
+
+    height:
+        1px;
+
+    margin-top:
+        9px;
+
+    background:
+        var(--kb-gold);
+
 }
 
 
-.footer-links a {
-    position: relative;
+.kb-footer-column a {
 
-    color: #9fb0a8;
+    color:
+        rgba(255,255,255,.48);
 
-    font-size: 12.5px;
+    font-size:
+        11px;
 
-    text-decoration: none;
+    text-decoration:
+        none;
 
     transition:
         color .2s ease,
         transform .2s ease;
+
 }
 
 
-.footer-links a:hover {
-    color: #d4af63;
+.kb-footer-column a:hover {
 
-    transform: translateX(3px);
-}
+    color:
+        var(--kb-gold-light);
 
+    transform:
+        translateX(3px);
 
-.footer-contact {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 4px;
-}
-
-
-.footer-contact-row {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 8px 0;
-
-    color: #cfd9d4;
-
-    font-size: 12.5px;
-
-    text-decoration: none;
-
-    border-bottom:
-        1px solid
-        rgba(255, 255, 255, .06);
-
-    width: 100%;
-
-    transition:
-        color .2s ease;
-}
-
-
-.footer-contact-row:last-child {
-    border-bottom: none;
-}
-
-
-.footer-contact-row:hover {
-    color: #d4af63;
-}
-
-
-.footer-contact-icon {
-    width: 26px;
-
-    height: 26px;
-
-    flex: 0 0 26px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 7px;
-
-    background:
-        rgba(212, 175, 99, .1);
-
-    color: #d4af63;
-
-    font-size: 12px;
-}
-
-
-.footer-bottom {
-    border-top:
-        1px solid
-        rgba(255, 255, 255, .08);
-}
-
-
-.footer-bottom-inner {
-    width: 100%;
-
-    max-width: 1200px;
-
-    margin: 0 auto;
-
-    padding: 18px 30px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 20px;
-
-    box-sizing: border-box;
-
-    color: #71847b;
-
-    font-size: 9.5px;
-}
-
-
-.footer-tagline {
-    color: #8c9d95;
-
-    text-align: right;
 }
 
 
 /* =========================================================
-   TABLET FOOTER
+   FOOTER CONTACT
 ========================================================= */
 
-@media (max-width: 900px) {
+.kb-footer-contact {
 
-    .footer-container {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        flex-start;
+
+}
+
+
+.kb-contact-item {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        10px;
+
+    padding:
+        10px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+
+    color:
+        rgba(255,255,255,.58);
+
+    font-size:
+        10px;
+
+    line-height:
+        1.6;
+
+    text-decoration:
+        none;
+
+    transition:
+        color .2s ease;
+
+}
+
+
+.kb-contact-item:last-child {
+
+    border-bottom:
+        none;
+
+}
+
+
+.kb-contact-item:hover {
+
+    color:
+        var(--kb-gold-light);
+
+}
+
+
+.kb-contact-symbol {
+
+    width:
+        24px;
+
+    height:
+        24px;
+
+    min-width:
+        24px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        6px;
+
+    background:
+        rgba(199,161,90,.09);
+
+    color:
+        var(--kb-gold);
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+}
+
+
+.kb-address {
+
+    align-items:
+        flex-start;
+
+}
+
+
+/* =========================================================
+   FOOTER BOTTOM
+========================================================= */
+
+.kb-footer-bottom {
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.kb-footer-bottom-inner {
+
+    width:
+        100%;
+
+    max-width:
+        1280px;
+
+    margin:
+        0 auto;
+
+    padding:
+        19px 35px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    color:
+        rgba(255,255,255,.32);
+
+    font-size:
+        8px;
+
+}
+
+
+.kb-footer-tagline {
+
+    color:
+        rgba(199,161,90,.62);
+
+    letter-spacing:
+        .5px;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .kb-navbar {
+
+        padding:
+            0 25px;
+
+    }
+
+
+    .kb-desktop-nav {
+
+        gap:
+            20px;
+
+    }
+
+
+    .kb-brand-text small {
+
+        display:
+            none;
+
+    }
+
+
+    .kb-footer-container {
 
         grid-template-columns:
             1.5fr 1fr 1fr;
 
-        gap: 40px;
+        gap:
+            45px;
 
     }
 
 
-    .footer-brand {
+    .kb-footer-contact {
 
-        grid-column: 1 / -1;
-
-        max-width: 600px;
-
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE FOOTER
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .modern-footer {
-
-        margin-top: 55px;
-
-    }
-
-
-    .footer-container {
-
-        grid-template-columns: 1fr;
-
-        gap: 30px;
-
-        padding:
-            44px 22px 34px;
-
-    }
-
-
-    .footer-brand {
-
-        grid-column: auto;
-
-        max-width: 100%;
-
-    }
-
-
-    .footer-logo img {
-
-        width: 45px;
-
-        height: 45px;
-
-    }
-
-
-    .footer-logo strong {
-
-        font-size: 17px;
-
-    }
-
-
-    .footer-logo span {
-
-        font-size: 7px;
-
-    }
-
-
-    .footer-brand p {
-
-        font-size: 11px;
-
-        line-height: 1.7;
-
-    }
-
-
-    .modern-footer h4 {
-
-        margin-bottom: 14px;
-
-    }
-
-
-    .footer-bottom-inner {
-
-        padding:
-            16px 22px;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 6px;
-
-        line-height: 1.5;
-
-    }
-
-
-    .footer-tagline {
-
-        text-align: left;
+        grid-column:
+            1 / -1;
 
     }
 
@@ -1811,872 +4271,245 @@
 
 
 /* =========================================================
-   MOBILE NAVIGATION
+   MOBILE
 ========================================================= */
 
 @media (max-width: 850px) {
 
-    html,
-    body {
+    .kb-navbar {
 
-        width: 100% !important;
+        height:
+            70px;
 
-        max-width: 100% !important;
-
-        min-width: 0 !important;
-
-        overflow-x: hidden !important;
+        padding:
+            0 15px;
 
     }
 
 
-    /* FIXED MOBILE HEADER */
+    .kb-header.scrolled
+    .kb-navbar {
 
-    .site-header {
-
-        width: 100% !important;
-
-        position: fixed !important;
-
-        top: 0 !important;
-
-        left: 0 !important;
-
-        right: 0 !important;
-
-        z-index: 99999 !important;
+        height:
+            64px;
 
     }
 
 
-    .main-navbar {
+    .kb-brand-logo {
 
-        width: 100% !important;
+        width:
+            41px;
 
-        max-width: 100% !important;
-
-        height: 68px !important;
-
-        min-height: 68px !important;
-
-        padding: 0 12px !important;
-
-        margin: 0 !important;
-
-        display: flex !important;
-
-        flex-direction: row !important;
-
-        align-items: center !important;
-
-        justify-content: space-between !important;
-
-        gap: 8px !important;
-
-        box-sizing: border-box !important;
+        height:
+            41px;
 
     }
 
 
-    .nav-brand {
+    .kb-brand-text strong {
 
-        display: block !important;
-
-        flex: 1 1 auto !important;
-
-        min-width: 0 !important;
-
-        max-width: calc(100% - 52px) !important;
-
-        overflow: hidden !important;
+        font-size:
+            16px;
 
     }
 
 
-    .nav-brand > a {
+    .kb-brand-text small {
 
-        width: 100% !important;
+        display:
+            block;
 
-        display: flex !important;
+        font-size:
+            5.5px;
 
-        flex-direction: row !important;
-
-        align-items: center !important;
-
-        gap: 8px !important;
-
-        min-width: 0 !important;
-
-        overflow: hidden !important;
+        letter-spacing:
+            1px;
 
     }
 
 
-    .nav-brand img {
+    .kb-desktop-nav {
 
-        width: 38px !important;
-
-        height: 38px !important;
-
-        min-width: 38px !important;
-
-        flex: 0 0 38px !important;
-
-        display: block !important;
-
-        object-fit: contain !important;
+        display:
+            none;
 
     }
 
 
-    .nav-brand a > span {
+    .kb-login,
+    .kb-nav-cta {
 
-        display: block !important;
-
-        flex: 1 1 auto !important;
-
-        min-width: 0 !important;
-
-        overflow: hidden !important;
-
-        color: #d4af63 !important;
-
-        font-size: 10px !important;
-
-        font-weight: 800 !important;
-
-        line-height: 1.15 !important;
-
-        white-space: nowrap !important;
-
-        text-overflow: ellipsis !important;
+        display:
+            none;
 
     }
 
 
-    .menu-toggle {
+    .kb-menu-button {
 
-        display: flex !important;
-
-        width: 44px !important;
-
-        height: 44px !important;
-
-        min-width: 44px !important;
-
-        min-height: 44px !important;
-
-        flex: 0 0 44px !important;
-
-        margin: 0 !important;
-
-        padding: 0 !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-        flex-direction: column !important;
-
-        gap: 4px !important;
-
-        background: #f1e7d4 !important;
-
-        border: 1px solid #d6bb88 !important;
-
-        border-radius: 9px !important;
-
-        position: relative !important;
-
-        z-index: 10000 !important;
+        display:
+            flex;
 
     }
 
 
-    .menu-toggle span {
+    .kb-account-button {
 
-        display: block !important;
-
-        width: 20px !important;
-
-        height: 2px !important;
-
-        background: #123c2f !important;
-
-        border-radius: 3px !important;
+        min-height:
+            42px;
 
     }
 
 
-    .nav-links {
+    .kb-account-name {
 
-        position: absolute !important;
-
-        top: 68px !important;
-
-        left: 0 !important;
-
-        right: 0 !important;
-
-        width: 100% !important;
-
-        max-width: 100% !important;
-
-        display: none !important;
-
-        flex-direction: column !important;
-
-        align-items: stretch !important;
-
-        gap: 0 !important;
-
-        padding: 12px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border-top: 1px solid #e5ebe7 !important;
-
-        box-shadow:
-            0 18px 40px
-            rgba(0, 0, 0, .12) !important;
-
-        z-index: 9998 !important;
+        display:
+            none;
 
     }
 
 
-    .nav-links.active {
+    .kb-account-dropdown {
 
-        display: flex !important;
+        position:
+            fixed;
 
-    }
+        top:
+            78px;
 
+        right:
+            12px;
 
-    .nav-link {
-
-        width: 100% !important;
-
-        min-height: 46px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        padding: 0 12px !important;
-
-        box-sizing: border-box !important;
-
-        color: #263731 !important;
-
-        background: #ffffff !important;
-
-        border-radius: 8px !important;
-
-        font-size: 14px !important;
-
-        font-weight: 700 !important;
-
-        white-space: nowrap !important;
-
-        text-decoration: none !important;
+        width:
+            min(340px, calc(100vw - 24px));
 
     }
 
 
-    .nav-link:hover {
+    .kb-notification-button {
 
-        background: #f3f7f4 !important;
+        width:
+            40px;
 
-        color: #123c2f !important;
-
-    }
-
-
-    .nav-link::after {
-
-        display: none !important;
-
-    }
-
-
-    /* MOBILE PROFILE */
-
-    .profile-menu {
-
-        position: relative !important;
-
-        width: 100% !important;
-
-        margin-top: 8px !important;
-
-        padding-top: 8px !important;
-
-        border-top: 1px solid #e8edeb !important;
-
-        z-index: 10000 !important;
-
-    }
-
-
-    .profile-button {
-
-        width: 100% !important;
-
-        min-height: 48px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        gap: 9px !important;
-
-        padding: 6px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border: 1px solid #dfe5e1 !important;
-
-        border-radius: 10px !important;
-
-        color: #123c2f !important;
-
-    }
-
-
-    .profile-avatar {
-
-        width: 35px !important;
-
-        height: 35px !important;
-
-        min-width: 35px !important;
-
-        flex: 0 0 35px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-    }
-
-
-    .profile-user-name {
-
-        display: block !important;
-
-        flex: 1 !important;
-
-        min-width: 0 !important;
-
-        color: #123c2f !important;
-
-        font-size: 13px !important;
-
-        font-weight: 700 !important;
-
-        text-align: left !important;
-
-        white-space: nowrap !important;
-
-        overflow: hidden !important;
-
-        text-overflow: ellipsis !important;
-
-    }
-
-
-    .profile-arrow {
-
-        display: block !important;
-
-        margin-left: auto !important;
-
-        color: #68736e !important;
-
-    }
-
-
-    .profile-dropdown {
-
-        position: absolute !important;
-
-        top: calc(100% + 8px) !important;
-
-        left: 0 !important;
-
-        right: 0 !important;
-
-        width: 100% !important;
-
-        display: block !important;
-
-        visibility: hidden !important;
-
-        opacity: 0 !important;
-
-        pointer-events: none !important;
-
-        overflow: hidden !important;
-
-        padding: 0 !important;
-
-        margin: 0 !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border: 1px solid #d8e1dc !important;
-
-        border-radius: 14px !important;
-
-        box-shadow:
-            0 18px 45px
-            rgba(0, 0, 0, .20) !important;
-
-        transform: translateY(-6px) !important;
-
-        z-index: 999999 !important;
-
-        transition:
-            opacity .18s ease,
-            visibility .18s ease,
-            transform .18s ease !important;
-
-    }
-
-
-    .profile-dropdown.open {
-
-        visibility: visible !important;
-
-        opacity: 1 !important;
-
-        pointer-events: auto !important;
-
-        transform: translateY(0) !important;
-
-    }
-
-
-    .profile-dropdown-header {
-
-        width: 100% !important;
-
-        min-height: 72px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        gap: 12px !important;
-
-        padding: 15px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border-bottom: 1px solid #edf0ee !important;
-
-    }
-
-
-    .profile-dropdown-avatar {
-
-        width: 44px !important;
-
-        height: 44px !important;
-
-        min-width: 44px !important;
-
-        flex: 0 0 44px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-        overflow: hidden !important;
-
-        border-radius: 50% !important;
+        height:
+            40px;
 
         background:
-            linear-gradient(
-                135deg,
-                #123c2f,
-                #1c5b46
-            ) !important;
-
-        color: #ffffff !important;
+            rgba(255,255,255,.88);
 
     }
 
 
-    .profile-dropdown-avatar img {
+    .kb-notification-bell svg {
 
-        width: 100% !important;
+        width:
+            18px;
 
-        height: 100% !important;
-
-        display: block !important;
-
-        object-fit: cover !important;
+        height:
+            18px;
 
     }
 
 
-    .profile-dropdown-user {
+    .kb-main {
 
-        min-width: 0 !important;
-
-        flex: 1 !important;
-
-        display: flex !important;
-
-        flex-direction: column !important;
-
-        gap: 4px !important;
-
-        overflow: hidden !important;
+        padding-top:
+            70px;
 
     }
 
 
-    .profile-dropdown-user strong {
+    .kb-header.scrolled
+    ~ .kb-main {
 
-        width: 100% !important;
-
-        display: block !important;
-
-        color: #123c2f !important;
-
-        font-size: 13px !important;
-
-        font-weight: 800 !important;
-
-        white-space: nowrap !important;
-
-        overflow: hidden !important;
-
-        text-overflow: ellipsis !important;
+        padding-top:
+            64px;
 
     }
 
 
-    .profile-dropdown-user span {
+    .kb-messages {
 
-        width: 100% !important;
+        top:
+            82px;
 
-        display: block !important;
-
-        color: #68736e !important;
-
-        font-size: 10px !important;
-
-        white-space: nowrap !important;
-
-        overflow: hidden !important;
-
-        text-overflow: ellipsis !important;
+        right:
+            15px;
 
     }
 
 
-    .profile-dropdown-links {
+    .kb-footer {
 
-        width: 100% !important;
-
-        padding: 7px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
+        margin-top:
+            60px;
 
     }
 
 
-    .profile-dropdown-link {
+    .kb-footer-container {
 
-        width: 100% !important;
+        grid-template-columns:
+            1fr;
 
-        min-height: 46px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        gap: 10px !important;
-
-        padding: 8px 10px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        color: #263731 !important;
-
-        border-radius: 8px !important;
-
-        text-decoration: none !important;
-
-        font-size: 13px !important;
-
-        font-weight: 650 !important;
-
-    }
-
-
-    .profile-dropdown-link:hover {
-
-        background: #f2f6f3 !important;
-
-        color: #123c2f !important;
-
-    }
-
-
-    .dropdown-icon {
-
-        width: 29px !important;
-
-        height: 29px !important;
-
-        min-width: 29px !important;
-
-        flex: 0 0 29px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-        background: #edf5f0 !important;
-
-        color: #26734d !important;
-
-        border-radius: 7px !important;
-
-        font-size: 12px !important;
-
-    }
-
-
-    .profile-dropdown-footer {
-
-        width: 100% !important;
-
-        padding: 7px !important;
-
-        box-sizing: border-box !important;
-
-        background: #ffffff !important;
-
-        border-top: 1px solid #edf0ee !important;
-
-    }
-
-
-    .profile-dropdown-logout {
-
-        width: 100% !important;
-
-        min-height: 46px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        gap: 10px !important;
-
-        padding: 8px 10px !important;
-
-        box-sizing: border-box !important;
-
-        color: #a33a3a !important;
-
-        background: #ffffff !important;
-
-        border-radius: 8px !important;
-
-        text-decoration: none !important;
-
-        font-size: 13px !important;
-
-        font-weight: 700 !important;
-
-    }
-
-
-    .profile-dropdown-logout:hover {
-
-        background: #fff3f3 !important;
-
-    }
-
-
-    /* LOGIN */
-
-    .nav-auth-actions {
-
-        width: 100% !important;
-
-        display: flex !important;
-
-        flex-direction: row !important;
-
-        gap: 8px !important;
-
-        padding-top: 8px !important;
-
-    }
-
-
-    .nav-login {
-
-        width: 100% !important;
-
-        flex: 1 1 auto !important;
-
-        min-height: 44px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-
-        justify-content: center !important;
-
-        box-sizing: border-box !important;
-
-        white-space: nowrap !important;
-
-        color: #123c2f !important;
-
-        background: #ffffff !important;
-
-        border: 1px solid #dfe5e1 !important;
-
-        border-radius: 8px !important;
-
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE FOOTER
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .modern-footer {
-
-        margin-top: 55px;
-
-    }
-
-
-    .footer-container {
-
-        grid-template-columns: 1fr;
-
-        gap: 28px;
+        gap:
+            36px;
 
         padding:
-            40px 22px 32px;
+            50px 23px 40px;
 
     }
 
 
-    .footer-brand {
+    .kb-footer-brand {
 
-        grid-column: auto;
-
-        max-width: 100%;
-
-    }
-
-
-    .footer-logo img {
-
-        width: 45px;
-
-        height: 45px;
+        max-width:
+            100%;
 
     }
 
 
-    .footer-logo strong {
+    .kb-footer-contact {
 
-        font-size: 17px;
-
-    }
-
-
-    .footer-logo span {
-
-        font-size: 7px;
+        grid-column:
+            auto;
 
     }
 
 
-    .footer-brand p {
-
-        font-size: 11px;
-
-        line-height: 1.7;
-
-    }
-
-
-    .modern-footer h4 {
-
-        margin-bottom: 13px;
-
-    }
-
-
-    .footer-links {
-
-        gap: 9px;
-
-    }
-
-
-    .footer-contact p {
-
-        margin-bottom: 10px;
-
-    }
-
-
-    .footer-bottom-inner {
+    .kb-footer-bottom-inner {
 
         padding:
-            15px 22px;
+            17px 23px;
 
-        flex-direction: column;
+        flex-direction:
+            column;
 
-        align-items: flex-start;
+        align-items:
+            flex-start;
 
-        gap: 6px;
+        gap:
+            6px;
 
-        line-height: 1.5;
+        line-height:
+            1.5;
 
     }
 
 
-    .footer-tagline {
+    .kb-mobile-bottom {
 
-        text-align: left;
+        flex-wrap:
+            wrap;
+
+    }
+
+
+    .kb-mobile-bottom a {
+
+        min-width:
+            calc(50% - 5px);
 
     }
 
@@ -2689,99 +4522,179 @@
 
 @media (max-width: 480px) {
 
-    .main-navbar {
+    .kb-navbar {
 
-        height: 64px !important;
+        height:
+            64px;
 
-        min-height: 64px !important;
-
-        padding: 0 10px !important;
-
-    }
-
-
-    .nav-brand img {
-
-        width: 35px !important;
-
-        height: 35px !important;
-
-        min-width: 35px !important;
-
-        flex-basis: 35px !important;
+        padding:
+            0 11px;
 
     }
 
 
-    .nav-brand a > span {
+    .kb-header.scrolled
+    .kb-navbar {
 
-        font-size: 9px !important;
-
-    }
-
-
-    .menu-toggle {
-
-        width: 40px !important;
-
-        height: 40px !important;
-
-        min-width: 40px !important;
-
-        flex-basis: 40px !important;
+        height:
+            60px;
 
     }
 
 
-    .nav-links {
+    .kb-brand {
 
-        top: 64px !important;
-
-    }
-
-
-    .profile-dropdown-header {
-
-        padding: 13px !important;
+        gap:
+            8px;
 
     }
 
 
-    .profile-dropdown-avatar {
+    .kb-brand-logo {
 
-        width: 42px !important;
+        width:
+            37px;
 
-        height: 42px !important;
-
-        min-width: 42px !important;
-
-        flex-basis: 42px !important;
+        height:
+            37px;
 
     }
 
 
-    .profile-dropdown-link,
-    .profile-dropdown-logout {
+    .kb-brand-text strong {
 
-        min-height: 44px !important;
-
-    }
-
-
-    .footer-container {
-
-        padding-left: 18px;
-
-        padding-right: 18px;
+        font-size:
+            14px;
 
     }
 
 
-    .footer-bottom-inner {
+    .kb-brand-text small {
 
-        padding-left: 18px;
+        font-size:
+            5px;
 
-        padding-right: 18px;
+    }
+
+
+    .kb-notification-button {
+
+        width:
+            37px;
+
+        height:
+            37px;
+
+        border:
+            0;
+
+        background:
+            transparent;
+
+    }
+
+
+    .kb-notification-badge {
+
+        top:
+            -2px;
+
+        right:
+            -2px;
+
+        min-width:
+            16px;
+
+        height:
+            16px;
+
+        font-size:
+            7px;
+
+    }
+
+
+    .kb-account-button {
+
+        padding:
+            3px;
+
+        border:
+            0;
+
+        background:
+            transparent;
+
+        box-shadow:
+            none;
+
+    }
+
+
+    .kb-account-avatar {
+
+        width:
+            36px;
+
+        height:
+            36px;
+
+    }
+
+
+    .kb-menu-button {
+
+        width:
+            40px;
+
+        height:
+            40px;
+
+    }
+
+
+    .kb-mobile-inner {
+
+        padding:
+            100px 20px 25px;
+
+    }
+
+
+    .kb-mobile-heading h2 {
+
+        font-size:
+            38px;
+
+    }
+
+
+    .kb-mobile-links a {
+
+        font-size:
+            20px;
+
+    }
+
+
+    .kb-footer-container {
+
+        padding-left:
+            19px;
+
+        padding-right:
+            19px;
+
+    }
+
+
+    .kb-footer-bottom-inner {
+
+        padding-left:
+            19px;
+
+        padding-right:
+            19px;
 
     }
 
@@ -2789,41 +4702,31 @@
 
 
 /* =========================================================
-   FIXED NAVBAR CONTENT OFFSET
-   PREVENTS THE FIXED HEADER FROM COVERING CONTENT
+   REDUCED MOTION
 ========================================================= */
 
-body {
+@media (prefers-reduced-motion: reduce) {
 
-    padding-top: 82px;
+    html {
 
-}
-
-
-/* =========================================================
-   MOBILE CONTENT OFFSET
-========================================================= */
-
-@media (max-width: 850px) {
-
-    body {
-
-        padding-top: 68px !important;
+        scroll-behavior:
+            auto;
 
     }
 
-}
 
+    *,
+    *::before,
+    *::after {
 
-/* =========================================================
-   SMALL MOBILE CONTENT OFFSET
-========================================================= */
+        animation-duration:
+            .01ms !important;
 
-@media (max-width: 480px) {
+        animation-iteration-count:
+            1 !important;
 
-    body {
-
-        padding-top: 64px !important;
+        transition-duration:
+            .01ms !important;
 
     }
 
@@ -2832,42 +4735,71 @@ body {
 </style>
 
 
-<!-- =====================================================
-     NAVIGATION JAVASCRIPT
-===================================================== -->
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
 
 <script>
 
-
 /* =========================================================
-   MOBILE MENU
+   PAGE LOADER
 ========================================================= */
 
-function toggleMenu() {
+window.addEventListener(
+    "load",
+    function() {
 
-    const menu =
-        document.getElementById("navLinks");
+        const loader =
+            document.getElementById(
+                "kbPageLoader"
+            );
 
-    const button =
-        document.querySelector(".menu-toggle");
+        if (loader) {
+
+            setTimeout(
+                function() {
+
+                    loader.classList.add(
+                        "loaded"
+                    );
+
+                },
+                250
+            );
+
+        }
+
+    }
+);
 
 
-    if (!menu) {
+/* =========================================================
+   HEADER SCROLL EFFECT
+========================================================= */
+
+function updateKBHeader() {
+
+    const header =
+        document.getElementById(
+            "kbHeader"
+        );
+
+    if (!header) {
 
         return;
 
     }
 
+    if (window.scrollY > 20) {
 
-    const isOpen =
-        menu.classList.toggle("active");
+        header.classList.add(
+            "scrolled"
+        );
 
+    } else {
 
-    if (button) {
-
-        button.setAttribute(
-            "aria-expanded",
-            isOpen ? "true" : "false"
+        header.classList.remove(
+            "scrolled"
         );
 
     }
@@ -2875,11 +4807,126 @@ function toggleMenu() {
 }
 
 
+window.addEventListener(
+    "scroll",
+    updateKBHeader,
+    {
+        passive: true
+    }
+);
+
+
+updateKBHeader();
+
+
 /* =========================================================
-   PROFILE DROPDOWN
+   MOBILE MENU
 ========================================================= */
 
-function toggleProfileMenu(event) {
+function toggleKBMobileMenu() {
+
+    const panel =
+        document.getElementById(
+            "kbMobilePanel"
+        );
+
+    const button =
+        document.getElementById(
+            "kbMenuButton"
+        );
+
+    if (!panel || !button) {
+
+        return;
+
+    }
+
+    const isOpen =
+        panel.classList.toggle(
+            "open"
+        );
+
+    button.classList.toggle(
+        "active",
+        isOpen
+    );
+
+    button.setAttribute(
+        "aria-expanded",
+        isOpen
+            ? "true"
+            : "false"
+    );
+
+    document.body.style.overflow =
+        isOpen
+            ? "hidden"
+            : "";
+
+}
+
+
+/* =========================================================
+   CLOSE MOBILE MENU
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".kb-mobile-links a, .kb-mobile-bottom a"
+    )
+    .forEach(
+        function(link) {
+
+            link.addEventListener(
+                "click",
+                function() {
+
+                    const panel =
+                        document.getElementById(
+                            "kbMobilePanel"
+                        );
+
+                    const button =
+                        document.getElementById(
+                            "kbMenuButton"
+                        );
+
+                    if (panel) {
+
+                        panel.classList.remove(
+                            "open"
+                        );
+
+                    }
+
+                    if (button) {
+
+                        button.classList.remove(
+                            "active"
+                        );
+
+                        button.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
+
+                    document.body.style.overflow =
+                        "";
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   ACCOUNT DROPDOWN
+========================================================= */
+
+function toggleKBAccount(event) {
 
     if (event) {
 
@@ -2887,18 +4934,15 @@ function toggleProfileMenu(event) {
 
     }
 
-
     const dropdown =
         document.getElementById(
-            "profileDropdown"
+            "kbAccountDropdown"
         );
-
 
     const button =
         document.getElementById(
-            "profileButton"
+            "kbAccountButton"
         );
-
 
     if (!dropdown || !button) {
 
@@ -2906,53 +4950,51 @@ function toggleProfileMenu(event) {
 
     }
 
-
     const isOpen =
-        dropdown.classList.toggle("open");
-
+        dropdown.classList.toggle(
+            "open"
+        );
 
     button.classList.toggle(
         "active",
         isOpen
     );
 
-
     button.setAttribute(
         "aria-expanded",
-        isOpen ? "true" : "false"
+        isOpen
+            ? "true"
+            : "false"
     );
 
 }
 
 
 /* =========================================================
-   CLOSE PROFILE DROPDOWN
+   CLOSE ACCOUNT DROPDOWN
 ========================================================= */
 
 document.addEventListener(
     "click",
     function(event) {
 
-        const menu =
+        const account =
             document.getElementById(
-                "profileMenu"
+                "kbAccount"
             );
-
 
         const dropdown =
             document.getElementById(
-                "profileDropdown"
+                "kbAccountDropdown"
             );
-
 
         const button =
             document.getElementById(
-                "profileButton"
+                "kbAccountButton"
             );
 
-
         if (
-            !menu ||
+            !account ||
             !dropdown ||
             !button
         ) {
@@ -2961,9 +5003,8 @@ document.addEventListener(
 
         }
 
-
         if (
-            !menu.contains(
+            !account.contains(
                 event.target
             )
         ) {
@@ -2972,11 +5013,9 @@ document.addEventListener(
                 "open"
             );
 
-
             button.classList.remove(
                 "active"
             );
-
 
             button.setAttribute(
                 "aria-expanded",
@@ -3008,37 +5047,170 @@ document.addEventListener(
 
         const dropdown =
             document.getElementById(
-                "profileDropdown"
+                "kbAccountDropdown"
             );
-
 
         const button =
             document.getElementById(
-                "profileButton"
+                "kbAccountButton"
+            );
+
+        const panel =
+            document.getElementById(
+                "kbMobilePanel"
+            );
+
+        const menuButton =
+            document.getElementById(
+                "kbMenuButton"
             );
 
 
-        if (!dropdown || !button) {
+        if (dropdown) {
 
-            return;
+            dropdown.classList.remove(
+                "open"
+            );
 
         }
 
 
-        dropdown.classList.remove(
-            "open"
-        );
+        if (button) {
+
+            button.classList.remove(
+                "active"
+            );
+
+            button.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
 
 
-        button.classList.remove(
-            "active"
-        );
+        if (panel) {
+
+            panel.classList.remove(
+                "open"
+            );
+
+        }
 
 
-        button.setAttribute(
-            "aria-expanded",
-            "false"
-        );
+        if (menuButton) {
+
+            menuButton.classList.remove(
+                "active"
+            );
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
+
+
+        document.body.style.overflow =
+            "";
+
+    }
+);
+
+
+/* =========================================================
+   EXPLORE DROPDOWN — MOBILE/TOUCH SUPPORT
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".kb-dropdown-trigger"
+    )
+    .forEach(
+        function(trigger) {
+
+            trigger.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+                    const dropdown =
+                        trigger.closest(
+                            ".kb-nav-dropdown"
+                        );
+
+                    if (!dropdown) {
+
+                        return;
+
+                    }
+
+                    const isOpen =
+                        dropdown.classList.toggle(
+                            "open"
+                        );
+
+                    trigger.setAttribute(
+                        "aria-expanded",
+                        isOpen
+                            ? "true"
+                            : "false"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   AUTO CLOSE EXPLORE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        document
+            .querySelectorAll(
+                ".kb-nav-dropdown.open"
+            )
+            .forEach(
+                function(dropdown) {
+
+                    if (
+                        !dropdown.contains(
+                            event.target
+                        )
+                    ) {
+
+                        dropdown.classList.remove(
+                            "open"
+                        );
+
+                        const trigger =
+                            dropdown.querySelector(
+                                ".kb-dropdown-trigger"
+                            );
+
+                        if (trigger) {
+
+                            trigger.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+
+                    }
+
+                }
+            );
 
     }
 );
@@ -3049,3 +5221,4 @@ document.addEventListener(
 </body>
 
 </html>
+

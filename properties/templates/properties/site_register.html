@@ -431,6 +431,48 @@
 
                     </div>
 
+                
+                <!-- =========================================
+                    TERMS & CONDITIONS
+                ========================================= -->
+
+                <div class="terms-agreement">
+
+                    <label class="terms-checkbox">
+
+                        {{ form.terms_agreed }}
+
+                        <span class="custom-check"></span>
+
+                        <span class="terms-text">
+
+                            I have read and agree to the
+
+                            <a
+                                href="{% url 'terms_and_conditions' %}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Terms & Conditions
+                            </a>.
+
+                        </span>
+
+                    </label>
+
+
+                    {% for error in form.terms_agreed.errors %}
+
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+
 
                     <!-- =========================================
                          SUBMISSION
@@ -1927,6 +1969,118 @@
     }
 
 }
+
+/* =========================================================
+   TERMS & CONDITIONS
+========================================================= */
+
+.terms-agreement {
+
+    margin-bottom: 22px;
+
+    padding: 16px 18px;
+
+    background: #fbfcfb;
+
+    border: 1px solid #e0e6e1;
+
+    border-radius: 12px;
+}
+
+.terms-checkbox {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    cursor: pointer;
+
+    color: #59665f;
+
+    font-size: 12px;
+
+    line-height: 1.65;
+}
+
+.terms-checkbox input {
+
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.custom-check {
+
+    width: 20px;
+
+    height: 20px;
+
+    flex-shrink: 0;
+
+    margin-top: 1px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid #cfd8d2;
+
+    border-radius: 6px;
+
+    background: white;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+.terms-checkbox input:checked + .custom-check {
+
+    background: #123c2f;
+
+    border-color: #123c2f;
+}
+
+.terms-checkbox input:checked + .custom-check::after {
+
+    content: "✓";
+
+    color: #d4af63;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+.terms-text {
+
+    flex: 1;
+}
+
+.terms-text a {
+
+    color: #123c2f;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    border-bottom: 1px solid rgba(181,139,59,.45);
+}
+
+.terms-text a:hover {
+
+    color: #b58b3b;
+
+    border-bottom-color: #b58b3b;
+}
+
 
 </style>
 

@@ -1,0 +1,639 @@
+
+{% extends "properties/base.html" %}
+{% load static %}
+
+{% block title %}
+Edit Skilled Worker Profile | KING B REAL ESTATE & CONSTRUCTION LTD
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   EDIT WORKER PROFILE
+========================================================= */
+
+.worker-edit-page {
+    min-height: 100vh;
+    background: #f5f6f4;
+    padding: 50px 20px 90px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.worker-edit-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    border: 1px solid #e4e7e4;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.08);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.worker-edit-header {
+    background:
+        linear-gradient(
+            135deg,
+            #0b2e22,
+            #123f2e
+        );
+
+    color: white;
+
+    padding: 38px 40px;
+}
+
+
+.worker-edit-header h1 {
+    margin: 0 0 8px;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.3px;
+}
+
+
+.worker-edit-header p {
+    margin: 0;
+
+    color: #dfe8e3;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+.alert-message {
+    margin: 25px 40px 0;
+
+    padding: 14px 16px;
+
+    border-radius: 10px;
+
+    background: #e8f5ec;
+
+    border: 1px solid #c7e6d1;
+
+    color: #126b3a;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.form-error {
+    margin-bottom: 25px;
+
+    padding: 15px 17px;
+
+    border-radius: 10px;
+
+    background: #f8dddd;
+
+    border: 1px solid #efc5c5;
+
+    color: #9b2525;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.worker-edit-form {
+    padding: 40px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #0b2e22;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    border: 1px solid #d8ddd9;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #222;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #0b2e22;
+
+    box-shadow:
+        0 0 0 3px rgba(11, 46, 34, 0.10);
+
+    background: #fcfefd;
+}
+
+
+.form-group textarea {
+    min-height: 130px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   FILE INPUT
+========================================================= */
+
+.form-group input[type="file"] {
+    padding: 10px;
+
+    background: #f8faf8;
+
+    cursor: pointer;
+}
+
+
+.form-group input[type="file"]::file-selector-button {
+    border: none;
+
+    padding: 9px 13px;
+
+    margin-right: 10px;
+
+    border-radius: 7px;
+
+    background: #0b2e22;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   HELP TEXT
+========================================================= */
+
+.form-group small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: #777;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FIELD ERRORS
+========================================================= */
+
+.field-error {
+    margin-top: 7px;
+
+    color: #b42323;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   REQUIRED FIELD
+========================================================= */
+
+.form-group input:required,
+.form-group select:required,
+.form-group textarea:required {
+    background-color: #fff;
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+========================================================= */
+
+.form-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 35px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #eeeeee;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.cancel-btn,
+.save-btn {
+    min-height: 46px;
+
+    padding: 12px 22px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+
+    box-sizing: border-box;
+}
+
+
+.cancel-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #f1f3f1;
+
+    border: 1px solid #dfe3df;
+
+    color: #444;
+}
+
+
+.cancel-btn:hover {
+    background: #e6eae6;
+
+    color: #222;
+
+    transform: translateY(-1px);
+}
+
+
+.save-btn {
+    border: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #c9a227,
+            #d8b83d
+        );
+
+    color: #111;
+
+    box-shadow:
+        0 6px 18px rgba(201, 162, 39, 0.22);
+}
+
+
+.save-btn:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #d8b83d,
+            #dfc04c
+        );
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 22px rgba(201, 162, 39, 0.28);
+}
+
+
+.save-btn:active,
+.cancel-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .worker-edit-page {
+        padding: 25px 12px 60px;
+    }
+
+
+    .worker-edit-container {
+        border-radius: 14px;
+    }
+
+
+    .worker-edit-header {
+        padding: 30px 22px;
+    }
+
+
+    .worker-edit-header h1 {
+        font-size: 25px;
+    }
+
+
+    .worker-edit-form {
+        padding: 28px 22px;
+    }
+
+
+    .alert-message {
+        margin-left: 22px;
+        margin-right: 22px;
+    }
+
+
+    .form-actions {
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+    }
+
+
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .worker-edit-page {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+
+    .worker-edit-header {
+        padding: 25px 18px;
+    }
+
+
+    .worker-edit-form {
+        padding: 24px 18px;
+    }
+
+
+    .alert-message {
+        margin-left: 18px;
+        margin-right: 18px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="worker-edit-page">
+
+    <div class="worker-edit-container">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <div class="worker-edit-header">
+
+            <h1>
+                Edit Skilled Worker Profile
+            </h1>
+
+            <p>
+                Keep your professional information up to date so
+                customers can see your latest details.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             MESSAGES
+        ================================================== -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="alert-message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="worker-edit-form"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- =============================================
+                 NON-FIELD ERRORS
+            ============================================== -->
+
+            {% if form.non_field_errors %}
+
+                <div class="form-error">
+
+                    {% for error in form.non_field_errors %}
+
+                        <div>
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =============================================
+                 FORM FIELDS
+            ============================================== -->
+
+            {% for field in form %}
+
+                <div class="form-group">
+
+                    <label for="{{ field.id_for_label }}">
+
+                        {{ field.label }}
+
+                        {% if field.field.required %}
+                            <span style="color:#b42323;">*</span>
+                        {% endif %}
+
+                    </label>
+
+
+                    {{ field }}
+
+
+                    {% if field.help_text %}
+
+                        <small>
+                            {{ field.help_text }}
+                        </small>
+
+                    {% endif %}
+
+
+                    {% for error in field.errors %}
+
+                        <div class="field-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endfor %}
+
+
+            <!-- =================================================
+                 ACTION BUTTONS
+            ================================================== -->
+
+            <div class="form-actions">
+
+
+                <!-- CANCEL -->
+
+                <a
+                    href="{% url 'worker_dashboard' %}"
+                    class="cancel-btn"
+                >
+                    ← Back to Dashboard
+                </a>
+
+
+                <!-- SAVE -->
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    ✓ Save Changes
+                </button>
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

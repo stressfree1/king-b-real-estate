@@ -710,8 +710,12 @@ class SkilledWorker(models.Model):
         default='available'
     )
 
+    email_verified = models.BooleanField(
+    default=False
+    )
+
     is_approved = models.BooleanField(
-        default=False
+    default=False
     )
 
     created_at = models.DateTimeField(
@@ -779,8 +783,12 @@ class Customer(models.Model):
         null=True
     )
 
-    is_verified = models.BooleanField(
-        default=False
+    email_verified = models.BooleanField(
+    default=False
+    )
+
+    is_approved = models.BooleanField(
+    default=False
     )
 
     created_at = models.DateTimeField(
@@ -913,7 +921,51 @@ class WorkerHire(models.Model):
             f"{self.worker.full_name}"
         )
 
+# =========================================================
+# SKILLED WORKER ↔ CUSTOMER MESSAGES
+# =========================================================
 
+class WorkerMessage(models.Model):
+
+    hire = models.ForeignKey(
+        WorkerHire,
+        on_delete=models.CASCADE,
+        related_name='messages'
+    )
+
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='worker_messages_sent'
+    )
+
+    receiver = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='worker_messages_received'
+    )
+
+    message = models.TextField()
+
+    is_read = models.BooleanField(
+        default=False
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return (
+            f"{self.sender.username} → "
+            f"{self.receiver.username}"
+        )
+
+    class Meta:
+
+        ordering = ['created_at']
+        
 # =========================================================
 # CUSTOMER → WORKER REVIEW
 # =========================================================
@@ -1525,3 +1577,58 @@ class MarketplaceListingView(models.Model):
             f"{self.viewer.username} viewed "
             f"{self.listing.title}"
         )
+
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ("hire_request", "Hire Request"),
+        ("hire_accepted", "Hire Accepted"),
+        ("hire_declined", "Hire Declined"),
+        ("hire_cancelled", "Hire Cancelled"),
+
+        ("worker_message", "Worker Message"),
+        ("customer_message", "Customer Message"),
+
+        ("review", "Review"),
+
+        ("listing_approved", "Listing Approved"),
+        ("listing_rejected", "Listing Rejected"),
+
+        ("marketplace_message", "Marketplace Message"),
+
+        ("account_approved", "Account Approved"),
+        ("account_rejected", "Account Rejected"),
+
+        ("job_completed", "Job Completed"),
+    ]
+
+    recipient = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="notifications"
+    )
+
+    notification_type = models.CharField(
+        max_length=50,
+        choices=NOTIFICATION_TYPES
+    )
+
+    title = models.CharField(max_length=200)
+
+    message = models.TextField()
+
+    link = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True
+    )
+
+    is_read = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.recipient.email} - {self.title}"

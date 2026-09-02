@@ -1,0 +1,976 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}
+    King B Real Estate | Executive Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="kb-dashboard">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="kb-sidebar">
+
+        <div class="kb-sidebar-brand">
+
+            <a href="{% url 'admin:index' %}" class="kb-sidebar-logo">
+
+                <img
+                    src="{% static 'properties/Image/kingb-logo.png' %}"
+                    alt="King B Real Estate"
+                >
+
+                <div>
+                    <strong>KING B</strong>
+                    <span>REAL ESTATE</span>
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- MAIN NAVIGATION -->
+
+        <div class="kb-sidebar-section">
+
+            <div class="kb-sidebar-label">
+                MAIN MENU
+            </div>
+
+            <a href="{% url 'admin:index' %}" class="kb-sidebar-link active">
+
+                <span class="kb-sidebar-icon">⌂</span>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- MANAGEMENT -->
+
+        <div class="kb-sidebar-section">
+
+            <div class="kb-sidebar-label">
+                MANAGEMENT
+            </div>
+
+            <a href="{% url 'admin:properties_property_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">▦</span>
+                <span>Properties</span>
+
+            </a>
+
+
+            <a href="{% url 'admin:properties_estate_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">⌂</span>
+                <span>Estates</span>
+
+            </a>
+
+
+            <a href="{% url 'admin:properties_customer_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">♙</span>
+                <span>Customers</span>
+
+            </a>
+
+
+            <a href="{% url 'admin:properties_skilledworker_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">♟</span>
+                <span>Skilled Workers</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- BUSINESS -->
+
+        <div class="kb-sidebar-section">
+
+            <div class="kb-sidebar-label">
+                BUSINESS
+            </div>
+
+
+            <a href="{% url 'admin:properties_marketplacelisting_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">◈</span>
+                <span>Marketplace</span>
+
+                {% if pending_marketplace_count %}
+                    <span class="kb-sidebar-badge">
+                        {{ pending_marketplace_count }}
+                    </span>
+                {% endif %}
+
+            </a>
+
+
+            <a href="{% url 'admin:properties_inquiry_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">✉</span>
+                <span>Inquiries</span>
+
+                {% if inquiry_count %}
+                    <span class="kb-sidebar-badge">
+                        {{ inquiry_count }}
+                    </span>
+                {% endif %}
+
+            </a>
+
+
+            <a href="{% url 'admin:properties_job_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">▤</span>
+                <span>Jobs</span>
+
+            </a>
+
+
+            <a href="{% url 'admin:properties_jobapplicant_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">♙</span>
+                <span>Applicants</span>
+
+            </a>
+
+
+            <a href="{% url 'admin:properties_contactmessage_changelist' %}"
+               class="kb-sidebar-link">
+
+                <span class="kb-sidebar-icon">◌</span>
+                <span>Messages</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- ACCOUNT -->
+
+        <div class="kb-sidebar-bottom">
+
+            <div class="kb-admin-profile">
+
+                <div class="kb-admin-avatar">
+
+                    {% if user.get_full_name %}
+                        {{ user.get_full_name|slice:":1"|upper }}
+                    {% else %}
+                        {{ user.username|slice:":1"|upper }}
+                    {% endif %}
+
+                </div>
+
+                <div class="kb-admin-profile-info">
+
+                    <strong>
+                        {% if user.get_full_name %}
+                            {{ user.get_full_name }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </strong>
+
+                    <span>
+                        Administrator
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <form method="post"
+                  action="{% url 'admin:logout' %}"
+                  class="kb-logout-form">
+
+                {% csrf_token %}
+
+                <button type="submit" class="kb-logout-button">
+
+                    <span>↪</span>
+
+                    <span>Sign out</span>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+
+    <main class="kb-main">
+
+
+        <!-- TOP HEADER -->
+
+        <header class="kb-topbar">
+
+            <div class="kb-topbar-left">
+
+                <div class="kb-mobile-menu">
+                    ☰
+                </div>
+
+                <div>
+
+                    <div class="kb-breadcrumb">
+                        KING B REAL ESTATE
+                        <span>/</span>
+                        ADMINISTRATION
+                    </div>
+
+                    <h1>
+                        Executive Dashboard
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <div class="kb-topbar-right">
+
+                <div class="kb-date">
+
+                    <span class="kb-date-label">
+                        TODAY
+                    </span>
+
+                    <strong>
+                        {{ now|date:"D, M j, Y" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="kb-topbar-divider"></div>
+
+
+                <a href="{% url 'admin:index' %}"
+                   class="kb-home-button"
+                   title="Dashboard">
+
+                    ⌂
+
+                </a>
+
+
+                <div class="kb-topbar-avatar">
+
+                    {% if user.get_full_name %}
+                        {{ user.get_full_name|slice:":1"|upper }}
+                    {% else %}
+                        {{ user.username|slice:":1"|upper }}
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             WELCOME SECTION
+        ================================================== -->
+
+        <section class="kb-welcome">
+
+            <div>
+
+                <span class="kb-eyebrow">
+                    BUSINESS OVERVIEW
+                </span>
+
+                <h2>
+                    Good day,
+                    {% if user.get_full_name %}
+                        {{ user.get_full_name }}
+                    {% else %}
+                        {{ user.username }}
+                    {% endif %}.
+                </h2>
+
+                <p>
+                    Here's what's happening across
+                    King B Real Estate today.
+                </p>
+
+            </div>
+
+
+            <div class="kb-welcome-actions">
+
+                <a href="{% url 'admin:properties_property_add' %}"
+                   class="kb-primary-button">
+
+                    <span>＋</span>
+                    Add Property
+
+                </a>
+
+                <a href="{% url 'admin:properties_customer_add' %}"
+                   class="kb-secondary-button">
+
+                    Add Customer
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             KPI CARDS
+        ================================================== -->
+
+        <section class="kb-stat-grid">
+
+
+            <div class="kb-stat-card">
+
+                <div class="kb-stat-card-top">
+
+                    <div class="kb-stat-icon property-icon">
+                        ⌂
+                    </div>
+
+                    <span class="kb-stat-label">
+                        PROPERTIES
+                    </span>
+
+                </div>
+
+                <div class="kb-stat-number">
+                    {{ property_count }}
+                </div>
+
+                <div class="kb-stat-footer">
+
+                    <span>
+                        Total property inventory
+                    </span>
+
+                    <a href="{% url 'admin:properties_property_changelist' %}">
+                        View →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="kb-stat-card">
+
+                <div class="kb-stat-card-top">
+
+                    <div class="kb-stat-icon estate-icon">
+                        ◈
+                    </div>
+
+                    <span class="kb-stat-label">
+                        ESTATES
+                    </span>
+
+                </div>
+
+                <div class="kb-stat-number">
+                    {{ estate_count }}
+                </div>
+
+                <div class="kb-stat-footer">
+
+                    <span>
+                        Registered estates
+                    </span>
+
+                    <a href="{% url 'admin:properties_estate_changelist' %}">
+                        View →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="kb-stat-card">
+
+                <div class="kb-stat-card-top">
+
+                    <div class="kb-stat-icon customer-icon">
+                        ♙
+                    </div>
+
+                    <span class="kb-stat-label">
+                        CUSTOMERS
+                    </span>
+
+                </div>
+
+                <div class="kb-stat-number">
+                    {{ customer_count }}
+                </div>
+
+                <div class="kb-stat-footer">
+
+                    <span>
+                        Registered customers
+                    </span>
+
+                    <a href="{% url 'admin:properties_customer_changelist' %}">
+                        View →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="kb-stat-card">
+
+                <div class="kb-stat-card-top">
+
+                    <div class="kb-stat-icon worker-icon">
+                        ♟
+                    </div>
+
+                    <span class="kb-stat-label">
+                        WORKERS
+                    </span>
+
+                </div>
+
+                <div class="kb-stat-number">
+                    {{ worker_count }}
+                </div>
+
+                <div class="kb-stat-footer">
+
+                    <span>
+                        Skilled professionals
+                    </span>
+
+                    <a href="{% url 'admin:properties_skilledworker_changelist' %}">
+                        View →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             PROPERTY + PENDING
+        ================================================== -->
+
+        <section class="kb-main-grid">
+
+
+            <!-- PROPERTY OVERVIEW -->
+
+            <div class="kb-panel kb-property-panel">
+
+                <div class="kb-panel-header">
+
+                    <div>
+
+                        <span class="kb-panel-eyebrow">
+                            PROPERTY PORTFOLIO
+                        </span>
+
+                        <h3>
+                            Property Overview
+                        </h3>
+
+                    </div>
+
+                    <a href="{% url 'admin:properties_property_changelist' %}"
+                       class="kb-panel-link">
+
+                        Manage Properties →
+
+                    </a>
+
+                </div>
+
+
+                <div class="kb-property-content">
+
+
+                    <div class="kb-property-summary">
+
+                        <div class="kb-property-total">
+
+                            <span>
+                                Total Properties
+                            </span>
+
+                            <strong>
+                                {{ property_count }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="kb-property-availability">
+
+                            <div class="kb-availability-number">
+                                {{ available_percentage }}%
+                            </div>
+
+                            <span>
+                                Available
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="kb-progress">
+
+                        <div
+                            class="kb-progress-bar"
+                            style="width: {{ available_percentage }}%;"
+                        ></div>
+
+                    </div>
+
+
+
+                    <div class="kb-property-status-grid">
+
+
+                        <div class="kb-status-item">
+
+                            <span class="kb-status-dot available"></span>
+
+                            <div>
+
+                                <strong>
+                                    {{ available_property_count }}
+                                </strong>
+
+                                <span>
+                                    Available
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="kb-status-item">
+
+                            <span class="kb-status-dot sold"></span>
+
+                            <div>
+
+                                <strong>
+                                    {{ sold_property_count }}
+                                </strong>
+
+                                <span>
+                                    Sold
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="kb-status-item">
+
+                            <span class="kb-status-dot reserved"></span>
+
+                            <div>
+
+                                <strong>
+                                    {{ reserved_property_count }}
+                                </strong>
+
+                                <span>
+                                    Reserved
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PENDING ACTIVITY -->
+
+            <div class="kb-panel">
+
+                <div class="kb-panel-header">
+
+                    <div>
+
+                        <span class="kb-panel-eyebrow">
+                            ATTENTION REQUIRED
+                        </span>
+
+                        <h3>
+                            Pending Activity
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kb-pending-list">
+
+
+                    <a href="{% url 'admin:properties_marketplacelisting_changelist' %}"
+                       class="kb-pending-item">
+
+                        <div class="kb-pending-icon">
+                            ◈
+                        </div>
+
+                        <div class="kb-pending-text">
+
+                            <strong>
+                                Marketplace Reviews
+                            </strong>
+
+                            <span>
+                                Listings awaiting approval
+                            </span>
+
+                        </div>
+
+                        <div class="kb-pending-number">
+                            {{ pending_marketplace_count }}
+                        </div>
+
+                    </a>
+
+
+
+                    <a href="{% url 'admin:properties_inquiry_changelist' %}"
+                       class="kb-pending-item">
+
+                        <div class="kb-pending-icon">
+                            ✉
+                        </div>
+
+                        <div class="kb-pending-text">
+
+                            <strong>
+                                Customer Inquiries
+                            </strong>
+
+                            <span>
+                                Property and business inquiries
+                            </span>
+
+                        </div>
+
+                        <div class="kb-pending-number">
+                            {{ inquiry_count }}
+                        </div>
+
+                    </a>
+
+
+
+                    <a href="{% url 'admin:properties_jobapplicant_changelist' %}"
+                       class="kb-pending-item">
+
+                        <div class="kb-pending-icon">
+                            ♙
+                        </div>
+
+                        <div class="kb-pending-text">
+
+                            <strong>
+                                Job Applications
+                            </strong>
+
+                            <span>
+                                Applications received
+                            </span>
+
+                        </div>
+
+                        <div class="kb-pending-number">
+                            {{ job_application_count }}
+                        </div>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             QUICK ACCESS
+        ================================================== -->
+
+        <section class="kb-panel kb-quick-panel">
+
+            <div class="kb-panel-header">
+
+                <div>
+
+                    <span class="kb-panel-eyebrow">
+                        QUICK ACCESS
+                    </span>
+
+                    <h3>
+                        Management Modules
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="kb-module-grid">
+
+
+                <a href="{% url 'admin:properties_property_changelist' %}"
+                   class="kb-module-card">
+
+                    <span class="kb-module-icon">
+                        ⌂
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Properties
+                        </strong>
+
+                        <span>
+                            Manage property inventory
+                        </span>
+
+                    </div>
+
+                    <span class="kb-module-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <a href="{% url 'admin:properties_estate_changelist' %}"
+                   class="kb-module-card">
+
+                    <span class="kb-module-icon">
+                        ◈
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Estates
+                        </strong>
+
+                        <span>
+                            Manage estate portfolio
+                        </span>
+
+                    </div>
+
+                    <span class="kb-module-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <a href="{% url 'admin:properties_customer_changelist' %}"
+                   class="kb-module-card">
+
+                    <span class="kb-module-icon">
+                        ♙
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Customers
+                        </strong>
+
+                        <span>
+                            Customer management
+                        </span>
+
+                    </div>
+
+                    <span class="kb-module-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <a href="{% url 'admin:properties_skilledworker_changelist' %}"
+                   class="kb-module-card">
+
+                    <span class="kb-module-icon">
+                        ♟
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Skilled Workers
+                        </strong>
+
+                        <span>
+                            Worker management
+                        </span>
+
+                    </div>
+
+                    <span class="kb-module-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <a href="{% url 'admin:properties_marketplacelisting_changelist' %}"
+                   class="kb-module-card">
+
+                    <span class="kb-module-icon">
+                        ◇
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Marketplace
+                        </strong>
+
+                        <span>
+                            Review marketplace listings
+                        </span>
+
+                    </div>
+
+                    <span class="kb-module-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <a href="{% url 'admin:properties_contactmessage_changelist' %}"
+                   class="kb-module-card">
+
+                    <span class="kb-module-icon">
+                        ✉
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Messages
+                        </strong>
+
+                        <span>
+                            Manage incoming messages
+                        </span>
+
+                    </div>
+
+                    <span class="kb-module-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <footer class="kb-dashboard-footer">
+
+            <span>
+                © {% now "Y" %} King B Real Estate & Construction Ltd.
+            </span>
+
+            <span>
+                Administration Portal
+            </span>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+{% endblock %}

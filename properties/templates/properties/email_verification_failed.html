@@ -1,0 +1,75 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}
+    Verification Failed | King B Real Estate
+{% endblock %}
+
+{% block content %}
+
+<div style="
+    max-width: 650px;
+    margin: 80px auto;
+    padding: 20px;
+">
+
+    <div style="
+        background: white;
+        border: 1px solid #e0e6e1;
+        border-radius: 20px;
+        padding: 45px 35px;
+        text-align: center;
+        box-shadow: 0 18px 50px rgba(24,41,33,.07);
+    ">
+
+        <div style="
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #fff2f1;
+            color: #c0392b;
+            font-size: 30px;
+            font-weight: 800;
+        ">
+            !
+        </div>
+
+        <h1 style="
+            color: #123c2f;
+            margin-bottom: 12px;
+        ">
+            Verification Link Invalid
+        </h1>
+
+        <p style="
+            color: #68756e;
+            line-height: 1.7;
+        ">
+            This verification link is invalid or has expired.
+            Please request a new verification email.
+        </p>
+
+        <a
+            href="{% url 'site_login' %}"
+            style="
+                display: inline-flex;
+                margin-top: 20px;
+                padding: 14px 25px;
+                border-radius: 10px;
+                background: #123c2f;
+                color: white;
+                text-decoration: none;
+                font-weight: 700;
+            "
+        >
+            Go to Login
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -81,6 +81,19 @@ class AccountRegistrationForm(forms.Form):
             }
         )
     )
+    
+    terms_agreed = forms.BooleanField(
+    required=True,
+    error_messages={
+        'required': (
+            'You must agree to the Terms & Conditions '
+            'before creating your account.'
+        )
+    }
+)
+    
+    
+    
 
     def clean_email(self):
 

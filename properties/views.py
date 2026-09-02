@@ -6,17 +6,29 @@ from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
+from .models import Notification
+from django.db import transaction
 from django.db.models import Avg
 from django.utils import timezone
 import secrets
 from datetime import timedelta
+from django.contrib.auth.tokens import default_token_generator
+from .notification_utils import create_notification
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.hashers import (
     make_password,
     check_password,
 )
-from django.db.models import Q, F
+from django.utils.http import (
+    urlsafe_base64_encode,
+    urlsafe_base64_decode,
+)
+from django.db.models import Q, F,Count
 from django.contrib.auth.views import (
     PasswordResetView,
     PasswordResetDoneView,
@@ -53,9 +65,10 @@ from .models import (
     MarketplaceMessage,
     MarketplaceReview,
     MarketplaceListingImage,
+    WorkerMessage,
+    Notification,
     
 )
-
 
 # =========================================================
 # HOME
@@ -608,9 +621,6 @@ def job_apply(
 # =========================================================
 # CONTACT
 # =========================================================
-# =========================================================
-# CONTACT
-# =========================================================
 
 def contact(request):
 
@@ -770,10 +780,7 @@ def skilled_workers(request):
 # SKILLED WORKER PROFILE
 # =========================================================
 
-def skilled_worker_profile(
-    request,
-    worker_id
-):
+def skilled_worker_profile(request, worker_id):
 
     worker = get_object_or_404(
         SkilledWorker,
@@ -792,15 +799,12 @@ def skilled_worker_profile(
             'hire__customer',
             'hire__worker'
         )
-        .order_by(
-            '-created_at'
-        )
+        .order_by('-created_at')
     )
 
     reviews_count = reviews.count()
 
     if reviews_count:
-
         total_rating = sum(
             review.rating
             for review in reviews
@@ -810,10 +814,89 @@ def skilled_worker_profile(
             total_rating / reviews_count,
             1
         )
-
     else:
-
         average_rating = 0
+
+    # =====================================================
+    # CUSTOMER HIRING / REVIEW STATUS
+    # =====================================================
+
+    can_hire = False
+    can_review = False
+    review_hire = None
+
+    if request.user.is_authenticated:
+
+        # -------------------------------------------------
+        # Check whether logged-in user has a customer
+        # profile
+        # -------------------------------------------------
+
+        customer = getattr(
+            request.user,
+            'customer_profile',
+            None
+        )
+
+        if customer:
+
+            # -------------------------------------------------
+            # CUSTOMER MUST BE VERIFIED AND APPROVED TO HIRE
+            # -------------------------------------------------
+
+            if (
+                customer.email_verified
+                and customer.is_approved
+            ):
+
+                # -------------------------------------------------
+                # Prevent customer from hiring their own worker
+                # profile
+                # -------------------------------------------------
+
+                if request.user != worker.user:
+
+                    can_hire = True
+
+            # -------------------------------------------------
+            # FIND COMPLETED HIRE THAT CAN BE REVIEWED
+            # -------------------------------------------------
+
+            review_hire = (
+                WorkerHire.objects
+                .filter(
+                    customer=customer,
+                    worker=worker,
+                    status='completed'
+                )
+                .exclude(
+                    worker_review__isnull=False
+                )
+                .first()
+            )
+
+            if review_hire:
+                can_review = True
+
+
+            print("====================================")
+            print("LOGGED USER:", request.user)
+            print("AUTHENTICATED:", request.user.is_authenticated)
+
+            customer = getattr(
+                request.user,
+                'customer_profile',
+                None
+            )
+
+            print("CUSTOMER:", customer)
+
+            if customer:
+                print("EMAIL VERIFIED:", customer.email_verified)
+                print("APPROVED:", customer.is_approved)
+
+            print("CAN HIRE:", can_hire)
+            print("====================================")
 
     return render(
         request,
@@ -823,8 +906,16 @@ def skilled_worker_profile(
             'reviews': reviews,
             'reviews_count': reviews_count,
             'average_rating': average_rating,
+
+            # Hiring
+            'can_hire': can_hire,
+
+            # Reviews
+            'can_review': can_review,
+            'review_hire': review_hire,
         }
     )
+
 
 
 # =========================================================
@@ -1330,6 +1421,10 @@ def my_listing_detail(
         }
     )
 
+# =========================================================
+# UNIFIED SITE REGISTRATION
+# =========================================================
+
 
 # =========================================================
 # UNIFIED SITE REGISTRATION
@@ -1338,16 +1433,11 @@ def my_listing_detail(
 def site_register(request):
 
     if request.user.is_authenticated:
-
-        return redirect(
-            'marketplace_dashboard'
-        )
+        return redirect('marketplace_dashboard')
 
     if request.method == 'POST':
 
-        form = AccountRegistrationForm(
-            request.POST
-        )
+        form = AccountRegistrationForm(request.POST)
 
         if form.is_valid():
 
@@ -1367,44 +1457,161 @@ def site_register(request):
                 .strip()
             )
 
-            password = form.cleaned_data[
-                'password'
-            ]
+            password = form.cleaned_data['password']
 
-            user = User.objects.create_user(
-                username=email,
-                email=email,
-                password=password,
-                first_name=full_name,
-            )
+            # =================================================
+            # CHECK EMAIL BEFORE DOING ANYTHING
+            # =================================================
 
-            Customer.objects.create(
-                user=user,
-                full_name=full_name,
-                phone=phone,
-                email=email,
-                address='',
-                id_type='',
-                id_number='',
-                is_verified=False,
-            )
+            if User.objects.filter(
+                email__iexact=email
+            ).exists():
 
-            login(
-                request,
-                user
-            )
+                messages.error(
+                    request,
+                    'An account with this email already exists.'
+                )
 
-            messages.success(
-                request,
-                'Your King B account has been created successfully. '
-                'Your account is currently awaiting verification. '
-                'You can browse the marketplace, but you must be '
-                'verified before you can hire a skilled worker.'
-            )
+                return render(
+                    request,
+                    'properties/site_register.html',
+                    {'form': form}
+                )
 
-            return redirect(
-                'marketplace_dashboard'
-            )
+            # =================================================
+            # CREATE ACCOUNT + SEND VERIFICATION
+            # =================================================
+
+            try:
+
+                with transaction.atomic():
+
+                    # -----------------------------------------
+                    # CREATE USER
+                    # -----------------------------------------
+
+                    user = User.objects.create_user(
+                        username=email,
+                        email=email,
+                        password=password,
+                        first_name=full_name,
+                        is_active=True,
+                    )
+
+                    # -----------------------------------------
+                    # CREATE CUSTOMER PROFILE
+                    # -----------------------------------------
+
+                    Customer.objects.create(
+                        user=user,
+                        full_name=full_name,
+                        phone=phone,
+                        email=email,
+                        address='',
+                        id_type='',
+                        id_number='',
+                        email_verified=False,
+                        is_approved=False,
+                    )
+
+                    # -----------------------------------------
+                    # CREATE VERIFICATION TOKEN
+                    # -----------------------------------------
+
+                    uid = urlsafe_base64_encode(
+                        force_bytes(user.pk)
+                    )
+
+                    token = default_token_generator.make_token(
+                        user
+                    )
+
+                    verification_url = request.build_absolute_uri(
+                        reverse(
+                            'verify_email',
+                            kwargs={
+                                'uidb64': uid,
+                                'token': token,
+                            }
+                        )
+                    )
+
+                    # -----------------------------------------
+                    # SEND VERIFICATION EMAIL
+                    # -----------------------------------------
+
+                    send_mail(
+                        subject='Verify Your King B Account',
+
+                        message=(
+                            f'Hello {full_name},\n\n'
+
+                            f'Thank you for creating your '
+                            f'King B Real Estate account.\n\n'
+
+                            f'Please verify your email address '
+                            f'by clicking the link below:\n\n'
+
+                            f'{verification_url}\n\n'
+
+                            f'After verifying your email, you '
+                            f'will be able to log in to your '
+                            f'King B account.\n\n'
+
+                            f'If you did not create this account, '
+                            f'you can ignore this email.\n\n'
+
+                            f'King B Real Estate & Construction Ltd'
+                        ),
+
+                        from_email=None,
+
+                        recipient_list=[email],
+
+                        fail_silently=False,
+                    )
+
+                # =================================================
+                # ONLY REACHES HERE IF EVERYTHING SUCCEEDED
+                # =================================================
+
+                messages.success(
+                    request,
+                    (
+                        'Your account has been created successfully. '
+                        'Please check your email and click the '
+                        'verification link before logging in.'
+                    )
+                )
+
+                return redirect('site_login')
+
+            except Exception as e:
+
+                # =================================================
+                # EMAIL FAILED / ACCOUNT CREATION FAILED
+                # =================================================
+
+                messages.error(
+                    request,
+                    (
+                        'We could not complete your registration '
+                        'because the verification email could not '
+                        'be sent. Please check your email address '
+                        'or try again later.'
+                    )
+                )
+
+                print(
+                    'REGISTRATION ERROR:',
+                    repr(e)
+                )
+
+                return render(
+                    request,
+                    'properties/site_register.html',
+                    {'form': form}
+                )
 
     else:
 
@@ -1418,6 +1625,89 @@ def site_register(request):
         }
     )
 
+# =========================================================
+# VERIFY EMAIL
+# =========================================================
+
+def verify_email(request, uidb64, token):
+
+    try:
+
+        uid = urlsafe_base64_decode(
+            uidb64
+        ).decode()
+
+        user = User.objects.get(
+            pk=uid
+        )
+
+    except (
+        TypeError,
+        ValueError,
+        OverflowError,
+        User.DoesNotExist,
+    ):
+
+        user = None
+
+    if user is None:
+
+        return render(
+            request,
+            'properties/email_verification_failed.html'
+        )
+
+    if not default_token_generator.check_token(
+        user,
+        token
+    ):
+
+        return render(
+            request,
+            'properties/email_verification_failed.html'
+        )
+
+    try:
+
+        customer = user.customer_profile
+
+        customer.email_verified = True
+
+        customer.save(
+            update_fields=[
+                'email_verified'
+            ]
+        )
+
+    except Customer.DoesNotExist:
+
+        pass
+
+    try:
+
+        worker = user.skilled_worker_profile
+
+        worker.email_verified = True
+
+        worker.save(
+            update_fields=[
+                'email_verified'
+            ]
+        )
+
+    except SkilledWorker.DoesNotExist:
+
+        pass
+
+    messages.success(
+        request,
+        'Your email address has been verified successfully.'
+    )
+
+    return render(
+        request,
+        'properties/email_verified.html'
+    )
 
 # =========================================================
 # OLD CUSTOMER REGISTRATION
@@ -1534,6 +1824,36 @@ def site_login(request):
                 }
             )
 
+                # =================================================
+        # EMAIL VERIFICATION CHECK
+        # =================================================
+
+        email_verified = False
+
+        try:
+
+            customer = user.customer_profile
+
+            email_verified = customer.email_verified
+
+        except Customer.DoesNotExist:
+
+            pass
+
+        if not email_verified:
+
+            return render(
+                request,
+                'properties/site_login.html',
+                {
+                    'error': (
+                        'Please verify your email address '
+                        'before logging in. Check your inbox '
+                        'for the verification email.'
+                    ),
+                }
+            )
+
         login(
             request,
             user
@@ -1617,7 +1937,6 @@ def skilled_worker_logout(request):
 # =========================================================
 # GENERAL ACCOUNT DASHBOARD
 # =========================================================
-
 @login_required(login_url='site_login')
 def marketplace_dashboard(request):
 
@@ -1626,28 +1945,24 @@ def marketplace_dashboard(request):
     customer = None
 
     try:
-
         customer = user.customer_profile
 
     except Customer.DoesNotExist:
-
         pass
 
     worker = None
 
     try:
-
         worker = user.skilled_worker_profile
 
     except SkilledWorker.DoesNotExist:
-
         pass
 
     customer_exists = customer is not None
 
     customer_verified = (
         customer_exists
-        and customer.is_verified
+        and customer.email_verified
     )
 
     worker_exists = worker is not None
@@ -1821,16 +2136,94 @@ def marketplace_dashboard(request):
     # =====================================================
     # UNREAD MARKETPLACE MESSAGES
     # =====================================================
+
     unread_marketplace_messages = (
         MarketplaceMessage.objects
         .filter(
             receiver=request.user,
             is_read=False
         )
-        .values('listing_id')
+        .values(
+            'listing_id'
+        )
         .distinct()
         .count()
     )
+
+    # =====================================================
+    # WORKER / CUSTOMER MESSAGE CONVERSATIONS
+    # =====================================================
+
+    worker_message_hires = WorkerHire.objects.none()
+
+    if customer_exists and worker_exists:
+
+        worker_message_hires = (
+            WorkerHire.objects
+            .filter(
+               Q(customer=customer) |
+                    Q(worker=worker)
+            )
+            .select_related(
+                'customer',
+                'customer__user',
+                'worker',
+                'worker__user'
+            )
+            .order_by(
+                '-hired_at'
+            )
+        )
+
+    elif customer_exists:
+
+        worker_message_hires = (
+            WorkerHire.objects
+            .filter(
+                customer=customer
+            )
+            .select_related(
+                'worker',
+                'worker__user'
+            )
+            .order_by(
+                '-hired_at'
+            )
+        )
+
+    elif worker_exists:
+
+        worker_message_hires = (
+            WorkerHire.objects
+            .filter(
+                worker=worker
+            )
+            .select_related(
+                'customer',
+                'customer__user'
+            )
+            .order_by(
+                '-hired_at'
+            )
+        )
+
+    # =====================================================
+    # UNREAD WORKER / CUSTOMER MESSAGES
+    # =====================================================
+
+    unread_worker_messages = (
+        WorkerMessage.objects
+        .filter(
+            receiver=request.user,
+            is_read=False
+        )
+        .count()
+    )
+
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
     context = {
 
         'user': user,
@@ -1864,20 +2257,130 @@ def marketplace_dashboard(request):
         'approved_listings_count': approved_listings_count,
         'under_review_listings_count': under_review_listings_count,
         'rejected_listings_count': rejected_listings_count,
-
         'total_listing_views': total_listing_views,
 
         'unread_marketplace_messages': unread_marketplace_messages,
+
+        'unread_worker_messages': unread_worker_messages,
+
+        'worker_message_hires': worker_message_hires,
     }
 
     return render(
         request,
         'properties/marketplace_dashboard.html',
         context
-
-    
     )
 
+@login_required(login_url='site_login')
+def delete_marketplace_listing(request, listing_id):
+
+    # =====================================================
+    # ONLY POST REQUESTS ARE ALLOWED
+    # =====================================================
+
+    if request.method != 'POST':
+
+        messages.error(
+            request,
+            'Invalid request.'
+        )
+
+        return redirect(
+            'marketplace_dashboard'
+        )
+
+    # =====================================================
+    # GET LISTING BELONGING TO CURRENT USER
+    # =====================================================
+
+    listing = get_object_or_404(
+        MarketplaceListing,
+        id=listing_id,
+        seller=request.user
+    )
+
+    # =====================================================
+    # SAVE TITLE FOR SUCCESS MESSAGE
+    # =====================================================
+
+    listing_title = listing.title
+
+    # =====================================================
+    # DELETE MAIN LISTING IMAGE
+    # =====================================================
+
+    if listing.image:
+
+        try:
+            listing.image.delete(
+                save=False
+            )
+        except Exception:
+            pass
+
+    # =====================================================
+    # DELETE GALLERY IMAGES
+    # =====================================================
+    #
+    # Your dashboard already uses:
+    #
+    #     prefetch_related('gallery_images')
+    #
+    # so we safely remove those uploaded files too.
+    #
+    # =====================================================
+
+    try:
+
+        gallery_images = listing.gallery_images.all()
+
+        for gallery_image in gallery_images:
+
+            # Try common image field names safely
+            image_file = getattr(
+                gallery_image,
+                'image',
+                None
+            )
+
+            if image_file:
+
+                try:
+                    image_file.delete(
+                        save=False
+                    )
+                except Exception:
+                    pass
+
+            gallery_image.delete()
+
+    except Exception:
+        pass
+
+    # =====================================================
+    # DELETE LISTING
+    # =====================================================
+
+    listing.delete()
+
+    # =====================================================
+    # SUCCESS MESSAGE
+    # =====================================================
+
+    messages.success(
+        request,
+        f'Your marketplace listing "{listing_title}" '
+        f'has been permanently deleted.'
+    )
+
+    # =====================================================
+    # RETURN TO MARKETPLACE DASHBOARD
+    # =====================================================
+
+    return redirect(
+        'marketplace_dashboard'
+    )
 
 # =========================================================
 # BECOME A SKILLED WORKER
@@ -2047,7 +2550,6 @@ def customer_profile_edit(request):
 # =========================================================
 # CUSTOMER DASHBOARD
 # =========================================================
-
 @login_required(login_url='site_login')
 def customer_dashboard(request):
 
@@ -2066,7 +2568,7 @@ def customer_dashboard(request):
             'marketplace_dashboard'
         )
 
-    if not customer.is_verified:
+    if not customer.email_verified:
 
         messages.warning(
             request,
@@ -2078,6 +2580,10 @@ def customer_dashboard(request):
             'marketplace_dashboard'
         )
 
+    # =====================================================
+    # CUSTOMER HIRES
+    # =====================================================
+
     hires = (
         WorkerHire.objects
         .filter(
@@ -2087,7 +2593,8 @@ def customer_dashboard(request):
             status='cancelled'
         )
         .select_related(
-            'worker'
+            'worker',
+            'worker__user'
         )
         .order_by(
             '-hired_at'
@@ -2117,6 +2624,10 @@ def customer_dashboard(request):
         .count()
     )
 
+    # =====================================================
+    # REVIEWS
+    # =====================================================
+
     reviews_count = (
         WorkerReview.objects
         .filter(
@@ -2136,9 +2647,68 @@ def customer_dashboard(request):
         )
     )
 
+    # =====================================================
+    # UNREAD WORKER MESSAGES
+    #
+    # Messages sent TO the current customer
+    # =====================================================
+
+    unread_worker_messages_count = (
+        WorkerMessage.objects
+        .filter(
+            receiver=request.user,
+            is_read=False
+        )
+        .count()
+    )
+
+    # =====================================================
+    # CONVERSATIONS
+    #
+    # Get hires that have at least one message
+    # =====================================================
+
+    message_hire_ids = (
+        WorkerMessage.objects
+        .filter(
+            Q(sender=request.user) |
+            Q(receiver=request.user)
+        )
+        .values_list(
+            'hire_id',
+            flat=True
+        )
+        .distinct()
+    )
+
+    message_hires = []
+
+    for hire in hires:
+
+        if hire.id in message_hire_ids:
+
+            unread_messages = (
+                WorkerMessage.objects
+                .filter(
+                    hire=hire,
+                    receiver=request.user,
+                    is_read=False
+                )
+                .count()
+            )
+
+            hire.unread_messages = unread_messages
+
+            message_hires.append(hire)
+
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
     context = {
 
         'customer': customer,
+
         'hires': hires,
 
         'total_hires': total_hires,
@@ -2152,6 +2722,10 @@ def customer_dashboard(request):
 
         'reviews_count': reviews_count,
         'reviewed_hire_ids': reviewed_hire_ids,
+
+        # MESSAGE DATA
+        'unread_worker_messages_count': unread_worker_messages_count,
+        'message_hires': message_hires,
     }
 
     return render(
@@ -2160,10 +2734,10 @@ def customer_dashboard(request):
         context
     )
 
-
 # =========================================================
 # WORKER DASHBOARD
 # =========================================================
+
 
 @login_required(login_url='site_login')
 def worker_dashboard(request):
@@ -2195,6 +2769,10 @@ def worker_dashboard(request):
             'marketplace_dashboard'
         )
 
+    # =====================================================
+    # WORKER HIRES
+    # =====================================================
+
     hires = (
         WorkerHire.objects
         .filter(
@@ -2208,25 +2786,49 @@ def worker_dashboard(request):
         )
     )
 
-    pending_requests = hires.filter(
-        status='requested'
-    ).count()
+    pending_requests = (
+        hires
+        .filter(
+            status='requested'
+        )
+        .count()
+    )
 
-    active_jobs = hires.filter(
-        status='active'
-    ).count()
+    active_jobs = (
+        hires
+        .filter(
+            status='active'
+        )
+        .count()
+    )
 
-    completed_jobs = hires.filter(
-        status='completed'
-    ).count()
+    completed_jobs = (
+        hires
+        .filter(
+            status='completed'
+        )
+        .count()
+    )
 
-    cancelled_jobs = hires.filter(
-        status='cancelled'
-    ).count()
+    cancelled_jobs = (
+        hires
+        .filter(
+            status='cancelled'
+        )
+        .count()
+    )
 
-    declined_requests = hires.filter(
-        status='declined'
-    ).count()
+    declined_requests = (
+        hires
+        .filter(
+            status='declined'
+        )
+        .count()
+    )
+
+    # =====================================================
+    # WORKER REVIEWS
+    # =====================================================
 
     reviews = (
         WorkerReview.objects
@@ -2268,6 +2870,10 @@ def worker_dashboard(request):
 
         average_rating = 0
 
+    # =====================================================
+    # CUSTOMER REVIEWS GIVEN BY WORKER
+    # =====================================================
+
     customer_reviewed_hire_ids = set(
         CustomerReview.objects
         .filter(
@@ -2279,9 +2885,59 @@ def worker_dashboard(request):
         )
     )
 
+    # =====================================================
+    # WORKER MESSAGES
+    #
+    # WorkerHire has a reverse relationship called
+    # "messages", so use messages__ instead of
+    # workermessage__.
+    # =====================================================
+
+    message_hires = (
+        WorkerHire.objects
+        .filter(
+            worker=worker,
+            messages__isnull=False
+        )
+        .select_related(
+            'customer'
+        )
+        .annotate(
+            unread_messages=Count(
+                'messages',
+                filter=Q(
+                    messages__receiver=request.user,
+                    messages__is_read=False
+                )
+            )
+        )
+        .order_by(
+            '-hired_at'
+        )
+        .distinct()
+    )
+
+    # =====================================================
+    # TOTAL UNREAD WORKER MESSAGES
+    # =====================================================
+
+    worker_unread_messages_count = (
+        WorkerMessage.objects
+        .filter(
+            receiver=request.user,
+            is_read=False
+        )
+        .count()
+    )
+
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
     context = {
 
         'worker': worker,
+
         'hires': hires,
 
         'pending_requests': pending_requests,
@@ -2296,6 +2952,10 @@ def worker_dashboard(request):
 
         'reviewed_hire_ids': reviewed_hire_ids,
         'customer_reviewed_hire_ids': customer_reviewed_hire_ids,
+
+        # MESSAGES
+        'message_hires': message_hires,
+        'worker_unread_messages_count': worker_unread_messages_count,
     }
 
     return render(
@@ -2303,7 +2963,6 @@ def worker_dashboard(request):
         'properties/worker_dashboard.html',
         context
     )
-
 
 # =========================================================
 # MY SKILLED WORKER PROFILE
@@ -2643,7 +3302,7 @@ def worker_hire(
     # CUSTOMER VERIFICATION
     # =====================================================
 
-    if not customer.is_verified:
+    if not customer.email_verified:
 
         messages.warning(
             request,
@@ -2745,15 +3404,30 @@ def worker_hire(
         # CREATE HIRE REQUEST
         # =================================================
 
-        WorkerHire.objects.create(
-            customer=customer,
-            worker=worker,
-            service=service,
-            notes=notes,
-            status='requested'
+        hire = WorkerHire.objects.create(
+                customer=customer,
+                worker=worker,
+                service=service,
+                notes=notes,
+                status='requested'
+            )
+
+        # =====================================================
+        # NOTIFY WORKER
+        # =====================================================
+
+        create_notification(
+            recipient=worker.user,
+            notification_type='hire_request',
+            title='New Hire Request',
+            message=(
+                f'{customer.full_name} has requested to hire you '
+                f'for {service}.'
+            ),
+            link=reverse(
+                'worker_dashboard'
+            )
         )
-
-
         # =================================================
         # SUCCESS MESSAGE
         # =================================================
@@ -2847,6 +3521,39 @@ def cancel_worker_hire(
             'status'
         ]
     )
+    # =====================================================
+    # NOTIFY CUSTOMER
+    # =====================================================
+
+    create_notification(
+        recipient=hire.customer.user,
+        notification_type='hire_accepted',
+        title='Hire Request Accepted',
+        message=(
+            f'{hire.worker.full_name} has accepted your '
+            f'hire request for {hire.service}.'
+        ),
+        link=reverse(
+            'customer_dashboard'
+        )
+    )
+
+    # =====================================================
+    # NOTIFY CUSTOMER
+    # =====================================================
+
+    create_notification(
+        recipient=hire.customer.user,
+        notification_type='hire_declined',
+        title='Hire Request Declined',
+        message=(
+            f'{hire.worker.full_name} has declined your '
+            f'hire request for {hire.service}.'
+        ),
+        link=reverse(
+            'customer_dashboard'
+        )
+    )
 
     messages.success(
         request,
@@ -2857,6 +3564,40 @@ def cancel_worker_hire(
 
     return redirect(
         'marketplace_dashboard'
+    )
+
+    # =====================================================
+    # NOTIFY WORKER
+    # =====================================================
+
+    create_notification(
+        recipient=hire.worker.user,
+        notification_type='hire_cancelled',
+        title='Hire Request Cancelled',
+        message=(
+            f'{hire.customer.full_name} has cancelled the '
+            f'hire request for {hire.service}.'
+        ),
+        link=reverse(
+            'worker_dashboard'
+        )
+    )
+
+        # =====================================================
+    # NOTIFY CUSTOMER
+    # =====================================================
+
+    create_notification(
+        recipient=hire.customer.user,
+        notification_type='job_completed',
+        title='Job Completed',
+        message=(
+            f'{hire.worker.full_name} has marked your '
+            f'{hire.service} job as completed.'
+        ),
+        link=reverse(
+            'customer_dashboard'
+        )
     )
 
 
@@ -3127,7 +3868,7 @@ def worker_review(
         customer=customer
     )
 
-    if not customer.is_verified:
+    if not customer.email_verified:
 
         messages.warning(
             request,
@@ -3234,6 +3975,22 @@ def worker_review(
             comment=comment,
             is_approved=True
         )
+        # =====================================================
+        # NOTIFY WORKER
+        # =====================================================
+
+        create_notification(
+            recipient=hire.worker.user,
+            notification_type='review',
+            title='New Worker Review',
+            message=(
+                f'{customer.full_name} left you a '
+                f'{rating}-star review.'
+            ),
+            link=reverse(
+                'my_worker_profile'
+            )
+        )
 
         messages.success(
             request,
@@ -3255,6 +4012,155 @@ def worker_review(
         }
     )
 
+
+# =========================================================
+# EDIT MY SKILLED WORKER PROFILE
+# =========================================================
+
+@login_required(login_url='site_login')
+def edit_worker_profile(request):
+
+    try:
+
+        worker = request.user.skilled_worker_profile
+
+    except SkilledWorker.DoesNotExist:
+
+        messages.error(
+            request,
+            'You do not have a skilled worker profile.'
+        )
+
+        return redirect(
+            'marketplace_dashboard'
+        )
+
+    # =====================================================
+    # HANDLE FORM SUBMISSION
+    # =====================================================
+
+    if request.method == 'POST':
+
+        form = SkilledWorkerRegistrationForm(
+            request.POST,
+            request.FILES,
+            instance=worker,
+            current_user=request.user,
+        )
+
+        if form.is_valid():
+
+            worker = form.save(
+                commit=False
+            )
+
+            # -------------------------------------------------
+            # KEEP PROFILE CONNECTED TO CURRENT USER
+            # -------------------------------------------------
+
+            worker.user = request.user
+
+            # -------------------------------------------------
+            # KEEP EMAIL SYNCHRONIZED WITH USER ACCOUNT
+            # -------------------------------------------------
+
+            if request.user.email:
+
+                worker.email = (
+                    request.user.email
+                    .strip()
+                    .lower()
+                )
+
+            worker.save()
+
+            messages.success(
+                request,
+                'Your skilled worker profile has been '
+                'updated successfully.'
+            )
+
+            # -------------------------------------------------
+            # RETURN TO WORKER DASHBOARD AFTER SAVING
+            # -------------------------------------------------
+
+            return redirect(
+                'worker_dashboard'
+            )
+
+    # =====================================================
+    # DISPLAY FORM
+    # =====================================================
+
+    else:
+
+        form = SkilledWorkerRegistrationForm(
+            instance=worker,
+            current_user=request.user,
+        )
+
+    return render(
+        request,
+        'properties/edit_worker_profile.html',
+        {
+            'worker': worker,
+            'form': form,
+        }
+    )
+
+
+
+# =========================================================
+# DELETE MY SKILLED WORKER PROFILE
+# =========================================================
+
+@login_required(login_url='site_login')
+def delete_worker_profile(request):
+
+    try:
+
+        worker = request.user.skilled_worker_profile
+
+    except SkilledWorker.DoesNotExist:
+
+        messages.error(
+            request,
+            'You do not have a skilled worker profile.'
+        )
+
+        return redirect(
+            'marketplace_dashboard'
+        )
+
+    # =====================================================
+    # DELETE MUST BE POST
+    # =====================================================
+
+    if request.method != 'POST':
+
+        messages.warning(
+            request,
+            'Invalid delete request.'
+        )
+
+        return redirect(
+            'my_worker_profile'
+        )
+
+    # =====================================================
+    # DELETE SKILLED WORKER PROFILE ONLY
+    # =====================================================
+
+    worker.delete()
+
+    messages.success(
+        request,
+        'Your skilled worker profile has been deleted successfully.'
+    )
+
+    return redirect(
+        'marketplace_dashboard'
+    )
 
 # =========================================================
 # WORKER REVIEWS CUSTOMER
@@ -3404,6 +4310,23 @@ def customer_review(
             rating=rating,
             comment=comment,
             is_approved=True
+        )
+
+        # =====================================================
+        # NOTIFY CUSTOMER
+        # =====================================================
+
+        create_notification(
+            recipient=hire.customer.user,
+            notification_type='review',
+            title='New Customer Review',
+            message=(
+                f'{worker.full_name} left you a '
+                f'{rating}-star review.'
+            ),
+            link=reverse(
+                'customer_dashboard'
+            )
         )
 
         messages.success(
@@ -4419,11 +5342,50 @@ def marketplace_chat(
         # CREATE MESSAGE
         # =================================================
 
-        MarketplaceMessage.objects.create(
+        new_message = MarketplaceMessage.objects.create(
             listing=listing,
             sender=current_user,
             receiver=other_user,
             message=message_text,
+        )
+
+        # =====================================================
+        # MARKETPLACE MESSAGE NOTIFICATION LINK
+        # =====================================================
+
+        if current_user == listing.seller:
+
+            notification_link = reverse(
+                'marketplace_chat_with_buyer',
+                kwargs={
+                    'listing_id': listing.id,
+                    'buyer_id': other_user.id,
+                }
+            )
+
+        else:
+
+            notification_link = reverse(
+                'marketplace_chat',
+                kwargs={
+                    'listing_id': listing.id,
+                }
+            )
+
+
+        # =====================================================
+        # CREATE MARKETPLACE MESSAGE NOTIFICATION
+        # =====================================================
+
+        create_notification(
+            recipient=other_user,
+            notification_type='marketplace_message',
+            title='New Marketplace Message',
+            message=(
+                f'{current_user.get_full_name() or current_user.email} '
+                f'sent you a message about "{listing.title}".'
+            ),
+            link=notification_link
         )
 
         # =================================================
@@ -4993,3 +5955,398 @@ class AccountPasswordResetCompleteView(
     template_name = (
         'properties/account_password_reset_complete.html'
     )
+
+# =========================================================
+# WORKER / CUSTOMER MESSAGES
+# =========================================================
+
+@login_required(login_url='site_login')
+def worker_messages(request, hire_id):
+
+    # -----------------------------------------------------
+    # GET THE HIRE
+    # -----------------------------------------------------
+
+    hire = get_object_or_404(
+        WorkerHire.objects.select_related(
+            'customer',
+            'customer__user',
+            'worker',
+            'worker__user',
+        ),
+        id=hire_id,
+    )
+
+    user = request.user
+
+    # -----------------------------------------------------
+    # MAKE SURE USER BELONGS TO THIS HIRE
+    # -----------------------------------------------------
+
+    is_customer = (
+        hire.customer.user_id == user.id
+    )
+
+    is_worker = (
+        hire.worker.user_id == user.id
+    )
+
+    if not is_customer and not is_worker:
+
+        messages.error(
+            request,
+            'You are not authorized to access this conversation.'
+        )
+
+        return redirect(
+            'marketplace_dashboard'
+        )
+
+    # -----------------------------------------------------
+    # DETERMINE OTHER PERSON
+    # -----------------------------------------------------
+
+    if is_customer:
+
+        other_user = hire.worker.user
+
+    else:
+
+        other_user = hire.customer.user
+
+    # -----------------------------------------------------
+    # SEND MESSAGE
+    # -----------------------------------------------------
+
+    if request.method == 'POST':
+
+        message_text = (
+            request.POST.get(
+                'message',
+                ''
+            )
+            .strip()
+        )
+
+        if not message_text:
+
+            messages.error(
+                request,
+                'Please enter a message.'
+            )
+
+            return redirect(
+                'worker_messages',
+                hire_id=hire.id
+            )
+
+        WorkerMessage.objects.create(
+            hire=hire,
+            sender=user,
+            receiver=other_user,
+            message=message_text,
+        )
+
+        return redirect(
+            'worker_messages',
+            hire_id=hire.id
+        )
+
+    # -----------------------------------------------------
+    # MARK RECEIVED MESSAGES AS READ
+    # -----------------------------------------------------
+
+    WorkerMessage.objects.filter(
+        hire=hire,
+        receiver=user,
+        is_read=False,
+    ).update(
+        is_read=True
+    )
+
+    # -----------------------------------------------------
+    # GET CONVERSATION
+    # -----------------------------------------------------
+
+    conversation = (
+        WorkerMessage.objects
+        .filter(
+            hire=hire
+        )
+        .select_related(
+            'sender',
+            'receiver',
+        )
+        .order_by(
+            'created_at'
+        )
+    )
+
+    context = {
+
+        'hire': hire,
+
+        'conversation': conversation,
+
+        'other_user': other_user,
+
+        'is_customer': is_customer,
+        'is_worker': is_worker,
+
+    }
+
+    return render(
+        request,
+        'properties/worker_messages.html',
+        context
+    )
+
+def terms_and_conditions(request):
+    return render(request, "properties/terms_and_conditions.html")
+
+
+# =========================================================
+# WORKER / CUSTOMER MESSAGES
+# =========================================================
+
+@login_required(login_url='site_login')
+def worker_messages(request, hire_id):
+
+    # =====================================================
+    # GET THE HIRE
+    # =====================================================
+
+    hire = get_object_or_404(
+        WorkerHire.objects.select_related(
+            'customer',
+            'customer__user',
+            'worker',
+            'worker__user',
+        ),
+        id=hire_id
+    )
+
+
+    # =====================================================
+    # GET CUSTOMER AND WORKER USERS
+    # =====================================================
+
+    customer_user = hire.customer.user
+    worker_user = hire.worker.user
+
+
+    # =====================================================
+    # SECURITY CHECK
+    #
+    # Only the customer OR worker connected to this
+    # specific WorkerHire can access the conversation.
+    # =====================================================
+
+    if (
+        request.user.id != customer_user.id
+        and
+        request.user.id != worker_user.id
+    ):
+
+        return HttpResponseForbidden(
+            'You are not authorized to access this conversation.'
+        )
+
+
+    # =====================================================
+    # DETERMINE THE OTHER PERSON
+    # =====================================================
+
+    if request.user.id == customer_user.id:
+
+        other_user = worker_user
+        other_person = hire.worker
+        current_role = 'customer'
+
+    else:
+
+        other_user = customer_user
+        other_person = hire.customer
+        current_role = 'worker'
+
+
+    # =====================================================
+    # HANDLE SENDING MESSAGE
+    # =====================================================
+
+    if request.method == 'POST':
+
+        message_text = request.POST.get(
+            'message',
+            ''
+        ).strip()
+
+
+        # =================================================
+        # MESSAGE REQUIRED
+        # =================================================
+
+        if not message_text:
+
+            messages.error(
+                request,
+                'Please enter a message.'
+            )
+
+            return redirect(
+                'worker_messages',
+                hire_id=hire.id
+            )
+
+
+        # =================================================
+        # CREATE MESSAGE
+        # =================================================
+
+        new_message = WorkerMessage.objects.create(
+                hire=hire,
+                sender=request.user,
+                receiver=other_user,
+                message=message_text
+            )
+
+        # =====================================================
+        # CREATE WORKER / CUSTOMER MESSAGE NOTIFICATION
+        # =====================================================
+
+        create_notification(
+            recipient=other_user,
+            notification_type=(
+                'customer_message'
+                if current_role == 'customer'
+                else 'worker_message'
+            ),
+            title='New Message',
+            message=(
+                f'{request.user.get_full_name() or request.user.email} '
+                f'sent you a message regarding your '
+                f'{hire.service} job.'
+            ),
+            link=reverse(
+                'worker_messages',
+                kwargs={
+                    'hire_id': hire.id,
+                }
+            )
+        )
+
+
+        # =================================================
+        # REDIRECT BACK TO CONVERSATION
+        # =================================================
+
+        return redirect(
+            'worker_messages',
+            hire_id=hire.id
+        )
+
+
+    # =====================================================
+    # GET MESSAGES
+    # =====================================================
+
+    conversation = (
+        WorkerMessage.objects
+        .filter(
+            hire=hire
+        )
+        .select_related(
+            'sender',
+            'receiver'
+        )
+        .order_by(
+            'created_at'
+        )
+    )
+
+
+    # =====================================================
+    # MARK MESSAGES SENT TO CURRENT USER AS READ
+    # =====================================================
+
+    WorkerMessage.objects.filter(
+        hire=hire,
+        receiver=request.user,
+        is_read=False
+    ).update(
+        is_read=True
+    )
+
+
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
+    context = {
+
+        'hire': hire,
+
+        'conversation': conversation,
+
+        'other_user': other_user,
+
+        'other_person': other_person,
+
+        'current_role': current_role,
+
+        'customer': hire.customer,
+
+        'worker': hire.worker,
+    }
+
+
+    # =====================================================
+    # RENDER CHAT PAGE
+    # =====================================================
+
+    return render(
+        request,
+        'properties/worker_messages.html',
+        context
+    )
+
+@login_required(login_url='site_login')
+def notifications(request):
+    user_notifications = Notification.objects.filter(
+        recipient=request.user
+    ).order_by('-created_at')
+
+    return render(
+        request,
+        'properties/notifications.html',
+        {
+            'notifications': user_notifications,
+        }
+    )
+
+
+@login_required(login_url='site_login')
+def mark_notification_read(request, notification_id):
+    notification = get_object_or_404(
+        Notification,
+        id=notification_id,
+        recipient=request.user
+    )
+
+    notification.is_read = True
+    notification.save(update_fields=['is_read'])
+
+    if notification.link:
+        return redirect(notification.link)
+
+    return redirect('notifications')
+
+
+@login_required(login_url='site_login')
+def mark_all_notifications_read(request):
+    Notification.objects.filter(
+        recipient=request.user,
+        is_read=False
+    ).update(is_read=True)
+
+    return redirect('notifications')

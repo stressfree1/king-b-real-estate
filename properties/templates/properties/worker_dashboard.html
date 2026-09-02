@@ -2,9 +2,8 @@
 {% load static %}
 
 {% block title %}
-    Worker Dashboard | King B Real Estate
+Worker Dashboard | King B Real Estate
 {% endblock %}
-
 
 {% block extra_css %}
 
@@ -167,6 +166,18 @@
 }
 
 
+.header-button-edit {
+    background: #ffffff;
+    color: #0b2e22;
+}
+
+
+.header-button-edit:hover {
+    background: #e8f5ec;
+    transform: translateY(-2px);
+}
+
+
 .header-button-logout {
     background: rgba(255,255,255,0.12);
 
@@ -203,7 +214,7 @@
     display: grid;
 
     grid-template-columns:
-        repeat(5, minmax(0, 1fr));
+        repeat(6, minmax(0, 1fr));
 
     gap: 18px;
 
@@ -247,6 +258,40 @@
 
 .worker-stat-rating {
     color: #c9a227;
+}
+
+
+/* =========================================================
+   MESSAGE STAT
+========================================================= */
+
+.message-stat-card {
+    position: relative;
+}
+
+
+.message-stat-number {
+    color: #b42323;
+}
+
+
+.message-stat-link {
+    display: block;
+
+    margin-top: 10px;
+
+    color: #123c2f;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+.message-stat-link:hover {
+    color: #b58b3b;
 }
 
 
@@ -532,7 +577,13 @@
 
     transition: 0.2s ease;
 
-    display: inline-block;
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
 }
 
 
@@ -585,8 +636,97 @@
 }
 
 
+/* =========================================================
+   MESSAGE BUTTON
+========================================================= */
+
+.message-customer-button {
+    background: #123c2f;
+    color: white;
+}
+
+
+.message-customer-button:hover {
+    background: #b58b3b;
+    color: white;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   RED MESSAGE COUNTER
+========================================================= */
+
+.message-count-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 21px;
+
+    height: 21px;
+
+    padding: 0 6px;
+
+    margin-left: 5px;
+
+    background: #d62828;
+
+    color: white;
+
+    border-radius: 50px;
+
+    font-size: 11px;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 2px 7px rgba(214, 40, 40, 0.35);
+}
+
+
+/* =========================================================
+   LARGE RED UNREAD BADGE
+========================================================= */
+
+.unread-message-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    background: #d62828;
+
+    color: white;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 3px 10px rgba(214, 40, 40, 0.25);
+}
+
+
+/* =========================================================
+   REVIEW COMPLETED
+========================================================= */
+
 .review-completed {
     background: #e8f5ec;
+
     color: #126b3a;
 
     border: 1px solid #c7e6d1;
@@ -844,6 +984,44 @@
 
 
 /* =========================================================
+   EDIT PROFILE BUTTON
+========================================================= */
+
+.worker-edit-action {
+    background: #c9a227;
+    color: #111;
+}
+
+
+.worker-edit-action:hover {
+    background: #dfc04c;
+    color: #111;
+}
+
+
+/* =========================================================
+   DELETE ACCOUNT BUTTON
+========================================================= */
+
+.worker-delete-action {
+    background: #f8dddd;
+
+    color: #9b2525;
+
+    border: 1px solid #efc5c5;
+}
+
+
+.worker-delete-action:hover {
+    background: #9b2525;
+
+    color: white;
+
+    border-color: #9b2525;
+}
+
+
+/* =========================================================
    EMPTY STATE
 ========================================================= */
 
@@ -898,7 +1076,7 @@
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
 
     .worker-statistics {
         grid-template-columns:
@@ -1018,197 +1196,961 @@
 
 {% endblock %}
 
-
-
 {% block content %}
 
 <div class="worker-dashboard-page">
 
+<!-- =====================================================
+     WORKER HEADER
+====================================================== -->
 
-    <!-- =====================================================
-         WORKER HEADER
-    ====================================================== -->
+<section class="worker-dashboard-header">
 
-    <section class="worker-dashboard-header">
-
-        <div class="worker-dashboard-header-inner">
-
-
-            <div class="worker-header-left">
+<div class="worker-dashboard-header-inner">
 
 
-                <!-- WORKER PHOTO -->
+<div class="worker-header-left">
 
-                {% if worker.profile_image %}
 
-                    <img
-                        src="{{ worker.profile_image.url }}"
-                        alt="{{ worker.full_name }}"
-                        class="worker-dashboard-photo"
-                    >
+    <!-- WORKER PHOTO -->
+
+    {% if worker.profile_image %}
+
+        <img
+            src="{{ worker.profile_image.url }}"
+            alt="{{ worker.full_name }}"
+            class="worker-dashboard-photo"
+        >
+
+    {% else %}
+
+        <div class="worker-dashboard-photo-placeholder">
+            {{ worker.full_name|first|upper }}
+        </div>
+
+    {% endif %}
+
+
+    <!-- WORKER INFORMATION -->
+
+    <div class="worker-header-text">
+
+        <h1>
+            Welcome, {{ worker.full_name }}
+        </h1>
+
+        <div class="worker-header-skill">
+            {{ worker.skill }}
+        </div>
+
+        <p>
+            📍 {{ worker.location }}
+        </p>
+
+
+        {% if worker.is_approved %}
+
+            <span class="worker-approved">
+                ✓ Approved Skilled Worker
+            </span>
+
+        {% else %}
+
+            <span
+                class="worker-approved"
+                style="background:#fff4cf;color:#806000;"
+            >
+                ⏳ Account Pending Approval
+            </span>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- HEADER ACTIONS -->
+
+<div class="worker-header-actions">
+
+    <a
+        href="{% url 'skilled_worker_profile' worker.id %}"
+        class="header-button header-button-profile"
+    >
+        👤 View Public Profile
+    </a>
+
+
+    <!-- EDIT PROFILE -->
+
+    <a
+        href="{% url 'skilled_worker_edit' %}"
+        class="header-button header-button-edit"
+    >
+        ✏️ Edit Profile
+    </a>
+
+
+    <form
+        method="POST"
+        action="{% url 'skilled_worker_logout' %}"
+        style="display: inline;"
+    >
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="header-button header-button-logout"
+            onclick="return confirm('Are you sure you want to logout?');"
+        >
+            🚪 Logout
+        </button>
+
+    </form>
+
+</div>
+
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+
+<main class="worker-dashboard-content">
+
+<!-- =================================================
+     STATISTICS
+================================================== -->
+
+<div class="worker-statistics">
+
+
+<div class="worker-stat-card">
+
+    <div class="worker-stat-title">
+        Pending Requests
+    </div>
+
+    <div class="worker-stat-number">
+        {{ pending_requests|default:"0" }}
+    </div>
+
+</div>
+
+
+<div class="worker-stat-card">
+
+    <div class="worker-stat-title">
+        Active Jobs
+    </div>
+
+    <div class="worker-stat-number">
+        {{ active_jobs|default:"0" }}
+    </div>
+
+</div>
+
+
+<div class="worker-stat-card">
+
+    <div class="worker-stat-title">
+        Completed Jobs
+    </div>
+
+    <div class="worker-stat-number">
+        {{ completed_jobs|default:"0" }}
+    </div>
+
+</div>
+
+
+<div class="worker-stat-card">
+
+    <div class="worker-stat-title">
+        Declined Requests
+    </div>
+
+    <div class="worker-stat-number">
+        {{ declined_requests|default:"0" }}
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     UNREAD MESSAGES
+================================================== -->
+
+<div class="worker-stat-card message-stat-card">
+
+    <div class="worker-stat-title">
+        Unread Messages
+    </div>
+
+    <div class="worker-stat-number message-stat-number">
+        {{ worker_unread_messages_count|default:"0" }}
+    </div>
+
+    {% if worker_unread_messages_count > 0 %}
+
+        <a
+            href="#worker-messages"
+            class="message-stat-link"
+        >
+            💬 View Messages
+        </a>
+
+    {% endif %}
+
+</div>
+
+
+<div class="worker-stat-card">
+
+    <div class="worker-stat-title">
+        Average Rating
+    </div>
+
+    <div class="worker-stat-number worker-stat-rating">
+        ⭐ {{ average_rating|default:"0" }}
+    </div>
+
+</div>
+
+
+</div>
+
+<!-- =================================================
+     DASHBOARD GRID
+================================================== -->
+
+<div class="worker-dashboard-grid">
+
+
+<!-- =================================================
+     LEFT COLUMN
+================================================== -->
+
+<div>
+
+
+    <!-- =================================================
+         CUSTOMER REQUESTS
+    ================================================== -->
+
+    <div class="worker-dashboard-card">
+
+        <h2>
+            Customer Hire Requests
+        </h2>
+
+
+        {% if hires %}
+
+            {% for hire in hires %}
+
+                <div class="worker-request">
+
+
+                    <!-- REQUEST HEADER -->
+
+                    <div class="worker-request-top">
+
+                        <div>
+
+                            <div class="customer-name">
+                                {{ hire.customer.full_name }}
+                            </div>
+
+                            <div class="request-service">
+
+                                <strong>
+                                    Service:
+                                </strong>
+
+                                {{ hire.service }}
+
+                            </div>
+
+
+                            <!-- VIEW CUSTOMER PROFILE -->
+
+                            <a
+                                href="{% url 'customer_profile' customer_id=hire.customer.id %}"
+                                class="customer-profile-button"
+                            >
+                                👤 View Customer Profile
+                            </a>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        {% if hire.status == 'requested' %}
+
+                            <span class="request-status status-requested">
+                                Pending
+                            </span>
+
+                        {% elif hire.status == 'active' %}
+
+                            <span class="request-status status-active">
+                                Active
+                            </span>
+
+                        {% elif hire.status == 'completed' %}
+
+                            <span class="request-status status-completed">
+                                Completed
+                            </span>
+
+                        {% elif hire.status == 'declined' %}
+
+                            <span class="request-status status-declined">
+                                Declined
+                            </span>
+
+                        {% elif hire.status == 'cancelled' %}
+
+                            <span class="request-status status-cancelled">
+                                Cancelled
+                            </span>
+
+                        {% else %}
+
+                            <span class="request-status">
+                                {{ hire.status }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- CUSTOMER INFORMATION -->
+
+                    <div class="customer-information">
+
+                        <div class="customer-information-title">
+                            CUSTOMER INFORMATION
+                        </div>
+
+
+                        {% if hire.customer.email %}
+
+                            <p>
+                                📧
+                                <strong>Email:</strong>
+                                {{ hire.customer.email }}
+                            </p>
+
+                        {% endif %}
+
+
+                        {% if hire.customer.phone %}
+
+                            <p>
+                                📞
+                                <strong>Phone:</strong>
+                                {{ hire.customer.phone }}
+                            </p>
+
+                        {% endif %}
+
+
+                        {% if hire.customer.address %}
+
+                            <p>
+                                📍
+                                <strong>Address:</strong>
+                                {{ hire.customer.address }}
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- REQUEST DETAILS -->
+
+                    <div class="request-details">
+
+
+                        <div class="request-detail">
+
+                            <strong>
+                                Service:
+                            </strong>
+
+                            {{ hire.service }}
+
+                        </div>
+
+
+                        <div class="request-detail">
+
+                            <strong>
+                                Requested:
+                            </strong>
+
+                            {{ hire.hired_at|date:"M d, Y" }}
+
+                        </div>
+
+
+                        {% if hire.completed_at %}
+
+                            <div class="request-detail">
+
+                                <strong>
+                                    Completed:
+                                </strong>
+
+                                {{ hire.completed_at|date:"M d, Y" }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- NOTES -->
+
+                    {% if hire.notes %}
+
+                        <div class="request-notes">
+
+                            <strong>
+                                Customer Notes:
+                            </strong>
+
+                            {{ hire.notes }}
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- =================================================
+                         PENDING ACTIONS
+                    ================================================== -->
+
+                    {% if hire.status == 'requested' %}
+
+                        <div class="request-actions">
+
+
+                            <!-- MESSAGE CUSTOMER -->
+
+                            <a
+                                href="{% url 'worker_messages' hire.id %}"
+                                class="request-button message-customer-button"
+                            >
+
+                                💬 Message Customer
+
+                                {% for message_hire in message_hires %}
+
+                                    {% if message_hire.id == hire.id %}
+
+                                        {% if message_hire.unread_messages > 0 %}
+
+                                            <span class="message-count-badge">
+                                                {{ message_hire.unread_messages }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </a>
+
+
+                            <!-- ACCEPT -->
+
+                            <form
+                                method="POST"
+                                action="{% url 'accept_worker_hire' hire.id %}"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="request-button accept-button"
+                                >
+                                    ✓ Accept Request
+                                </button>
+
+                            </form>
+
+
+                            <!-- DECLINE -->
+
+                            <form
+                                method="POST"
+                                action="{% url 'decline_worker_hire' hire.id %}"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="request-button decline-button"
+                                >
+                                    ✕ Decline Request
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- =================================================
+                         ACTIVE JOB ACTIONS
+                    ================================================== -->
+
+                    {% if hire.status == 'active' %}
+
+                        <div class="request-actions">
+
+
+                            <span
+                                class="request-button accept-button"
+                                style="cursor:default;"
+                            >
+                                ✓ Job Accepted
+                            </span>
+
+
+                            <!-- MESSAGE CUSTOMER -->
+
+                            <a
+                                href="{% url 'worker_messages' hire.id %}"
+                                class="request-button message-customer-button"
+                            >
+
+                                💬 Message Customer
+
+                                {% for message_hire in message_hires %}
+
+                                    {% if message_hire.id == hire.id %}
+
+                                        {% if message_hire.unread_messages > 0 %}
+
+                                            <span class="message-count-badge">
+                                                {{ message_hire.unread_messages }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </a>
+
+
+                            <!-- COMPLETE -->
+
+                            <form
+                                method="POST"
+                                action="{% url 'complete_worker_hire' hire.id %}"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="request-button complete-button"
+                                    onclick="return confirm('Are you sure this job has been completed?');"
+                                >
+                                    ✓ Mark Job as Completed
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- =================================================
+                         COMPLETED JOB
+                    ================================================== -->
+
+                    {% if hire.status == 'completed' %}
+
+                        <div class="completed-message">
+
+                            ✓ This job has been marked as completed.
+
+                        </div>
+
+
+                        <div class="request-actions">
+
+
+                            <!-- VIEW OLD CONVERSATION -->
+
+                            <a
+                                href="{% url 'worker_messages' hire.id %}"
+                                class="request-button message-customer-button"
+                            >
+
+                                💬 View Conversation
+
+                                {% for message_hire in message_hires %}
+
+                                    {% if message_hire.id == hire.id %}
+
+                                        {% if message_hire.unread_messages > 0 %}
+
+                                            <span class="message-count-badge">
+                                                {{ message_hire.unread_messages }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </a>
+
+
+                            {% if hire.id in reviewed_hire_ids %}
+
+                                <span
+                                    class="request-button review-completed"
+                                >
+                                    ✓ Customer Review Submitted
+                                </span>
+
+                            {% else %}
+
+                                <a
+                                    href="{% url 'customer_review' hire.id %}"
+                                    class="request-button review-button"
+                                >
+                                    ⭐ Write Review About Customer
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- =================================================
+                         DECLINED
+                    ================================================== -->
+
+                    {% if hire.status == 'declined' %}
+
+                        <div
+                            class="completed-message"
+                            style="
+                                background:#f8dddd;
+                                color:#9b2525;
+                                border-left-color:#9b2525;
+                            "
+                        >
+
+                            ✕ You declined this customer request.
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- =================================================
+                         CANCELLED
+                    ================================================== -->
+
+                    {% if hire.status == 'cancelled' %}
+
+                        <div
+                            class="completed-message"
+                            style="
+                                background:#eeeeee;
+                                color:#666;
+                                border-left-color:#777;
+                            "
+                        >
+
+                            This hire request has been cancelled.
+
+                        </div>
+
+                    {% endif %}
+
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <div class="worker-empty">
+
+                <h3>
+                    No Customer Requests
+                </h3>
+
+                <p>
+                    You currently have no customer
+                    hire requests.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =================================================
+         WORKER MESSAGES
+    ================================================== -->
+
+    <div
+        class="worker-dashboard-card"
+        id="worker-messages"
+    >
+
+        <h2>
+            💬 Messages
+
+            {% if worker_unread_messages_count > 0 %}
+
+                <span class="unread-message-badge">
+                    {{ worker_unread_messages_count }}
+                    unread
+                </span>
+
+            {% endif %}
+
+        </h2>
+
+
+        <p
+            style="
+                color:#666;
+                margin-bottom:20px;
+                line-height:1.6;
+            "
+        >
+            Communicate directly with customers
+            connected to your jobs.
+        </p>
+
+
+        {% if message_hires %}
+
+            {% for hire in message_hires %}
+
+                <div class="worker-request">
+
+                    <div class="worker-request-top">
+
+                        <div>
+
+                            <div class="customer-name">
+
+                                {{ hire.customer.full_name }}
+
+                            </div>
+
+
+                            <div class="request-service">
+
+                                <strong>
+                                    Service:
+                                </strong>
+
+                                {{ hire.service }}
+
+                            </div>
+
+                        </div>
+
+
+                        {% if hire.unread_messages > 0 %}
+
+                            <span class="unread-message-badge">
+
+                                💬
+                                {{ hire.unread_messages }}
+                                unread
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div style="margin-top:10px;">
+
+                        {% if hire.status == 'requested' %}
+
+                            <span class="request-status status-requested">
+                                Pending
+                            </span>
+
+                        {% elif hire.status == 'active' %}
+
+                            <span class="request-status status-active">
+                                Active
+                            </span>
+
+                        {% elif hire.status == 'completed' %}
+
+                            <span class="request-status status-completed">
+                                Completed
+                            </span>
+
+                        {% elif hire.status == 'declined' %}
+
+                            <span class="request-status status-declined">
+                                Declined
+                            </span>
+
+                        {% elif hire.status == 'cancelled' %}
+
+                            <span class="request-status status-cancelled">
+                                Cancelled
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="request-actions">
+
+                        <a
+                            href="{% url 'worker_messages' hire.id %}"
+                            class="request-button message-customer-button"
+                        >
+
+                            💬 Open Conversation
+
+                            {% if hire.unread_messages > 0 %}
+
+                                <span class="message-count-badge">
+                                    {{ hire.unread_messages }}
+                                </span>
+
+                            {% endif %}
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <div class="worker-empty">
+
+                <h3>
+                    No Conversations Yet
+                </h3>
+
+                <p>
+                    Your conversations with customers
+                    will appear here.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =================================================
+         CUSTOMER REVIEWS
+    ================================================== -->
+
+    <div class="worker-dashboard-card">
+
+        <h2>
+            Reviews From Customers
+        </h2>
+
+
+        <div class="rating-summary">
+
+            <div class="average-rating">
+                {{ average_rating|default:"0" }}
+            </div>
+
+
+            <div class="stars">
+
+                {% if average_rating >= 5 %}
+
+                    ★★★★★
+
+                {% elif average_rating >= 4 %}
+
+                    ★★★★☆
+
+                {% elif average_rating >= 3 %}
+
+                    ★★★☆☆
+
+                {% elif average_rating >= 2 %}
+
+                    ★★☆☆☆
+
+                {% elif average_rating >= 1 %}
+
+                    ★☆☆☆☆
 
                 {% else %}
 
-                    <div class="worker-dashboard-photo-placeholder">
-                        {{ worker.full_name|first|upper }}
-                    </div>
+                    ☆☆☆☆☆
 
                 {% endif %}
 
-
-                <!-- WORKER INFORMATION -->
-
-                <div class="worker-header-text">
-
-                    <h1>
-                        Welcome, {{ worker.full_name }}
-                    </h1>
-
-                    <div class="worker-header-skill">
-                        {{ worker.skill }}
-                    </div>
-
-                    <p>
-                        📍 {{ worker.location }}
-                    </p>
-
-
-                    {% if worker.is_approved %}
-
-                        <span class="worker-approved">
-                            ✓ Approved Skilled Worker
-                        </span>
-
-                    {% else %}
-
-                        <span
-                            class="worker-approved"
-                            style="background:#fff4cf;color:#806000;"
-                        >
-                            ⏳ Account Pending Approval
-                        </span>
-
-                    {% endif %}
-
-                </div>
-
             </div>
 
 
-            <!-- HEADER ACTIONS -->
+            <div class="rating-count">
 
-            <div class="worker-header-actions">
-
-                <a
-                    href="{% url 'skilled_worker_profile' worker.id %}"
-                    class="header-button header-button-profile"
-                >
-                    👤 View Public Profile
-                </a>
-
-
-                <form
-                    method="POST"
-                    action="{% url 'skilled_worker_logout' %}"
-                    style="display: inline;"
-                >
-
-                    {% csrf_token %}
-
-                    <button
-                        type="submit"
-                        class="header-button header-button-logout"
-                        onclick="return confirm('Are you sure you want to logout?');"
-                    >
-                        🚪 Logout
-                    </button>
-
-                </form>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         MAIN CONTENT
-    ====================================================== -->
-
-    <main class="worker-dashboard-content">
-
-
-        <!-- =================================================
-             STATISTICS
-        ================================================== -->
-
-        <div class="worker-statistics">
-
-
-            <div class="worker-stat-card">
-
-                <div class="worker-stat-title">
-                    Pending Requests
-                </div>
-
-                <div class="worker-stat-number">
-                    {{ pending_requests|default:"0" }}
-                </div>
-
-            </div>
-
-
-            <div class="worker-stat-card">
-
-                <div class="worker-stat-title">
-                    Active Jobs
-                </div>
-
-                <div class="worker-stat-number">
-                    {{ active_jobs|default:"0" }}
-                </div>
-
-            </div>
-
-
-            <div class="worker-stat-card">
-
-                <div class="worker-stat-title">
-                    Completed Jobs
-                </div>
-
-                <div class="worker-stat-number">
-                    {{ completed_jobs|default:"0" }}
-                </div>
-
-            </div>
-
-
-            <div class="worker-stat-card">
-
-                <div class="worker-stat-title">
-                    Declined Requests
-                </div>
-
-                <div class="worker-stat-number">
-                    {{ declined_requests|default:"0" }}
-                </div>
-
-            </div>
-
-
-            <div class="worker-stat-card">
-
-                <div class="worker-stat-title">
-                    Average Rating
-                </div>
-
-                <div class="worker-stat-number worker-stat-rating">
-                    ⭐ {{ average_rating|default:"0" }}
-                </div>
+                Based on
+                {{ reviews_count|default:"0" }}
+                customer review{{ reviews_count|pluralize }}
 
             </div>
 
@@ -1216,804 +2158,396 @@
 
 
 
-        <!-- =================================================
-             DASHBOARD GRID
-        ================================================== -->
+        {% if reviews %}
 
-        <div class="worker-dashboard-grid">
+            {% for review in reviews %}
 
+                <div class="review-item">
 
-            <!-- =================================================
-                 LEFT COLUMN
-            ================================================= -->
+                    <div class="review-header">
 
-            <div>
+                        <div class="review-customer">
 
-
-                <!-- =================================================
-                     CUSTOMER REQUESTS
-                ================================================== -->
-
-                <div class="worker-dashboard-card">
-
-                    <h2>
-                        Customer Hire Requests
-                    </h2>
-
-
-                    {% if hires %}
-
-                        {% for hire in hires %}
-
-                            <div class="worker-request">
-
-
-                                <!-- REQUEST HEADER -->
-
-                                <div class="worker-request-top">
-
-                                    <div>
-
-                                        <div class="customer-name">
-                                            {{ hire.customer.full_name }}
-                                        </div>
-
-                                        <div class="request-service">
-
-                                            <strong>
-                                                Service:
-                                            </strong>
-
-                                            {{ hire.service }}
-
-                                        </div>
-
-
-                                        <!-- =================================================
-                                             VIEW CUSTOMER PROFILE BUTTON
-                                        ================================================== -->
-
-                                        <a
-                                            href="{% url 'customer_profile' customer_id=hire.customer.id %}"
-                                            class="customer-profile-button"
-                                        >
-                                            👤 View Customer Profile
-                                        </a>
-
-                                    </div>
-
-
-                                    <!-- STATUS -->
-
-                                    {% if hire.status == 'requested' %}
-
-                                        <span class="request-status status-requested">
-                                            Pending
-                                        </span>
-
-                                    {% elif hire.status == 'active' %}
-
-                                        <span class="request-status status-active">
-                                            Active
-                                        </span>
-
-                                    {% elif hire.status == 'completed' %}
-
-                                        <span class="request-status status-completed">
-                                            Completed
-                                        </span>
-
-                                    {% elif hire.status == 'declined' %}
-
-                                        <span class="request-status status-declined">
-                                            Declined
-                                        </span>
-
-                                    {% elif hire.status == 'cancelled' %}
-
-                                        <span class="request-status status-cancelled">
-                                            Cancelled
-                                        </span>
-
-                                    {% else %}
-
-                                        <span class="request-status">
-                                            {{ hire.status }}
-                                        </span>
-
-                                    {% endif %}
-
-                                </div>
-
-
-
-                                <!-- CUSTOMER INFORMATION -->
-
-                                <div class="customer-information">
-
-                                    <div class="customer-information-title">
-                                        CUSTOMER INFORMATION
-                                    </div>
-
-
-                                    {% if hire.customer.email %}
-
-                                        <p>
-                                            📧
-                                            <strong>Email:</strong>
-                                            {{ hire.customer.email }}
-                                        </p>
-
-                                    {% endif %}
-
-
-                                    {% if hire.customer.phone %}
-
-                                        <p>
-                                            📞
-                                            <strong>Phone:</strong>
-                                            {{ hire.customer.phone }}
-                                        </p>
-
-                                    {% endif %}
-
-
-                                    {% if hire.customer.address %}
-
-                                        <p>
-                                            📍
-                                            <strong>Address:</strong>
-                                            {{ hire.customer.address }}
-                                        </p>
-
-                                    {% endif %}
-
-                                </div>
-
-
-
-                                <!-- REQUEST DETAILS -->
-
-                                <div class="request-details">
-
-
-                                    <div class="request-detail">
-
-                                        <strong>
-                                            Service:
-                                        </strong>
-
-                                        {{ hire.service }}
-
-                                    </div>
-
-
-                                    <div class="request-detail">
-
-                                        <strong>
-                                            Requested:
-                                        </strong>
-
-                                        {{ hire.hired_at|date:"M d, Y" }}
-
-                                    </div>
-
-
-                                    {% if hire.completed_at %}
-
-                                        <div class="request-detail">
-
-                                            <strong>
-                                                Completed:
-                                            </strong>
-
-                                            {{ hire.completed_at|date:"M d, Y" }}
-
-                                        </div>
-
-                                    {% endif %}
-
-                                </div>
-
-
-
-                                <!-- NOTES -->
-
-                                {% if hire.notes %}
-
-                                    <div class="request-notes">
-
-                                        <strong>
-                                            Customer Notes:
-                                        </strong>
-
-                                        {{ hire.notes }}
-
-                                    </div>
-
-                                {% endif %}
-
-
-
-                                <!-- =================================================
-                                     PENDING ACTIONS
-                                ================================================== -->
-
-                                {% if hire.status == 'requested' %}
-
-                                    <div class="request-actions">
-
-
-                                        <form
-                                            method="POST"
-                                            action="{% url 'accept_worker_hire' hire.id %}"
-                                        >
-
-                                            {% csrf_token %}
-
-                                            <button
-                                                type="submit"
-                                                class="request-button accept-button"
-                                            >
-                                                ✓ Accept Request
-                                            </button>
-
-                                        </form>
-
-
-                                        <form
-                                            method="POST"
-                                            action="{% url 'decline_worker_hire' hire.id %}"
-                                        >
-
-                                            {% csrf_token %}
-
-                                            <button
-                                                type="submit"
-                                                class="request-button decline-button"
-                                            >
-                                                ✕ Decline Request
-                                            </button>
-
-                                        </form>
-
-                                    </div>
-
-                                {% endif %}
-
-
-
-                                <!-- =================================================
-                                     ACTIVE JOB ACTIONS
-                                ================================================== -->
-
-                                {% if hire.status == 'active' %}
-
-                                    <div class="request-actions">
-
-
-                                        <span
-                                            class="request-button accept-button"
-                                            style="cursor:default;"
-                                        >
-                                            ✓ Job Accepted
-                                        </span>
-
-
-                                        <form
-                                            method="POST"
-                                            action="{% url 'complete_worker_hire' hire.id %}"
-                                        >
-
-                                            {% csrf_token %}
-
-                                            <button
-                                                type="submit"
-                                                class="request-button complete-button"
-                                                onclick="return confirm('Are you sure this job has been completed?');"
-                                            >
-                                                ✓ Mark Job as Completed
-                                            </button>
-
-                                        </form>
-
-                                    </div>
-
-                                {% endif %}
-
-
-
-                                <!-- =================================================
-                                     COMPLETED JOB
-                                ================================================== -->
-
-                                {% if hire.status == 'completed' %}
-
-                                    <div class="completed-message">
-
-                                        ✓ This job has been marked as completed.
-
-                                    </div>
-
-
-                                    <div class="request-actions">
-
-
-                                        {% if hire.id in reviewed_hire_ids %}
-
-                                            <span
-                                                class="request-button review-completed"
-                                            >
-                                                ✓ Customer Review Submitted
-                                            </span>
-
-                                        {% else %}
-
-                                            <a
-                                                href="{% url 'customer_review' hire.id %}"
-                                                class="request-button review-button"
-                                            >
-                                                ⭐ Write Review About Customer
-                                            </a>
-
-                                        {% endif %}
-
-                                    </div>
-
-                                {% endif %}
-
-
-
-                                <!-- =================================================
-                                     DECLINED
-                                ================================================== -->
-
-                                {% if hire.status == 'declined' %}
-
-                                    <div
-                                        class="completed-message"
-                                        style="
-                                            background:#f8dddd;
-                                            color:#9b2525;
-                                            border-left-color:#9b2525;
-                                        "
-                                    >
-
-                                        ✕ You declined this customer request.
-
-                                    </div>
-
-                                {% endif %}
-
-
-
-                                <!-- =================================================
-                                     CANCELLED
-                                ================================================== -->
-
-                                {% if hire.status == 'cancelled' %}
-
-                                    <div
-                                        class="completed-message"
-                                        style="
-                                            background:#eeeeee;
-                                            color:#666;
-                                            border-left-color:#777;
-                                        "
-                                    >
-
-                                        This hire request has been cancelled.
-
-                                    </div>
-
-                                {% endif %}
-
-
-                            </div>
-
-                        {% endfor %}
-
-
-                    {% else %}
-
-                        <div class="worker-empty">
-
-                            <h3>
-                                No Customer Requests
-                            </h3>
-
-                            <p>
-                                You currently have no customer
-                                hire requests.
-                            </p>
+                            {{ review.hire.customer.full_name }}
 
                         </div>
 
-                    {% endif %}
 
-                </div>
+                        <div class="review-rating">
 
-
-
-                <!-- =================================================
-                     CUSTOMER REVIEWS
-                ================================================== -->
-
-                <div class="worker-dashboard-card">
-
-                    <h2>
-                        Reviews From Customers
-                    </h2>
-
-
-                    <!-- RATING SUMMARY -->
-
-                    <div class="rating-summary">
-
-                        <div class="average-rating">
-                            {{ average_rating|default:"0" }}
-                        </div>
-
-
-                        <div class="stars">
-
-                            {% if average_rating >= 5 %}
+                            {% if review.rating == 5 %}
 
                                 ★★★★★
 
-                            {% elif average_rating >= 4 %}
+                            {% elif review.rating == 4 %}
 
                                 ★★★★☆
 
-                            {% elif average_rating >= 3 %}
+                            {% elif review.rating == 3 %}
 
                                 ★★★☆☆
 
-                            {% elif average_rating >= 2 %}
+                            {% elif review.rating == 2 %}
 
                                 ★★☆☆☆
 
-                            {% elif average_rating >= 1 %}
+                            {% else %}
 
                                 ★☆☆☆☆
 
-                            {% else %}
-
-                                ☆☆☆☆☆
-
                             {% endif %}
-
-                        </div>
-
-
-                        <div class="rating-count">
-
-                            Based on
-                            {{ reviews_count|default:"0" }}
-                            customer review{{ reviews_count|pluralize }}
 
                         </div>
 
                     </div>
 
 
+                    <div class="review-comment">
 
-                    <!-- REVIEWS -->
+                        {{ review.comment }}
 
-                    {% if reviews %}
-
-                        {% for review in reviews %}
-
-                            <div class="review-item">
-
-                                <div class="review-header">
-
-                                    <div class="review-customer">
-
-                                        {{ review.hire.customer.full_name }}
-
-                                    </div>
+                    </div>
 
 
-                                    <div class="review-rating">
+                    {% if review.created_at %}
 
-                                        {% if review.rating == 5 %}
+                        <div class="review-date">
 
-                                            ★★★★★
-
-                                        {% elif review.rating == 4 %}
-
-                                            ★★★★☆
-
-                                        {% elif review.rating == 3 %}
-
-                                            ★★★☆☆
-
-                                        {% elif review.rating == 2 %}
-
-                                            ★★☆☆☆
-
-                                        {% else %}
-
-                                            ★☆☆☆☆
-
-                                        {% endif %}
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="review-comment">
-
-                                    {{ review.comment }}
-
-                                </div>
-
-
-                                {% if review.created_at %}
-
-                                    <div class="review-date">
-
-                                        {{ review.created_at|date:"M d, Y" }}
-
-                                    </div>
-
-                                {% endif %}
-
-                            </div>
-
-                        {% endfor %}
-
-                    {% else %}
-
-                        <div class="worker-empty">
-
-                            <h3>
-                                No Reviews Yet
-                            </h3>
-
-                            <p>
-                                Customer reviews will appear here
-                                after customers review your completed jobs.
-                            </p>
+                            {{ review.created_at|date:"M d, Y" }}
 
                         </div>
 
                     {% endif %}
 
                 </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="worker-empty">
+
+                <h3>
+                    No Reviews Yet
+                </h3>
+
+                <p>
+                    Customer reviews will appear here
+                    after customers review your completed jobs.
+                </p>
 
             </div>
 
+        {% endif %}
 
+    </div>
 
-            <!-- =================================================
-                 RIGHT COLUMN
-            ================================================== -->
+</div>
 
-            <aside>
 
 
-                <!-- =================================================
-                     PROFESSIONAL PROFILE
-                ================================================== -->
+<!-- =================================================
+     RIGHT COLUMN
+================================================== -->
 
-                <div class="worker-dashboard-card">
+<aside>
 
-                    <h2>
-                        My Professional Details
-                    </h2>
 
+    <!-- =================================================
+         PROFESSIONAL PROFILE
+    ================================================== -->
 
-                    <div class="profile-detail-row">
+    <div class="worker-dashboard-card">
 
-                        <span class="profile-detail-label">
-                            Name
-                        </span>
+        <h2>
+            My Professional Details
+        </h2>
 
-                        <span class="profile-detail-value">
-                            {{ worker.full_name }}
-                        </span>
 
-                    </div>
+        <div class="profile-detail-row">
 
+            <span class="profile-detail-label">
+                Name
+            </span>
 
-                    <div class="profile-detail-row">
-
-                        <span class="profile-detail-label">
-                            Profession
-                        </span>
-
-                        <span class="profile-detail-value">
-                            {{ worker.skill }}
-                        </span>
-
-                    </div>
-
-
-                    <div class="profile-detail-row">
-
-                        <span class="profile-detail-label">
-                            Experience
-                        </span>
-
-                        <span class="profile-detail-value">
-                            {{ worker.years_of_experience }}
-                            years
-                        </span>
-
-                    </div>
-
-
-                    <div class="profile-detail-row">
-
-                        <span class="profile-detail-label">
-                            Location
-                        </span>
-
-                        <span class="profile-detail-value">
-                            {{ worker.location }}
-                        </span>
-
-                    </div>
-
-
-                    <div class="profile-detail-row">
-
-                        <span class="profile-detail-label">
-                            Availability
-                        </span>
-
-                        <span class="profile-detail-value">
-
-                            {% if worker.availability == 'available' %}
-
-                                Available
-
-                            {% else %}
-
-                                Not Available
-
-                            {% endif %}
-
-                        </span>
-
-                    </div>
-
-
-                    <div class="profile-detail-row">
-
-                        <span class="profile-detail-label">
-                            Approval
-                        </span>
-
-                        <span class="profile-detail-value">
-
-                            {% if worker.is_approved %}
-
-                                ✓ Approved
-
-                            {% else %}
-
-                                Pending
-
-                            {% endif %}
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- =================================================
-                     QUICK ACTIONS
-                ================================================== -->
-
-                <div class="worker-dashboard-card">
-
-                    <h2>
-                        Quick Actions
-                    </h2>
-
-
-                    <div class="worker-quick-actions">
-
-
-                        <a
-                            href="{% url 'skilled_worker_profile' worker.id %}"
-                            class="worker-quick-action"
-                        >
-                            👤 View My Public Profile
-                        </a>
-
-
-                        <a
-                            href="{% url 'skilled_workers' %}"
-                            class="worker-quick-action"
-                        >
-                            👷 View Other Workers
-                        </a>
-
-
-                        <form
-                            method="POST"
-                            action="{% url 'skilled_worker_logout' %}"
-                            style="display: inline;"
-                        >
-
-                            {% csrf_token %}
-
-                            <button
-                                type="submit"
-                                class="worker-quick-action"
-                                onclick="return confirm('Are you sure you want to logout?');"
-                            >
-                                🚪 Logout
-                            </button>
-
-                        </form>
-
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- =================================================
-                     NETWORK
-                ================================================== -->
-
-                <div class="worker-dashboard-card">
-
-                    <h2>
-                        King B Network
-                    </h2>
-
-
-                    <div class="network-box">
-
-                        Your professional profile is part of
-                        the King B Real Estate skilled worker
-                        network.
-
-                    </div>
-
-
-                    {% if worker.is_approved %}
-
-                        <div class="network-approved">
-                            ✓ Your account is approved
-                        </div>
-
-                    {% else %}
-
-                        <div
-                            style="
-                                background:#fff4cf;
-                                color:#806000;
-                                padding:12px;
-                                border-radius:8px;
-                                font-weight:700;
-                                margin-top:15px;
-                            "
-                        >
-                            ⏳ Your account is awaiting approval
-                        </div>
-
-                    {% endif %}
-
-                </div>
-
-
-            </aside>
+            <span class="profile-detail-value">
+                {{ worker.full_name }}
+            </span>
 
         </div>
 
-    </main>
+
+        <div class="profile-detail-row">
+
+            <span class="profile-detail-label">
+                Profession
+            </span>
+
+            <span class="profile-detail-value">
+                {{ worker.skill }}
+            </span>
+
+        </div>
+
+
+        <div class="profile-detail-row">
+
+            <span class="profile-detail-label">
+                Experience
+            </span>
+
+            <span class="profile-detail-value">
+                {{ worker.years_of_experience }}
+                years
+            </span>
+
+        </div>
+
+
+        <div class="profile-detail-row">
+
+            <span class="profile-detail-label">
+                Location
+            </span>
+
+            <span class="profile-detail-value">
+                {{ worker.location }}
+            </span>
+
+        </div>
+
+
+        <div class="profile-detail-row">
+
+            <span class="profile-detail-label">
+                Availability
+            </span>
+
+            <span class="profile-detail-value">
+
+                {% if worker.availability == 'available' %}
+
+                    Available
+
+                {% else %}
+
+                    Not Available
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+        <div class="profile-detail-row">
+
+            <span class="profile-detail-label">
+                Approval
+            </span>
+
+            <span class="profile-detail-value">
+
+                {% if worker.is_approved %}
+
+                    ✓ Approved
+
+                {% else %}
+
+                    Pending
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         QUICK ACTIONS
+    ================================================== -->
+
+    <div class="worker-dashboard-card">
+
+        <h2>
+            Quick Actions
+        </h2>
+
+
+        <div class="worker-quick-actions">
+
+
+            <!-- VIEW PUBLIC PROFILE -->
+
+            <a
+                href="{% url 'skilled_worker_profile' worker.id %}"
+                class="worker-quick-action"
+            >
+                👤 View My Public Profile
+            </a>
+
+
+            <!-- EDIT PROFILE -->
+
+            <a
+                href="{% url 'skilled_worker_edit' %}"
+                class="worker-quick-action worker-edit-action"
+            >
+                ✏️ Edit My Profile
+            </a>
+
+
+            <!-- VIEW OTHER WORKERS -->
+
+            <a
+                href="{% url 'skilled_workers' %}"
+                class="worker-quick-action"
+            >
+                👷 View Other Workers
+            </a>
+
+
+            <!-- MESSAGES -->
+
+            {% if worker_unread_messages_count > 0 %}
+
+                <a
+                    href="#worker-messages"
+                    class="worker-quick-action"
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                    "
+                >
+
+                    <span>
+                        💬 Messages
+                    </span>
+
+                    <span class="message-count-badge">
+                        {{ worker_unread_messages_count }}
+                    </span>
+
+                </a>
+
+            {% else %}
+
+                <a
+                    href="#worker-messages"
+                    class="worker-quick-action"
+                >
+                    💬 Messages
+                </a>
+
+            {% endif %}
+
+
+            <!-- LOGOUT -->
+
+            <form
+                method="POST"
+                action="{% url 'skilled_worker_logout' %}"
+                style="display: inline;"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="worker-quick-action"
+                    onclick="return confirm('Are you sure you want to logout?');"
+                >
+                    🚪 Logout
+                </button>
+
+            </form>
+
+
+            <!-- =================================================
+                 DELETE ACCOUNT
+            ================================================== -->
+
+            <form
+                method="POST"
+                action="{% url 'skilled_worker_delete' %}"
+                style="display: inline;"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="worker-quick-action worker-delete-action"
+                    onclick="return confirm('WARNING: Are you sure you want to permanently delete your skilled worker account and profile? This action cannot be undone.');"
+                >
+                    🗑️ Delete My Account
+                </button>
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         NETWORK
+    ================================================== -->
+
+    <div class="worker-dashboard-card">
+
+        <h2>
+            King B Network
+        </h2>
+
+
+        <div class="network-box">
+
+            Your professional profile is part of
+            the King B Real Estate skilled worker
+            network.
+
+        </div>
+
+
+        {% if worker.is_approved %}
+
+            <div class="network-approved">
+                ✓ Your account is approved
+            </div>
+
+        {% else %}
+
+            <div
+                style="
+                    background:#fff4cf;
+                    color:#806000;
+                    padding:12px;
+                    border-radius:8px;
+                    font-weight:700;
+                    margin-top:15px;
+                "
+            >
+                ⏳ Your account is awaiting approval
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+</aside>
+
+
+</div>
+
+</main>
 
 </div>
 

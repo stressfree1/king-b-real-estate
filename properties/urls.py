@@ -545,4 +545,64 @@ urlpatterns = [
         views.AccountPasswordResetCompleteView.as_view(),
         name='account_password_reset_complete'
     ),
+
+    path(
+        'verify-email/<uidb64>/<token>/',
+        views.verify_email,
+        name='verify_email'
+    ),
+
+    path(
+        'worker/messages/<int:hire_id>/',
+        views.worker_messages,
+        name='worker_messages',
+    ),
+
+    path(
+        "terms-and-conditions/", 
+        views.terms_and_conditions, 
+        name="terms_and_conditions"
+    ),
+
+    path(
+        'worker/messages/<int:hire_id>/',
+        views.worker_messages,
+        name='worker_messages'
+    ),
+
+    path(
+        'skilled-workers/edit/',
+        views.edit_worker_profile,
+        name='skilled_worker_edit'
+    ),
+
+    path(
+        'account/worker/profile/delete/',
+        views.delete_worker_profile,
+        name='skilled_worker_delete'
+    ),
+
+    path(
+        'marketplace/delete/<int:listing_id>/',
+        views.delete_marketplace_listing,
+        name='marketplace_delete_listing'
+    ),
+
+    path(
+        'notifications/',
+        views.notifications,
+        name='notifications'
+    ),
+
+    path(
+        'notifications/<int:notification_id>/read/',
+        views.mark_notification_read,
+        name='mark_notification_read'
+    ),
+
+    path(
+        'notifications/mark-all-read/',
+        views.mark_all_notifications_read,
+        name='mark_all_notifications_read'
+    ),
 ]
