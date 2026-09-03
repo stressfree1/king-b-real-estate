@@ -1,0 +1,1680 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}
+    Report User | King B Marketplace
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   REPORT USER — PREMIUM HORIZONTAL
+========================================================= */
+
+.report-page {
+    min-height: calc(100vh - 70px);
+    padding: 34px 18px 50px;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(181,139,59,.07),
+            transparent 35%
+        ),
+        linear-gradient(
+            180deg,
+            #f7f9f8 0%,
+            #eef3f0 100%
+        );
+
+    box-sizing: border-box;
+}
+
+.report-page *,
+.report-page *::before,
+.report-page *::after {
+    box-sizing: border-box;
+}
+
+.report-container {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+}
+
+/* =========================================================
+   TOP
+========================================================= */
+
+.report-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+
+    min-height: 30px;
+}
+
+.report-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 13px;
+    color: #7c8983;
+}
+
+.report-breadcrumb a {
+    color: #123c2f;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.report-breadcrumb span {
+    color: #a4afa9;
+}
+
+.report-security {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+    color: #68766f;
+}
+
+.report-security-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #3e9b69;
+    box-shadow: 0 0 0 4px rgba(62,155,105,.10);
+}
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.report-card {
+    position: relative;
+
+    display: grid;
+
+    /*
+        Fixed desktop structure.
+        This prevents the horizontal layout
+        from constantly changing proportions.
+    */
+    grid-template-columns: 420px minmax(0, 1fr);
+
+    width: 100%;
+    min-height: 580px;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe8e3;
+    border-radius: 25px;
+
+    box-shadow:
+        0 25px 70px rgba(18,60,47,.10),
+        0 5px 20px rgba(18,60,47,.04);
+}
+
+/* =========================================================
+   LEFT SIDE
+========================================================= */
+
+.report-left {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    min-width: 0;
+
+    padding: 42px;
+
+    overflow: hidden;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            145deg,
+            #123c2f 0%,
+            #0d3227 52%,
+            #09271f 100%
+        );
+}
+
+.report-left::before {
+    content: "";
+
+    position: absolute;
+
+    width: 320px;
+    height: 320px;
+
+    right: -150px;
+    top: -150px;
+
+    border-radius: 50%;
+
+    background: rgba(212,175,99,.07);
+}
+
+.report-left::after {
+    content: "";
+
+    position: absolute;
+
+    width: 230px;
+    height: 230px;
+
+    left: -130px;
+    bottom: -120px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.report-left-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.report-icon {
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 28px;
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,.09);
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        0 15px 30px rgba(0,0,0,.12);
+}
+
+.report-icon-inner {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    color: #d4af63;
+
+    background: rgba(212,175,99,.10);
+
+    font-size: 23px;
+}
+
+/* =========================================================
+   LEFT TITLE
+========================================================= */
+
+.report-left-title {
+    margin: 0 0 16px;
+
+    color: #ffffff;
+
+    font-size: clamp(30px, 3vw, 42px);
+    line-height: 1.08;
+    font-weight: 850;
+    letter-spacing: -.8px;
+}
+
+.report-left-subtitle {
+    max-width: 330px;
+
+    margin: 0;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+/* =========================================================
+   REPORTED USER
+========================================================= */
+
+.report-user {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    margin-top: 38px;
+
+    padding: 14px;
+
+    border-radius: 15px;
+
+    background: rgba(255,255,255,.07);
+
+    border: 1px solid rgba(255,255,255,.09);
+}
+
+.report-user-avatar {
+    width: 45px;
+    height: 45px;
+
+    flex: 0 0 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: rgba(212,175,99,.13);
+
+    font-size: 18px;
+}
+
+.report-user-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.report-user-label {
+    color: rgba(255,255,255,.52);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.report-user-name {
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.report-left-footer {
+    position: relative;
+    z-index: 2;
+}
+
+.report-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    color: rgba(255,255,255,.58);
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.report-brand-mark {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #d4af63;
+}
+
+/* =========================================================
+   RIGHT SIDE
+========================================================= */
+
+.report-right {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 42px;
+
+    background: #ffffff;
+}
+
+.report-right-header {
+    margin-bottom: 23px;
+}
+
+.report-right-title {
+    margin: 0 0 8px;
+
+    color: #123c2f;
+
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 850;
+    letter-spacing: -.4px;
+}
+
+.report-right-description {
+    margin: 0;
+
+    color: #75827c;
+
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+/* =========================================================
+   NOTICE
+========================================================= */
+
+.report-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    margin-bottom: 25px;
+    padding: 14px 15px;
+
+    border-radius: 14px;
+
+    background: #faf8f1;
+
+    border: 1px solid #eee6d1;
+}
+
+.report-notice-icon {
+    width: 30px;
+    height: 30px;
+
+    flex: 0 0 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    color: #9b7631;
+
+    background: #f1e7cb;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.report-notice-content {
+    min-width: 0;
+}
+
+.report-notice-title {
+    margin: 1px 0 4px;
+
+    color: #665024;
+
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.report-notice-text {
+    margin: 0;
+
+    color: #806f4b;
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.report-form {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+.report-field {
+    margin-bottom: 20px;
+}
+
+.report-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+.report-label {
+    color: #243b32;
+
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.report-required {
+    color: #b58b3b;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+.report-select {
+    width: 100%;
+    height: 49px;
+
+    padding: 0 15px;
+
+    border: 1px solid #dce5e0;
+    border-radius: 12px;
+
+    outline: none;
+
+    color: #263b33;
+    background: #fbfcfb;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.report-select:hover {
+    background: #ffffff;
+}
+
+.report-select:focus {
+    border-color: #b58b3b;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 4px rgba(181,139,59,.10);
+}
+
+/* =========================================================
+   TEXTAREA
+========================================================= */
+
+.report-textarea-wrap {
+    position: relative;
+}
+
+.report-textarea {
+    width: 100%;
+    height: 145px;
+
+    resize: vertical;
+
+    min-height: 120px;
+    max-height: 260px;
+
+    padding: 14px 15px 35px;
+
+    border: 1px solid #dce5e0;
+    border-radius: 12px;
+
+    outline: none;
+
+    color: #263b33;
+    background: #fbfcfb;
+
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.6;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.report-textarea::placeholder {
+    color: #a4aea9;
+}
+
+.report-textarea:hover {
+    background: #ffffff;
+}
+
+.report-textarea:focus {
+    border-color: #b58b3b;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 4px rgba(181,139,59,.10);
+}
+
+.report-counter {
+    position: absolute;
+
+    right: 13px;
+    bottom: 10px;
+
+    color: #9aa59f;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    pointer-events: none;
+}
+
+.report-help {
+    margin-top: 7px;
+
+    color: #8a9690;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.report-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 1px;
+    padding-top: 21px;
+
+    border-top: 1px solid #edf1ee;
+}
+
+.report-cancel,
+.report-submit {
+    height: 45px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease,
+        opacity .18s ease;
+}
+
+.report-cancel {
+    min-width: 88px;
+
+    color: #65736c;
+
+    background: #f4f6f5;
+
+    border: 1px solid #e2e8e4;
+}
+
+.report-cancel:hover {
+    background: #edf1ef;
+    transform: translateY(-1px);
+}
+
+.report-submit {
+    min-width: 145px;
+
+    padding: 0 18px;
+
+    border: 0;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #b58b3b,
+            #9d762f
+        );
+
+    box-shadow:
+        0 10px 22px rgba(181,139,59,.20);
+}
+
+.report-submit:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 14px 28px rgba(181,139,59,.27);
+}
+
+.report-submit:disabled {
+    cursor: not-allowed;
+    opacity: .65;
+    transform: none;
+}
+
+/* =========================================================
+   SUBMITTING
+========================================================= */
+
+.report-submit.submitting {
+    pointer-events: none;
+}
+
+.report-spinner {
+    width: 14px;
+    height: 14px;
+
+    margin-right: 8px;
+
+    border: 2px solid rgba(255,255,255,.35);
+    border-top-color: #ffffff;
+
+    border-radius: 50%;
+
+    animation: reportSpin .7s linear infinite;
+}
+
+@keyframes reportSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================
+   SUCCESS MESSAGE
+========================================================= */
+
+.report-success {
+    display: none;
+
+    margin-top: 18px;
+    padding: 18px;
+
+    border-radius: 15px;
+
+    background: #f0f8f3;
+
+    border: 1px solid #cfe5d7;
+
+    color: #245c3d;
+
+    animation: reportSuccessIn .25s ease;
+}
+
+.report-success.show {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.report-success-icon {
+    width: 34px;
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #d9eddf;
+
+    color: #28704a;
+
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.report-success-content {
+    min-width: 0;
+}
+
+.report-success-title {
+    margin: 0 0 3px;
+
+    font-size: 13px;
+    font-weight: 850;
+}
+
+.report-success-message {
+    margin: 0;
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+@keyframes reportSuccessIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   TRUST
+========================================================= */
+
+.report-trust {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-top: auto;
+    padding-top: 19px;
+
+    color: #7f8b85;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.report-trust:first-letter {
+    color: #3d9564;
+}
+
+.report-trust strong {
+    color: #53635b;
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.report-error {
+    display: none;
+
+    margin-top: 15px;
+    padding: 12px 14px;
+
+    border-radius: 11px;
+
+    color: #8b3333;
+
+    background: #fff3f3;
+
+    border: 1px solid #f0d2d2;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.report-error.show {
+    display: block;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .report-card {
+        grid-template-columns: 360px minmax(0, 1fr);
+    }
+
+    .report-left,
+    .report-right {
+        padding: 32px;
+    }
+
+    .report-left-title {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .report-page {
+        padding: 22px 12px 35px;
+    }
+
+    .report-top {
+        align-items: flex-start;
+    }
+
+    .report-security {
+        display: none;
+    }
+
+    .report-card {
+        display: flex;
+        flex-direction: column;
+
+        min-height: auto;
+    }
+
+    .report-left,
+    .report-right {
+        width: 100%;
+        padding: 30px 24px;
+    }
+
+    .report-left {
+        min-height: 430px;
+    }
+
+    .report-right {
+        min-height: auto;
+    }
+
+    .report-left-title {
+        font-size: 31px;
+    }
+
+    .report-right-title {
+        font-size: 24px;
+    }
+
+    .report-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .report-cancel,
+    .report-submit {
+        width: 100%;
+    }
+}
+
+</style>
+
+
+<section class="report-page">
+
+    <div class="report-container">
+
+        <!-- =====================================================
+             TOP
+        ====================================================== -->
+
+        <div class="report-top">
+
+            <div class="report-breadcrumb">
+
+                <a href="javascript:history.back()">
+                    Marketplace
+                </a>
+
+                <span>/</span>
+
+                <span>
+                    Report User
+                </span>
+
+            </div>
+
+            <div class="report-security">
+
+                <span class="report-security-dot"></span>
+
+                King B Marketplace Safety
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             MAIN CARD
+        ====================================================== -->
+
+        <div class="report-card">
+
+
+            <!-- =================================================
+                 LEFT
+            ================================================== -->
+
+            <div class="report-left">
+
+                <div class="report-left-content">
+
+                    <div class="report-icon">
+
+                        <div class="report-icon-inner">
+                            ⚑
+                        </div>
+
+                    </div>
+
+
+                    <h1 class="report-left-title">
+
+                        Report a<br>
+                        Marketplace User
+
+                    </h1>
+
+
+                    <p class="report-left-subtitle">
+
+                        Help King B maintain a trusted,
+                        professional and secure marketplace
+                        for everyone.
+
+                    </p>
+
+
+                    <!-- REPORTED USER -->
+
+                    <div class="report-user">
+
+                        <div class="report-user-avatar">
+                            👤
+                        </div>
+
+                        <div class="report-user-info">
+
+                            <span class="report-user-label">
+                                Reporting user
+                            </span>
+
+                            <span class="report-user-name">
+
+                                {{ reported_user.get_full_name|default:reported_user.username }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BRAND -->
+
+                <div class="report-left-footer">
+
+                    <div class="report-brand">
+
+                        <span class="report-brand-mark"></span>
+
+                        King B Real Estate &amp; Construction Ltd
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT
+            ================================================== -->
+
+            <div class="report-right">
+
+
+                <div class="report-right-header">
+
+                    <h2 class="report-right-title">
+                        Tell us what happened
+                    </h2>
+
+                    <p class="report-right-description">
+
+                        Select the most appropriate reason
+                        and provide additional information
+                        where necessary.
+
+                    </p>
+
+                </div>
+
+
+                <!-- NOTICE -->
+
+                <div class="report-notice">
+
+                    <div class="report-notice-icon">
+                        ⚠
+                    </div>
+
+                    <div class="report-notice-content">
+
+                        <p class="report-notice-title">
+                            Report responsibly
+                        </p>
+
+                        <p class="report-notice-text">
+
+                            Please provide accurate information.
+                            Do not include passwords, PINs,
+                            card details, verification codes,
+                            or other sensitive information.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     FORM
+                ================================================== -->
+
+                <form
+                    method="POST"
+                    class="report-form"
+                    id="reportForm"
+                    novalidate
+                >
+
+                    {% csrf_token %}
+
+
+                    <!-- REASON -->
+
+                    <div class="report-field">
+
+                        <div class="report-label-row">
+
+                            <label
+                                for="reason"
+                                class="report-label"
+                            >
+                                Reason for Report
+                            </label>
+
+                            <span class="report-required">
+                                Required
+                            </span>
+
+                        </div>
+
+
+                        <select
+                            name="reason"
+                            id="reason"
+                            class="report-select"
+                            required
+                        >
+
+                            <option value="">
+                                Select a reason
+                            </option>
+
+                            {% for value, label in reasons %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if selected_reason == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="report-field">
+
+                        <div class="report-label-row">
+
+                            <label
+                                for="description"
+                                class="report-label"
+                            >
+                                Additional Details
+                            </label>
+
+                            <span
+                                class="report-required"
+                                style="color:#7d8982;"
+                            >
+                                Optional
+                            </span>
+
+                        </div>
+
+
+                        <div class="report-textarea-wrap">
+
+                            <textarea
+                                name="description"
+                                id="description"
+                                class="report-textarea"
+                                maxlength="3000"
+                                placeholder="Explain what happened and provide any information that may help our team..."
+                            >{{ description|default:'' }}</textarea>
+
+                            <span
+                                class="report-counter"
+                                id="reportCounter"
+                            >
+                                0 / 3000
+                            </span>
+
+                        </div>
+
+
+                        <div class="report-help">
+
+                            Please provide useful details where possible.
+                            Avoid including confidential or sensitive information.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ERROR -->
+
+                    <div
+                        class="report-error"
+                        id="reportError"
+                    ></div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="report-actions">
+
+                        <a
+                            href="javascript:history.back()"
+                            class="report-cancel"
+                            id="reportCancel"
+                        >
+                            Cancel
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="report-submit"
+                            id="reportSubmit"
+                        >
+
+                            <span
+                                id="submitNormal"
+                            >
+                                ⚑ &nbsp; Submit Report
+                            </span>
+
+
+                            <span
+                                id="submitLoading"
+                                style="display:none;"
+                            >
+
+                                <span class="report-spinner"></span>
+
+                                Submitting...
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <!-- =================================================
+                     SUCCESS
+                ================================================== -->
+
+                <div
+                    class="report-success"
+                    id="reportSuccess"
+                >
+
+                    <div class="report-success-icon">
+                        ✓
+                    </div>
+
+                    <div class="report-success-content">
+
+                        <p class="report-success-title">
+                            Report submitted successfully
+                        </p>
+
+                        <p
+                            class="report-success-message"
+                            id="reportSuccessMessage"
+                        >
+                            Thank you for helping keep
+                            King B Marketplace safe.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRUST -->
+
+                <div class="report-trust">
+
+                    ✓
+
+                    <span>
+
+                        Your report helps keep
+                        <strong>King B Marketplace</strong>
+                        safer.
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
+
+        const form =
+            document.getElementById("reportForm");
+
+        const reason =
+            document.getElementById("reason");
+
+        const description =
+            document.getElementById("description");
+
+        const counter =
+            document.getElementById("reportCounter");
+
+        const submitButton =
+            document.getElementById("reportSubmit");
+
+        const submitNormal =
+            document.getElementById("submitNormal");
+
+        const submitLoading =
+            document.getElementById("submitLoading");
+
+        const errorBox =
+            document.getElementById("reportError");
+
+        const successBox =
+            document.getElementById("reportSuccess");
+
+        const successMessage =
+            document.getElementById(
+                "reportSuccessMessage"
+            );
+
+
+        /* =====================================================
+           CHARACTER COUNTER
+        ===================================================== */
+
+        function updateCounter() {
+
+            if (!description || !counter) {
+                return;
+            }
+
+            counter.textContent =
+                description.value.length +
+                " / 3000";
+        }
+
+        if (description) {
+
+            description.addEventListener(
+                "input",
+                updateCounter
+            );
+
+            updateCounter();
+        }
+
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        function showError(message) {
+
+            if (!errorBox) {
+                return;
+            }
+
+            errorBox.textContent = message;
+
+            errorBox.classList.add("show");
+
+            errorBox.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest"
+            });
+        }
+
+
+        function hideError() {
+
+            if (!errorBox) {
+                return;
+            }
+
+            errorBox.textContent = "";
+
+            errorBox.classList.remove("show");
+        }
+
+
+        /* =====================================================
+           SUCCESS
+        ===================================================== */
+
+        function showSuccess(message) {
+
+            if (successMessage) {
+
+                successMessage.textContent =
+                    message ||
+                    "Thank you for helping keep King B Marketplace safe.";
+
+            }
+
+            if (successBox) {
+
+                successBox.classList.add("show");
+
+                successBox.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest"
+                });
+
+            }
+        }
+
+
+        /* =====================================================
+           SUBMIT
+        ===================================================== */
+
+        if (form) {
+
+            form.addEventListener(
+                "submit",
+                async function (event) {
+
+                    /*
+                        THIS IS THE IMPORTANT PART.
+
+                        Prevent the browser's normal
+                        form submission.
+
+                        Therefore:
+                        NO PAGE RELOAD.
+                    */
+
+                    event.preventDefault();
+
+                    hideError();
+
+
+                    /* -----------------------------------------
+                       VALIDATION
+                    ----------------------------------------- */
+
+                    if (!reason.value) {
+
+                        showError(
+                            "Please select a reason for the report."
+                        );
+
+                        reason.focus();
+
+                        return;
+                    }
+
+
+                    /* -----------------------------------------
+                       CONFIRMATION
+                    ----------------------------------------- */
+
+                    const confirmed =
+                        window.confirm(
+                            "Are you sure you want to submit this report to King B for review?"
+                        );
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+
+                    /* -----------------------------------------
+                       LOADING STATE
+                    ----------------------------------------- */
+
+                    submitButton.disabled = true;
+
+                    submitButton.classList.add(
+                        "submitting"
+                    );
+
+                    if (submitNormal) {
+                        submitNormal.style.display =
+                            "none";
+                    }
+
+                    if (submitLoading) {
+                        submitLoading.style.display =
+                            "inline-flex";
+                    }
+
+
+                    try {
+
+                        /* -------------------------------------
+                           FORM DATA
+                        ------------------------------------- */
+
+                        const formData =
+                            new FormData(form);
+
+
+                        /* -------------------------------------
+                           AJAX REQUEST
+                        ------------------------------------- */
+
+                        const response =
+                            await fetch(
+                                window.location.href,
+                                {
+                                    method: "POST",
+
+                                    body: formData,
+
+                                    headers: {
+                                        "X-Requested-With":
+                                            "XMLHttpRequest",
+
+                                        "Accept":
+                                            "application/json"
+                                    },
+
+                                    credentials: "same-origin"
+                                }
+                            );
+
+
+                        /* -------------------------------------
+                           READ RESPONSE
+                        ------------------------------------- */
+
+                        let data;
+
+                        try {
+
+                            data =
+                                await response.json();
+
+                        } catch (jsonError) {
+
+                            throw new Error(
+                                "The server returned an unexpected response."
+                            );
+                        }
+
+
+                        /* -------------------------------------
+                           SERVER ERROR
+                        ------------------------------------- */
+
+                        if (
+                            !response.ok ||
+                            !data.success
+                        ) {
+
+                            throw new Error(
+                                data.message ||
+                                "Unable to submit your report."
+                            );
+                        }
+
+
+                        /* -------------------------------------
+                           SUCCESS
+                        ------------------------------------- */
+
+                        form.style.display =
+                            "none";
+
+                        hideError();
+
+                        showSuccess(
+                            data.message
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Report submission error:",
+                            error
+                        );
+
+                        showError(
+                            error.message ||
+                            "Something went wrong while submitting your report. Please try again."
+                        );
+
+
+                        /* -------------------------------------
+                           RESTORE BUTTON
+                        ------------------------------------- */
+
+                        submitButton.disabled =
+                            false;
+
+                        submitButton.classList.remove(
+                            "submitting"
+                        );
+
+                        if (submitNormal) {
+
+                            submitNormal.style.display =
+                                "inline";
+
+                        }
+
+                        if (submitLoading) {
+
+                            submitLoading.style.display =
+                                "none";
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}
+

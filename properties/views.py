@@ -18,8 +18,10 @@ from django.core.mail import send_mail
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from django.http import HttpResponseForbidden
 from django.core.mail import send_mail
 from django.urls import reverse, reverse_lazy
+from django.http import JsonResponse
 from django.contrib.auth.hashers import (
     make_password,
     check_password,
@@ -67,6 +69,8 @@ from .models import (
     MarketplaceListingImage,
     WorkerMessage,
     Notification,
+    UserReport,
+    MarketplaceConversationDeletion
     
 )
 
@@ -1628,7 +1632,6 @@ def site_register(request):
 # =========================================================
 # VERIFY EMAIL
 # =========================================================
-
 def verify_email(request, uidb64, token):
 
     try:
@@ -1650,12 +1653,20 @@ def verify_email(request, uidb64, token):
 
         user = None
 
+    # =====================================================
+    # INVALID USER
+    # =====================================================
+
     if user is None:
 
         return render(
             request,
             'properties/email_verification_failed.html'
         )
+
+    # =====================================================
+    # INVALID / EXPIRED TOKEN
+    # =====================================================
 
     if not default_token_generator.check_token(
         user,
@@ -1667,21 +1678,59 @@ def verify_email(request, uidb64, token):
             'properties/email_verification_failed.html'
         )
 
+    # =====================================================
+    # CUSTOMER EMAIL VERIFICATION
+    # =====================================================
+
     try:
 
         customer = user.customer_profile
 
+        # Email has been successfully verified
         customer.email_verified = True
+
+        # Automatically approve customer
+        customer.is_approved = True
 
         customer.save(
             update_fields=[
-                'email_verified'
+                'email_verified',
+                'is_approved',
             ]
+        )
+
+        # =================================================
+        # CUSTOMER APPROVAL NOTIFICATION
+        # =================================================
+
+        create_notification(
+            recipient=user,
+            notification_type='account_approved',
+            title='Account Approved',
+            message=(
+                'Your email has been verified successfully '
+                'and your King B customer account has been '
+                'automatically approved.'
+            ),
+            link=reverse(
+                'marketplace_dashboard'
+            )
         )
 
     except Customer.DoesNotExist:
 
         pass
+
+    # =====================================================
+    # SKILLED WORKER EMAIL VERIFICATION
+    # =====================================================
+    #
+    # Workers remain subject to manual approval.
+    #
+    # Email verification does NOT automatically approve
+    # a skilled worker.
+    #
+    # =====================================================
 
     try:
 
@@ -1699,6 +1748,10 @@ def verify_email(request, uidb64, token):
 
         pass
 
+    # =====================================================
+    # SUCCESS MESSAGE
+    # =====================================================
+
     messages.success(
         request,
         'Your email address has been verified successfully.'
@@ -1708,6 +1761,8 @@ def verify_email(request, uidb64, token):
         request,
         'properties/email_verified.html'
     )
+
+
 
 # =========================================================
 # OLD CUSTOMER REGISTRATION
@@ -2550,8 +2605,13 @@ def customer_profile_edit(request):
 # =========================================================
 # CUSTOMER DASHBOARD
 # =========================================================
+
 @login_required(login_url='site_login')
 def customer_dashboard(request):
+
+    # =====================================================
+    # GET CUSTOMER PROFILE
+    # =====================================================
 
     try:
 
@@ -2568,6 +2628,11 @@ def customer_dashboard(request):
             'marketplace_dashboard'
         )
 
+
+    # =====================================================
+    # CUSTOMER VERIFICATION
+    # =====================================================
+
     if not customer.email_verified:
 
         messages.warning(
@@ -2580,8 +2645,15 @@ def customer_dashboard(request):
             'marketplace_dashboard'
         )
 
+
     # =====================================================
-    # CUSTOMER HIRES
+    # WORKER HIRES / HIRE HISTORY
+    #
+    # IMPORTANT:
+    # DO NOT filter conversation_deleted_by here.
+    #
+    # This section controls the customer's hire history.
+    # Deleting a conversation must NOT remove the hire.
     # =====================================================
 
     hires = (
@@ -2601,19 +2673,44 @@ def customer_dashboard(request):
         )
     )
 
+
+    # =====================================================
+    # HIRE STATISTICS
+    # =====================================================
+
     total_hires = hires.count()
 
-    active_hires = hires.filter(
-        status='active'
-    ).count()
+    active_hires = (
+        hires
+        .filter(
+            status='active'
+        )
+        .count()
+    )
 
-    completed_hires = hires.filter(
-        status='completed'
-    ).count()
+    completed_hires = (
+        hires
+        .filter(
+            status='completed'
+        )
+        .count()
+    )
 
-    pending_hires = hires.filter(
-        status='requested'
-    ).count()
+    pending_hires = (
+        hires
+        .filter(
+            status='requested'
+        )
+        .count()
+    )
+
+
+    # =====================================================
+    # CANCELLED HIRES
+    #
+    # Kept separately so cancelled history/count remains
+    # available without affecting the active hire list.
+    # =====================================================
 
     cancelled_hires = (
         WorkerHire.objects
@@ -2623,6 +2720,7 @@ def customer_dashboard(request):
         )
         .count()
     )
+
 
     # =====================================================
     # REVIEWS
@@ -2636,6 +2734,11 @@ def customer_dashboard(request):
         .count()
     )
 
+
+    # =====================================================
+    # REVIEWED HIRE IDS
+    # =====================================================
+
     reviewed_hire_ids = set(
         WorkerReview.objects
         .filter(
@@ -2647,10 +2750,12 @@ def customer_dashboard(request):
         )
     )
 
+
     # =====================================================
     # UNREAD WORKER MESSAGES
     #
-    # Messages sent TO the current customer
+    # Only count messages that the current user has not
+    # individually deleted.
     # =====================================================
 
     unread_worker_messages_count = (
@@ -2659,13 +2764,15 @@ def customer_dashboard(request):
             receiver=request.user,
             is_read=False
         )
+        .exclude(
+            deleted_by=request.user
+        )
         .count()
     )
 
+
     # =====================================================
-    # CONVERSATIONS
-    #
-    # Get hires that have at least one message
+    # FIND HIRES THAT HAVE MESSAGES
     # =====================================================
 
     message_hire_ids = (
@@ -2681,25 +2788,73 @@ def customer_dashboard(request):
         .distinct()
     )
 
+
+    # =====================================================
+    # MESSAGE CONVERSATIONS
+    #
+    # IMPORTANT:
+    #
+    # The hire itself remains visible in Hire History.
+    #
+    # Only the message conversation card is hidden when
+    # the current user has chosen:
+    #
+    # "Delete Conversation"
+    #
+    # This does NOT delete the WorkerHire.
+    # This does NOT delete WorkerMessage records.
+    # =====================================================
+
     message_hires = []
 
     for hire in hires:
 
-        if hire.id in message_hire_ids:
+        # -------------------------------------------------
+        # CHECK WHETHER CURRENT USER HID THE CONVERSATION
+        # -------------------------------------------------
 
-            unread_messages = (
-                WorkerMessage.objects
-                .filter(
-                    hire=hire,
-                    receiver=request.user,
-                    is_read=False
-                )
-                .count()
+        conversation_was_deleted = (
+            hire.conversation_deleted_by
+            .filter(
+                id=request.user.id
             )
+            .exists()
+        )
 
-            hire.unread_messages = unread_messages
+        if conversation_was_deleted:
+            continue
 
-            message_hires.append(hire)
+
+        # -------------------------------------------------
+        # ONLY SHOW HIRES THAT HAVE MESSAGES
+        # -------------------------------------------------
+
+        if hire.id not in message_hire_ids:
+            continue
+
+
+        # -------------------------------------------------
+        # COUNT UNREAD MESSAGES FOR THIS CONVERSATION
+        # -------------------------------------------------
+
+        unread_messages = (
+            WorkerMessage.objects
+            .filter(
+                hire=hire,
+                receiver=request.user,
+                is_read=False
+            )
+            .exclude(
+                deleted_by=request.user
+            )
+            .count()
+        )
+
+
+        hire.unread_messages = unread_messages
+
+        message_hires.append(hire)
+
 
     # =====================================================
     # CONTEXT
@@ -2709,31 +2864,42 @@ def customer_dashboard(request):
 
         'customer': customer,
 
+        # Hire history
         'hires': hires,
 
+        # Statistics
         'total_hires': total_hires,
         'active_hires': active_hires,
         'completed_hires': completed_hires,
         'pending_hires': pending_hires,
         'cancelled_hires': cancelled_hires,
 
+        # Existing template compatibility
         'active_hires_count': active_hires,
         'completed_hires_count': completed_hires,
 
+        # Reviews
         'reviews_count': reviews_count,
         'reviewed_hire_ids': reviewed_hire_ids,
 
-        # MESSAGE DATA
-        'unread_worker_messages_count': unread_worker_messages_count,
-        'message_hires': message_hires,
+        # Messages
+        'unread_worker_messages_count':
+            unread_worker_messages_count,
+
+        'message_hires':
+            message_hires,
     }
+
+
+    # =====================================================
+    # RENDER DASHBOARD
+    # =====================================================
 
     return render(
         request,
         'properties/customer_dashboard.html',
         context
     )
-
 # =========================================================
 # WORKER DASHBOARD
 # =========================================================
@@ -3599,6 +3765,57 @@ def cancel_worker_hire(
             'customer_dashboard'
         )
     )
+
+# =========================================================
+# DELETE WORKER CONVERSATION — FOR ME ONLY
+# =========================================================
+
+@login_required(login_url='site_login')
+@require_POST
+def delete_worker_conversation(request, hire_id):
+
+    hire = get_object_or_404(
+        WorkerHire.objects.select_related(
+            'customer__user',
+            'worker__user',
+        ),
+        id=hire_id
+    )
+
+    customer_user_id = hire.customer.user_id
+    worker_user_id = hire.worker.user_id
+
+    # =====================================================
+    # SECURITY CHECK
+    # =====================================================
+
+    if request.user.id not in [
+        customer_user_id,
+        worker_user_id,
+    ]:
+        return HttpResponseForbidden(
+            'You are not authorized to delete this conversation.'
+        )
+
+    # =====================================================
+    # HIDE CONVERSATION ONLY FOR CURRENT USER
+    # =====================================================
+
+    hire.conversation_deleted_by.add(request.user)
+
+    messages.success(
+        request,
+        'Conversation deleted from your dashboard.'
+    )
+
+    # =====================================================
+    # RETURN TO THE CORRECT DASHBOARD
+    # =====================================================
+
+    if request.user.id == customer_user_id:
+        return redirect('customer_dashboard')
+
+    return redirect('worker_dashboard')
 
 
 # =========================================================
@@ -5077,7 +5294,6 @@ def marketplace_seller_profile(
 # - Chat page can be opened
 # - New messages can be sent
 # =========================================================
-
 @login_required(login_url='site_login')
 def marketplace_chat(
     request,
@@ -5171,42 +5387,13 @@ def marketplace_chat(
             id=buyer_id
         )
 
-        # =================================================
-        # SELLER CAN ONLY OPEN EXISTING CONVERSATION
-        # =================================================
-
-        conversation_exists = (
-            MarketplaceMessage.objects
-            .filter(
-                listing=listing
-            )
-            .filter(
-                Q(
-                    sender=current_user,
-                    receiver=other_user
-                )
-                |
-                Q(
-                    sender=other_user,
-                    receiver=current_user
-                )
-            )
-            .exists()
-        )
-
-        if not conversation_exists:
-
-            messages.error(
-                request,
-                'This conversation does not exist.'
-            )
-
-            return redirect(
-                'marketplace_messages'
-            )
-
     # =====================================================
-    # LOAD CONVERSATION
+    # GET CONVERSATION
+    #
+    # IMPORTANT:
+    # This MUST be outside the buyer/seller branch.
+    #
+    # Both buyer and seller need the same conversation.
     # =====================================================
 
     conversation = (
@@ -5224,6 +5411,9 @@ def marketplace_chat(
                 sender=other_user,
                 receiver=current_user
             )
+        )
+        .exclude(
+            deleted_by=current_user
         )
         .select_related(
             'sender',
@@ -5342,7 +5532,7 @@ def marketplace_chat(
         # CREATE MESSAGE
         # =================================================
 
-        new_message = MarketplaceMessage.objects.create(
+        MarketplaceMessage.objects.create(
             listing=listing,
             sender=current_user,
             receiver=other_user,
@@ -5371,7 +5561,6 @@ def marketplace_chat(
                     'listing_id': listing.id,
                 }
             )
-
 
         # =====================================================
         # CREATE MARKETPLACE MESSAGE NOTIFICATION
@@ -5441,9 +5630,6 @@ def marketplace_chat(
 
     # =====================================================
     # RENDER CHAT PAGE
-    #
-    # IMPORTANT:
-    # This MUST be outside the POST block.
     # =====================================================
 
     return render(
@@ -5462,9 +5648,14 @@ def marketplace_chat(
         }
     )
 
+
 # =========================================================
 # MARKETPLACE MESSAGES
 # UNIFIED BUYER + SELLER INBOX
+# =========================================================
+
+# =========================================================
+# MARKETPLACE MESSAGES
 # =========================================================
 
 @login_required(login_url='site_login')
@@ -5472,8 +5663,12 @@ def marketplace_messages(request):
 
     user = request.user
 
+
     # =====================================================
     # GET ALL MESSAGES INVOLVING CURRENT USER
+    #
+    # Individual messages deleted with "Delete for me"
+    # are excluded here.
     # =====================================================
 
     messages_queryset = (
@@ -5482,20 +5677,34 @@ def marketplace_messages(request):
             Q(sender=user) |
             Q(receiver=user)
         )
+        .exclude(
+            deleted_by=user
+        )
         .select_related(
             'sender',
             'receiver',
             'listing',
             'listing__seller',
         )
-        .order_by('-created_at')
+        .order_by(
+            '-created_at'
+        )
     )
+
 
     # =====================================================
     # BUILD UNIQUE CONVERSATIONS
+    #
+    # One conversation =
+    #
+    #       LISTING + OTHER USER
+    #
+    # This allows one seller to have separate conversations
+    # with multiple buyers for the same listing.
     # =====================================================
 
     conversations = {}
+
 
     for message in messages_queryset:
 
@@ -5503,6 +5712,7 @@ def marketplace_messages(request):
 
         if not listing:
             continue
+
 
         # =================================================
         # SAFETY:
@@ -5516,17 +5726,23 @@ def marketplace_messages(request):
         ):
             continue
 
+
         # =================================================
         # DETERMINE OTHER USER
         # =================================================
 
         if message.sender_id == user.id:
+
             other_user = message.receiver
+
         else:
+
             other_user = message.sender
+
 
         if not other_user:
             continue
+
 
         # =================================================
         # PREVENT SELF CONVERSATION
@@ -5535,10 +5751,35 @@ def marketplace_messages(request):
         if other_user.id == user.id:
             continue
 
+
+        # =================================================
+        # CHECK WHETHER THIS USER DELETED THIS CONVERSATION
+        #
+        # IMPORTANT:
+        #
+        # This is conversation-level deletion.
+        #
+        # It does NOT delete the actual messages.
+        # It only hides this conversation from this user.
+        # =================================================
+
+        conversation_deleted = (
+            MarketplaceConversationDeletion.objects
+            .filter(
+                listing=listing,
+                user=user,
+                other_user=other_user
+            )
+            .exists()
+        )
+
+        if conversation_deleted:
+            continue
+
+
         # =================================================
         # CONVERSATION KEY
         #
-        # One conversation per:
         # LISTING + OTHER USER
         # =================================================
 
@@ -5547,6 +5788,7 @@ def marketplace_messages(request):
             other_user.id
         )
 
+
         # =================================================
         # CREATE CONVERSATION
         # =================================================
@@ -5554,22 +5796,30 @@ def marketplace_messages(request):
         if key not in conversations:
 
             conversations[key] = {
+
                 'listing': listing,
+
                 'other_user': other_user,
+
                 'latest_message': message,
+
                 'unread_count': 0,
+
             }
+
 
         # =================================================
         # UPDATE LATEST MESSAGE
         # =================================================
 
         elif (
-            message.created_at >
+            message.created_at
+            >
             conversations[key]['latest_message'].created_at
         ):
 
             conversations[key]['latest_message'] = message
+
 
         # =================================================
         # COUNT UNREAD
@@ -5582,19 +5832,23 @@ def marketplace_messages(request):
 
             conversations[key]['unread_count'] += 1
 
+
     # =====================================================
-    # BUILD CHAT URLS
+    # BUILD CONVERSATION LIST
     # =====================================================
 
     conversation_list = []
 
+
     for conversation in conversations.values():
 
         listing = conversation['listing']
+
         other_user = conversation['other_user']
 
+
         # =================================================
-        # SELLER
+        # SELLER CHAT URL
         # =================================================
 
         if listing.seller_id == user.id:
@@ -5607,8 +5861,9 @@ def marketplace_messages(request):
                 }
             )
 
+
         # =================================================
-        # BUYER
+        # BUYER CHAT URL
         # =================================================
 
         else:
@@ -5620,21 +5875,38 @@ def marketplace_messages(request):
                 }
             )
 
-        conversation_list.append(conversation)
+
+        # =================================================
+        # DELETE CONVERSATION URL
+        # =================================================
+
+        conversation['delete_url'] = reverse(
+            'delete_marketplace_conversation',
+            kwargs={
+                'listing_id': listing.id,
+                'other_user_id': other_user.id,
+            }
+        )
+
+
+        conversation_list.append(
+            conversation
+        )
+
 
     # =====================================================
     # SORT BY MOST RECENT MESSAGE
     # =====================================================
 
     conversation_list.sort(
-        key=lambda conversation: (
-            conversation['latest_message'].created_at
-        ),
+        key=lambda conversation:
+            conversation['latest_message'].created_at,
         reverse=True
     )
 
+
     # =====================================================
-    # TOTAL UNREAD
+    # TOTAL UNREAD MESSAGES
     # =====================================================
 
     unread_messages = (
@@ -5643,8 +5915,12 @@ def marketplace_messages(request):
             receiver=user,
             is_read=False
         )
+        .exclude(
+            deleted_by=user
+        )
         .count()
     )
+
 
     # =====================================================
     # TOTAL CONVERSATIONS
@@ -5654,6 +5930,7 @@ def marketplace_messages(request):
         conversation_list
     )
 
+
     # =====================================================
     # RENDER
     # =====================================================
@@ -5662,11 +5939,105 @@ def marketplace_messages(request):
         request,
         'properties/marketplace_messages.html',
         {
-            'conversations': conversation_list,
-            'unread_messages': unread_messages,
-            'total_conversations': total_conversations,
+            'conversations':
+                conversation_list,
+
+            'unread_messages':
+                unread_messages,
+
+            'total_conversations':
+                total_conversations,
         }
     )
+
+
+# =========================================================
+# DELETE MARKETPLACE CONVERSATION
+# FOR CURRENT USER ONLY
+# =========================================================
+
+@login_required(login_url='site_login')
+@require_POST
+def delete_marketplace_conversation(
+    request,
+    listing_id,
+    other_user_id
+):
+
+    listing = get_object_or_404(
+        MarketplaceListing,
+        id=listing_id
+    )
+
+    other_user = get_object_or_404(
+        User,
+        id=other_user_id
+    )
+
+    current_user = request.user
+
+
+    # =====================================================
+    # CANNOT DELETE YOUR OWN CONVERSATION
+    # =====================================================
+
+    if current_user.id == other_user.id:
+
+        return HttpResponseForbidden(
+            'Invalid conversation.'
+        )
+
+
+    # =====================================================
+    # VERIFY THIS USER IS ACTUALLY PART OF THE CONVERSATION
+    # =====================================================
+
+    conversation_exists = (
+        MarketplaceMessage.objects
+        .filter(
+            listing=listing
+        )
+        .filter(
+            Q(
+                sender=current_user,
+                receiver=other_user
+            )
+            |
+            Q(
+                sender=other_user,
+                receiver=current_user
+            )
+        )
+        .exists()
+    )
+
+
+    if not conversation_exists:
+
+        return HttpResponseForbidden(
+            'You are not authorized to delete this conversation.'
+        )
+
+
+    # =====================================================
+    # HIDE CONVERSATION FOR CURRENT USER ONLY
+    # =====================================================
+
+    MarketplaceConversationDeletion.objects.get_or_create(
+        listing=listing,
+        user=current_user,
+        other_user=other_user
+    )
+
+
+    # =====================================================
+    # RETURN TO MARKETPLACE MESSAGES
+    # =====================================================
+
+    return redirect(
+        'marketplace_messages'
+    )
+
 # =========================================================
     # DELETE PHOTOS
 # =========================================================
@@ -5956,16 +6327,16 @@ class AccountPasswordResetCompleteView(
         'properties/account_password_reset_complete.html'
     )
 
+
+def terms_and_conditions(request):
+    return render(request, "properties/terms_and_conditions.html")
+
+
 # =========================================================
 # WORKER / CUSTOMER MESSAGES
 # =========================================================
-
 @login_required(login_url='site_login')
 def worker_messages(request, hire_id):
-
-    # -----------------------------------------------------
-    # GET THE HIRE
-    # -----------------------------------------------------
 
     hire = get_object_or_404(
         WorkerHire.objects.select_related(
@@ -5974,49 +6345,43 @@ def worker_messages(request, hire_id):
             'worker',
             'worker__user',
         ),
-        id=hire_id,
+        id=hire_id
     )
 
-    user = request.user
+    customer_user = hire.customer.user
+    worker_user = hire.worker.user
 
-    # -----------------------------------------------------
-    # MAKE SURE USER BELONGS TO THIS HIRE
-    # -----------------------------------------------------
+    # =====================================================
+    # SECURITY
+    # =====================================================
 
-    is_customer = (
-        hire.customer.user_id == user.id
-    )
-
-    is_worker = (
-        hire.worker.user_id == user.id
-    )
-
-    if not is_customer and not is_worker:
-
-        messages.error(
-            request,
+    if request.user.id not in [
+        customer_user.id,
+        worker_user.id,
+    ]:
+        return HttpResponseForbidden(
             'You are not authorized to access this conversation.'
         )
 
-        return redirect(
-            'marketplace_dashboard'
-        )
+    # =====================================================
+    # DETERMINE OTHER USER
+    # =====================================================
 
-    # -----------------------------------------------------
-    # DETERMINE OTHER PERSON
-    # -----------------------------------------------------
+    if request.user.id == customer_user.id:
 
-    if is_customer:
-
-        other_user = hire.worker.user
+        other_user = worker_user
+        other_person = hire.worker
+        current_role = 'customer'
 
     else:
 
-        other_user = hire.customer.user
+        other_user = customer_user
+        other_person = hire.customer
+        current_role = 'worker'
 
-    # -----------------------------------------------------
+    # =====================================================
     # SEND MESSAGE
-    # -----------------------------------------------------
+    # =====================================================
 
     if request.method == 'POST':
 
@@ -6024,8 +6389,7 @@ def worker_messages(request, hire_id):
             request.POST.get(
                 'message',
                 ''
-            )
-            .strip()
+            ).strip()
         )
 
         if not message_text:
@@ -6042,177 +6406,14 @@ def worker_messages(request, hire_id):
 
         WorkerMessage.objects.create(
             hire=hire,
-            sender=user,
+            sender=request.user,
             receiver=other_user,
-            message=message_text,
+            message=message_text
         )
-
-        return redirect(
-            'worker_messages',
-            hire_id=hire.id
-        )
-
-    # -----------------------------------------------------
-    # MARK RECEIVED MESSAGES AS READ
-    # -----------------------------------------------------
-
-    WorkerMessage.objects.filter(
-        hire=hire,
-        receiver=user,
-        is_read=False,
-    ).update(
-        is_read=True
-    )
-
-    # -----------------------------------------------------
-    # GET CONVERSATION
-    # -----------------------------------------------------
-
-    conversation = (
-        WorkerMessage.objects
-        .filter(
-            hire=hire
-        )
-        .select_related(
-            'sender',
-            'receiver',
-        )
-        .order_by(
-            'created_at'
-        )
-    )
-
-    context = {
-
-        'hire': hire,
-
-        'conversation': conversation,
-
-        'other_user': other_user,
-
-        'is_customer': is_customer,
-        'is_worker': is_worker,
-
-    }
-
-    return render(
-        request,
-        'properties/worker_messages.html',
-        context
-    )
-
-def terms_and_conditions(request):
-    return render(request, "properties/terms_and_conditions.html")
-
-
-# =========================================================
-# WORKER / CUSTOMER MESSAGES
-# =========================================================
-
-@login_required(login_url='site_login')
-def worker_messages(request, hire_id):
-
-    # =====================================================
-    # GET THE HIRE
-    # =====================================================
-
-    hire = get_object_or_404(
-        WorkerHire.objects.select_related(
-            'customer',
-            'customer__user',
-            'worker',
-            'worker__user',
-        ),
-        id=hire_id
-    )
-
-
-    # =====================================================
-    # GET CUSTOMER AND WORKER USERS
-    # =====================================================
-
-    customer_user = hire.customer.user
-    worker_user = hire.worker.user
-
-
-    # =====================================================
-    # SECURITY CHECK
-    #
-    # Only the customer OR worker connected to this
-    # specific WorkerHire can access the conversation.
-    # =====================================================
-
-    if (
-        request.user.id != customer_user.id
-        and
-        request.user.id != worker_user.id
-    ):
-
-        return HttpResponseForbidden(
-            'You are not authorized to access this conversation.'
-        )
-
-
-    # =====================================================
-    # DETERMINE THE OTHER PERSON
-    # =====================================================
-
-    if request.user.id == customer_user.id:
-
-        other_user = worker_user
-        other_person = hire.worker
-        current_role = 'customer'
-
-    else:
-
-        other_user = customer_user
-        other_person = hire.customer
-        current_role = 'worker'
-
-
-    # =====================================================
-    # HANDLE SENDING MESSAGE
-    # =====================================================
-
-    if request.method == 'POST':
-
-        message_text = request.POST.get(
-            'message',
-            ''
-        ).strip()
-
 
         # =================================================
-        # MESSAGE REQUIRED
+        # NOTIFICATION
         # =================================================
-
-        if not message_text:
-
-            messages.error(
-                request,
-                'Please enter a message.'
-            )
-
-            return redirect(
-                'worker_messages',
-                hire_id=hire.id
-            )
-
-
-        # =================================================
-        # CREATE MESSAGE
-        # =================================================
-
-        new_message = WorkerMessage.objects.create(
-                hire=hire,
-                sender=request.user,
-                receiver=other_user,
-                message=message_text
-            )
-
-        # =====================================================
-        # CREATE WORKER / CUSTOMER MESSAGE NOTIFICATION
-        # =====================================================
 
         create_notification(
             recipient=other_user,
@@ -6230,30 +6431,35 @@ def worker_messages(request, hire_id):
             link=reverse(
                 'worker_messages',
                 kwargs={
-                    'hire_id': hire.id,
+                    'hire_id': hire.id
                 }
             )
         )
-
-
-        # =================================================
-        # REDIRECT BACK TO CONVERSATION
-        # =================================================
 
         return redirect(
             'worker_messages',
             hire_id=hire.id
         )
 
-
     # =====================================================
-    # GET MESSAGES
+    # GET VISIBLE CONVERSATION
+    # =====================================================
+    #
+    # IMPORTANT:
+    #
+    # This hides messages deleted by the CURRENT USER only.
+    #
+    # The message itself is NOT deleted from the database.
+    #
     # =====================================================
 
     conversation = (
         WorkerMessage.objects
         .filter(
             hire=hire
+        )
+        .exclude(
+            deleted_by=request.user
         )
         .select_related(
             'sender',
@@ -6264,19 +6470,19 @@ def worker_messages(request, hire_id):
         )
     )
 
-
     # =====================================================
-    # MARK MESSAGES SENT TO CURRENT USER AS READ
+    # MARK RECEIVED MESSAGES AS READ
     # =====================================================
 
     WorkerMessage.objects.filter(
         hire=hire,
         receiver=request.user,
         is_read=False
+    ).exclude(
+        deleted_by=request.user
     ).update(
         is_read=True
     )
-
 
     # =====================================================
     # CONTEXT
@@ -6299,16 +6505,13 @@ def worker_messages(request, hire_id):
         'worker': hire.worker,
     }
 
-
-    # =====================================================
-    # RENDER CHAT PAGE
-    # =====================================================
-
     return render(
         request,
         'properties/worker_messages.html',
         context
     )
+
+
 
 @login_required(login_url='site_login')
 def notifications(request):
@@ -6350,3 +6553,253 @@ def mark_all_notifications_read(request):
     ).update(is_read=True)
 
     return redirect('notifications')
+
+# =========================================================
+# DELETE MARKETPLACE MESSAGE — DELETE FOR ME
+# =========================================================
+
+@login_required(login_url='site_login')
+@require_POST
+def delete_marketplace_message(request, message_id):
+
+    message = get_object_or_404(
+        MarketplaceMessage.objects.select_related(
+            'listing',
+            'sender',
+            'receiver',
+        ),
+        id=message_id
+    )
+
+    # Only the two people involved in the conversation
+    # can delete the message from their own side.
+    if request.user.id not in [
+        message.sender_id,
+        message.receiver_id,
+    ]:
+        return HttpResponseForbidden(
+            'You are not authorized to delete this message.'
+        )
+
+    # Delete ONLY from the current user's side.
+    message.deleted_by.add(request.user)
+
+    # Send the user back to the conversation.
+    if request.user.id == message.listing.seller_id:
+
+        return redirect(
+            'marketplace_chat_with_buyer',
+            listing_id=message.listing.id,
+            buyer_id=(
+                message.receiver_id
+                if message.sender_id == request.user.id
+                else message.sender_id
+            )
+        )
+
+    return redirect(
+        'marketplace_chat',
+        listing_id=message.listing.id
+    )
+
+# =========================================================
+# DELETE WORKER MESSAGE — DELETE FOR ME
+# =========================================================
+
+@login_required(login_url='site_login')
+@require_POST
+def delete_worker_message(request, message_id):
+
+    message = get_object_or_404(
+        WorkerMessage.objects.select_related(
+            'hire',
+            'hire__customer',
+            'hire__customer__user',
+            'hire__worker',
+            'hire__worker__user',
+            'sender',
+            'receiver',
+        ),
+        id=message_id
+    )
+
+    hire = message.hire
+
+    customer_user = hire.customer.user
+    worker_user = hire.worker.user
+
+    # Only the customer or worker involved in the hire
+    # can delete the message from their own side.
+    if request.user.id not in [
+        customer_user.id,
+        worker_user.id,
+    ]:
+        return HttpResponseForbidden(
+            'You are not authorized to delete this message.'
+        )
+
+    # Delete ONLY from the current user's side.
+    message.deleted_by.add(request.user)
+
+    return redirect(
+        'worker_messages',
+        hire_id=hire.id
+    )
+
+
+# =========================================================
+# REPORT USER
+# =========================================================
+@login_required(login_url='site_login')
+def report_user(request, user_id):
+
+    # =====================================================
+    # GET REPORTED USER
+    # =====================================================
+
+    reported_user = get_object_or_404(
+        User,
+        id=user_id
+    )
+
+    # =====================================================
+    # PREVENT SELF-REPORTING
+    # =====================================================
+
+    if request.user.id == reported_user.id:
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse(
+                {
+                    'success': False,
+                    'message': 'You cannot report your own account.'
+                },
+                status=400
+            )
+
+        messages.error(
+            request,
+            'You cannot report your own account.'
+        )
+
+        return redirect(
+            'marketplace_dashboard'
+        )
+
+    # =====================================================
+    # HANDLE REPORT SUBMISSION
+    # =====================================================
+
+    if request.method == 'POST':
+
+        reason = (
+            request.POST.get(
+                'reason',
+                ''
+            )
+            .strip()
+        )
+
+        description = (
+            request.POST.get(
+                'description',
+                ''
+            )
+            .strip()
+        )
+
+        # =================================================
+        # VALID REASONS
+        # =================================================
+
+        valid_reasons = dict(
+            UserReport.REASON_CHOICES
+        )
+
+        if reason not in valid_reasons:
+
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse(
+                    {
+                        'success': False,
+                        'message': 'Please select a valid report reason.'
+                    },
+                    status=400
+                )
+
+            messages.error(
+                request,
+                'Please select a valid report reason.'
+            )
+
+            return render(
+                request,
+                'properties/report_user.html',
+                {
+                    'reported_user': reported_user,
+                    'reasons': UserReport.REASON_CHOICES,
+                    'selected_reason': reason,
+                    'description': description,
+                }
+            )
+
+        # =================================================
+        # CREATE REPORT
+        # =================================================
+
+        report = UserReport.objects.create(
+            reporter=request.user,
+            reported_user=reported_user,
+            reason=reason,
+            description=description,
+        )
+
+        # =================================================
+        # AJAX SUCCESS
+        # =================================================
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse(
+                {
+                    'success': True,
+                    'message': (
+                        'Thank you. Your report has been submitted '
+                        'and will be reviewed by our team.'
+                    ),
+                    'report_id': report.id
+                }
+            )
+
+        # =================================================
+        # NORMAL POST SUCCESS
+        # =================================================
+
+        messages.success(
+            request,
+            'Thank you. Your report has been submitted '
+            'and will be reviewed by our team.'
+        )
+
+        # =================================================
+        # RETURN USER
+        # =================================================
+
+        return redirect(
+            request.META.get(
+                'HTTP_REFERER',
+                'marketplace_dashboard'
+            )
+        )
+
+    # =====================================================
+    # SHOW REPORT FORM
+    # =====================================================
+
+    return render(
+        request,
+        'properties/report_user.html',
+        {
+            'reported_user': reported_user,
+            'reasons': UserReport.REASON_CHOICES,
+        }
+    )

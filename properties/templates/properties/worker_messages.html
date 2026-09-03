@@ -10,6 +10,10 @@ Messages
 
 <style>
 
+/* =========================================================
+   WORKER CHAT PAGE
+========================================================= */
+
 .worker-chat-page {
     min-height: calc(100vh - 100px);
     background: #f5f7f6;
@@ -33,6 +37,17 @@ Messages
     border-radius: 14px 14px 0 0;
 }
 
+.worker-chat-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.worker-chat-header-info {
+    min-width: 0;
+}
+
 .worker-chat-header h2 {
     margin: 0;
     font-size: 22px;
@@ -42,6 +57,34 @@ Messages
     margin: 6px 0 0;
     opacity: 0.85;
     font-size: 14px;
+}
+
+
+/* =========================================================
+   REPORT USER BUTTON
+========================================================= */
+
+.worker-chat-report-user {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.08);
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.worker-chat-report-user:hover {
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.6);
+    color: white;
 }
 
 
@@ -79,7 +122,7 @@ Messages
 
 
 /* =========================================================
-   MESSAGE
+   MESSAGE ROW
 ========================================================= */
 
 .worker-message-row {
@@ -96,14 +139,18 @@ Messages
 }
 
 
+/* =========================================================
+   MESSAGE
+========================================================= */
+
 .worker-message {
     max-width: 70%;
     padding: 12px 16px;
     border-radius: 16px;
     line-height: 1.5;
     word-wrap: break-word;
+    position: relative;
 }
-
 
 .worker-message.mine {
     background: #123c2f;
@@ -111,25 +158,58 @@ Messages
     border-bottom-right-radius: 4px;
 }
 
-
 .worker-message.theirs {
     background: #eef2f0;
     color: #222;
     border-bottom-left-radius: 4px;
 }
 
-
 .worker-message-text {
     margin: 0;
     white-space: pre-wrap;
+    padding-right: 5px;
 }
-
 
 .worker-message-time {
     display: block;
     margin-top: 5px;
     font-size: 11px;
     opacity: 0.7;
+}
+
+
+/* =========================================================
+   MESSAGE ACTIONS
+========================================================= */
+
+.worker-message-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 7px;
+}
+
+.worker-message-delete-form {
+    margin: 0;
+    padding: 0;
+}
+
+.worker-message-delete {
+    display: inline-block;
+    border: none;
+    background: transparent;
+    color: #b42318;
+    opacity: 0.85;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 0;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.worker-message-delete:hover {
+    opacity: 1;
+    text-decoration: underline;
 }
 
 
@@ -149,7 +229,6 @@ Messages
     gap: 10px;
 }
 
-
 .worker-chat-input {
     flex: 1;
     resize: none;
@@ -163,11 +242,9 @@ Messages
     outline: none;
 }
 
-
 .worker-chat-input:focus {
     border-color: #123c2f;
 }
-
 
 .worker-chat-send {
     border: none;
@@ -178,7 +255,6 @@ Messages
     cursor: pointer;
     font-weight: 600;
 }
-
 
 .worker-chat-send:hover {
     background: #0b2d23;
@@ -197,13 +273,11 @@ Messages
     border-radius: 12px;
 }
 
-
 .worker-hire-info-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
 }
-
 
 .worker-hire-info-item small {
     display: block;
@@ -211,7 +285,6 @@ Messages
     font-size: 11px;
     margin-bottom: 3px;
 }
-
 
 .worker-hire-info-item strong {
     color: #123c2f;
@@ -248,6 +321,15 @@ Messages
 
     .worker-chat-send {
         padding: 0 18px;
+    }
+
+    .worker-chat-header-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .worker-chat-report-user {
+        width: 100%;
     }
 
 }
@@ -330,31 +412,67 @@ Messages
 
 
         <!-- =================================================
-             CHAT
+             CHAT HEADER
         ================================================== -->
 
         <div class="worker-chat-header">
 
-            <h2>
+            <div class="worker-chat-header-top">
 
-                {% if current_role == 'customer' %}
 
-                    Chat with {{ worker.full_name }}
+                <!-- CHAT TITLE -->
 
-                {% else %}
+                <div class="worker-chat-header-info">
 
-                    Chat with {{ customer.full_name }}
+                    <h2>
+
+                        {% if current_role == 'customer' %}
+
+                            Chat with {{ worker.full_name }}
+
+                        {% else %}
+
+                            Chat with {{ customer.full_name }}
+
+                        {% endif %}
+
+                    </h2>
+
+                    <p>
+                        Discuss the service and work details here.
+                    </p>
+
+                </div>
+
+
+                <!-- =================================================
+                     REPORT USER
+                ================================================== -->
+
+                {% if other_user %}
+
+                    {% if other_user.id != request.user.id %}
+
+                        <a
+                            href="{% url 'report_user' other_user.id %}"
+                            class="worker-chat-report-user"
+                            onclick="return confirm('Are you sure you want to report this user?');"
+                        >
+                            ⚑ Report User
+                        </a>
+
+                    {% endif %}
 
                 {% endif %}
 
-            </h2>
-
-            <p>
-                Discuss the service and work details here.
-            </p>
+            </div>
 
         </div>
 
+
+        <!-- =================================================
+             CHAT
+        ================================================== -->
 
         <div
             class="worker-chat-box"
@@ -383,9 +501,15 @@ Messages
                             {% endif %}"
                         >
 
+
+                            <!-- MESSAGE -->
+
                             <p class="worker-message-text">
                                 {{ msg.message }}
                             </p>
+
+
+                            <!-- TIME -->
 
                             <span class="worker-message-time">
 
@@ -393,13 +517,48 @@ Messages
 
                             </span>
 
+
+                            <!-- =================================================
+                                 DELETE FOR ME
+                            ================================================== -->
+
+                            <div class="worker-message-actions">
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'delete_worker_message' msg.id %}"
+                                    class="worker-message-delete-form"
+                                    onsubmit="return confirm('Delete this message from your side?');"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="worker-message-delete"
+                                        title="Delete this message from your side"
+                                    >
+                                        Delete for me
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+
                         </div>
 
                     </div>
 
                 {% endfor %}
 
+
             {% else %}
+
+
+                <!-- =================================================
+                     EMPTY CHAT
+                ================================================== -->
 
                 <div class="worker-chat-empty">
 
@@ -409,6 +568,7 @@ Messages
                     </p>
 
                 </div>
+
 
             {% endif %}
 
@@ -450,10 +610,15 @@ Messages
 
         </div>
 
+
     </div>
 
 </div>
 
+
+<!-- =========================================================
+     AUTO-SCROLL CHAT
+========================================================= -->
 
 <script>
 

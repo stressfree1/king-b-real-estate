@@ -577,6 +577,18 @@ urlpatterns = [
     ),
 
     path(
+        'marketplace/message/<int:message_id>/delete/',
+        views.delete_marketplace_message,
+        name='delete_marketplace_message'
+    ),
+
+    path(
+        'worker/message/<int:message_id>/delete/',
+        views.delete_worker_message,
+        name='delete_worker_message'
+    ),
+
+    path(
         'account/worker/profile/delete/',
         views.delete_worker_profile,
         name='skilled_worker_delete'
@@ -604,5 +616,35 @@ urlpatterns = [
         'notifications/mark-all-read/',
         views.mark_all_notifications_read,
         name='mark_all_notifications_read'
+    ),
+
+    path(
+        'marketplace/message/<int:message_id>/delete/',
+        views.delete_marketplace_message,
+        name='delete_marketplace_message'
+    ),
+
+    path(
+        'report-user/<int:user_id>/',
+        views.report_user,
+        name='report_user'
+    ),
+
+    path(
+        'report-user/<int:user_id>/',
+        views.report_user,
+        name='report_user'
+    ),
+
+    path(
+        'worker/messages/<int:hire_id>/delete/',
+        views.delete_worker_conversation,
+        name='delete_worker_conversation'
+    ),
+
+    path(
+        'marketplace/conversation/<int:listing_id>/<int:other_user_id>/delete/',
+        views.delete_marketplace_conversation,
+        name='delete_marketplace_conversation'
     ),
 ]

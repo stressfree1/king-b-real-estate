@@ -915,6 +915,12 @@ class WorkerHire(models.Model):
         blank=True
     )
 
+    conversation_deleted_by = models.ManyToManyField(
+        User,
+        related_name='deleted_worker_conversations',
+        blank=True
+    )
+
     def __str__(self):
         return (
             f"{self.customer.full_name} - "
@@ -954,6 +960,12 @@ class WorkerMessage(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True
     )
+    deleted_by = models.ManyToManyField(
+        User,
+        related_name='deleted_worker_messages',
+        blank=True
+    )
+    
 
     def __str__(self):
 
@@ -1406,6 +1418,11 @@ class MarketplaceMessage(models.Model):
     is_read = models.BooleanField(
         default=False
     )
+    deleted_by = models.ManyToManyField(
+        User,
+        related_name='deleted_marketplace_messages',
+        blank=True
+    )
 
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -1475,12 +1492,12 @@ class MarketplaceReport(models.Model):
             f"{self.listing.title} - "
             f"{self.reason}"
         )
-
 # =========================================================
 # MARKETPLACE SELLER REVIEW
 # =========================================================
 
 class MarketplaceReview(models.Model):
+
     seller = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -1517,28 +1534,31 @@ class MarketplaceReview(models.Model):
 
     is_approved = models.BooleanField(
         default=True
-)
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )
-def __str__(self):
-    seller_name = (
-        self.seller.username
-        if self.seller
-        else 'Unknown Seller'
-    )
 
-    reviewer_name = (
-        self.reviewer.username
-        if self.reviewer
-        else 'Unknown Reviewer'
-    )
+    def __str__(self):
 
-    return (
-        f"{reviewer_name} → "
-        f"{seller_name} "
-        f"({self.rating} Stars)"
-    )
+        seller_name = (
+            self.seller.username
+            if self.seller
+            else 'Unknown Seller'
+        )
+
+        reviewer_name = (
+            self.reviewer.username
+            if self.reviewer
+            else 'Unknown Reviewer'
+        )
+
+        return (
+            f"{reviewer_name} → "
+            f"{seller_name} "
+            f"({self.rating} Stars)"
+        )
 # =========================================================
 # MARKETPLACE LISTING VIEW
 # =========================================================
@@ -1632,3 +1652,124 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.recipient.email} - {self.title}"
+
+
+# =========================================================
+# USER REPORT
+# =========================================================
+
+class UserReport(models.Model):
+
+    REASON_CHOICES = [
+        ('fraud', 'Fraud / Scam'),
+        ('harassment', 'Harassment or Abuse'),
+        ('fake_profile', 'Fake Profile'),
+        ('misleading', 'Misleading Information'),
+        ('inappropriate', 'Inappropriate Behaviour'),
+        ('spam', 'Spam'),
+        ('unsafe', 'Safety Concern'),
+        ('other', 'Other'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('reviewing', 'Under Review'),
+        ('resolved', 'Resolved'),
+        ('dismissed', 'Dismissed'),
+    ]
+
+    reporter = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='user_reports_made'
+    )
+
+    reported_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='user_reports_received'
+    )
+
+    reason = models.CharField(
+        max_length=50,
+        choices=REASON_CHOICES
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+
+        return (
+            f"{self.reporter.username} reported "
+            f"{self.reported_user.username} "
+            f"- {self.reason}"
+        )
+
+    class Meta:
+
+        ordering = ['-created_at']
+
+# =========================================================
+# MARKETPLACE CONVERSATION DELETION
+# =========================================================
+
+class MarketplaceConversationDeletion(models.Model):
+
+    listing = models.ForeignKey(
+        MarketplaceListing,
+        on_delete=models.CASCADE,
+        related_name='conversation_deletions'
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='deleted_marketplace_conversations'
+    )
+
+    other_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='marketplace_conversations_deleted_by_others'
+    )
+
+    deleted_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'listing',
+                    'user',
+                    'other_user',
+                ],
+                name='unique_marketplace_conversation_deletion'
+            )
+        ]
+
+        ordering = ['-deleted_at']
+
+    def __str__(self):
+        return (
+            f'Conversation deleted by '
+            f'{self.user.username} '
+            f'on listing #{self.listing.id}'
+        )

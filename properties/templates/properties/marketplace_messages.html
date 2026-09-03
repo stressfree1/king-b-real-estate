@@ -188,8 +188,6 @@
     border-bottom:
         1px solid #edf0ee;
 
-    text-decoration: none;
-
     color: inherit;
 
     transition:
@@ -333,6 +331,105 @@
 
 
 /* =========================================================
+   CONVERSATION LINK
+========================================================= */
+
+.conversation-open-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-top: 10px;
+
+    padding: 8px 13px;
+
+    border-radius: 8px;
+
+    background: #123c2f;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+
+.conversation-open-link:hover {
+    background: #b58b3b;
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CONVERSATION ACTIONS
+========================================================= */
+
+.conversation-actions {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   DELETE CONVERSATION BUTTON
+========================================================= */
+
+.delete-conversation-button {
+    border: none;
+
+    padding: 8px 13px;
+
+    border-radius: 8px;
+
+    background: #a52a2a;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+
+.delete-conversation-button:hover {
+    background: #7d1f1f;
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
    UNREAD
 ========================================================= */
 
@@ -423,6 +520,46 @@
    MOBILE
 ========================================================= */
 
+@media (max-width: 750px) {
+
+    .conversation {
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+
+    .conversation-avatar {
+        width: 46px;
+
+        height: 46px;
+
+        border-radius: 13px;
+    }
+
+
+    .conversation-content {
+        width: calc(100% - 62px);
+    }
+
+
+    .conversation-actions {
+        width: 100%;
+
+        flex-direction: row;
+
+        align-items: center;
+
+        justify-content: flex-start;
+
+        margin-left: 62px;
+
+        padding-top: 2px;
+    }
+
+}
+
+
 @media (max-width: 650px) {
 
     .messages-page {
@@ -466,12 +603,24 @@
     }
 
 
-    .conversation-avatar {
-        width: 46px;
+    .conversation-actions {
+        margin-left: 62px;
 
-        height: 46px;
+        flex-direction: column;
 
-        border-radius: 13px;
+        align-items: stretch;
+
+        width: calc(100% - 62px);
+    }
+
+
+    .conversation-open-link,
+    .delete-conversation-button {
+        width: 100%;
+
+        box-sizing: border-box;
+
+        text-align: center;
     }
 
 }
@@ -481,258 +630,302 @@
 
 <section class="messages-page">
 
-<div class="messages-container">
+    <div class="messages-container">
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
 
-    <div class="messages-header">
+        <div class="messages-header">
 
-        <h1>
-            Marketplace Messages
-        </h1>
+            <h1>
+                Marketplace Messages
+            </h1>
 
-        <p>
-            View and continue your conversations with
-            buyers and sellers on the King B marketplace.
-        </p>
-
-    </div>
-
-
-    <!-- =====================================================
-         STATISTICS
-    ====================================================== -->
-
-    <div class="message-stats">
-
-
-        <!-- CONVERSATIONS -->
-
-        <div class="message-stat">
-
-            <div class="message-stat-label">
-                Conversations
-            </div>
-
-            <div class="message-stat-number">
-
-                {{ total_conversations|default:"0" }}
-
-            </div>
+            <p>
+                View and continue your conversations with
+                buyers and sellers on the King B marketplace.
+            </p>
 
         </div>
 
 
-        <!-- UNREAD -->
+        <!-- =====================================================
+             STATISTICS
+        ====================================================== -->
 
-        <div class="message-stat">
+        <div class="message-stats">
 
-            <div class="message-stat-label">
-                Unread Messages
+
+            <!-- CONVERSATIONS -->
+
+            <div class="message-stat">
+
+                <div class="message-stat-label">
+                    Conversations
+                </div>
+
+                <div class="message-stat-number">
+
+                    {{ total_conversations|default:"0" }}
+
+                </div>
+
             </div>
 
-            <div class="message-stat-number">
 
-                {{ unread_messages|default:"0" }}
+            <!-- UNREAD -->
+
+            <div class="message-stat">
+
+                <div class="message-stat-label">
+                    Unread Messages
+                </div>
+
+                <div class="message-stat-number">
+
+                    {{ unread_messages|default:"0" }}
+
+                </div>
 
             </div>
+
 
         </div>
 
 
-    </div>
+        <!-- =====================================================
+             INBOX
+        ====================================================== -->
+
+        <div class="inbox-card">
 
 
-    <!-- =====================================================
-         INBOX
-    ====================================================== -->
+            <div class="inbox-title">
 
-    <div class="inbox-card">
+                <h2>
+                    My Conversations
+                </h2>
 
-
-        <div class="inbox-title">
-
-            <h2>
-                My Conversations
-            </h2>
-
-        </div>
+            </div>
 
 
-        {% if conversations %}
+            {% if conversations %}
 
 
-            {% for conversation in conversations %}
+                {% for conversation in conversations %}
 
 
-                <!-- =================================================
-                     CONVERSATION
-                ================================================== -->
+                    <!-- =================================================
+                         CONVERSATION
+                    ================================================== -->
 
-                <a
-                    href="{{ conversation.chat_url }}"
-                    class="
-                        conversation
-                        {% if conversation.unread_count %}
-                            conversation-unread
-                        {% endif %}
-                    "
-                >
-
-
-                    <!-- =============================================
-                         AVATAR
-                    ============================================== -->
-
-                    <div class="conversation-avatar">
-
-                        {% if conversation.other_user.first_name %}
-
-                            {{ conversation.other_user.first_name|first|upper }}
-
-                        {% else %}
-
-                            {{ conversation.other_user.username|first|upper }}
-
-                        {% endif %}
-
-                    </div>
+                    <div
+                        class="
+                            conversation
+                            {% if conversation.unread_count %}
+                                conversation-unread
+                            {% endif %}
+                        "
+                    >
 
 
-                    <!-- =============================================
-                         CONTENT
-                    ============================================== -->
+                        <!-- =============================================
+                             AVATAR
+                        ============================================== -->
 
-                    <div class="conversation-content">
+                        <div class="conversation-avatar">
 
+                            {% if conversation.other_user.first_name %}
 
-                        <div class="conversation-top">
-
-
-                            <!-- OTHER USER -->
-
-                            <div class="other-user-name">
-
-                                {% if conversation.other_user.get_full_name %}
-
-                                    {{ conversation.other_user.get_full_name }}
-
-                                {% else %}
-
-                                    {{ conversation.other_user.username }}
-
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- TIME -->
-
-                            <div class="message-time">
-
-                                {{ conversation.latest_message.created_at|date:"M d · g:i A" }}
-
-                            </div>
-
-
-                        </div>
-
-
-                        <!-- =========================================
-                             ADVERTISEMENT
-                        ========================================== -->
-
-                        <div class="listing-name">
-
-                            {{ conversation.listing.title }}
-
-                        </div>
-
-
-                        <!-- =========================================
-                             LAST MESSAGE
-                        ========================================== -->
-
-                        <div class="latest-message">
-
-                            {% if conversation.latest_message.sender_id == request.user.id %}
-
-                                You:
-                                {{ conversation.latest_message.message }}
+                                {{ conversation.other_user.first_name|first|upper }}
 
                             {% else %}
 
-                                {{ conversation.latest_message.message }}
+                                {{ conversation.other_user.username|first|upper }}
 
                             {% endif %}
 
                         </div>
 
 
-                    </div>
+                        <!-- =============================================
+                             CONTENT
+                        ============================================== -->
+
+                        <div class="conversation-content">
 
 
-                    <!-- =============================================
-                         UNREAD COUNT
-                    ============================================== -->
+                            <div class="conversation-top">
 
-                    {% if conversation.unread_count %}
 
-                        <div class="unread-badge">
+                                <!-- OTHER USER -->
 
-                            {{ conversation.unread_count }}
+                                <div class="other-user-name">
+
+                                    {% if conversation.other_user.get_full_name %}
+
+                                        {{ conversation.other_user.get_full_name }}
+
+                                    {% else %}
+
+                                        {{ conversation.other_user.username }}
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- TIME -->
+
+                                <div class="message-time">
+
+                                    {{ conversation.latest_message.created_at|date:"M d · g:i A" }}
+
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- =========================================
+                                 LISTING
+                            ========================================== -->
+
+                            <div class="listing-name">
+
+                                {{ conversation.listing.title }}
+
+                            </div>
+
+
+                            <!-- =========================================
+                                 LAST MESSAGE
+                            ========================================== -->
+
+                            <div class="latest-message">
+
+                                {% if conversation.latest_message.sender_id == request.user.id %}
+
+                                    You:
+                                    {{ conversation.latest_message.message }}
+
+                                {% else %}
+
+                                    {{ conversation.latest_message.message }}
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- =========================================
+                                 OPEN CONVERSATION
+                            ========================================== -->
+
+                            <a
+                                href="{{ conversation.chat_url }}"
+                                class="conversation-open-link"
+                            >
+                                💬 Open Conversation
+                            </a>
+
 
                         </div>
 
-                    {% endif %}
+
+                        <!-- =============================================
+                             ACTIONS
+                        ============================================== -->
+
+                        <div class="conversation-actions">
 
 
-                </a>
+                            <!-- =========================================
+                                 UNREAD COUNT
+                            ========================================== -->
+
+                            {% if conversation.unread_count %}
+
+                                <div class="unread-badge">
+
+                                    {{ conversation.unread_count }}
+
+                                </div>
+
+                            {% endif %}
 
 
-            {% endfor %}
+                            <!-- =========================================
+                                 DELETE CONVERSATION
+                                 FOR CURRENT USER ONLY
+                            ========================================== -->
+
+                            <form
+                                method="POST"
+                                action="{{ conversation.delete_url }}"
+                                onsubmit="return confirm('Are you sure you want to delete this conversation from your messages? The other person will still be able to see the conversation.');"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="delete-conversation-button"
+                                >
+                                    🗑 Delete Conversation
+                                </button>
+
+                            </form>
 
 
-        {% else %}
+                        </div>
 
 
-            <!-- =================================================
-                 EMPTY STATE
-            ================================================== -->
-
-            <div class="empty-state">
+                    </div>
 
 
-                <div class="empty-icon">
-                    💬
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <!-- =================================================
+                     EMPTY STATE
+                ================================================== -->
+
+                <div class="empty-state">
+
+
+                    <div class="empty-icon">
+                        💬
+                    </div>
+
+
+                    <h3>
+                        No conversations yet
+                    </h3>
+
+
+                    <p>
+                        Your marketplace conversations will appear
+                        here when you contact a seller or a buyer
+                        contacts you about an advertisement.
+                    </p>
+
+
                 </div>
 
 
-                <h3>
-                    No conversations yet
-                </h3>
+            {% endif %}
 
 
-                <p>
-                    Your marketplace conversations will appear
-                    here when you contact a seller or a buyer
-                    contacts you about an advertisement.
-                </p>
-
-
-            </div>
-
-
-        {% endif %}
+        </div>
 
 
     </div>
-
-
-</div>
 
 </section>
 

@@ -23,7 +23,8 @@ from .models import (
     MarketplaceReport,
     MarketplaceReview,
     AccountSettings,
-    MarketplaceListingImage,
+    MarketplaceListingImage,\
+    UserReport,
 )
 
 from .notification_utils import create_notification
@@ -1291,3 +1292,78 @@ def kingb_admin_index(request, extra_context=None):
 
 
 admin.site.index = kingb_admin_index
+
+# =========================================================
+# USER REPORTS
+# =========================================================
+
+@admin.register(UserReport)
+class UserReportAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'id',
+        'reporter',
+        'reported_user',
+        'reason',
+        'status',
+        'created_at',
+        'updated_at',
+    )
+
+    list_filter = (
+        'status',
+        'reason',
+        'created_at',
+    )
+
+    search_fields = (
+        'reporter__username',
+        'reporter__email',
+        'reported_user__username',
+        'reported_user__email',
+        'description',
+    )
+
+    ordering = (
+        '-created_at',
+    )
+
+    readonly_fields = (
+        'reporter',
+        'reported_user',
+        'reason',
+        'description',
+        'created_at',
+        'updated_at',
+    )
+
+    fieldsets = (
+        (
+            'Report Information',
+            {
+                'fields': (
+                    'reporter',
+                    'reported_user',
+                    'reason',
+                    'description',
+                )
+            }
+        ),
+        (
+            'Report Status',
+            {
+                'fields': (
+                    'status',
+                )
+            }
+        ),
+        (
+            'System Information',
+            {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                )
+            }
+        ),
+    )

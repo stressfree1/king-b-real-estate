@@ -593,6 +593,68 @@
 
 
 /* =========================================================
+   REPORT USER
+========================================================= */
+
+.chat-report-user {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        5px;
+
+    margin-top:
+        7px;
+
+    padding:
+        5px 8px;
+
+    border:
+        1px solid rgba(255,255,255,.14);
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    color:
+        rgba(255,255,255,.72);
+
+    text-decoration:
+        none;
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        border-color .18s ease;
+}
+
+
+.chat-report-user:hover {
+
+    background:
+        rgba(255,255,255,.12);
+
+    color:
+        #ffffff;
+
+    border-color:
+        rgba(255,255,255,.25);
+}
+
+
+/* =========================================================
    HEADER STATUS
 ========================================================= */
 
@@ -849,7 +911,7 @@
         flex;
 
     margin-bottom:
-        4px;
+        8px;
 
     box-sizing:
         border-box;
@@ -871,6 +933,24 @@
 
 
 /* =========================================================
+   MESSAGE WRAPPER
+========================================================= */
+
+.message-wrapper {
+
+    width:
+        fit-content;
+
+    max-width:
+        min(
+            70%,
+            560px
+        );
+
+}
+
+
+/* =========================================================
    MESSAGE BUBBLE
 ========================================================= */
 
@@ -886,10 +966,7 @@
         fit-content;
 
     max-width:
-        min(
-            70%,
-            560px
-        );
+        100%;
 
     padding:
         7px 10px 5px;
@@ -1003,6 +1080,88 @@
 
     white-space:
         nowrap;
+}
+
+
+/* =========================================================
+   MESSAGE ACTIONS
+========================================================= */
+
+.message-actions {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        8px;
+
+    margin-top:
+        4px;
+
+}
+
+
+.message-action-form {
+
+    margin:
+        0;
+
+    padding:
+        0;
+}
+
+
+.message-action-button {
+
+    border:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        #7a867f;
+
+    opacity:
+        .65;
+
+    padding:
+        2px 0;
+
+    font-family:
+        inherit;
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        opacity .18s ease,
+        color .18s ease;
+}
+
+
+.message-action-button:hover {
+
+    opacity:
+        1;
+
+    color:
+        #b58b3b;
+
+    text-decoration:
+        underline;
 }
 
 
@@ -1655,6 +1814,16 @@
     }
 
 
+    .chat-report-user {
+
+        font-size:
+            7px;
+
+        padding:
+            4px 7px;
+    }
+
+
     .chat-status-badge {
 
         padding:
@@ -1672,10 +1841,14 @@
     }
 
 
-    .message {
+    .message-wrapper {
 
         max-width:
             82%;
+    }
+
+
+    .message {
 
         padding:
             6px 9px 5px;
@@ -1696,6 +1869,13 @@
 
 
     .message-time {
+
+        font-size:
+            7px;
+    }
+
+
+    .message-action-button {
 
         font-size:
             7px;
@@ -1773,7 +1953,7 @@
     }
 
 
-    .message {
+    .message-wrapper {
 
         max-width:
             86%;
@@ -1814,7 +1994,7 @@
     }
 
 
-    .message {
+    .message-wrapper {
 
         max-width:
             89%;
@@ -2002,6 +2182,37 @@
                     </div>
 
 
+                    <!-- =================================================
+                         REPORT USER
+                    ================================================== -->
+
+                    {% if request.user == listing.seller %}
+
+                        <a
+                            href="{% url 'report_user' other_user.id %}"
+                            class="chat-report-user"
+                            onclick="return confirm('Are you sure you want to report this user?');"
+                        >
+
+                            ⚑ Report User
+
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'report_user' listing.seller.id %}"
+                            class="chat-report-user"
+                            onclick="return confirm('Are you sure you want to report this user?');"
+                        >
+
+                            ⚑ Report User
+
+                        </a>
+
+                    {% endif %}
+
+
                     <a
                         href="{% url 'marketplace_detail' listing.id %}"
                         class="chat-listing-link"
@@ -2109,19 +2320,59 @@
                     "
                 >
 
-                    <div class="message">
+                    <div class="message-wrapper">
 
 
-                        <div class="message-text">
+                        <!-- =========================================
+                             MESSAGE BUBBLE
+                        ========================================== -->
 
-                            {{ chat_message.message }}
+                        <div class="message">
+
+
+                            <div class="message-text">
+
+                                {{ chat_message.message }}
+
+                            </div>
+
+
+                            <div class="message-time">
+
+                                {{ chat_message.created_at|date:"g:i A" }}
+
+                            </div>
+
 
                         </div>
 
 
-                        <div class="message-time">
+                        <!-- =========================================
+                             MESSAGE ACTIONS
+                        ========================================== -->
 
-                            {{ chat_message.created_at|date:"g:i A" }}
+                        <div class="message-actions">
+
+                            <form
+                                method="POST"
+                                action="{% url 'delete_marketplace_message' chat_message.id %}"
+                                class="message-action-form"
+                                onsubmit="return confirm('Delete this message from your side?');"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="message-action-button"
+                                    title="Delete this message from your side"
+                                >
+
+                                    Delete for me
+
+                                </button>
+
+                            </form>
 
                         </div>
 
@@ -2446,7 +2697,7 @@ document.addEventListener(
 
         /* =====================================================
            ENTER TO SEND
-           
+
            SHIFT + ENTER = NEW LINE
         ===================================================== */
 
