@@ -6872,14 +6872,14 @@ def report_user(request, user_id):
             )
         )
 
-    # =====================================================
+    #    # =====================================================
     # SHOW REPORT FORM
     # =====================================================
 
     return render(
         request,
         'properties/report_user.html',
-        site_register
+        {
             'reported_user': reported_user,
             'reasons': UserReport.REASON_CHOICES,
         }
