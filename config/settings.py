@@ -320,6 +320,8 @@ EMAIL_USE_TLS = (
     ).lower() == "true"
 )
 
+EMAIL_TIMEOUT = 20
+
 
 EMAIL_HOST_USER = os.environ.get(
     "EMAIL_HOST_USER",
