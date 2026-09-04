@@ -1433,7 +1433,6 @@ def my_listing_detail(
 # =========================================================
 # UNIFIED SITE REGISTRATION
 # =========================================================
-
 def site_register(request):
 
     if request.user.is_authenticated:
@@ -1541,13 +1540,41 @@ def site_register(request):
                     )
 
                     # -----------------------------------------
-                    # SEND VERIFICATION EMAIL
+                    # BREVO API EMAIL
                     # -----------------------------------------
 
-                    send_mail(
-                        subject='Verify Your King B Account',
+                    import json
+                    import urllib.request
+                    import urllib.error
 
-                        message=(
+                    brevo_api_key = os.environ.get(
+                        'BREVO_API_KEY'
+                    )
+
+                    if not brevo_api_key:
+
+                        raise Exception(
+                            'BREVO_API_KEY is not configured.'
+                        )
+
+                    email_payload = {
+                        'sender': {
+                            'name': 'King B Real Estate',
+                            'email': 'hello@kingbrealestate.com',
+                        },
+
+                        'to': [
+                            {
+                                'email': email,
+                                'name': full_name,
+                            }
+                        ],
+
+                        'subject': (
+                            'Verify Your King B Account'
+                        ),
+
+                        'textContent': (
                             f'Hello {full_name},\n\n'
 
                             f'Thank you for creating your '
@@ -1567,13 +1594,68 @@ def site_register(request):
 
                             f'King B Real Estate & Construction Ltd'
                         ),
+                    }
 
-                        from_email=None,
+                    request_data = json.dumps(
+                        email_payload
+                    ).encode('utf-8')
 
-                        recipient_list=[email],
-
-                        fail_silently=False,
+                    brevo_request = urllib.request.Request(
+                        'https://api.brevo.com/v3/smtp/email',
+                        data=request_data,
+                        method='POST',
+                        headers={
+                            'accept': 'application/json',
+                            'api-key': brevo_api_key,
+                            'content-type': 'application/json',
+                        },
                     )
+
+                    try:
+
+                        with urllib.request.urlopen(
+                            brevo_request,
+                            timeout=20
+                        ) as response:
+
+                            response_body = (
+                                response.read()
+                                .decode('utf-8')
+                            )
+
+                            print(
+                                'BREVO EMAIL SENT:',
+                                response.status,
+                                response_body
+                            )
+
+                    except urllib.error.HTTPError as e:
+
+                        error_body = (
+                            e.read()
+                            .decode('utf-8')
+                        )
+
+                        print(
+                            'BREVO API ERROR:',
+                            e.code,
+                            error_body
+                        )
+
+                        raise Exception(
+                            f'Brevo API error {e.code}'
+                        )
+
+                    except urllib.error.URLError as e:
+
+                        print(
+                            'BREVO CONNECTION ERROR:',
+                            repr(e)
+                        )
+
+                        raise Exception(
+                            'Could not connect to Brevo.'
+                        )
 
                 # =================================================
                 # ONLY REACHES HERE IF EVERYTHING SUCCEEDED
@@ -1601,8 +1683,7 @@ def site_register(request):
                     (
                         'We could not complete your registration '
                         'because the verification email could not '
-                        'be sent. Please check your email address '
-                        'or try again later.'
+                        'be sent. Please try again later.'
                     )
                 )
 
@@ -6798,7 +6879,7 @@ def report_user(request, user_id):
     return render(
         request,
         'properties/report_user.html',
-        {
+        site_register
             'reported_user': reported_user,
             'reasons': UserReport.REASON_CHOICES,
         }
