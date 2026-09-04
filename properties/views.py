@@ -22,6 +22,7 @@ from django.http import HttpResponseForbidden
 from django.core.mail import send_mail
 from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
+import os
 from django.contrib.auth.hashers import (
     make_password,
     check_password,
