@@ -2,6 +2,16 @@ from django import forms
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 
+import os
+import json
+import urllib.request
+import urllib.error
+
+from django.contrib.auth.tokens import default_token_generator
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+
 from .models import (
     AccountSettings,
     JobApplicant,
@@ -667,6 +677,12 @@ class CustomerForm(forms.ModelForm):
 # =========================================================
 # UNIVERSAL PASSWORD RESET
 # =========================================================
+# =========================================================
+# UNIVERSAL PASSWORD RESET — BREVO
+# =========================================================
+# =========================================================
+# UNIVERSAL PASSWORD RESET — BREVO
+# =========================================================
 
 class UniversalPasswordResetForm(PasswordResetForm):
 
@@ -682,9 +698,214 @@ class UniversalPasswordResetForm(PasswordResetForm):
         for user in users:
 
             if user.has_usable_password():
-
                 yield user
-                
+
+    def save(
+        self,
+        domain_override=None,
+        subject_template_name=None,
+        use_https=False,
+        token_generator=default_token_generator,
+        from_email=None,
+        request=None,
+        html_email_template_name=None,
+        extra_email_context=None,
+    ):
+
+        email = self.cleaned_data["email"].strip().lower()
+
+        brevo_api_key = os.environ.get("BREVO_API_KEY")
+
+        if not brevo_api_key:
+            raise Exception(
+                "BREVO_API_KEY is not configured."
+            )
+
+        for user in self.get_users(email):
+
+            uid = urlsafe_base64_encode(
+                force_bytes(user.pk)
+            )
+
+            token = token_generator.make_token(user)
+
+            reset_url = request.build_absolute_uri(
+                reverse(
+                    "account_password_reset_confirm",
+                    kwargs={
+                        "uidb64": uid,
+                        "token": token,
+                    },
+                )
+            )
+
+            user_name = (
+                user.first_name.strip()
+                if user.first_name
+                else "there"
+            )
+
+            email_payload = {
+                "sender": {
+                    "name": "King B Real Estate",
+                    "email": "hello@kingbrealestate.com",
+                },
+
+                "to": [
+                    {
+                        "email": user.email,
+                        "name": user_name,
+                    }
+                ],
+
+                "subject": (
+                    "Reset Your King B Real Estate Password"
+                ),
+
+                "textContent": (
+                    f"Hello {user_name},\n\n"
+                    "We received a request to reset your "
+                    "King B Real Estate account password.\n\n"
+                    "Click the link below to create a new password:\n\n"
+                    f"{reset_url}\n\n"
+                    "This password reset link will expire "
+                    "after 3 days.\n\n"
+                    "If you did not request a password reset, "
+                    "you can safely ignore this email.\n\n"
+                    "King B Real Estate & Construction Ltd"
+                ),
+
+                "htmlContent": f"""
+                    <div style="
+                        font-family: Arial, sans-serif;
+                        line-height: 1.6;
+                    ">
+
+                        <h2>
+                            Reset Your King B Real Estate Password
+                        </h2>
+
+                        <p>
+                            Hello {user_name},
+                        </p>
+
+                        <p>
+                            We received a request to reset your
+                            King B Real Estate account password.
+                        </p>
+
+                        <p>
+                            Click the button below to create
+                            a new password:
+                        </p>
+
+                        <p>
+                            <a href="{reset_url}"
+                               style="
+                                   display:inline-block;
+                                   padding:12px 20px;
+                                   background:#123c2f;
+                                   color:#ffffff;
+                                   text-decoration:none;
+                                   border-radius:6px;
+                               ">
+                                Reset My Password
+                            </a>
+                        </p>
+
+                        <p>
+                            Or copy and paste this link into
+                            your browser:
+                        </p>
+
+                        <p>
+                            {reset_url}
+                        </p>
+
+                        <p>
+                            This password reset link will expire
+                            after 3 days.
+                        </p>
+
+                        <p>
+                            If you did not request a password reset,
+                            you can safely ignore this email.
+                        </p>
+
+                        <p>
+                            <strong>
+                                King B Real Estate &
+                                Construction Ltd
+                            </strong>
+                        </p>
+
+                    </div>
+                """,
+            }
+
+            request_data = json.dumps(
+                email_payload
+            ).encode("utf-8")
+
+            brevo_request = urllib.request.Request(
+                "https://api.brevo.com/v3/smtp/email",
+                data=request_data,
+                method="POST",
+                headers={
+                    "accept": "application/json",
+                    "api-key": brevo_api_key,
+                    "content-type": "application/json",
+                },
+            )
+
+            try:
+
+                with urllib.request.urlopen(
+                    brevo_request,
+                    timeout=20
+                ) as response:
+
+                    response_body = (
+                        response.read()
+                        .decode("utf-8")
+                    )
+
+                    print(
+                        "PASSWORD RESET EMAIL SENT:",
+                        response.status,
+                        response_body
+                    )
+
+            except urllib.error.HTTPError as e:
+
+                error_body = (
+                    e.read()
+                    .decode("utf-8")
+                )
+
+                print(
+                    "BREVO PASSWORD RESET ERROR:",
+                    e.code,
+                    error_body
+                )
+
+                raise Exception(
+                    f"Brevo API error {e.code}"
+                )
+
+            except urllib.error.URLError as e:
+
+                print(
+                    "BREVO PASSWORD RESET CONNECTION ERROR:",
+                    repr(e)
+                )
+
+                raise Exception(
+                    "Could not connect to Brevo."
+                )
+
+            # Only one email should be sent.
+            break
 # =========================================================
 # MARKETPLACE LISTING
 # =========================================================
