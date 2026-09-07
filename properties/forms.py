@@ -704,6 +704,7 @@ class UniversalPasswordResetForm(PasswordResetForm):
         self,
         domain_override=None,
         subject_template_name=None,
+        email_template_name=None,
         use_https=False,
         token_generator=default_token_generator,
         from_email=None,
