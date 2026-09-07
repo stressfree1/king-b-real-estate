@@ -12203,3 +12203,356 @@ header nav {
         inset 0 1px 2px rgba(255, 255, 255, 0.2);
 }
 
+/* =========================================================
+   REAL-TIME NOTIFICATION POPUP
+========================================================= */
+
+.kb-live-notifications {
+
+    position: fixed;
+
+    top: 105px;
+
+    right: 28px;
+
+    width: min(390px, calc(100vw - 30px));
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    z-index: 999998;
+
+    pointer-events: none;
+
+}
+
+
+.kb-live-notification {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding: 17px 17px 17px 15px;
+
+    background:
+        rgba(255,255,255,.97);
+
+    border:
+        1px solid
+        rgba(199,161,90,.28);
+
+    border-left:
+        4px solid
+        var(--kb-gold);
+
+    border-radius:
+        15px;
+
+    box-shadow:
+        0 25px 65px
+        rgba(7,30,22,.20);
+
+    backdrop-filter:
+        blur(16px);
+
+    -webkit-backdrop-filter:
+        blur(16px);
+
+    pointer-events:
+        auto;
+
+    cursor:
+        pointer;
+
+    opacity:
+        0;
+
+    transform:
+        translateX(35px)
+        scale(.96);
+
+    animation:
+        kbLiveNotificationIn .4s ease forwards;
+
+}
+
+
+.kb-live-notification.removing {
+
+    animation:
+        kbLiveNotificationOut .3s ease forwards;
+
+}
+
+
+.kb-live-notification-icon {
+
+    width:
+        39px;
+
+    height:
+        39px;
+
+    min-width:
+        39px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        11px;
+
+    background:
+        var(--kb-green);
+
+    color:
+        var(--kb-gold-light);
+
+    font-size:
+        17px;
+
+    font-weight:
+        800;
+
+}
+
+
+.kb-live-notification-content {
+
+    min-width:
+        0;
+
+    flex:
+        1;
+
+}
+
+
+.kb-live-notification-label {
+
+    display:
+        block;
+
+    margin-bottom:
+        3px;
+
+    color:
+        var(--kb-gold);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.5px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.kb-live-notification-title {
+
+    margin:
+        0 0 4px;
+
+    color:
+        var(--kb-green);
+
+    font-family:
+        var(--kb-serif);
+
+    font-size:
+        15px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.25;
+
+}
+
+
+.kb-live-notification-message {
+
+    margin:
+        0;
+
+    color:
+        var(--kb-muted);
+
+    font-size:
+        11px;
+
+    line-height:
+        1.55;
+
+    display:
+        -webkit-box;
+
+    -webkit-line-clamp:
+        2;
+
+    -webkit-box-orient:
+        vertical;
+
+    overflow:
+        hidden;
+
+}
+
+
+.kb-live-notification-close {
+
+    width:
+        25px;
+
+    height:
+        25px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        transparent;
+
+    color:
+        #8b9690;
+
+    font-size:
+        17px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.kb-live-notification-close:hover {
+
+    background:
+        #f1f4f2;
+
+    color:
+        var(--kb-green);
+
+}
+
+
+@keyframes kbLiveNotificationIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateX(35px)
+            scale(.96);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateX(0)
+            scale(1);
+
+    }
+
+}
+
+
+@keyframes kbLiveNotificationOut {
+
+    from {
+
+        opacity:
+            1;
+
+        transform:
+            translateX(0)
+            scale(1);
+
+    }
+
+    to {
+
+        opacity:
+            0;
+
+        transform:
+            translateX(35px)
+            scale(.96);
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE LIVE NOTIFICATIONS
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .kb-live-notifications {
+
+        top:
+            82px;
+
+        right:
+            15px;
+
+        left:
+            15px;
+
+        width:
+            auto;
+
+    }
+
+    .kb-live-notification {
+
+        padding:
+            14px;
+
+    }
+
+}

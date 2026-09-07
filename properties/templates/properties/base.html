@@ -65,6 +65,17 @@
 
 <body>
 
+{% if request.user.is_authenticated %}
+
+<div
+    class="kb-live-notifications"
+    id="kbLiveNotifications"
+    aria-live="polite"
+    aria-atomic="false"
+></div>
+
+{% endif %}
+
 
 <!-- =========================================================
      PAGE LOADER
@@ -5867,7 +5878,533 @@ document.addEventListener(
 );
 
 </script>
+{% if request.user.is_authenticated %}
 
+<script>
+
+(function () {
+
+    'use strict';
+
+
+    /* =====================================================
+       KING B REAL-TIME NOTIFICATIONS
+    ====================================================== */
+
+    const notificationContainer =
+        document.getElementById('kbLiveNotifications');
+
+
+    if (!notificationContainer) {
+        return;
+    }
+
+
+    const notificationUrl =
+        "{% url 'notification_updates' %}";
+
+
+    /*
+        We use the server's timestamp rather than the
+        user's computer clock.
+    */
+
+    let lastServerTime = null;
+
+
+    /*
+        Prevent the same notification from being displayed
+        twice during the current browser session.
+    */
+
+    const shownNotifications =
+        new Set();
+
+
+    /* =====================================================
+       UPDATE NOTIFICATION BADGE
+    ====================================================== */
+
+    function updateNotificationBadge(unreadCount) {
+
+        const notificationButtons =
+            document.querySelectorAll(
+                '.kb-notification-button'
+            );
+
+
+        notificationButtons.forEach(function (button) {
+
+            let badge =
+                button.querySelector(
+                    '.kb-notification-badge'
+                );
+
+
+            if (unreadCount > 0) {
+
+                if (!badge) {
+
+                    badge =
+                        document.createElement('span');
+
+                    badge.className =
+                        'kb-notification-badge';
+
+                    button.appendChild(badge);
+
+                }
+
+
+                badge.textContent =
+                    unreadCount > 9
+                        ? '9+'
+                        : unreadCount;
+
+
+                badge.setAttribute(
+                    'aria-label',
+                    unreadCount +
+                    ' unread notifications'
+                );
+
+
+            } else {
+
+                if (badge) {
+                    badge.remove();
+                }
+
+            }
+
+        });
+
+
+        /*
+            Update the mobile notification text.
+        */
+
+        const mobileNotificationLinks =
+            document.querySelectorAll(
+                '.kb-mobile-account[href*="notifications"]'
+            );
+
+
+        mobileNotificationLinks.forEach(function (link) {
+
+            const baseText = 'Notifications';
+
+
+            if (unreadCount > 0) {
+
+                link.textContent =
+                    baseText +
+                    ' (' +
+                    unreadCount +
+                    ')';
+
+            } else {
+
+                link.textContent =
+                    baseText;
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       NOTIFICATION ICON
+    ====================================================== */
+
+    function getNotificationIcon(type) {
+
+        switch (type) {
+
+            case 'marketplace_message':
+                return '◇';
+
+            case 'worker_message':
+                return '✉';
+
+            case 'customer_message':
+                return '✉';
+
+            case 'hire_request':
+                return '↗';
+
+            case 'hire_accepted':
+                return '✓';
+
+            case 'hire_declined':
+                return '×';
+
+            case 'hire_cancelled':
+                return '×';
+
+            case 'review':
+                return '★';
+
+            case 'listing_approved':
+                return '✓';
+
+            case 'listing_rejected':
+                return '!';
+
+            case 'account_approved':
+                return '✓';
+
+            case 'account_rejected':
+                return '!';
+
+            case 'job_completed':
+                return '✓';
+
+            default:
+                return '•';
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CREATE POPUP
+    ====================================================== */
+
+    function showNotification(notification) {
+
+        if (
+            shownNotifications.has(
+                notification.id
+            )
+        ) {
+            return;
+        }
+
+
+        shownNotifications.add(
+            notification.id
+        );
+
+
+        const popup =
+            document.createElement('div');
+
+        popup.className =
+            'kb-live-notification';
+
+
+        const icon =
+            document.createElement('div');
+
+        icon.className =
+            'kb-live-notification-icon';
+
+        icon.textContent =
+            getNotificationIcon(
+                notification.type
+            );
+
+
+        const content =
+            document.createElement('div');
+
+        content.className =
+            'kb-live-notification-content';
+
+
+        const label =
+            document.createElement('span');
+
+        label.className =
+            'kb-live-notification-label';
+
+        label.textContent =
+            'KING B NOTIFICATION';
+
+
+        const title =
+            document.createElement('h4');
+
+        title.className =
+            'kb-live-notification-title';
+
+        title.textContent =
+            notification.title;
+
+
+        const message =
+            document.createElement('p');
+
+        message.className =
+            'kb-live-notification-message';
+
+        message.textContent =
+            notification.message;
+
+
+        content.appendChild(label);
+        content.appendChild(title);
+        content.appendChild(message);
+
+
+        const closeButton =
+            document.createElement('button');
+
+        closeButton.type =
+            'button';
+
+        closeButton.className =
+            'kb-live-notification-close';
+
+        closeButton.setAttribute(
+            'aria-label',
+            'Close notification'
+        );
+
+        closeButton.textContent =
+            '×';
+
+
+        closeButton.addEventListener(
+            'click',
+            function (event) {
+
+                event.stopPropagation();
+
+                removeNotification(popup);
+
+            }
+        );
+
+
+        popup.appendChild(icon);
+        popup.appendChild(content);
+        popup.appendChild(closeButton);
+
+
+        /*
+            Clicking the popup opens the notification link.
+        */
+
+        popup.addEventListener(
+            'click',
+            function () {
+
+                if (notification.link) {
+
+                    window.location.href =
+                        notification.link;
+
+                } else {
+
+                    window.location.href =
+                        "{% url 'notifications' %}";
+
+                }
+
+            }
+        );
+
+
+        notificationContainer.prepend(
+            popup
+        );
+
+
+        /*
+            Automatically remove after 8 seconds.
+        */
+
+        setTimeout(
+            function () {
+
+                removeNotification(
+                    popup
+                );
+
+            },
+            8000
+        );
+
+    }
+
+
+    /* =====================================================
+       REMOVE POPUP
+    ====================================================== */
+
+    function removeNotification(popup) {
+
+        if (!popup) {
+            return;
+        }
+
+
+        if (
+            popup.classList.contains(
+                'removing'
+            )
+        ) {
+            return;
+        }
+
+
+        popup.classList.add(
+            'removing'
+        );
+
+
+        setTimeout(
+            function () {
+
+                if (popup.parentNode) {
+
+                    popup.parentNode.removeChild(
+                        popup
+                    );
+
+                }
+
+            },
+            300
+        );
+
+    }
+
+
+    /* =====================================================
+       CHECK SERVER
+    ====================================================== */
+
+    async function checkNotifications() {
+
+        try {
+
+            let url =
+                notificationUrl;
+
+
+            if (lastServerTime) {
+
+                url +=
+                    '?since=' +
+                    encodeURIComponent(
+                        lastServerTime
+                    );
+
+            }
+
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With':
+                                'XMLHttpRequest'
+                        },
+                        credentials: 'same-origin',
+                        cache: 'no-store'
+                    }
+                );
+
+
+            if (!response.ok) {
+                return;
+            }
+
+
+            const data =
+                await response.json();
+
+
+            /*
+                Always update the badge.
+            */
+
+            updateNotificationBadge(
+                data.unread_count
+            );
+
+
+            /*
+                Show only notifications that appeared
+                after this page started monitoring.
+            */
+
+            if (Array.isArray(data.notifications)) {
+
+                data.notifications.forEach(
+                    function (notification) {
+
+                        showNotification(
+                            notification
+                        );
+
+                    }
+                );
+
+            }
+
+
+            /*
+                Save server time for the next request.
+            */
+
+            if (data.server_time) {
+
+                lastServerTime =
+                    data.server_time;
+
+            }
+
+        }
+
+        catch (error) {
+
+            /*
+                Silently ignore temporary network errors.
+
+                The next polling cycle will try again.
+            */
+
+            console.debug(
+                'King B notification check failed.',
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       INITIAL CHECK
+    ====================================================== */
+
+    checkNotifications();
+
+
+    /* =====================================================
+       BACKGROUND POLLING
+    ====================================================== */
+
+    setInterval(
+        checkNotifications,
+        5000
+    );
+
+
+})();
+
+</script>
+
+{% endif %}
 
 </body>
 

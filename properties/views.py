@@ -6613,6 +6613,51 @@ def notifications(request):
         }
     )
 
+@login_required(login_url='site_login')
+def notification_updates(request):
+
+    since = request.GET.get('since')
+
+    new_notifications = []
+
+    if since:
+        try:
+            since_datetime = timezone.datetime.fromisoformat(
+                since.replace('Z', '+00:00')
+            )
+
+            new_notifications = Notification.objects.filter(
+                recipient=request.user,
+                created_at__gt=since_datetime
+            ).order_by('created_at')
+
+        except (ValueError, TypeError):
+            new_notifications = []
+
+    unread_count = Notification.objects.filter(
+        recipient=request.user,
+        is_read=False
+    ).count()
+
+    notifications_data = []
+
+    for notification in new_notifications:
+
+        notifications_data.append({
+            'id': notification.id,
+            'type': notification.notification_type,
+            'title': notification.title,
+            'message': notification.message,
+            'link': notification.link or '',
+            'created_at': notification.created_at.isoformat(),
+        })
+
+    return JsonResponse({
+        'notifications': notifications_data,
+        'unread_count': unread_count,
+        'server_time': timezone.now().isoformat(),
+    })
+
 
 @login_required(login_url='site_login')
 def mark_notification_read(request, notification_id):
