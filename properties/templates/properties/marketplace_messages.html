@@ -184,6 +184,8 @@
 
     gap: 16px;
 
+    min-height: 78px;
+
     padding: 20px 25px;
 
     border-bottom: 1px solid #edf0ee;
@@ -197,6 +199,8 @@
     -webkit-user-select: none;
 
     -webkit-touch-callout: none;
+
+    touch-action: manipulation;
 
     transition:
         background .18s ease,
@@ -228,7 +232,7 @@
 
 
 /* =========================================================
-   LONG PRESS ACTIVE STATE
+   LONG PRESS ACTIVE
 ========================================================= */
 
 .conversation.long-press-active {
@@ -367,7 +371,24 @@
 
 
 /* =========================================================
-   UNREAD
+   CONVERSATION ACTIONS
+========================================================= */
+
+.conversation-actions {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   UNREAD BADGE
 ========================================================= */
 
 .unread-badge {
@@ -400,27 +421,18 @@
 
 
 /* =========================================================
-   CONVERSATION ACTIONS
+   DELETE FORM
+   COMPLETELY HIDDEN BY DEFAULT
 ========================================================= */
 
-.conversation-actions {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-shrink: 0;
-}
-
-
-/*
-   Delete form exists in the page but the button is hidden.
-   It appears only after a long press / right click.
-*/
-
 .delete-conversation-form {
-    display: none;
+    position: absolute;
+
+    right: 0;
+
+    top: calc(100% + 8px);
+
+    z-index: 100;
 
     margin: 0;
 
@@ -428,8 +440,23 @@
 }
 
 
+/*
+   IMPORTANT:
+   The HTML hidden attribute is respected.
+*/
+
+.delete-conversation-form[hidden] {
+    display: none !important;
+}
+
+
+/*
+   Only display after JavaScript
+   removes the hidden state.
+*/
+
 .conversation.long-press-active
-.delete-conversation-form {
+.delete-conversation-form:not([hidden]) {
     display: block;
 }
 
@@ -441,9 +468,9 @@
 .delete-conversation-button {
     border: none;
 
-    padding: 8px 12px;
+    padding: 9px 13px;
 
-    border-radius: 9px;
+    border-radius: 10px;
 
     background: #a52a2a;
 
@@ -460,7 +487,7 @@
     white-space: nowrap;
 
     box-shadow:
-        0 5px 14px rgba(165,42,42,.18);
+        0 7px 20px rgba(0,0,0,.15);
 
     transition:
         background .18s ease,
@@ -481,17 +508,17 @@
 
 
 /* =========================================================
-   LONG PRESS HINT
+   LONG PRESS INDICATOR
 ========================================================= */
 
-.long-press-hint {
-    display: none;
+.conversation.long-press-active::after {
+    content: "Delete";
 
     position: absolute;
 
     right: 15px;
 
-    bottom: 8px;
+    bottom: 7px;
 
     color: #a52a2a;
 
@@ -499,12 +526,9 @@
 
     font-weight: 800;
 
+    opacity: .8;
+
     pointer-events: none;
-}
-
-
-.conversation.long-press-active .long-press-hint {
-    display: none;
 }
 
 
@@ -785,20 +809,29 @@
        DELETE ACTION
     ===================================================== */
 
-    .conversation-actions {
-        flex: 0 0 auto;
+    .delete-conversation-form {
+        position: absolute;
+
+        right: 5px;
+
+        top: calc(100% + 5px);
     }
 
 
     .delete-conversation-button {
         padding:
-            7px 9px;
+            8px 11px;
 
         border-radius:
             8px;
 
         font-size:
             9px;
+    }
+
+
+    .conversation.long-press-active::after {
+        content: none;
     }
 
 }
@@ -947,7 +980,7 @@
 
     .delete-conversation-button {
         padding:
-            6px 8px;
+            7px 9px;
 
         font-size:
             8px;
@@ -1009,7 +1042,7 @@
 
     .delete-conversation-button {
         padding:
-            5px 7px;
+            6px 8px;
 
         font-size:
             7px;
@@ -1027,6 +1060,7 @@
     *,
     *::before,
     *::after {
+
         transition:
             none !important;
 
@@ -1127,6 +1161,14 @@
                             {% endif %}
                         "
                         data-chat-url="{{ conversation.chat_url }}"
+                        role="link"
+                        tabindex="0"
+                        aria-label="Open conversation with
+                        {% if conversation.other_user.get_full_name %}
+                            {{ conversation.other_user.get_full_name }}
+                        {% else %}
+                            {{ conversation.other_user.username }}
+                        {% endif %}"
                     >
 
 
@@ -1230,13 +1272,16 @@
                             {% endif %}
 
 
-                            <!-- DELETE
-                                 HIDDEN UNTIL LONG PRESS -->
+                            <!-- =========================================
+                                 DELETE
+                                 HIDDEN UNTIL LONG PRESS
+                            ========================================== -->
 
                             <form
                                 method="POST"
                                 action="{{ conversation.delete_url }}"
                                 class="delete-conversation-form"
+                                hidden
                                 onsubmit="return confirm('Are you sure you want to delete this conversation from your messages? The other person will still be able to see the conversation.');"
                             >
 
@@ -1295,111 +1340,61 @@
 <script>
 
 /* =========================================================
-   MARKETPLACE MESSAGES
-   CLICK TO OPEN
-   LONG PRESS TO DELETE
+   KING B MARKETPLACE MESSAGES
+
+   NORMAL CLICK
+   → OPEN CONVERSATION
+
+   LONG PRESS
+   → SHOW DELETE
+
+   RIGHT CLICK ON DESKTOP
+   → SHOW DELETE
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    const conversations =
-        document.querySelectorAll(".conversation");
-
-
-    let longPressTimer = null;
-
-    let longPressTriggered = false;
-
-
-    conversations.forEach(function (conversation) {
-
-        const chatUrl =
-            conversation.dataset.chatUrl;
-
-
-        const deleteForm =
-            conversation.querySelector(
-                ".delete-conversation-form"
+        const conversations =
+            document.querySelectorAll(
+                ".conversation"
             );
 
 
+        const LONG_PRESS_TIME = 600;
+
+
         /* =====================================================
-           OPEN CONVERSATION
+           EACH CONVERSATION
         ===================================================== */
 
-        conversation.addEventListener(
-            "click",
-            function (event) {
+        conversations.forEach(
+            function (conversation) {
 
-                /*
-                 * If long press already happened,
-                 * don't open the conversation.
-                 */
-
-                if (longPressTriggered) {
-
-                    longPressTriggered = false;
-
-                    return;
-                }
+                const chatUrl =
+                    conversation.dataset.chatUrl;
 
 
-                /*
-                 * If the user clicked the delete button,
-                 * allow the form to work normally.
-                 */
-
-                if (
-                    event.target.closest(
+                const deleteForm =
+                    conversation.querySelector(
                         ".delete-conversation-form"
-                    )
-                ) {
-                    return;
-                }
+                    );
 
 
-                if (chatUrl) {
+                let longPressTimer = null;
 
-                    window.location.href =
-                        chatUrl;
-
-                }
-
-            }
-        );
+                let longPressTriggered = false;
 
 
-        /* =====================================================
-           LONG PRESS START
-        ===================================================== */
+                /* =================================================
+                   SHOW DELETE
+                ================================================= */
 
-        function startLongPress(event) {
-
-            /*
-             * Don't start long press when touching
-             * the delete button.
-             */
-
-            if (
-                event.target.closest(
-                    ".delete-conversation-form"
-                )
-            ) {
-                return;
-            }
-
-
-            longPressTriggered = false;
-
-
-            longPressTimer =
-                setTimeout(function () {
-
-                    longPressTriggered = true;
-
+                function showDelete() {
 
                     /*
-                     * Close other active conversations
+                     * Close every other delete option.
                      */
 
                     conversations.forEach(
@@ -1413,6 +1408,22 @@ document.addEventListener("DOMContentLoaded", function () {
                                     "long-press-active"
                                 );
 
+
+                                const otherDeleteForm =
+                                    item.querySelector(
+                                        ".delete-conversation-form"
+                                    );
+
+
+                                if (
+                                    otherDeleteForm
+                                ) {
+
+                                    otherDeleteForm.hidden =
+                                        true;
+
+                                }
+
                             }
 
                         }
@@ -1420,7 +1431,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                     /*
-                     * Show delete action
+                     * Activate this conversation.
                      */
 
                     conversation.classList.add(
@@ -1429,117 +1440,352 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                     /*
-                     * Small vibration on supported phones
+                     * IMPORTANT:
+                     * Remove hidden attribute.
+                     */
+
+                    if (deleteForm) {
+
+                        deleteForm.hidden =
+                            false;
+
+                    }
+
+
+                    /*
+                     * Small vibration.
                      */
 
                     if (
                         navigator.vibrate
                     ) {
 
-                        navigator.vibrate(35);
-
-                    }
-
-                }, 600);
-
-        }
-
-
-        /* =====================================================
-           CANCEL LONG PRESS
-        ===================================================== */
-
-        function cancelLongPress() {
-
-            if (longPressTimer) {
-
-                clearTimeout(
-                    longPressTimer
-                );
-
-                longPressTimer = null;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           TOUCH EVENTS
-        ===================================================== */
-
-        conversation.addEventListener(
-            "touchstart",
-            startLongPress,
-            {
-                passive: true
-            }
-        );
-
-
-        conversation.addEventListener(
-            "touchend",
-            cancelLongPress
-        );
-
-
-        conversation.addEventListener(
-            "touchmove",
-            cancelLongPress
-        );
-
-
-        conversation.addEventListener(
-            "touchcancel",
-            cancelLongPress
-        );
-
-
-        /* =====================================================
-           DESKTOP RIGHT CLICK
-        ===================================================== */
-
-        conversation.addEventListener(
-            "contextmenu",
-            function (event) {
-
-                event.preventDefault();
-
-
-                conversations.forEach(
-                    function (item) {
-
-                        item.classList.remove(
-                            "long-press-active"
+                        navigator.vibrate(
+                            35
                         );
 
                     }
+
+                }
+
+
+                /* =================================================
+                   HIDE DELETE
+                ================================================= */
+
+                function hideDelete() {
+
+                    conversation.classList.remove(
+                        "long-press-active"
+                    );
+
+
+                    if (deleteForm) {
+
+                        deleteForm.hidden =
+                            true;
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   START LONG PRESS
+                ================================================= */
+
+                function startLongPress(
+                    event
+                ) {
+
+                    /*
+                     * Don't start long press
+                     * from the Delete button.
+                     */
+
+                    if (
+                        event.target.closest(
+                            ".delete-conversation-form"
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    longPressTriggered =
+                        false;
+
+
+                    if (
+                        longPressTimer
+                    ) {
+
+                        clearTimeout(
+                            longPressTimer
+                        );
+
+                    }
+
+
+                    longPressTimer =
+                        setTimeout(
+                            function () {
+
+                                longPressTriggered =
+                                    true;
+
+
+                                showDelete();
+
+                            },
+                            LONG_PRESS_TIME
+                        );
+
+                }
+
+
+                /* =================================================
+                   CANCEL LONG PRESS
+                ================================================= */
+
+                function cancelLongPress() {
+
+                    if (
+                        longPressTimer
+                    ) {
+
+                        clearTimeout(
+                            longPressTimer
+                        );
+
+                        longPressTimer =
+                            null;
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   NORMAL CLICK
+                ================================================= */
+
+                conversation.addEventListener(
+                    "click",
+                    function (event) {
+
+                        /*
+                         * Delete button was clicked.
+                         * Let the form work.
+                         */
+
+                        if (
+                            event.target.closest(
+                                ".delete-conversation-form"
+                            )
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        /*
+                         * A long press already happened.
+                         *
+                         * Prevent the automatic click
+                         * generated by the phone.
+                         */
+
+                        if (
+                            longPressTriggered
+                        ) {
+
+                            event.preventDefault();
+
+                            event.stopPropagation();
+
+                            longPressTriggered =
+                                false;
+
+                            return;
+
+                        }
+
+
+                        /*
+                         * Normal click opens chat.
+                         */
+
+                        if (
+                            chatUrl
+                        ) {
+
+                            window.location.href =
+                                chatUrl;
+
+                        }
+
+                    }
                 );
 
 
-                conversation.classList.add(
-                    "long-press-active"
+                /* =================================================
+                   KEYBOARD ACCESSIBILITY
+                ================================================= */
+
+                conversation.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (
+                            event.key === "Enter" ||
+                            event.key === " "
+                        ) {
+
+                            /*
+                             * Don't open when
+                             * delete form is focused.
+                             */
+
+                            if (
+                                event.target.closest(
+                                    ".delete-conversation-form"
+                                )
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            event.preventDefault();
+
+
+                            if (
+                                chatUrl
+                            ) {
+
+                                window.location.href =
+                                    chatUrl;
+
+                            }
+
+                        }
+
+                    }
+                );
+
+
+                /* =================================================
+                   TOUCH START
+                ================================================= */
+
+                conversation.addEventListener(
+                    "touchstart",
+                    startLongPress,
+                    {
+                        passive: true
+                    }
+                );
+
+
+                /* =================================================
+                   TOUCH END
+                ================================================= */
+
+                conversation.addEventListener(
+                    "touchend",
+                    function () {
+
+                        cancelLongPress();
+
+                    }
+                );
+
+
+                /* =================================================
+                   TOUCH MOVE
+                ================================================= */
+
+                conversation.addEventListener(
+                    "touchmove",
+                    function () {
+
+                        cancelLongPress();
+
+                    }
+                );
+
+
+                /* =================================================
+                   TOUCH CANCEL
+                ================================================= */
+
+                conversation.addEventListener(
+                    "touchcancel",
+                    function () {
+
+                        cancelLongPress();
+
+                    }
+                );
+
+
+                /* =================================================
+                   DESKTOP RIGHT CLICK
+                ================================================= */
+
+                conversation.addEventListener(
+                    "contextmenu",
+                    function (event) {
+
+                        event.preventDefault();
+
+
+                        longPressTriggered =
+                            true;
+
+
+                        showDelete();
+
+                    }
                 );
 
             }
         );
 
-    });
+
+        /* =====================================================
+           CLICK OUTSIDE
+        ===================================================== */
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                /*
+                 * If click happened inside a
+                 * conversation, leave it alone.
+                 */
+
+                if (
+                    event.target.closest(
+                        ".conversation"
+                    )
+                ) {
+
+                    return;
+
+                }
 
 
-    /* =====================================================
-       CLICK OUTSIDE — CLOSE DELETE OPTION
-    ===================================================== */
-
-    document.addEventListener(
-        "click",
-        function (event) {
-
-            if (
-                !event.target.closest(
-                    ".conversation"
-                )
-            ) {
+                /*
+                 * Otherwise close every
+                 * delete option.
+                 */
 
                 conversations.forEach(
                     function (conversation) {
@@ -1548,15 +1794,30 @@ document.addEventListener("DOMContentLoaded", function () {
                             "long-press-active"
                         );
 
+
+                        const deleteForm =
+                            conversation.querySelector(
+                                ".delete-conversation-form"
+                            );
+
+
+                        if (
+                            deleteForm
+                        ) {
+
+                            deleteForm.hidden =
+                                true;
+
+                        }
+
                     }
                 );
 
             }
+        );
 
-        }
-    );
-
-});
+    }
+);
 
 </script>
 
