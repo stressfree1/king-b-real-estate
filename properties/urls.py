@@ -645,4 +645,10 @@ urlpatterns = [
         views.delete_marketplace_conversation,
         name='delete_marketplace_conversation'
     ),
+
+    path(
+        'notifications/updates/',
+        views.notification_updates,
+        name='notification_updates'
+    ),
 ]
