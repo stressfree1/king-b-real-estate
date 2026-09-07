@@ -5613,7 +5613,26 @@ def marketplace_chat(
             receiver=other_user,
             message=message_text,
         )
+        # =================================================
+        # RESTORE CONVERSATION AFTER NEW MESSAGE
+        #
+        # If either user previously deleted this conversation,
+        # a new message should make the conversation visible again.
+        # =================================================
 
+        MarketplaceConversationDeletion.objects.filter(
+            listing=listing
+        ).filter(
+            Q(
+                user=current_user,
+                other_user=other_user
+            )
+            |
+            Q(
+                user=other_user,
+                other_user=current_user
+            )
+        ).delete()
         # =====================================================
         # MARKETPLACE MESSAGE NOTIFICATION LINK
         # =====================================================
