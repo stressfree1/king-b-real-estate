@@ -1,1074 +1,441 @@
 {% extends "properties/base.html" %}
 
 {% block title %}
-    Marketplace Messages | KING B REAL ESTATE & CONSTRUCTION LTD
+Marketplace Messages | KING B REAL ESTATE & CONSTRUCTION LTD
 {% endblock %}
 
-{% block customer_nav_account %}
-    true
-{% endblock %}
+{% block customer_nav_account %}true{% endblock %}
 
 {% block content %}
 
 <style>
-
 /* =========================================================
-   KING B MARKETPLACE — MESSAGES
-========================================================= */
+   MARKETPLACE MESSAGES
+   ========================================================= */
 
 .messages-page {
-    min-height: 80vh;
-    padding: 50px 5% 80px;
-
+    min-height: calc(100vh - 100px);
+    padding: 40px 18px 70px;
     background:
-        radial-gradient(
-            circle at top left,
-            rgba(18, 60, 47, 0.05),
-            transparent 35%
-        ),
-        #f5f7f5;
-
-    box-sizing: border-box;
+        radial-gradient(circle at top left, rgba(199, 161, 90, 0.08), transparent 30%),
+        linear-gradient(180deg, #f7f5ef 0%, #ffffff 100%);
 }
 
-
 .messages-container {
-    width: min(1050px, 100%);
+    width: min(900px, 100%);
     margin: 0 auto;
 }
 
-
-/* =========================================================
-   HEADER
-========================================================= */
-
+/* Header */
 .messages-header {
-    background:
-        linear-gradient(
-            135deg,
-            #123c2f,
-            #09271f
-        );
-
-    color: white;
-
-    padding: 34px;
-
-    border-radius: 20px;
-
     margin-bottom: 25px;
-
-    box-shadow:
-        0 12px 35px rgba(18, 60, 47, 0.12);
 }
-
 
 .messages-header h1 {
-    margin: 0 0 8px;
-
-    font-size: 31px;
-
-    letter-spacing: -.03em;
+    margin: 0;
+    color: #0b2119;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
 }
-
 
 .messages-header p {
-    margin: 0;
-
-    opacity: .82;
-
-    line-height: 1.7;
+    margin: 8px 0 0;
+    color: #66736d;
+    font-size: 15px;
 }
-
 
 /* =========================================================
-   STATISTICS
-========================================================= */
+   CONVERSATION LIST
+   ========================================================= */
 
-.message-stats {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 16px;
-
-    margin-bottom: 25px;
-}
-
-
-.message-stat {
-    background: #ffffff;
-
-    border: 1px solid #e3e8e5;
-
-    border-radius: 15px;
-
-    padding: 21px;
-
-    box-shadow:
-        0 5px 20px rgba(0,0,0,.04);
-}
-
-
-.message-stat-label {
-    color: #76817b;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    text-transform: uppercase;
-
-    letter-spacing: .04em;
-}
-
-
-.message-stat-number {
-    margin-top: 5px;
-
-    color: #123c2f;
-
-    font-size: 29px;
-
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   INBOX
-========================================================= */
-
-.inbox-card {
-    background: #ffffff;
-
-    border: 1px solid #e2e8e4;
-
-    border-radius: 19px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.05);
-}
-
-
-.inbox-title {
-    padding: 25px;
-
-    border-bottom: 1px solid #edf0ee;
-}
-
-
-.inbox-title h2 {
-    margin: 0;
-
-    color: #123c2f;
-
-    font-size: 21px;
-}
-
-
-/* =========================================================
-   CONVERSATION
-========================================================= */
-
-.conversation {
-    position: relative;
-
+.conversations-list {
     display: flex;
-
-    align-items: center;
-
-    gap: 16px;
-
-    min-height: 78px;
-
-    padding: 20px 25px;
-
-    border-bottom: 1px solid #edf0ee;
-
-    color: inherit;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    -webkit-user-select: none;
-
-    -webkit-touch-callout: none;
-
-    touch-action: manipulation;
-
-    transition:
-        background .18s ease,
-        transform .18s ease,
-        box-shadow .18s ease;
-}
-
-
-.conversation:last-child {
-    border-bottom: none;
-}
-
-
-.conversation:hover {
-    background: #f8faf9;
-
-    transform: translateX(2px);
-}
-
-
-.conversation:active {
-    background: #eef5f1;
-}
-
-
-.conversation-unread {
-    background: #f0f7f3;
-}
-
-
-/* =========================================================
-   LONG PRESS ACTIVE
-========================================================= */
-
-.conversation.long-press-active {
-    background: #edf5f1;
-
-    box-shadow:
-        inset 4px 0 0 #b58b3b;
-}
-
-
-.conversation.long-press-active .conversation-avatar {
-    transform: scale(.96);
-}
-
-
-/* =========================================================
-   AVATAR
-========================================================= */
-
-.conversation-avatar {
-    width: 52px;
-
-    height: 52px;
-
-    border-radius: 15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #123c2f,
-            #1c5945
-        );
-
-    color: #d4af63;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 17px;
-
-    font-weight: 900;
-
-    flex-shrink: 0;
-
-    box-shadow:
-        0 5px 15px rgba(18,60,47,.15);
-
-    transition:
-        transform .18s ease;
-}
-
-
-/* =========================================================
-   CONTENT
-========================================================= */
-
-.conversation-content {
-    flex: 1;
-
-    min-width: 0;
-}
-
-
-.conversation-top {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
+    flex-direction: column;
     gap: 12px;
 }
 
+.conversation {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    min-height: 86px;
+    padding: 15px 18px;
+    box-sizing: border-box;
 
-.other-user-name {
-    color: #123c2f;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid #e5e8e5;
+    border-radius: 18px;
 
-    font-size: 15px;
+    cursor: pointer;
 
+    box-shadow:
+        0 5px 18px rgba(11, 33, 25, 0.06);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.conversation:hover {
+    transform: translateY(-2px);
+    border-color: rgba(199, 161, 90, 0.55);
+
+    box-shadow:
+        0 10px 28px rgba(11, 33, 25, 0.10);
+}
+
+/* Avatar */
+.conversation-avatar {
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(135deg, #123c2f, #194d3b);
+
+    color: #dfc486;
+    font-size: 20px;
     font-weight: 800;
 
+    box-shadow:
+        0 5px 15px rgba(11, 33, 25, 0.16);
+}
+
+/* Conversation content */
+.conversation-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.conversation-name {
+    margin-bottom: 5px;
+
+    color: #0b2119;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.conversation-preview {
+    color: #68736e;
+    font-size: 14px;
+
+    white-space: nowrap;
     overflow: hidden;
-
     text-overflow: ellipsis;
-
-    white-space: nowrap;
 }
 
-
-.message-time {
-    color: #87918c;
-
-    font-size: 10px;
-
-    white-space: nowrap;
-
-    flex-shrink: 0;
-}
-
-
-.listing-name {
+.conversation-time {
     margin-top: 5px;
 
-    color: #b58b3b;
-
+    color: #9a9f9c;
     font-size: 12px;
-
-    font-weight: 700;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
 }
 
-
-.latest-message {
-    margin-top: 5px;
-
-    color: #6d7872;
-
-    font-size: 12px;
-
-    line-height: 1.5;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-/* =========================================================
-   ACTIONS
-========================================================= */
-
+/* Right side */
 .conversation-actions {
     position: relative;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    flex-shrink: 0;
+    flex: 0 0 auto;
 }
 
-
-/* =========================================================
-   UNREAD BADGE
-========================================================= */
-
+/* Unread */
 .unread-badge {
-    min-width: 24px;
-
-    height: 24px;
-
-    padding: 0 7px;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 8px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    background: #b58b3b;
+    border-radius: 999px;
 
-    color: #ffffff;
+    background: #c7a15a;
+    color: #0b2119;
 
-    border-radius: 50px;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    flex-shrink: 0;
-
-    box-sizing: border-box;
+    font-size: 12px;
+    font-weight: 900;
 }
 
+.conversation-unread {
+    border-color: rgba(199, 161, 90, 0.65);
+    background: #fffdf8;
+}
 
 /* =========================================================
-   DELETE MENU
-   COMPLETELY INVISIBLE UNTIL 3-SECOND HOLD
-========================================================= */
+   DELETE POPUP
+   HIDDEN BY DEFAULT
+   ========================================================= */
 
-.conversation-delete-menu {
+.delete-popup-overlay {
+    position: fixed;
+    inset: 0;
+
     display: none;
 
-    position: absolute;
-
-    right: 0;
-
-    top: calc(100% + 10px);
-
-    z-index: 999;
-
-    margin: 0;
-
-    padding: 0;
-}
-
-
-/*
-   ONLY SHOW AFTER LONG PRESS
-*/
-
-.conversation.long-press-active
-.conversation-delete-menu {
-    display: block;
-}
-
-
-/* =========================================================
-   DELETE FORM
-========================================================= */
-
-.delete-conversation-form {
-    margin: 0;
-
-    padding: 0;
-}
-
-
-/* =========================================================
-   DELETE BUTTON
-========================================================= */
-
-.delete-conversation-button {
-    display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    gap: 6px;
+    padding: 20px;
 
-    border: none;
+    background: rgba(0, 0, 0, 0.58);
 
-    padding: 10px 14px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 
-    border-radius: 10px;
-
-    background: #a52a2a;
-
-    color: #ffffff;
-
-    font-family: inherit;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    white-space: nowrap;
-
-    box-shadow:
-        0 8px 20px rgba(0,0,0,.18);
-
-    transition:
-        background .18s ease,
-        transform .18s ease;
+    z-index: 999999;
 }
 
-
-.delete-conversation-button:hover {
-    background: #7d1f1f;
-
-    transform: translateY(-1px);
+.delete-popup-overlay.show {
+    display: flex;
 }
 
+/* Popup box */
+.delete-popup {
+    width: min(430px, 100%);
 
-.delete-conversation-button:active {
-    transform: scale(.96);
-}
+    padding: 30px 25px 25px;
 
+    background: #ffffff;
 
-/* =========================================================
-   LONG PRESS VISUAL
-========================================================= */
+    border-radius: 24px;
 
-.conversation.long-press-active::before {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-
-    top: 0;
-
-    bottom: 0;
-
-    width: 4px;
-
-    background: #b58b3b;
-
-    border-radius: 0 4px 4px 0;
-}
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
-.empty-state {
     text-align: center;
 
-    padding: 80px 25px;
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.30);
 
-    color: #78847d;
+    animation: deletePopupIn 0.22s ease-out;
 }
 
+@keyframes deletePopupIn {
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.94);
+    }
 
-.empty-icon {
-    width: 70px;
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
 
-    height: 70px;
+/* Delete icon */
+.delete-popup-icon {
+    width: 68px;
+    height: 68px;
 
     margin: 0 auto 18px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    border-radius: 20px;
+    border-radius: 50%;
 
-    background: #f5ead3;
+    background: #fff0f0;
 
-    font-size: 32px;
+    color: #d62828;
+
+    font-size: 30px;
 }
 
+/* Popup title */
+.delete-popup h2 {
+    margin: 0 0 10px;
 
-.empty-state h3 {
+    color: #0b2119;
+
+    font-size: 23px;
+    font-weight: 850;
+}
+
+/* Popup message */
+.delete-popup p {
+    margin: 0 auto 25px;
+
+    max-width: 340px;
+
+    color: #68736e;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Buttons */
+.delete-popup-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.delete-popup-button {
+    flex: 1;
+
+    min-height: 50px;
+
+    border: 0;
+    border-radius: 13px;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.delete-popup-button:hover {
+    transform: translateY(-1px);
+}
+
+.delete-popup-cancel {
+    background: #eef1ef;
+    color: #0b2119;
+}
+
+.delete-popup-delete {
+    background: #d62828;
+    color: #ffffff;
+}
+
+.delete-popup-delete:hover {
+    opacity: 0.92;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+    padding: 60px 25px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e8e5;
+    border-radius: 22px;
+
+    box-shadow:
+        0 8px 25px rgba(11, 33, 25, 0.06);
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.empty-state h2 {
     margin: 0 0 8px;
 
-    color: #123c2f;
+    color: #0b2119;
 
-    font-size: 20px;
+    font-size: 22px;
 }
-
 
 .empty-state p {
-    max-width: 550px;
+    margin: 0;
 
-    margin: 0 auto;
+    color: #68736e;
 
-    line-height: 1.7;
+    font-size: 14px;
 }
-
 
 /* =========================================================
    MOBILE
-========================================================= */
+   ========================================================= */
 
-@media (max-width: 750px) {
+@media (max-width: 600px) {
 
     .messages-page {
-        min-height: 100dvh;
-
-        padding:
-            25px 0 50px;
-
-        background:
-            #f5f7f5;
+        padding: 25px 12px 50px;
     }
 
+    .conversation {
+        min-height: 78px;
+        padding: 12px 13px;
+        gap: 12px;
 
-    .messages-container {
-        width: 100%;
-    }
-
-
-    /* =====================================================
-       HEADER
-    ===================================================== */
-
-    .messages-header {
-        margin:
-            0 12px 16px;
-
-        padding:
-            23px 20px;
-
-        border-radius:
-            17px;
-    }
-
-
-    .messages-header h1 {
-        font-size: 24px;
-
-        line-height: 1.2;
-    }
-
-
-    .messages-header p {
-        margin-top: 7px;
-
-        font-size: 12px;
-
-        line-height: 1.6;
-    }
-
-
-    /* =====================================================
-       STATS
-    ===================================================== */
-
-    .message-stats {
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        gap: 8px;
-
-        margin:
-            0 12px 16px;
-    }
-
-
-    .message-stat {
-        padding: 14px;
-
-        border-radius: 13px;
-    }
-
-
-    .message-stat-label {
-        font-size: 9px;
-    }
-
-
-    .message-stat-number {
-        margin-top: 4px;
-
-        font-size: 23px;
-    }
-
-
-    /* =====================================================
-       INBOX
-    ===================================================== */
-
-    .inbox-card {
         border-radius: 16px;
-
-        border-left:
-            1px solid #e2e8e4;
-
-        border-right:
-            1px solid #e2e8e4;
     }
 
+    .conversation-avatar {
+        flex-basis: 45px;
+        width: 45px;
+        height: 45px;
 
-    .inbox-title {
-        padding:
-            18px 16px;
-    }
-
-
-    .inbox-title h2 {
         font-size: 17px;
     }
 
-
-    /* =====================================================
-       CONVERSATION
-    ===================================================== */
-
-    .conversation {
-        min-height: 76px;
-
-        padding:
-            14px 13px;
-
-        gap:
-            11px;
-
-        align-items:
-            center;
-    }
-
-
-    .conversation:hover {
-        transform: none;
-    }
-
-
-    .conversation:active {
-        transform: none;
-
-        background: #edf5f1;
-    }
-
-
-    .conversation-avatar {
-        width: 45px;
-
-        height: 45px;
-
-        flex: 0 0 45px;
-
-        border-radius: 13px;
-
+    .conversation-name {
         font-size: 15px;
     }
 
-
-    .conversation-content {
-        min-width: 0;
-
-        flex: 1;
-    }
-
-
-    .conversation-top {
-        display: flex;
-
-        align-items: center;
-
-        flex-direction: row;
-
-        gap: 7px;
-    }
-
-
-    .other-user-name {
-        min-width: 0;
-
-        flex: 1;
-
+    .conversation-preview {
         font-size: 13px;
     }
 
-
-    .message-time {
-        font-size: 8px;
-    }
-
-
-    .listing-name {
-        margin-top: 3px;
-
-        font-size: 10px;
-    }
-
-
-    .latest-message {
-        margin-top: 3px;
-
-        font-size: 10px;
-
-        line-height: 1.4;
-    }
-
-
-    /* =====================================================
-       UNREAD
-    ===================================================== */
-
-    .unread-badge {
-        min-width: 21px;
-
-        height: 21px;
-
-        padding:
-            0 6px;
-
-        font-size: 9px;
-    }
-
-
-    /* =====================================================
-       DELETE MENU
-    ===================================================== */
-
-    .conversation-delete-menu {
-        right: 0;
-
-        top: calc(100% + 7px);
-    }
-
-
-    .delete-conversation-button {
-        padding:
-            9px 12px;
-
-        border-radius:
-            9px;
-
-        font-size:
-            9px;
-    }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-
-    .messages-page {
-        padding-top: 18px;
-    }
-
-
-    .messages-header {
-        margin:
-            0 9px 12px;
-
-        padding:
-            20px 17px;
-
-        border-radius:
-            15px;
-    }
-
-
-    .messages-header h1 {
-        font-size: 21px;
-    }
-
-
-    .messages-header p {
+    .conversation-time {
         font-size: 11px;
     }
 
+    .unread-badge {
+        min-width: 23px;
+        height: 23px;
+        padding: 0 6px;
 
-    .message-stats {
-        margin:
-            0 9px 12px;
-
-        gap: 7px;
+        font-size: 11px;
     }
 
-
-    .message-stat {
-        padding:
-            12px;
+    /* Bigger popup on mobile */
+    .delete-popup-overlay {
+        align-items: flex-end;
+        padding: 10px;
     }
 
+    .delete-popup {
+        width: 100%;
+        box-sizing: border-box;
 
-    .message-stat-label {
-        font-size: 8px;
+        padding: 28px 20px 20px;
+
+        border-radius: 25px 25px 18px 18px;
     }
 
+    .delete-popup-icon {
+        width: 62px;
+        height: 62px;
+    }
 
-    .message-stat-number {
+    .delete-popup h2 {
         font-size: 21px;
     }
 
-
-    .inbox-card {
-        border-radius:
-            14px;
+    .delete-popup p {
+        font-size: 14px;
     }
 
-
-    .inbox-title {
-        padding:
-            16px 13px;
+    .delete-popup-button {
+        min-height: 54px;
+        font-size: 14px;
     }
-
-
-    .inbox-title h2 {
-        font-size:
-            16px;
-    }
-
-
-    .conversation {
-        min-height:
-            70px;
-
-        padding:
-            12px 10px;
-
-        gap:
-            9px;
-    }
-
-
-    .conversation-avatar {
-        width:
-            42px;
-
-        height:
-            42px;
-
-        flex-basis:
-            42px;
-
-        border-radius:
-            12px;
-
-        font-size:
-            14px;
-    }
-
-
-    .other-user-name {
-        font-size:
-            12px;
-    }
-
-
-    .message-time {
-        font-size:
-            7px;
-    }
-
-
-    .listing-name {
-        font-size:
-            9px;
-    }
-
-
-    .latest-message {
-        font-size:
-            9px;
-    }
-
-
-    .unread-badge {
-        min-width:
-            19px;
-
-        height:
-            19px;
-
-        font-size:
-            8px;
-    }
-
-
-    .delete-conversation-button {
-        padding:
-            8px 10px;
-
-        font-size:
-            8px;
-    }
-
 }
-
-
-/* =========================================================
-   VERY SMALL PHONES
-========================================================= */
-
-@media (max-width: 360px) {
-
-    .conversation {
-        padding:
-            11px 8px;
-
-        gap:
-            8px;
-    }
-
-
-    .conversation-avatar {
-        width:
-            39px;
-
-        height:
-            39px;
-
-        flex-basis:
-            39px;
-    }
-
-
-    .other-user-name {
-        font-size:
-            11px;
-    }
-
-
-    .listing-name {
-        font-size:
-            8px;
-    }
-
-
-    .latest-message {
-        font-size:
-            8px;
-    }
-
-
-    .message-time {
-        display:
-            none;
-    }
-
-
-    .delete-conversation-button {
-        padding:
-            7px 9px;
-
-        font-size:
-            7px;
-    }
-
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-
-        transition:
-            none !important;
-
-        animation:
-            none !important;
-    }
-
-}
-
 </style>
 
 
@@ -1076,664 +443,454 @@
 
     <div class="messages-container">
 
-
-        <!-- =====================================================
-             HEADER
-        ====================================================== -->
-
+        <!-- PAGE HEADER -->
         <div class="messages-header">
+            <h1>Messages</h1>
+            <p>Your marketplace conversations</p>
+        </div>
 
-            <h1>
-                Marketplace Messages
-            </h1>
+
+        <!-- CONVERSATIONS -->
+        {% if conversations %}
+
+        <div class="conversations-list">
+
+            {% for conversation in conversations %}
+
+            <div
+                class="conversation {% if conversation.unread_count %}conversation-unread{% endif %}"
+                data-chat-url="{{ conversation.chat_url }}"
+                data-delete-url="{{ conversation.delete_url }}"
+                role="link"
+                tabindex="0"
+                aria-label="Open conversation"
+            >
+
+                <!-- AVATAR -->
+                <div class="conversation-avatar">
+                    {% if conversation.other_user.first_name %}
+                        {{ conversation.other_user.first_name|first|upper }}
+                    {% elif conversation.other_user.username %}
+                        {{ conversation.other_user.username|first|upper }}
+                    {% else %}
+                        U
+                    {% endif %}
+                </div>
+
+
+                <!-- CONTENT -->
+                <div class="conversation-content">
+
+                    <div class="conversation-name">
+
+                        {% if conversation.other_user.get_full_name %}
+                            {{ conversation.other_user.get_full_name }}
+                        {% elif conversation.other_user.username %}
+                            {{ conversation.other_user.username }}
+                        {% else %}
+                            User
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if conversation.last_message %}
+
+                    <div class="conversation-preview">
+                        {{ conversation.last_message.content }}
+                    </div>
+
+                    <div class="conversation-time">
+                        {{ conversation.last_message.created_at|timesince }} ago
+                    </div>
+
+                    {% else %}
+
+                    <div class="conversation-preview">
+                        No messages yet
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- RIGHT SIDE -->
+                <div class="conversation-actions">
+
+                    {% if conversation.unread_count %}
+                        <div class="unread-badge">
+                            {{ conversation.unread_count }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- EMPTY -->
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                💬
+            </div>
+
+            <h2>No messages yet</h2>
 
             <p>
-                View and continue your conversations with
-                buyers and sellers on the King B marketplace.
+                Your marketplace conversations will appear here.
             </p>
 
         </div>
 
-
-        <!-- =====================================================
-             STATISTICS
-        ====================================================== -->
-
-        <div class="message-stats">
-
-            <div class="message-stat">
-
-                <div class="message-stat-label">
-                    Conversations
-                </div>
-
-                <div class="message-stat-number">
-                    {{ total_conversations|default:"0" }}
-                </div>
-
-            </div>
-
-
-            <div class="message-stat">
-
-                <div class="message-stat-label">
-                    Unread Messages
-                </div>
-
-                <div class="message-stat-number">
-                    {{ unread_messages|default:"0" }}
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             INBOX
-        ====================================================== -->
-
-        <div class="inbox-card">
-
-            <div class="inbox-title">
-
-                <h2>
-                    My Conversations
-                </h2>
-
-            </div>
-
-
-            {% if conversations %}
-
-                {% for conversation in conversations %}
-
-                    <!-- =================================================
-                         CONVERSATION
-                    ================================================== -->
-
-                    <div
-                        class="
-                            conversation
-                            {% if conversation.unread_count %}
-                                conversation-unread
-                            {% endif %}
-                        "
-                        data-chat-url="{{ conversation.chat_url }}"
-                        role="link"
-                        tabindex="0"
-                        aria-label="Open conversation"
-                    >
-
-
-                        <!-- =============================================
-                             AVATAR
-                        ============================================== -->
-
-                        <div class="conversation-avatar">
-
-                            {% if conversation.other_user.first_name %}
-
-                                {{ conversation.other_user.first_name|first|upper }}
-
-                            {% else %}
-
-                                {{ conversation.other_user.username|first|upper }}
-
-                            {% endif %}
-
-                        </div>
-
-
-                        <!-- =============================================
-                             CONTENT
-                        ============================================== -->
-
-                        <div class="conversation-content">
-
-                            <div class="conversation-top">
-
-                                <div class="other-user-name">
-
-                                    {% if conversation.other_user.get_full_name %}
-
-                                        {{ conversation.other_user.get_full_name }}
-
-                                    {% else %}
-
-                                        {{ conversation.other_user.username }}
-
-                                    {% endif %}
-
-                                </div>
-
-
-                                <div class="message-time">
-
-                                    {{ conversation.latest_message.created_at|date:"M d · g:i A" }}
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- LISTING -->
-
-                            <div class="listing-name">
-
-                                {{ conversation.listing.title }}
-
-                            </div>
-
-
-                            <!-- LAST MESSAGE -->
-
-                            <div class="latest-message">
-
-                                {% if conversation.latest_message.sender_id == request.user.id %}
-
-                                    You:
-                                    {{ conversation.latest_message.message }}
-
-                                {% else %}
-
-                                    {{ conversation.latest_message.message }}
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =============================================
-                             ACTIONS
-                        ============================================== -->
-
-                        <div class="conversation-actions">
-
-
-                            <!-- UNREAD -->
-
-                            {% if conversation.unread_count %}
-
-                                <div class="unread-badge">
-
-                                    {{ conversation.unread_count }}
-
-                                </div>
-
-                            {% endif %}
-
-
-                            <!-- =========================================
-                                 DELETE MENU
-                                 INVISIBLE UNTIL 3-SECOND LONG PRESS
-                            ========================================== -->
-
-                            <div class="conversation-delete-menu">
-
-                                <form
-                                    method="POST"
-                                    action="{{ conversation.delete_url }}"
-                                    class="delete-conversation-form"
-                                    onsubmit="return confirm('Are you sure you want to delete this conversation from your messages? The other person will still be able to see the conversation.');"
-                                >
-
-                                    {% csrf_token %}
-
-                                    <button
-                                        type="submit"
-                                        class="delete-conversation-button"
-                                    >
-                                        🗑 Delete Conversation
-                                    </button>
-
-                                </form>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                {% endfor %}
-
-
-            {% else %}
-
-
-                <!-- =================================================
-                     EMPTY STATE
-                ================================================== -->
-
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        💬
-                    </div>
-
-                    <h3>
-                        No conversations yet
-                    </h3>
-
-                    <p>
-                        Your marketplace conversations will appear
-                        here when you contact a seller or a buyer
-                        contacts you about an advertisement.
-                    </p>
-
-                </div>
-
-            {% endif %}
-
-        </div>
+        {% endif %}
 
     </div>
 
 </section>
 
 
+<!-- =========================================================
+     DELETE POPUP
+     ========================================================= -->
+
+<div
+    class="delete-popup-overlay"
+    id="deletePopupOverlay"
+    aria-hidden="true"
+>
+
+    <div
+        class="delete-popup"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deletePopupTitle"
+    >
+
+        <div class="delete-popup-icon">
+            🗑️
+        </div>
+
+        <h2 id="deletePopupTitle">
+            Delete Conversation?
+        </h2>
+
+        <p>
+            This will remove this conversation from your messages.
+            The other person will still be able to see their copy.
+        </p>
+
+        <div class="delete-popup-buttons">
+
+            <button
+                type="button"
+                class="delete-popup-button delete-popup-cancel"
+                id="deletePopupCancel"
+            >
+                Cancel
+            </button>
+
+            <form
+                method="POST"
+                id="deleteConversationForm"
+                style="flex: 1;"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="delete-popup-button delete-popup-delete"
+                    style="width: 100%;"
+                >
+                    Delete Conversation
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-/* =========================================================
-   KING B MARKETPLACE MESSAGES
+    const conversations =
+        document.querySelectorAll(".conversation");
 
-   NORMAL TAP
-   → OPEN CONVERSATION
+    const popup =
+        document.getElementById("deletePopupOverlay");
 
-   HOLD FOR 3 SECONDS
-   → SHOW DELETE OPTION
-========================================================= */
+    const cancelButton =
+        document.getElementById("deletePopupCancel");
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+    const deleteForm =
+        document.getElementById("deleteConversationForm");
 
-        const conversations =
-            document.querySelectorAll(
-                ".conversation"
-            );
+    const LONG_PRESS_TIME = 3000;
+
+    let longPressTimer = null;
+
+    let activeDeleteUrl = null;
+
+    let longPressTriggered = false;
+
+
+    /*
+    =========================================================
+    OPEN DELETE POPUP
+    =========================================================
+    */
+
+    function showDeletePopup(deleteUrl) {
+
+        if (!deleteUrl) {
+            return;
+        }
+
+        activeDeleteUrl = deleteUrl;
+
+        deleteForm.action = deleteUrl;
+
+        popup.classList.add("show");
+
+        popup.setAttribute("aria-hidden", "false");
+
+        /*
+         * Small vibration on supported phones
+         */
+        if (navigator.vibrate) {
+            navigator.vibrate([80, 40, 80]);
+        }
+
+    }
+
+
+    /*
+    =========================================================
+    CLOSE DELETE POPUP
+    =========================================================
+    */
+
+    function closeDeletePopup() {
+
+        popup.classList.remove("show");
+
+        popup.setAttribute("aria-hidden", "true");
+
+        activeDeleteUrl = null;
+
+    }
+
+
+    /*
+    =========================================================
+    START LONG PRESS
+    =========================================================
+    */
+
+    function startLongPress(conversation, event) {
+
+        /*
+         * Only start if the user is actually pressing
+         * the conversation itself.
+         */
+        if (
+            event.target.closest(".delete-popup") ||
+            event.target.closest("button") ||
+            event.target.closest("form")
+        ) {
+            return;
+        }
+
+
+        longPressTriggered = false;
+
+
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+        }
+
+
+        longPressTimer = setTimeout(function () {
+
+            longPressTriggered = true;
+
+            const deleteUrl =
+                conversation.dataset.deleteUrl;
+
+            showDeletePopup(deleteUrl);
+
+        }, LONG_PRESS_TIME);
+
+    }
+
+
+    /*
+    =========================================================
+    CANCEL LONG PRESS
+    =========================================================
+    */
+
+    function cancelLongPress() {
+
+        if (longPressTimer) {
+
+            clearTimeout(longPressTimer);
+
+            longPressTimer = null;
+
+        }
+
+    }
+
+
+    /*
+    =========================================================
+    EACH CONVERSATION
+    =========================================================
+    */
+
+    conversations.forEach(function (conversation) {
+
+        const chatUrl =
+            conversation.dataset.chatUrl;
 
 
         /*
-         * 3 SECONDS
-         */
+        -----------------------------------------------------
+        MOBILE TOUCH START
+        -----------------------------------------------------
+        */
 
-        const LONG_PRESS_TIME = 3000;
+        conversation.addEventListener(
+            "touchstart",
+            function (event) {
 
-
-        conversations.forEach(
-            function (conversation) {
-
-                const chatUrl =
-                    conversation.dataset.chatUrl;
-
-
-                const deleteMenu =
-                    conversation.querySelector(
-                        ".conversation-delete-menu"
-                    );
-
-
-                const deleteForm =
-                    conversation.querySelector(
-                        ".delete-conversation-form"
-                    );
-
-
-                let longPressTimer = null;
-
-                let longPressTriggered = false;
-
-
-                /* =================================================
-                   SHOW DELETE
-                ================================================= */
-
-                function showDelete() {
-
-                    /*
-                     * Close all other menus.
-                     */
-
-                    conversations.forEach(
-                        function (item) {
-
-                            if (
-                                item !== conversation
-                            ) {
-
-                                item.classList.remove(
-                                    "long-press-active"
-                                );
-
-                            }
-
-                        }
-                    );
-
-
-                    /*
-                     * Show this menu.
-                     */
-
-                    conversation.classList.add(
-                        "long-press-active"
-                    );
-
-
-                    /*
-                     * Vibration.
-                     */
-
-                    if (
-                        navigator.vibrate
-                    ) {
-
-                        navigator.vibrate(
-                            50
-                        );
-
-                    }
-
-                }
-
-
-                /* =================================================
-                   HIDE DELETE
-                ================================================= */
-
-                function hideDelete() {
-
-                    conversation.classList.remove(
-                        "long-press-active"
-                    );
-
-                }
-
-
-                /* =================================================
-                   START LONG PRESS
-                ================================================= */
-
-                function startLongPress(
+                startLongPress(
+                    conversation,
                     event
-                ) {
-
-                    /*
-                     * Don't start the timer if
-                     * the user is already touching
-                     * the Delete option.
-                     */
-
-                    if (
-                        event.target.closest(
-                            ".conversation-delete-menu"
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    /*
-                     * Reset state.
-                     */
-
-                    longPressTriggered =
-                        false;
-
-
-                    /*
-                     * Clear previous timer.
-                     */
-
-                    if (
-                        longPressTimer
-                    ) {
-
-                        clearTimeout(
-                            longPressTimer
-                        );
-
-                    }
-
-
-                    /*
-                     * Start 3-second timer.
-                     */
-
-                    longPressTimer =
-                        setTimeout(
-                            function () {
-
-                                longPressTriggered =
-                                    true;
-
-
-                                showDelete();
-
-                            },
-                            LONG_PRESS_TIME
-                        );
-
-                }
-
-
-                /* =================================================
-                   CANCEL TIMER
-                ================================================= */
-
-                function cancelLongPress() {
-
-                    if (
-                        longPressTimer
-                    ) {
-
-                        clearTimeout(
-                            longPressTimer
-                        );
-
-                        longPressTimer =
-                            null;
-
-                    }
-
-                }
-
-
-                /* =================================================
-                   CLICK / TAP
-                ================================================= */
-
-                conversation.addEventListener(
-                    "click",
-                    function (event) {
-
-                        /*
-                         * If Delete was clicked,
-                         * allow the form to work.
-                         */
-
-                        if (
-                            event.target.closest(
-                                ".conversation-delete-menu"
-                            )
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        /*
-                         * If the user held the conversation
-                         * for 3 seconds, do NOT open it.
-                         */
-
-                        if (
-                            longPressTriggered
-                        ) {
-
-                            event.preventDefault();
-
-                            event.stopPropagation();
-
-                            longPressTriggered =
-                                false;
-
-                            return;
-
-                        }
-
-
-                        /*
-                         * Normal tap opens chat.
-                         */
-
-                        if (
-                            chatUrl
-                        ) {
-
-                            window.location.href =
-                                chatUrl;
-
-                        }
-
-                    }
                 );
 
-
-                /* =================================================
-                   TOUCH START
-                ================================================= */
-
-                conversation.addEventListener(
-                    "touchstart",
-                    startLongPress,
-                    {
-                        passive: true
-                    }
-                );
+            },
+            {
+                passive: true
+            }
+        );
 
 
-                /* =================================================
-                   TOUCH END
-                ================================================= */
+        /*
+        -----------------------------------------------------
+        TOUCH END
+        -----------------------------------------------------
+        */
 
-                conversation.addEventListener(
-                    "touchend",
-                    function () {
+        conversation.addEventListener(
+            "touchend",
+            function () {
 
-                        cancelLongPress();
-
-                    }
-                );
-
-
-                /* =================================================
-                   TOUCH MOVE
-                ================================================= */
-
-                conversation.addEventListener(
-                    "touchmove",
-                    function () {
-
-                        cancelLongPress();
-
-                    }
-                );
-
-
-                /* =================================================
-                   TOUCH CANCEL
-                ================================================= */
-
-                conversation.addEventListener(
-                    "touchcancel",
-                    function () {
-
-                        cancelLongPress();
-
-                    }
-                );
-
-
-                /* =================================================
-                   DESKTOP RIGHT CLICK
-                ================================================= */
-
-                conversation.addEventListener(
-                    "contextmenu",
-                    function (event) {
-
-                        event.preventDefault();
-
-
-                        longPressTriggered =
-                            true;
-
-
-                        showDelete();
-
-                    }
-                );
-
-
-                /* =================================================
-                   KEYBOARD
-                ================================================= */
-
-                conversation.addEventListener(
-                    "keydown",
-                    function (event) {
-
-                        if (
-                            event.key === "Enter" ||
-                            event.key === " "
-                        ) {
-
-                            event.preventDefault();
-
-
-                            if (
-                                chatUrl
-                            ) {
-
-                                window.location.href =
-                                    chatUrl;
-
-                            }
-
-                        }
-
-                    }
-                );
+                cancelLongPress();
 
             }
         );
 
 
-        /* =====================================================
-           CLICK OUTSIDE
-        ===================================================== */
+        /*
+        -----------------------------------------------------
+        TOUCH CANCEL
+        -----------------------------------------------------
+        */
 
-        document.addEventListener(
+        conversation.addEventListener(
+            "touchcancel",
+            function () {
+
+                cancelLongPress();
+
+            }
+        );
+
+
+        /*
+        -----------------------------------------------------
+        TOUCH MOVE
+        -----------------------------------------------------
+
+        If the user moves their finger, treat it as scrolling
+        rather than a long press.
+        -----------------------------------------------------
+        */
+
+        conversation.addEventListener(
+            "touchmove",
+            function () {
+
+                cancelLongPress();
+
+            }
+        );
+
+
+        /*
+        -----------------------------------------------------
+        DESKTOP RIGHT CLICK
+        -----------------------------------------------------
+        */
+
+        conversation.addEventListener(
+            "contextmenu",
+            function (event) {
+
+                event.preventDefault();
+
+                longPressTriggered = true;
+
+                const deleteUrl =
+                    conversation.dataset.deleteUrl;
+
+                showDeletePopup(deleteUrl);
+
+            }
+        );
+
+
+        /*
+        -----------------------------------------------------
+        NORMAL CLICK
+        -----------------------------------------------------
+
+        A normal click opens the conversation.
+
+        A click caused immediately after the 3-second
+        long press does NOT open the chat.
+        -----------------------------------------------------
+        */
+
+        conversation.addEventListener(
             "click",
             function (event) {
 
                 /*
-                 * Don't close if the user clicked
-                 * inside the conversation.
+                 * If the long press already opened the
+                 * delete popup, do not open the chat.
                  */
+                if (longPressTriggered) {
 
-                if (
-                    event.target.closest(
-                        ".conversation"
-                    )
-                ) {
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+                    longPressTriggered = false;
 
                     return;
 
@@ -1741,25 +898,112 @@ document.addEventListener(
 
 
                 /*
-                 * Close all delete menus.
+                 * Normal click opens chat
                  */
+                if (chatUrl) {
 
-                conversations.forEach(
-                    function (conversation) {
+                    window.location.href = chatUrl;
 
-                        conversation.classList.remove(
-                            "long-press-active"
-                        );
-
-                    }
-                );
+                }
 
             }
         );
 
-    }
-);
 
+        /*
+        -----------------------------------------------------
+        KEYBOARD SUPPORT
+        -----------------------------------------------------
+        */
+
+        conversation.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    if (chatUrl) {
+
+                        window.location.href =
+                            chatUrl;
+
+                    }
+
+                }
+
+            }
+        );
+
+    });
+
+
+    /*
+    =========================================================
+    CANCEL BUTTON
+    =========================================================
+    */
+
+    cancelButton.addEventListener(
+        "click",
+        function () {
+
+            closeDeletePopup();
+
+        }
+    );
+
+
+    /*
+    =========================================================
+    CLICK OUTSIDE POPUP
+    =========================================================
+    */
+
+    popup.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target === popup
+            ) {
+
+                closeDeletePopup();
+
+            }
+
+        }
+    );
+
+
+    /*
+    =========================================================
+    ESCAPE KEY
+    =========================================================
+    */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                popup.classList.contains("show")
+            ) {
+
+                closeDeletePopup();
+
+            }
+
+        }
+    );
+
+
+});
 </script>
 
 {% endblock %}
