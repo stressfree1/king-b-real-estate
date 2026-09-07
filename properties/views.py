@@ -46,7 +46,7 @@ from .forms import (
     ContactMessageForm,
     SkilledWorkerRegistrationForm,
     CustomerForm,
-    SkilledWorkerPasswordResetForm,
+    UniversalPasswordResetForm,
     AccountSettingsForm,
     MarketplaceListingForm,
     MarketplaceSellerReviewForm,
@@ -4669,26 +4669,18 @@ class AccountPasswordChangeView(
 # SKILLED WORKER PASSWORD RESET
 # =========================================================
 
-class SkilledWorkerPasswordResetView(
+class AccountPasswordResetView(
     PasswordResetView
 ):
 
     template_name = (
-        'properties/skilled_worker_password_reset.html'
+        'properties/account_password_reset.html'
     )
 
-    form_class = SkilledWorkerPasswordResetForm
-
-    email_template_name = (
-        'properties/skilled_worker_password_reset_email.html'
-    )
-
-    subject_template_name = (
-        'properties/skilled_worker_password_reset_subject.txt'
-    )
+    form_class = UniversalPasswordResetForm
 
     success_url = reverse_lazy(
-        'worker_password_reset_done'
+        'account_password_reset_done'
     )
 
 
@@ -4696,12 +4688,12 @@ class SkilledWorkerPasswordResetView(
 # PASSWORD RESET DONE
 # =========================================================
 
-class SkilledWorkerPasswordResetDoneView(
+class AccountPasswordResetDoneView(
     PasswordResetDoneView
 ):
 
     template_name = (
-        'properties/skilled_worker_password_reset_done.html'
+        'properties/account_password_reset_done.html'
     )
 
 
@@ -4709,29 +4701,30 @@ class SkilledWorkerPasswordResetDoneView(
 # PASSWORD RESET CONFIRM
 # =========================================================
 
-class SkilledWorkerPasswordResetConfirmView(
+class AccountPasswordResetConfirmView(
     PasswordResetConfirmView
 ):
 
     template_name = (
-        'properties/skilled_worker_password_reset_confirm.html'
+        'properties/account_password_reset_confirm.html'
     )
 
     success_url = reverse_lazy(
-        'worker_password_reset_complete'
+        'account_password_reset_complete'
     )
+
 
 
 # =========================================================
 # PASSWORD RESET COMPLETE
 # =========================================================
 
-class SkilledWorkerPasswordResetCompleteView(
+class AccountPasswordResetCompleteView(
     PasswordResetCompleteView
 ):
 
     template_name = (
-        'properties/skilled_worker_password_reset_complete.html'
+        'properties/account_password_reset_complete.html'
     )
 
 
@@ -6345,7 +6338,6 @@ def marketplace_delete_main_photo(request, listing_id):
 # =========================================================
 # GENERAL ACCOUNT PASSWORD RESET
 # =========================================================
-
 class AccountPasswordResetView(
     PasswordResetView
 ):
@@ -6354,18 +6346,11 @@ class AccountPasswordResetView(
         'properties/account_password_reset.html'
     )
 
-    email_template_name = (
-        'properties/account_password_reset_email.html'
-    )
-
-    subject_template_name = (
-        'properties/account_password_reset_subject.txt'
-    )
+    form_class = UniversalPasswordResetForm
 
     success_url = reverse_lazy(
         'account_password_reset_done'
     )
-
 
 # =========================================================
 # PASSWORD RESET EMAIL SENT

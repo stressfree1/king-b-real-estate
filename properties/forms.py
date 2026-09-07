@@ -664,14 +664,11 @@ class CustomerForm(forms.ModelForm):
 
         return id_document
 
-
 # =========================================================
-# SKILLED WORKER PASSWORD RESET
+# UNIVERSAL PASSWORD RESET
 # =========================================================
 
-class SkilledWorkerPasswordResetForm(
-    PasswordResetForm
-):
+class UniversalPasswordResetForm(PasswordResetForm):
 
     def get_users(self, email):
 
@@ -680,7 +677,6 @@ class SkilledWorkerPasswordResetForm(
         users = User.objects.filter(
             email__iexact=email,
             is_active=True,
-            skilled_worker_profile__isnull=False,
         )
 
         for user in users:
@@ -688,8 +684,7 @@ class SkilledWorkerPasswordResetForm(
             if user.has_usable_password():
 
                 yield user
-
-
+                
 # =========================================================
 # MARKETPLACE LISTING
 # =========================================================

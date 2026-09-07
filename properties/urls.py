@@ -384,31 +384,29 @@ urlpatterns = [
     # =========================================================
     # SKILLED WORKER PASSWORD RESET
     # =========================================================
-
     path(
-        'skilled-workers/password-reset/',
-        views.SkilledWorkerPasswordResetView.as_view(),
-        name='worker_password_reset'
+        'password-reset/',
+        views.AccountPasswordResetView.as_view(),
+        name='account_password_reset'
     ),
 
     path(
-        'skilled-workers/password-reset/done/',
-        views.SkilledWorkerPasswordResetDoneView.as_view(),
-        name='worker_password_reset_done'
+        'password-reset/done/',
+        views.AccountPasswordResetDoneView.as_view(),
+        name='account_password_reset_done'
     ),
 
     path(
-        'skilled-workers/password-reset/confirm/<uidb64>/<token>/',
-        views.SkilledWorkerPasswordResetConfirmView.as_view(),
-        name='worker_password_reset_confirm'
+        'password-reset/confirm/<uidb64>/<token>/',
+        views.AccountPasswordResetConfirmView.as_view(),
+        name='account_password_reset_confirm'
     ),
 
     path(
-        'skilled-workers/password-reset/complete/',
-        views.SkilledWorkerPasswordResetCompleteView.as_view(),
-        name='worker_password_reset_complete'
+        'password-reset/complete/',
+        views.AccountPasswordResetCompleteView.as_view(),
+        name='account_password_reset_complete'
     ),
-
 
     # =========================================================
     # GENERAL MARKETPLACE USER DASHBOARD
