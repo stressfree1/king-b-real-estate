@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     for host in os.environ.get(
         "ALLOWED_HOSTS",
         "127.0.0.1,localhost,king-b-real-estate-1.onrender.com"
+        " king-b-real-estate-production.up.railway.app,www.kingbrealestate.com"
     ).split(",")
     if host.strip()
 ]
@@ -47,6 +48,7 @@ CSRF_TRUSTED_ORIGINS = [
     for origin in os.environ.get(
         "CSRF_TRUSTED_ORIGINS",
         "http://127.0.0.1:8000,http://localhost:8000,https://king-b-real-estate-1.onrender.com"
+        "https://king-b-real-estate-production.up.railway.app,https://www.kingbrealestate.com"
     ).split(",")
     if origin.strip()
 ]
