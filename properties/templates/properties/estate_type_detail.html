@@ -706,7 +706,6 @@
 
 /* =========================================================
    DIGITAL LAYOUT SECTION
-   HIDDEN UNTIL OPENED
 ========================================================= */
 
 .kb-layout-section {
@@ -973,8 +972,9 @@
 }
 
 
-.kb-layout-toggle.active
-.kb-layout-toggle-arrow {
+/* CORRECTED SELECTOR */
+
+.kb-layout-toggle.active .kb-layout-toggle-arrow {
 
     transform: rotate(180deg);
 
@@ -2016,7 +2016,7 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-    *,
+    * ,
     *::before,
     *::after {
 
@@ -2477,7 +2477,6 @@
                                     alt="{{ estate.name }} {{ estate_type.name }} Digital Layout"
                                 >
 
-
                             {% endif %}
 
 
@@ -2869,3 +2868,4 @@ document.addEventListener(
 </script>
 
 {% endblock %}
+
